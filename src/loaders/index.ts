@@ -22,8 +22,8 @@ export default async ({ expressApp }) => {
   };
 
   const roleController = {
-    name: config.controller.role.name,
-    path: config.controller.role.path
+    name: config.controllers.role.name,
+    path: config.controllers.role.path
   }
 
   const roleRepo = {

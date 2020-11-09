@@ -40,7 +40,7 @@ export default {
     prefix: '/api',
   },
 
-  controller: {
+  controllers: {
     role: {
       name: "RoleController",
       path: "../controllers/roleController"

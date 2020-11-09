@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import * as sinon from 'sinon';
 
 import { Response, Request, NextFunction } from 'express';
@@ -6,40 +5,38 @@ import { Response, Request, NextFunction } from 'express';
 import { Container } from 'typedi';
 import config from "../../config";
 
+import { Result } from '../core/logic/Result';
+
 import IRoleService from "../services/IServices/IRoleService";
+import RoleController from "./roleController";
+import IRoleDTO from '../dto/IRoleDTO';
 
-import {RoleController} from "./roleController";
-
-
-describe('role controller create', function () {
-
+describe('role controller', function () {
 	beforeEach(function() {
-		let roleServiceClass = require(config.services.role.path).default;
-		let roleServiceInstance: IRoleService = Container.get(roleServiceClass)
-		Container.set(config.services.role.name, roleServiceInstance);
-
-		let roleService = Container.get(config.services.role.name);
-
-		sinon.stub(roleService, 'createRole');
     });
 
-    it('returns json with id+name values', async function () {
-
-        let body = { "name":'role1' };
+    it('createRole: returns json with id+name values', async function () {
+        let body = { "name":'role12' };
         let req: Partial<Request> = {};
+		req.body = body;
 
         let res: Partial<Response> = {
-			json: sinon.stub()
+			json: sinon.spy()
         };
-
 		let next: Partial<NextFunction> = () => {};
 
-		const ctrl = Container.get(RoleController);
+		let roleServiceClass = require(config.services.role.path).default;
+		let roleServiceInstance = Container.get(roleServiceClass)
+		Container.set(config.services.role.name, roleServiceInstance);
 
-        await ctrl.createRole(<Request>req, <Response>res, <NextFunction>next);
+		roleServiceInstance = Container.get(config.services.role.name);
+		sinon.stub(roleServiceInstance, "createRole").returns( Result.ok<IRoleDTO>( {"id":"123", "name": req.body.name} ));
 
-		sinon.assert.called(res.json as sinon.SinonStub,
-			 { "id": "42db239f-d33b-4880-8caf-747c2cf41e81","name": "role1"});      
-		let a = 12;
+		const ctrl = new RoleController(roleServiceInstance as IRoleService);
+
+		await ctrl.createRole(<Request>req, <Response>res, <NextFunction>next);
+
+		sinon.assert.calledOnce(res.json);
+		sinon.assert.calledWith(res.json, sinon.match({ "id": "123","name": req.body.name}));
 	});
 });

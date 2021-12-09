@@ -5,7 +5,7 @@ import { Role } from "../domain/role";
 import { RoleId } from "../domain/roleId";
 import { RoleMap } from "../mappers/RoleMap";
 
-import { Document, Model } from 'mongoose';
+import { Document, FilterQuery, Model } from 'mongoose';
 import { IRolePersistence } from '../dataschema/IRolePersistence';
 
 @Service()
@@ -22,12 +22,12 @@ export default class RoleRepo implements IRoleRepo {
     }
   }
 
-  public async exists (roleId: RoleId | string): Promise<boolean> {
-
-    const idX = roleId instanceof RoleId ? (<RoleId>roleId).id.toValue() : roleId;
+  public async exists(role: Role): Promise<boolean> {
+    
+    const idX = role.id instanceof RoleId ? (<RoleId>role.id).toValue() : role.id;
 
     const query = { domainId: idX}; 
-    const roleDocument = await this.roleSchema.findOne( query );
+    const roleDocument = await this.roleSchema.findOne( query as FilterQuery<IRolePersistence & Document>);
 
     return !!roleDocument === true;
   }
@@ -57,7 +57,7 @@ export default class RoleRepo implements IRoleRepo {
 
   public async findByDomainId (roleId: RoleId | string): Promise<Role> {
     const query = { domainId: roleId};
-    const roleRecord = await this.roleSchema.findOne( query );
+    const roleRecord = await this.roleSchema.findOne( query as FilterQuery<IRolePersistence & Document> );
 
     if( roleRecord != null) {
       return RoleMap.toDomain(roleRecord);

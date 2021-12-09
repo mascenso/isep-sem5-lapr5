@@ -16,7 +16,7 @@ export class UserMap extends Mapper<User> {
 
   public static toDTO( user: User): IUserDTO {
     return {
-      id: user.id.toString(),
+      //id: user.id.toString(),
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email.value,
@@ -37,7 +37,7 @@ export class UserMap extends Mapper<User> {
       email: userEmailOrError.getValue(),
       password: userPasswordOrError.getValue(),
       role: role,
-    }, new UniqueEntityID(raw.base_user_id))
+    }, new UniqueEntityID(raw.domainId))
 
     userOrError.isFailure ? console.log(userOrError.error) : '';
     
@@ -46,7 +46,7 @@ export class UserMap extends Mapper<User> {
 
   public static toPersistence (user: User): any {
     const a = {
-      base_user_id: user.id.toString(),
+      domainId: user.id.toString(),
       email: user.email.value,
       password: user.password.value,
       firstName: user.firstName,

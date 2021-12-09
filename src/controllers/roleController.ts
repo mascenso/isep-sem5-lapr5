@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { Inject } from 'typedi';
+import { Inject, Service } from 'typedi';
 import config from "../../config";
 
 import IRoleController from "./IControllers/IRoleController";
@@ -8,6 +8,7 @@ import IRoleDTO from '../dto/IRoleDTO';
 
 import { Result } from "../core/logic/Result";
 
+@Service()
 export default class RoleController implements IRoleController /* TODO: extends ../core/infra/BaseController */ {
   constructor(
       @Inject(config.services.role.name) private roleServiceInstance : IRoleService

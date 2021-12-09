@@ -13,6 +13,23 @@ export default class RoleService implements IRoleService {
       @Inject(config.repos.role.name) private roleRepo : IRoleRepo
   ) {}
 
+  public async getRole( roleId: string): Promise<Result<IRoleDTO>> {
+    try {
+      const role = await this.roleRepo.findByDomainId(roleId);
+
+      if (role === null) {
+        return Result.fail<IRoleDTO>("Role not found");
+      }
+      else {
+        const roleDTOResult = RoleMap.toDTO( role ) as IRoleDTO;
+        return Result.ok<IRoleDTO>( roleDTOResult )
+        }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+
   public async createRole(roleDTO: IRoleDTO): Promise<Result<IRoleDTO>> {
     try {
 

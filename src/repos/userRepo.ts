@@ -3,7 +3,7 @@ import { Service, Inject } from 'typedi';
 import { Document, Model } from 'mongoose';
 import { IUserPersistence } from '../dataschema/IUserPersistence';
 
-import { IUserRepo } from "../services/IRepos/IUserRepo";
+import IUserRepo from "../services/IRepos/IUserRepo";
 import { User } from "../domain/user";
 import { UserId } from "../domain/userId";
 import { UserEmail } from "../domain/userEmail";
@@ -35,7 +35,7 @@ export default class UserRepo implements IUserRepo {
   }
 
   public async save (user: User): Promise<User> {
-    const query = { email: user.email.value}; 
+    const query = { domainId: user.id.toString() }; 
 
     const userDocument = await this.userSchema.findOne( query );
 
@@ -60,6 +60,20 @@ export default class UserRepo implements IUserRepo {
 
   public async findByEmail (email: UserEmail | string): Promise<User> {
     const query = { email: email.toString() };
+    const userRecord = await this.userSchema.findOne( query );
+
+    if( userRecord != null) {
+      return UserMap.toDomain(userRecord);
+    }
+    else
+      return null;
+  }
+
+  public async findById (userId: UserId | string): Promise<User> {
+
+    const idX = userId instanceof UserId ? (<UserId>userId).id.toValue() : userId;
+
+    const query = { domainId: idX }; 
     const userRecord = await this.userSchema.findOne( query );
 
     if( userRecord != null) {

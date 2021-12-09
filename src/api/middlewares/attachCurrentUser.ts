@@ -1,7 +1,10 @@
-import { Container } from 'typedi';
-import mongoose from 'mongoose';
-import { IUserPersistence } from '../../dataschema/IUserPersistence';
+import { Container} from 'typedi';
+
 import winston from 'winston';
+
+import config from '../../../config';
+
+import IUserRepo from '../../services/IRepos/IUserRepo';
 
 /**
  * Attach user to req.user
@@ -12,16 +15,20 @@ import winston from 'winston';
 const attachCurrentUser = async (req, res, next) => {
   const Logger = Container.get('logger') as winston.Logger;
   try {
-    const UserModel = Container.get('userModel') as mongoose.Model<IUserPersistence & mongoose.Document>;
-    const userRecord = await UserModel.findById(req.token._id);
-    if (!userRecord) {
-      return res.sendStatus(401);
-    }
-    const currentUser = userRecord.toObject();
-    Reflect.deleteProperty(currentUser, 'password');
-    Reflect.deleteProperty(currentUser, 'salt');
-    req.currentUser = currentUser;
-    return next();
+    
+    const userRepo = Container.get(config.repos.user.name) as IUserRepo
+
+    if( !req.token || req.token == undefined )
+      next( new Error("Token inexistente ou inválido ") );
+
+    const id = req.token.id;
+
+    const isFound = await userRepo.exists( id );
+
+    if (isFound)
+      next();
+    else
+      next( new Error("Token não corresponde a qualquer utilizador do sistema") );
   } catch (e) {
     Logger.error('🔥 Error attaching user to req: %o', e);
     return next(e);

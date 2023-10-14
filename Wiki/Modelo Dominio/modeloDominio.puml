@@ -1,0 +1,152 @@
+@startuml RobDroneGo
+
+
+package "RobDroneGo" {
+  class "<<Root>> \nCampus" as Campus #03fc98{
+    - nome: string
+    - edificios: List<Edificio>
+    - criarEficio()
+  }
+
+  class "<<Root>>\nEdificio" as Edificio #03fc98{
+    - nome: string
+    - pisos: List<Piso>
+    - robots: List<Robot>
+    - drones: List<Drone>
+    - criarPiso()
+    - editarEdificio()
+    - criarElevador()
+  }
+
+  class "<<Root>>\nPiso" as Piso #03fc98{
+    - numero: int
+    - descricao: string
+    - mapa: mapa
+    - salas: List<Sala>
+    - elevadores: List<Elevador>
+    - corredores: List<Corredor>
+    - pasagens: List<Passagem>
+    - editarPiso()
+    - criarPassagem()
+    - criarSala()
+  }
+
+  class "<<Entity>>\nSala" as Sala #9be0de{
+    - numero: string
+    - dimensoes: Dimensoes
+    - portas: List<Porta>
+    - editarSala()
+  }
+
+  class "<<Entity>>\nElevador" as Elevador #9be0de{
+    - localizacao: Coordenadas
+    - editarElevador()
+  }
+
+  class "<<Entity>>\nCorredor" as Corredor #9be0de{
+    - localizacao: Coordenadas
+  }
+
+  class "<<Entity>>\nRobot" as Robot #9be0de{
+    - id: int
+    - tipo: string
+    - Bateria
+    - activado: boolean
+    - sensores: List<Sensor>
+  }
+
+  class "<<Entity>>\nDrone" as Drone #9be0de{
+    - id: int
+    - tipo: string
+    - Bateria
+    - activado: boolean
+  }
+
+  class "<<Entity>>\nUtente" as Utente #9be0de{
+    - id: int
+    - nome: string
+    - tipo: string
+    - tarefas: List<Tarefa>
+  }
+
+  class "<<Entity>>\nAdministradorDeSistema" as AdministradorDeSistema #9be0de{
+    - id: int
+    - nome: string
+    - autorizacoes: List<Autorizacao>
+  }
+
+  class "<<Entity>>\nGestorDeFrota" as GestorDeFrota #9be0de{
+    - id: int
+    - nome: string
+  }
+
+  class "<<Entity>>\nGestorDeCampus" as GestorDeCampus #9be0de{
+    - id: int
+    - nome: string
+  }
+
+  class "<<Entity>>\nTarefa" as Tarefa #9be0de{
+    - id: int
+    - descricao: string
+    - estado: string
+  }
+
+  class "<<Entity>>\nPercurso" as Percurso #9be0de{
+    - id: int
+    - descricao: string
+  }
+
+  class "<<Entity>>\nMapa" as Mapa #9be0de{
+    - id: int
+    - descricao: string
+    - campus: Campus
+  }
+
+  class "<<Entity>>\nAutorizacao" as Autorizacao #9be0de{
+    - tipo: string
+  }
+
+  class "<<Entity>>\Passagem" as Passagem #9be0de{
+    - origem: Piso
+    - destino: Piso
+    - localizacao: Coordenadas
+    - tipo: string
+    - editarPassagem()
+  }
+
+  class "<<Value Object>>\nCoordenadas" as Coordenadas #e4e6aa{
+    - latitude: double
+    - longitude: double
+  }
+
+  class "<<Value Object>>\nDimensoes" as Dimensoes #e4e6aa{
+    - largura: double
+    - altura: double
+  }
+
+  class "<<Value Object>>\nPorta" as Porta #e4e6aa{
+    - localizacao: Coordenadas
+  }
+
+
+  
+  Campus "1" o-- "*" Edificio : Contem
+  Edificio "1" --> "*" Piso : Contem
+  Piso "1" o-- "*" Sala : Contem
+  Piso "1" o-- "0/1" Elevador : Contem
+  Piso "1" o-- "1" Corredor : Contem
+  Piso "1" *-- "*" Porta : Contem
+  Edificio "1" *-- "*" Robot : Contem
+  Utente --|> Autorizacao : Tem
+  GestorDeFrota --|> Robot : Gere
+  GestorDeFrota --|> Drone : Gere
+  GestorDeCampus --|> Campus :Gere
+  Tarefa --|> Utente : É criada
+  Tarefa "1"--|> "1"Robot : É atribuida
+  Tarefa "1"--|> "1"Percurso : Tem
+  Robot "1" --|> "1" Coordenadas : Tem
+  Sala "1" *-- "1"Dimensoes : Tem
+  Piso -- Passagem : Tem
+}
+
+@enduml

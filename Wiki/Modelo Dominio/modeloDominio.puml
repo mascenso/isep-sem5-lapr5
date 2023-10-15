@@ -5,7 +5,7 @@ package "RobDroneGo" {
   class "<<Root>> \nCampus" as Campus #03fc98{
     - nome: string
     - edificios: List<Edificio>
-    - criarEficio()
+    - criarEdificio()
   }
 
   class "<<Root>>\nEdificio" as Edificio #03fc98{
@@ -21,7 +21,7 @@ package "RobDroneGo" {
   class "<<Root>>\nPiso" as Piso #03fc98{
     - numero: int
     - descricao: string
-    - mapa: mapa
+    - mapa: Mapa
     - salas: List<Sala>
     - elevadores: List<Elevador>
     - corredores: List<Corredor>
@@ -52,6 +52,8 @@ package "RobDroneGo" {
     - tipo: string
     - Bateria
     - activado: boolean
+    - ocupado: boolean
+    - tempoNavegaçao: double
     - sensores: List<Sensor>
   }
 
@@ -65,8 +67,14 @@ package "RobDroneGo" {
   class "<<Entity>>\nUtente" as Utente #9be0de{
     - id: int
     - nome: string
-    - tipo: string
+    - tipo: enum
     - tarefas: List<Tarefa>
+  }
+
+  enum Type{
+  - student
+  - teacher
+  - employee
   }
 
   class "<<Entity>>\nAdministradorDeSistema" as AdministradorDeSistema #9be0de{
@@ -106,12 +114,21 @@ package "RobDroneGo" {
     - tipo: string
   }
 
-  class "<<Entity>>\Passagem" as Passagem #9be0de{
-    - origem: Piso
-    - destino: Piso
+  class "<<Entity>>\nPassagem" as Passagem #9be0de{
+    - EdifOrigem: Edificio
+    - PisoOrigem: Piso
+    - EdifDestino: Edificio
+    - PisoDestino: Piso
     - localizacao: Coordenadas
+    - direção: string
     - tipo: string
     - editarPassagem()
+  }
+
+  class "<<Root>>\nUser" as User #03fc98{
+    - id: int
+    - auth: Auth
+    - role
   }
 
   class "<<Value Object>>\nCoordenadas" as Coordenadas #e4e6aa{
@@ -129,7 +146,7 @@ package "RobDroneGo" {
   }
 
 
-  
+
   Campus "1" o-- "*" Edificio : Contem
   Edificio "1" --> "*" Piso : Contem
   Piso "1" o-- "*" Sala : Contem
@@ -138,15 +155,27 @@ package "RobDroneGo" {
   Piso "1" *-- "*" Porta : Contem
   Edificio "1" *-- "*" Robot : Contem
   Utente --|> Autorizacao : Tem
-  GestorDeFrota --|> Robot : Gere
-  GestorDeFrota --|> Drone : Gere
+  GestorDeFrota --|> Robot : Configura
+  GestorDeFrota --|> Drone : Configura
+  GestorDeFrota --|> Tarefa : Gere
   GestorDeCampus --|> Campus :Gere
+  GestorDeCampus "1" --|> "*"Percurso: Gere
   Tarefa --|> Utente : É criada
   Tarefa "1"--|> "1"Robot : É atribuida
   Tarefa "1"--|> "1"Percurso : Tem
   Robot "1" --|> "1" Coordenadas : Tem
   Sala "1" *-- "1"Dimensoes : Tem
   Piso -- Passagem : Tem
+  Type -- Utente
+  User "1"-- "*" Utente
+  User "1"-- "*" GestorDeFrota
+  User "1"-- "*" GestorDeCampus
+  User "1"-- "*" AdministradorDeSistema
+  AdministradorDeSistema "1"-- "*" User : Gere
+  Piso "1" o-- "1" Mapa
+  Passagem "1"--|> "1"Coordenadas
+  Elevador "1"--|> "1"Coordenadas
+  Corredor "1"--|> "1"Coordenadas
 }
 
 @enduml

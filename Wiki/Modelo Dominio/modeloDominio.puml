@@ -127,7 +127,8 @@ package "RobDroneGo" {
 
   class "<<Root>>\nUser" as User #03fc98{
     - id: int
-    - auth: Auth
+    - username: string
+    - password: string
     - role
   }
 

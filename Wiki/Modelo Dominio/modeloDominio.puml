@@ -8,11 +8,21 @@ package "RobDroneGo" {
     - criarEdificio()
   }
 
+  class "<<Entity>>\nFrota" as Frota #9be0de{
+    - robots: List<Robot>
+    - drones: List<Drone>
+    - criarRobot()
+    - criarDrone()
+    - inibirRobot()
+    - inibirDrone()
+  }
+
   class "<<Root>>\nEdificio" as Edificio #03fc98{
     - nome: string
     - pisos: List<Piso>
     - robots: List<Robot>
     - drones: List<Drone>
+    - hasElevador: boolean
     - criarPiso()
     - editarEdificio()
     - criarElevador()
@@ -23,9 +33,8 @@ package "RobDroneGo" {
     - descricao: string
     - mapa: Mapa
     - salas: List<Sala>
-    - elevadores: List<Elevador>
     - corredores: List<Corredor>
-    - pasagens: List<Passagem>
+    - passagens: List<Passagem>
     - editarPiso()
     - criarPassagem()
     - criarSala()
@@ -49,7 +58,8 @@ package "RobDroneGo" {
 
   class "<<Entity>>\nRobot" as Robot #9be0de{
     - id: int
-    - tipo: string
+    - tipo: enum
+    - designação: string
     - Bateria
     - activado: boolean
     - ocupado: boolean
@@ -59,7 +69,8 @@ package "RobDroneGo" {
 
   class "<<Entity>>\nDrone" as Drone #9be0de{
     - id: int
-    - tipo: string
+    - tipo: enum
+    - designação: string
     - Bateria
     - activado: boolean
   }
@@ -68,7 +79,6 @@ package "RobDroneGo" {
     - id: int
     - nome: string
     - tipo: enum
-    - tarefas: List<Tarefa>
   }
 
   enum Type{
@@ -97,6 +107,12 @@ package "RobDroneGo" {
     - id: int
     - descricao: string
     - estado: string
+    - tarefa: List<Tarefa>
+    - criarTarefa()
+  }
+  enum "TipoTarefa" as TipoTarefa{
+    - vigilância
+    - transporte
   }
 
   class "<<Entity>>\nPercurso" as Percurso #9be0de{
@@ -151,13 +167,14 @@ package "RobDroneGo" {
   Campus "1" o-- "*" Edificio : Contem
   Edificio "1" --> "*" Piso : Contem
   Piso "1" o-- "*" Sala : Contem
-  Piso "1" o-- "0/1" Elevador : Contem
+  Edificio "1" o-- "0/1" Elevador : Contem
   Piso "1" o-- "1" Corredor : Contem
   Piso "1" *-- "*" Porta : Contem
   Edificio "1" *-- "*" Robot : Contem
   Utente --|> Autorizacao : Tem
-  GestorDeFrota --|> Robot : Configura
-  GestorDeFrota --|> Drone : Configura
+  GestorDeFrota --|> Frota :Configura
+  Frota --|> Robot
+  Frota --|> Drone
   GestorDeFrota --|> Tarefa : Gere
   GestorDeCampus --|> Campus :Gere
   GestorDeCampus "1" --|> "*"Percurso: Gere
@@ -177,6 +194,8 @@ package "RobDroneGo" {
   Passagem "1"--|> "1"Coordenadas
   Elevador "1"--|> "1"Coordenadas
   Corredor "1"--|> "1"Coordenadas
+  TipoTarefa -- Robot
+  TipoTarefa -- Drone
 }
 
 @enduml

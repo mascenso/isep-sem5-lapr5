@@ -1,5 +1,9 @@
 @startuml RobDroneGo
-
+'orto:
+'left to right direction
+top to bottom direction
+skinparam linetype ortho
+'skinparam linetype polyline
 
 package "RobDroneGo" {
   class "<<Root>> \nCampus" as Campus #03fc98{

@@ -6,181 +6,241 @@ skinparam linetype ortho
 'skinparam linetype polyline
 
 package "RobDroneGo" {
-  class "<<Root>> \nCampus" as Campus #03fc98{
+
+/'
+class "<<Root>> \nCampus" as Campus #03fc98{
     - nome: string
     - edificios: List<Edificio>
     - criarEdificio()
   }
+'/
 
-  class "<<Entity>>\nFrota" as Frota #9be0de{
-    - robots: List<Robot>
-    - drones: List<Drone>
-    - criarRobot()
-    - criarDrone()
-    - inibirRobot()
-    - inibirDrone()
+package "Agg-Edificio" {
+                         class "<<Root>>\nEdificio" as Edificio #03fc98
+                         {
+                           - nome: string
+                           - pisos: List<Piso>
+                           - robots: List<Robot>
+                           - drones: List<Drone>
+                           - hasElevador: boolean
+                           - criarPiso()
+                           - editarEdificio()
+                           - criarElevador()
+                         }
+
+                         note right of Edificio
+                           Dos esclarecimentos:
+                           codigo (Id, unico, imutavel),
+                           nome,
+                           descricao,
+                           DIMENSAO_PLANTA
+                         end note
+
+                         note right of Edificio
+                               Atenção q os Robots podem deslocar-se entre edificios
+                               atraves das passagens
+                         end note
+
+                         class "<<Entity>>\nElevador" as Elevador #9be0de
+                         {
+                             - localizacao: Coordenadas
+                             - editarElevador()
+                         }
+                      }
+
+package "Agg-Piso" {
+                      class "<<Root>>\nPiso" as Piso #03fc98
+                      {
+                        - numero: int
+                        - descricao: string
+                        - mapa: Mapa
+                        - salas: List<Sala>
+                        - corredores: List<Corredor>
+                        - passagens: List<Passagem>
+                        - editarPiso()
+                        - criarPassagem()
+                        - criarSala()
+                      }
+
+                      note right of Piso
+                                                   "maze": {
+                                                           "size": { "width": 8, "depth": 7 },
+                                                           "map": [
+                                                               [3, 2, 2, 2, 2, 3, 2, 2, 1],
+                                                               [1, 0, 0, 0, 0, 1, 0, 0, 1],
+                                                               [2, 2, 2, 0, 2, 2, 0, 2, 0],
+                                                               [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                                                               [3, 2, 2, 2, 2, 2, 0, 0, 1],
+                                                               [1, 0, 0, 0, 0, 0, 1, 0, 0],
+                                                               [1, 0, 0, 0, 0, 0, 1, 0, 0],
+                                                               [2, 2, 2, 2, 2, 2, 2, 2, 0]
+                                                           ],
+                                                           "exits": [
+                                                               [2.0, -1.0],
+                                                               [5.0, 8.0]
+                                                           ],
+                                                           "elevators": [
+                                                               [2.0, 8.0]
+                                                           ],
+                                                           "exitLocation": [2.0, 8.0]
+                      end note
+
+                      class "<<Entity>>\nCorredor" as Corredor #9be0de{
+                          - localizacao: Coordenadas
+                      }
+
+                      class "<<Entity>>\nSala" as Sala #9be0de{
+                        - numero: string
+                        - dimensoes: Dimensoes
+                        - portas: List<Porta>
+                        - editarSala()
+                      }
+
+                      class "<<Value Object>>\nDimensoes" as Dimensoes #e4e6aa{
+                        - largura: double
+                        - altura: double
+                      }
+
+                      class "<<Entity>>\nMapa" as Mapa #9be0de{
+                        - id: int
+                        - descricao: string
+                        - campus: Campus
+                      }
+
+                      class "<<Value Object>>\nPorta" as Porta #e4e6aa{
+                        - localizacao: Coordenadas
+                      }
+
+                      class "<<Entity>>\nPassagem" as Passagem #9be0de{
+                        - EdifOrigem: Edificio
+                        - PisoOrigem: Piso
+                        - EdifDestino: Edificio
+                        - PisoDestino: Piso
+                        - localizacao: Coordenadas
+                        - direção: string
+                        - tipo: string
+                        - editarPassagem()
+                      }
+
   }
 
-  class "<<Root>>\nEdificio" as Edificio #03fc98{
-    - nome: string
-    - pisos: List<Piso>
-    - robots: List<Robot>
-    - drones: List<Drone>
-    - hasElevador: boolean
-    - criarPiso()
-    - editarEdificio()
-    - criarElevador()
+
+package "Agg-Robot" {
+                      class "<<Entity>>\nFrota" as Frota #9be0de{
+                        - robots: List<Robot>
+                        - drones: List<Drone>
+                        - criarRobot()
+                        - criarDrone()
+                        - inibirRobot()
+                        - inibirDrone()
+                      }
+
+                      class "<<Entity>>\nRobot" as Robot #9be0de{
+                        - id: int
+                        - tipo: enum
+                        - designação: string
+                        - Bateria
+                        - activado: boolean
+                        - ocupado: boolean
+                        - tempoNavegaçao: double
+                        - sensores: List<Sensor>
+                      }
+
+                      class "<<Entity>>\nDrone" as Drone #9be0de{
+                        - id: int
+                        - tipo: enum
+                        - designação: string
+                        - Bateria
+                        - activado: boolean
+                      }
   }
 
-  class "<<Root>>\nPiso" as Piso #03fc98{
-    - numero: int
-    - descricao: string
-    - mapa: Mapa
-    - salas: List<Sala>
-    - corredores: List<Corredor>
-    - passagens: List<Passagem>
-    - editarPiso()
-    - criarPassagem()
-    - criarSala()
-  }
 
-  class "<<Entity>>\nSala" as Sala #9be0de{
-    - numero: string
-    - dimensoes: Dimensoes
-    - portas: List<Porta>
-    - editarSala()
-  }
+package "Agg-Tarefa ou Tipos Robot" {
+                                      class "<<Entity>>\nTarefa" as Tarefa #9be0de{
+                                        - id: int
+                                        - descricao: string
+                                        - estado: string
+                                        - tarefa: List<Tarefa>
+                                        - criarTarefa()
+                                      }
+                                      enum "TipoTarefa" as TipoTarefa{
+                                        - vigilância
+                                        - transporte
+                                      }
+}
 
-  class "<<Entity>>\nElevador" as Elevador #9be0de{
-    - localizacao: Coordenadas
-    - editarElevador()
-  }
-
-  class "<<Entity>>\nCorredor" as Corredor #9be0de{
-    - localizacao: Coordenadas
-  }
-
-  class "<<Entity>>\nRobot" as Robot #9be0de{
-    - id: int
-    - tipo: enum
-    - designação: string
-    - Bateria
-    - activado: boolean
-    - ocupado: boolean
-    - tempoNavegaçao: double
-    - sensores: List<Sensor>
-  }
-
-  class "<<Entity>>\nDrone" as Drone #9be0de{
-    - id: int
-    - tipo: enum
-    - designação: string
-    - Bateria
-    - activado: boolean
-  }
-
-  class "<<Entity>>\nUtente" as Utente #9be0de{
-    - id: int
-    - nome: string
-    - tipo: enum
-  }
-
-  enum Type{
-  - student
-  - teacher
-  - employee
-  }
-
-  class "<<Entity>>\nAdministradorDeSistema" as AdministradorDeSistema #9be0de{
-    - id: int
-    - nome: string
-    - autorizacoes: List<Autorizacao>
-  }
-
-  class "<<Entity>>\nGestorDeFrota" as GestorDeFrota #9be0de{
-    - id: int
-    - nome: string
-  }
-
-  class "<<Entity>>\nGestorDeCampus" as GestorDeCampus #9be0de{
-    - id: int
-    - nome: string
-  }
-
-  class "<<Entity>>\nTarefa" as Tarefa #9be0de{
-    - id: int
-    - descricao: string
-    - estado: string
-    - tarefa: List<Tarefa>
-    - criarTarefa()
-  }
-  enum "TipoTarefa" as TipoTarefa{
-    - vigilância
-    - transporte
-  }
 
   class "<<Entity>>\nPercurso" as Percurso #9be0de{
     - id: int
     - descricao: string
   }
 
-  class "<<Entity>>\nMapa" as Mapa #9be0de{
-    - id: int
-    - descricao: string
-    - campus: Campus
-  }
-
-  class "<<Entity>>\nAutorizacao" as Autorizacao #9be0de{
-    - tipo: string
-  }
-
-  class "<<Entity>>\nPassagem" as Passagem #9be0de{
-    - EdifOrigem: Edificio
-    - PisoOrigem: Piso
-    - EdifDestino: Edificio
-    - PisoDestino: Piso
-    - localizacao: Coordenadas
-    - direção: string
-    - tipo: string
-    - editarPassagem()
-  }
-
-  class "<<Root>>\nUser" as User #03fc98{
-    - id: int
-    - username: string
-    - password: string
-    - role
-  }
 
   class "<<Value Object>>\nCoordenadas" as Coordenadas #e4e6aa{
     - latitude: double
     - longitude: double
   }
 
-  class "<<Value Object>>\nDimensoes" as Dimensoes #e4e6aa{
-    - largura: double
-    - altura: double
-  }
 
-  class "<<Value Object>>\nPorta" as Porta #e4e6aa{
-    - localizacao: Coordenadas
-  }
+package "Agg-Employees" {
+                          class "<<Root>>\nUser" as User #03fc98{
+                            - id: int
+                            - username: string
+                            - password: string
+                            - role
+                          }
+
+                          class "<<Entity>>\nUtente" as Utente #9be0de{
+                            - id: int
+                            - nome: string
+                            - tipo: enum
+                          }
+
+                          class "<<Entity>>\nAutorizacao" as Autorizacao #9be0de{
+                            - tipo: string
+                          }
+
+                          enum Type{
+                          - student
+                          - teacher
+                          - employee
+                          }
+
+                          class "<<Entity>>\nAdministradorDeSistema" as AdministradorDeSistema #9be0de{
+                            - id: int
+                            - nome: string
+                            - autorizacoes: List<Autorizacao>
+                          }
+
+                          class "<<Entity>>\nGestorDeFrota" as GestorDeFrota #9be0de{
+                            - id: int
+                            - nome: string
+                          }
+
+                          class "<<Entity>>\nGestorDeCampus" as GestorDeCampus #9be0de{
+                            - id: int
+                            - nome: string
+                          }
+}
 
 
 
-  Campus "1" o-- "*" Edificio : Contem
+  'Campus "1" o-- "*" Edificio : Contem
   Edificio "1" --> "*" Piso : Contem
   Piso "1" o-- "*" Sala : Contem
   Edificio "1" o-- "0/1" Elevador : Contem
+
   Piso "1" o-- "1" Corredor : Contem
   Piso "1" *-- "*" Porta : Contem
   Edificio "1" *-- "*" Robot : Contem
   Utente --|> Autorizacao : Tem
-  GestorDeFrota --|> Frota :Configura
   Frota --|> Robot
   Frota --|> Drone
+  GestorDeFrota --|> Frota :Configura
   GestorDeFrota --|> Tarefa : Gere
-  GestorDeCampus --|> Campus :Gere
+  GestorDeCampus --|> Mapa :Gere
+  GestorDeCampus --|> Percurso :Gere
   GestorDeCampus "1" --|> "*"Percurso: Gere
   Tarefa --|> Utente : É criada
   Tarefa "1"--|> "1"Robot : É atribuida

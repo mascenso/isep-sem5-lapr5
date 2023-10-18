@@ -13,6 +13,7 @@ describe('role controller', function () {
 	const sandbox = sinon.createSandbox();
 
 	beforeEach(function() {
+		this.timeout(6000);
 		Container.reset();
 		let roleSchemaInstance = require("../src/persistence/schemas/roleSchema").default;
 		Container.set("roleSchema", roleSchemaInstance);

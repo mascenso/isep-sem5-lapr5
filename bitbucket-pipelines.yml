@@ -15,9 +15,3 @@ pipelines:
             script:
               - npm install
               - npm test
-        - step:
-            name: Code linting
-            script:
-
-            caches:
-              - node

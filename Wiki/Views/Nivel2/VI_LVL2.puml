@@ -1,0 +1,23 @@
+@startuml
+
+package "Sistema RobDroneGo" {
+    package "UI" {
+    }
+    package "Gestão de Frota" {
+
+    }
+    package "Gestão de Campus" {
+
+    }
+    package "Gestão de Tarefas" {
+
+    }
+    package "Utentes" {
+
+    }
+
+    "UI" -> "Gestão de Frota" 
+    "UI" -> "Gestão de Campus"
+    "UI" -> "Gestão de Tarefas"
+    "UI" -> "Utentes"
+  }

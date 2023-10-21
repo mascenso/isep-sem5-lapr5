@@ -21,6 +21,12 @@ export default async ({ expressApp }) => {
     schema: '../persistence/schemas/roleSchema',
   };
 
+  const buildingSchema = {
+    // compare with the approach followed in repos and services
+    name: 'buildingSchema',
+    schema: '../persistence/schemas/buildingSchema',
+  };
+
   const robotSchema = {
     // compare with the approach followed in repos and services
     name: 'robotSchema',
@@ -37,6 +43,11 @@ export default async ({ expressApp }) => {
     path: config.controllers.robot.path
   };
 
+  const buildingController = {
+    name: config.controllers.building.name,
+    path: config.controllers.building.path
+  }
+
   const roleRepo = {
     name: config.repos.role.name,
     path: config.repos.role.path
@@ -52,6 +63,11 @@ export default async ({ expressApp }) => {
     path: config.repos.user.path
   };
 
+  const buildingRepo = {
+    name: config.repos.building.name,
+    path: config.repos.building.path
+  }
+
   const roleService = {
     name: config.services.role.name,
     path: config.services.role.path
@@ -62,24 +78,33 @@ export default async ({ expressApp }) => {
     path: config.services.robot.path
   }
 
+  const buildingService = {
+    name: config.services.building.name,
+    path: config.services.building.path
+  }
+
   await dependencyInjectorLoader({
     mongoConnection,
     schemas: [
       userSchema,
       roleSchema,
+      buildingSchema,
       robotSchema
     ],
     controllers: [
       roleController,
+      buildingController,
       robotController
     ],
     repos: [
       roleRepo,
       userRepo,
+      buildingRepo,
       robotRepo
     ],
     services: [
       roleService,
+      buildingService,
       robotService
     ]
   });

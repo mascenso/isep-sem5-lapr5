@@ -5,7 +5,15 @@ top to bottom direction
 skinparam linetype ortho
 'skinparam linetype polyline
 
-package "RobDroneGo" {
+'#lightcyan
+'#e4e6aa
+'#9be0de
+'#03fc98
+'rose #e4e6aa
+
+
+
+package "RobDroneGo" #edeceb {
 
 /'
 class "<<Root>> \nCampus" as Campus #03fc98{
@@ -19,13 +27,25 @@ package "Agg-Edificio" {
                          class "<<Root>>\nEdificio" as Edificio #03fc98
                          {
                            - nome: string
-                           - pisos: List<Piso>
-                           - robots: List<Robot>
-                           - drones: List<Drone>
+                           - descricao: string
                            - hasElevador: boolean
-                           - criarPiso()
-                           - editarEdificio()
-                           - criarElevador()
+                           - pisos: List<PisoID>
+                           - pisoZero: int
+                           - pisoMax: int
+                         }
+
+                         class "<<Identifier>>\nCodigo" as CodigoEdificio #e4e6aa{
+                           - codigo: string
+                         }
+
+                              note right of CodigoEdificio
+                               o código do edificio é obrigatório, no máximo 5 caracteres, letras e digitos, podendo conter espaços no meio
+
+                              end note
+
+                         class "<<Value Object>>\nDimensoesImplantacao" as DimensoesImplantacao #e4e6aa{
+                           - largura: double
+                           - altura: double
                          }
 
                          note right of Edificio
@@ -34,6 +54,8 @@ package "Agg-Edificio" {
                            nome,
                            descricao,
                            DIMENSAO_PLANTA
+
+                           o nome do edificio é opcional, no máximo 50 caracteres alfanuméricos
                          end note
 
                          note right of Edificio
@@ -44,25 +66,29 @@ package "Agg-Edificio" {
                          class "<<Entity>>\nElevador" as Elevador #9be0de
                          {
                              - localizacao: Coordenadas
-                             - editarElevador()
                          }
                       }
 
 package "Agg-Piso" {
                       class "<<Root>>\nPiso" as Piso #03fc98
                       {
-                        - numero: int
+                        - numeroPiso: int
+                        - codigoEdificio: CodigoEdificio
                         - descricao: string
-                        - mapa: Mapa
-                        - salas: List<Sala>
-                        - corredores: List<Corredor>
                         - passagens: List<Passagem>
-                        - editarPiso()
-                        - criarPassagem()
-                        - criarSala()
                       }
 
-                      note right of Piso
+                      class "<<Identifier>>\nCodigo" as CodigoPiso #e4e6aa{
+                        - codigo: string
+                      }
+
+                     class "<<Entity>>\nMapa" as Mapa #9be0de{
+                       - id: int
+                       - descricao: string
+                       - campus: Campus
+                     }
+
+                      note right of Mapa
                                                    "maze": {
                                                            "size": { "width": 8, "depth": 7 },
                                                            "map": [
@@ -88,40 +114,37 @@ package "Agg-Piso" {
                       class "<<Entity>>\nCorredor" as Corredor #9be0de{
                           - localizacao: Coordenadas
                       }
+  }
 
-                      class "<<Entity>>\nSala" as Sala #9be0de{
-                        - numero: string
-                        - dimensoes: Dimensoes
-                        - portas: List<Porta>
-                        - editarSala()
-                      }
-
-                      class "<<Value Object>>\nDimensoes" as Dimensoes #e4e6aa{
-                        - largura: double
-                        - altura: double
-                      }
-
-                      class "<<Entity>>\nMapa" as Mapa #9be0de{
-                        - id: int
-                        - descricao: string
-                        - campus: Campus
-                      }
-
-                      class "<<Value Object>>\nPorta" as Porta #e4e6aa{
-                        - localizacao: Coordenadas
-                      }
-
+  package "Agg-Passagem" {
                       class "<<Entity>>\nPassagem" as Passagem #9be0de{
                         - EdifOrigem: Edificio
                         - PisoOrigem: Piso
                         - EdifDestino: Edificio
                         - PisoDestino: Piso
                         - localizacao: Coordenadas
-                        - direção: string
-                        - tipo: string
-                        - editarPassagem()
                       }
+  }
 
+  package "Agg-Sala" {
+
+                        class "<<Root>>\nSala" as Sala #9be0de{
+                          - codigoEdificio
+                          - pisoEdificio
+                          - descricao
+                          - nrSala
+                        }
+
+                        class "<<Identifier>>\nCodigo" as CodigoSala #e4e6aa{
+                          - codigo: string
+                        }
+
+                        note right of Sala
+                            o requisito 310 Criar sala permite definir um sala num dado piso de um edificio,
+                            exemplo sala "B310" no 3º piso do edificio B,
+                            com uma categorização dessa sala (Gabinete, Anfiteatro, Laboratório, Outro)
+                            e uma breve descrição, ex., "Laboratório de Engenharia de Qualidade"
+                        end note
   }
 
 
@@ -129,10 +152,6 @@ package "Agg-Robot" {
                       class "<<Entity>>\nFrota" as Frota #9be0de{
                         - robots: List<Robot>
                         - drones: List<Drone>
-                        - criarRobot()
-                        - criarDrone()
-                        - inibirRobot()
-                        - inibirDrone()
                       }
 
                       class "<<Entity>>\nRobot" as Robot #9be0de{
@@ -156,35 +175,25 @@ package "Agg-Robot" {
   }
 
 
-package "Agg-Tarefa ou Tipos Robot" {
+package "Agg-Tarefa" {
                                       class "<<Entity>>\nTarefa" as Tarefa #9be0de{
                                         - id: int
+                                      }
+
+                                      class "<<Entity>>\nTarefaVigilancia" as TarefaVigilancia #9be0de{
                                         - descricao: string
                                         - estado: string
-                                        - tarefa: List<Tarefa>
-                                        - criarTarefa()
                                       }
-                                      enum "TipoTarefa" as TipoTarefa{
-                                        - vigilância
-                                        - transporte
+
+                                      class "<<Entity>>\nTarefaEntrega" as TarefaEntrega #9be0de{
+                                        - descricao: string
+                                        - estado: string
                                       }
 }
 
 
-  class "<<Entity>>\nPercurso" as Percurso #9be0de{
-    - id: int
-    - descricao: string
-  }
-
-
-  class "<<Value Object>>\nCoordenadas" as Coordenadas #e4e6aa{
-    - latitude: double
-    - longitude: double
-  }
-
-
 package "Agg-Employees" {
-                          class "<<Root>>\nUser" as User #03fc98{
+                          class "<<Root>>\nUtilizador" as Utilizador #03fc98{
                             - id: int
                             - username: string
                             - password: string
@@ -197,15 +206,9 @@ package "Agg-Employees" {
                             - tipo: enum
                           }
 
-                          class "<<Entity>>\nAutorizacao" as Autorizacao #9be0de{
-                            - tipo: string
-                          }
-
-                          enum Type{
-                          - student
-                          - teacher
-                          - employee
-                          }
+                          'class "<<Entity>>\nAutorizacao" as Autorizacao #9be0de{
+                          '  - tipo: string
+                          '}
 
                           class "<<Entity>>\nAdministradorDeSistema" as AdministradorDeSistema #9be0de{
                             - id: int
@@ -222,44 +225,88 @@ package "Agg-Employees" {
                             - id: int
                             - nome: string
                           }
+
+                          class "<<Entity>>\nEstudante" as Estudante #9be0de{
+                            - id: int
+                            - nome: string
+                            - curso: string
+                            - ano: int
+                          }
+
+                          class "<<Entity>>\nFuncionario" as Funcionario #9be0de{
+                            - id: int
+                            - nome: string
+                            - cargo: string
+                          }
+
+                          class "<<Entity>>\nDocente" as Docente #9be0de{
+                            - id: int
+                            - nome: string
+                            - cargo: string
+                          }
 }
 
 
 
-  'Campus "1" o-- "*" Edificio : Contem
-  Edificio "1" --> "*" Piso : Contem
-  Piso "1" o-- "*" Sala : Contem
-  Edificio "1" o-- "0/1" Elevador : Contem
+  '   class "<<Entity>>\nPercurso" as Percurso #9be0de{
+  '     - id: int
+  '     - descricao: string
+  '   }
 
-  Piso "1" o-- "1" Corredor : Contem
-  Piso "1" *-- "*" Porta : Contem
-  Edificio "1" *-- "*" Robot : Contem
-  Utente --|> Autorizacao : Tem
+
+  '   class "<<Value Object>>\nCoordenadas" as Coordenadas #e4e6aa{
+  '     - latitude: double
+  '     - longitude: double
+  '   }
+
+
+
+
+  Edificio "1" --> "*" Piso : Contem
+  Edificio "1" --> "1" CodigoEdificio : tem
+  Edificio "1" --> "1" DimensoesImplantacao : Contem
+  Edificio "1" --> "0/1" Elevador : Contem
+  'Campus "1" o-- "*" Edificio : Contem
+  'Edificio "1" *-- "*" Robot : Contem
+
+  Piso "1" --> "1" CodigoPiso : tem
+  Piso "1" --> "*" Sala : Contem
+  Piso "1" --> "1" Corredor : Contem
+  Piso "1" --> "1" Mapa
+  'Piso "1" *-- "*" Porta : Contem
+
+  Passagem "*" -- "2" Piso : Liga
+  'Passagem "1"--|> "1"Coordenadas
+
+  Sala "1" --> "1" CodigoSala : tem
+  'Sala "1" *-- "1" DimensoesSala : Tem
+
+
+  Tarefa "1" --|> "*"TarefaEntrega
+  Tarefa "1" --|> "*"TarefaVigilancia
+  Tarefa "1"--> "*" Robot : É atribuida
+  'Tarefa "1"--|> "1"Percurso : Tem
+  'Tarefa --|> Utente : É criada
+
+  'Robot "1" --|> "1" Coordenadas : Tem
+
+  'Utente --|> Autorizacao : Tem
   Frota --|> Robot
   Frota --|> Drone
   GestorDeFrota --|> Frota :Configura
   GestorDeFrota --|> Tarefa : Gere
-  GestorDeCampus --|> Mapa :Gere
-  GestorDeCampus --|> Percurso :Gere
-  GestorDeCampus "1" --|> "*"Percurso: Gere
-  Tarefa --|> Utente : É criada
-  Tarefa "1"--|> "1"Robot : É atribuida
-  Tarefa "1"--|> "1"Percurso : Tem
-  Robot "1" --|> "1" Coordenadas : Tem
-  Sala "1" *-- "1"Dimensoes : Tem
-  Piso -- Passagem : Tem
-  Type -- Utente
-  User "1"-- "*" Utente
-  User "1"-- "*" GestorDeFrota
-  User "1"-- "*" GestorDeCampus
-  User "1"-- "*" AdministradorDeSistema
-  AdministradorDeSistema "1"-- "*" User : Gere
-  Piso "1" o-- "1" Mapa
-  Passagem "1"--|> "1"Coordenadas
-  Elevador "1"--|> "1"Coordenadas
-  Corredor "1"--|> "1"Coordenadas
-  TipoTarefa -- Robot
-  TipoTarefa -- Drone
+  'GestorDeCampus --|> Mapa :Gere
+  'GestorDeCampus --|> Percurso :Gere
+  'GestorDeCampus "1" --|> "*"Percurso: Gere
+
+  Utilizador "1"--|> Utente
+  Utilizador "1"--|> GestorDeFrota
+  Utilizador "1"--|> GestorDeCampus
+  Utilizador "1"--|> AdministradorDeSistema
+  Utente "1"--|> Estudante
+  Utente "1"--|> Docente
+  Utente "1"--|> Funcionario
+  'AdministradorDeSistema "1"-- "*" Utilizador : Gere
 }
 
 @enduml

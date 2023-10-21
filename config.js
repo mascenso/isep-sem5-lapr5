@@ -14,7 +14,7 @@ export default {
   /**
    * Your favorite port : optional change to 4000 by JRT
    */
-  port: parseInt(process.env.PORT, 10) || 4000, 
+  port: parseInt(process.env.PORT, 10) || 4000,
 
   /**
    * That long string from mlab
@@ -48,6 +48,10 @@ export default {
     robot: {
       name: "RobotController",
       path: "../controllers/robotController"
+    },
+    building:  {
+      name: "BuildingController",
+      path: "../controllers/buildingController"
     }
   },
 
@@ -63,6 +67,10 @@ export default {
     user: {
       name: "UserRepo",
       path: "../repos/userRepo"
+    },
+    building: {
+      name: "Building",
+      path: "../repos/buildingRepo"
     }
   },
 
@@ -74,6 +82,10 @@ export default {
     robot: {
       name: "RobotService",
       path: "../services/robotService"
+    },
+    building: {
+      name: "BuildingService",
+      path: "../services/buildingService"
     }
   },
 };

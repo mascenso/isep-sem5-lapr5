@@ -17,7 +17,10 @@ export default (app: Router) => {
     celebrate({
       body: Joi.object({
         code: Joi.string().required(),
-        dimensions: Joi.string().required(),
+        dimensions: Joi.object({
+          maxWidth: Joi.number().required(),
+          maxLength: Joi.number().required()
+        }).required(),
         name: Joi.string(),
         description: Joi.string()
       })

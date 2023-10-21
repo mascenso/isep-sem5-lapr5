@@ -7,7 +7,8 @@ const BuildingSchema = new mongoose.Schema(
     code: { type: String, unique: true },
     name: { type: String, unique: false },
     description: { type: String, unique: false },
-    dimensions: {maxWidth: Number, maxLength: Number}
+    maxWidth: Number,
+    maxLength: Number
   },
   {
     timestamps: true

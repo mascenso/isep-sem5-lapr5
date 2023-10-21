@@ -14,7 +14,9 @@ export class BuildingMap extends Mapper<Building> {
     return {
       code: building.code,
       description: building.description,
-      name: building.name
+      name: building.name,
+      maxWidth: building.maxWidth,
+      maxLength: building.maxLength
     } as IBuildingDTO;
   }
 
@@ -34,7 +36,9 @@ export class BuildingMap extends Mapper<Building> {
       domainId: building.id.toString(),
       code: building.code,
       description: building.description,
-      name: building.name
+      name: building.name,
+      maxWidth: building.maxWidth,
+      maxLength: building.maxLength
     }
     return a;
   }

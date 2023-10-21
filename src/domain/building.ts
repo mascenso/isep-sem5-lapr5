@@ -55,4 +55,12 @@ export class Building extends AggregateRoot<BuildingProps> {
     return this.props.description;
   }
 
+  get maxWidth(): number {
+    return this.props.dimensions.maxWidth;
+  }
+
+  get maxLength(): number {
+    return this.props.dimensions.maxLength;
+  }
+
 }

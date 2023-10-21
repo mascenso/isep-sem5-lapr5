@@ -1,5 +1,5 @@
 import { Result } from "../../core/logic/Result";
-import IRoleDTO from "../../dto/IRoleDTO";
+import IRobotDTO from "../../dto/IRobotDTO";
 
 export default interface IRobotService  {
   createRobot(robotDTO: IRobotDTO): Promise<Result<IRobotDTO>>;

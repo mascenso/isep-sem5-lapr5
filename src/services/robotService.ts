@@ -59,7 +59,7 @@ export default class RobotService implements IRobotService {
       }
       else {
         robot.designacao = robotDTO.designacao;
-        robot.tarefa = robotDTO.tarefa;
+        robot.tarefas = robotDTO.tarefas;
         await this.robotRepo.save(robot);
 
         const robotDTOResult = RobotMap.toDTO( robot ) as IRobotDTO;

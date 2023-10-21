@@ -44,6 +44,10 @@ export default {
     role: {
       name: "RoleController",
       path: "../controllers/roleController"
+    },
+    robot: {
+      name: "RobotController",
+      path: "../controllers/robotController"
     }
   },
 
@@ -51,6 +55,10 @@ export default {
     role: {
       name: "RoleRepo",
       path: "../repos/roleRepo"
+    },
+    robot: {
+      name: "RobotRepo",
+      path: "../repos/robotRepo"
     },
     user: {
       name: "UserRepo",
@@ -62,6 +70,10 @@ export default {
     role: {
       name: "RoleService",
       path: "../services/roleService"
+    },
+    robot: {
+      name: "RobotService",
+      path: "../services/robotService"
     }
   },
 };

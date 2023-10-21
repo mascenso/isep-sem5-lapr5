@@ -5,7 +5,7 @@ const RobotSchema = new mongoose.Schema(
   {
     domainId: { type: String, unique: true },
     designacao: { type: String, unique: true },
-    tarefas: {type: String}
+    tarefas: {type: String, unique: false}
   },
   {
     timestamps: true

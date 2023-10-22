@@ -9,6 +9,7 @@ interface FloorProps {
     length: number;
     floorNumber: number;
     description?: string;
+    floorMap: number[][];
 }
 
 export class Floor extends AggregateRoot<FloorProps> {
@@ -24,7 +25,8 @@ export class Floor extends AggregateRoot<FloorProps> {
       { argument: props.width, argumentName: 'width' },
       { argument: props.length, argumentName: 'length' },
       { argument: props.floorNumber, argumentName: 'floorNumber' },
-      { argument: props.description, argumentName: 'description' }
+      { argument: props.description, argumentName: 'description' },
+      { argument: props.floorMap, argumentName: 'floorMap' }
     ];
 
 
@@ -40,6 +42,11 @@ export class Floor extends AggregateRoot<FloorProps> {
 
       return Result.ok<Floor>(floor);
     }
+  }
+
+  addMap(floorMap){
+    this.floorMap = floorMap;
+    return this;
   }
 
   get id (): UniqueEntityID {
@@ -67,6 +74,10 @@ export class Floor extends AggregateRoot<FloorProps> {
     return this.props.length;
   }
 
+  get floorMap(): number [][]{
+    return this.props.floorMap;
+  }
+
   set buildingId ( value: string) {
     this.props.buildingId = value;
   }
@@ -85,5 +96,9 @@ export class Floor extends AggregateRoot<FloorProps> {
 
   set length ( value: number) {
     this.props.length = value;
+  }
+
+  set floorMap ( value: number[][]) {
+    this.props.floorMap = value;
   }
 }

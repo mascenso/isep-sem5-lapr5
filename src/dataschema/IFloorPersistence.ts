@@ -5,5 +5,6 @@ export interface IFloorPersistence {
     length: number;
     floorNumber: number;
     description: string;
+    floorMap: number[][];
     salt: string;
   }

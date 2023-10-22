@@ -42,4 +42,24 @@ export default class FloorService implements IFloorService {
     }
   }
 
+  public async addMapToFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
+    try {
+    
+      const floor = await this.floorRepo.findByDomainId(floorDTO.id);
+      
+      if(floor === null) {
+        return Result.fail<IFloorDTO>("Floor not found, you can't add a map to a floor that doesn't exist. ");
+      }
+
+      const updatedFloor = floor.addMap(floorDTO.floorMap);
+
+      await this.floorRepo.save(updatedFloor);
+
+      const floorDTOResult = FloorMap.toDTO( floor ) as IFloorDTO;
+      return Result.ok<IFloorDTO>( floorDTOResult )
+    } catch (e) {
+      throw e;
+    }
+  }
+
 }

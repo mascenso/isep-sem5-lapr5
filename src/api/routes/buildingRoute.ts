@@ -36,6 +36,19 @@ export default (app: Router) => {
         description: Joi.string()
       })
     }),
-    (req, res, next) => ctrl.updateBuilding(req, res, next) );  
+    (req, res, next) => ctrl.updateBuilding(req, res, next) );
+
+  route.put('',
+  celebrate({
+    body: Joi.object({
+      id: Joi.string().required(),
+      code: Joi.string().required(),
+      maxWidth: Joi.number().required(),
+      maxLength: Joi.number().required(),
+      name: Joi.string().required(),
+      description: Joi.string().required()
+    })
+  }),
+  (req, res, next) => ctrl.updateBuilding(req, res, next) );  
 
 };

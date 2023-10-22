@@ -27,7 +27,6 @@ export class Building extends AggregateRoot<BuildingProps> {
       { argument: props.description, argumentName: 'description' }
     ];
 
-
     const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
     if (!guardResult.succeeded) {

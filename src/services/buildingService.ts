@@ -44,20 +44,12 @@ export default class BuildingServiceService implements IBuildingService {
         return Result.fail<IBuildingDTO>('Building not found');
       }
 
-      if (buildingDTO.name) {
-        building.name = buildingDTO.name;
-      }
-      if (buildingDTO.description) {
-        building.description = buildingDTO.description;
-      }
-      if (buildingDTO.maxLength) {
-        building.maxLength = buildingDTO.maxLength;
-      }
-      if (buildingDTO.maxWidth) {
-        building.maxWidth = buildingDTO.maxWidth;
-      }
-      if (buildingDTO.code) {
-        building.code = buildingDTO.code;
+      const fieldsToUpdate = ['name', 'description', 'maxLength', 'maxWidth', 'code'];
+
+      for (const field of fieldsToUpdate) {
+        if (buildingDTO[field]) {
+          building[field] = buildingDTO[field];
+        }
       }
 
       await this.buildingRepo.save(building);

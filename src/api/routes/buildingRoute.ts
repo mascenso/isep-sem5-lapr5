@@ -1,8 +1,6 @@
 import { Router } from 'express';
 import { celebrate, Joi } from 'celebrate';
-
 import { Container } from 'typedi';
-
 import config from "../../../config";
 import IBuildingController from "../../controllers/IControllers/IBuildingController";
 
@@ -32,8 +30,8 @@ export default (app: Router) => {
       body: Joi.object({
         id: Joi.string().required(),
         code: Joi.string(),
-          maxWidth: Joi.number(),
-          maxLength: Joi.number(),
+        maxWidth: Joi.number(),
+        maxLength: Joi.number(),
         name: Joi.string(),
         description: Joi.string()
       })

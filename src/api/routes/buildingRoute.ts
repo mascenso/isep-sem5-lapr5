@@ -49,6 +49,11 @@ export default (app: Router) => {
       description: Joi.string().required()
     })
   }),
-  (req, res, next) => ctrl.updateBuilding(req, res, next) );  
+  (req, res, next) => ctrl.updateBuilding(req, res, next) );
+
+  route.get('', 
+    (req, res, next) => { ctrl.getAllBuildings(req, res, next);
+  });
+ 
 
 };

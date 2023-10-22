@@ -45,20 +45,12 @@ export default class BuildingRepo implements IBuildingRepo {
         return BuildingMap.toDomain(buildingCreated);
       } else {
 
-        if (building.name) {
-          buildingDocument.name = building.name;
-        }
-        if (building.code) {
-          buildingDocument.code = building.code;
-        }
-        if (building.description) {
-          buildingDocument.description = building.description;
-        }
-        if (building.maxWidth) {
-          buildingDocument.maxWidth = building.maxWidth;
-        }
-        if (building.maxLength) {
-          buildingDocument.maxLength = building.maxLength;
+        const updateFields = ['name', 'code', 'description', 'maxWidth', 'maxLength'];
+
+        for (const field of updateFields) {
+          if (building[field] !== undefined) {
+            buildingDocument[field] = building[field];
+          }
         }
 
         await buildingDocument.save();
@@ -79,5 +71,23 @@ export default class BuildingRepo implements IBuildingRepo {
     }
     else
       return null;
+  }
+
+  public async getAllBuildings (): Promise<any> {
+    try {
+      const query = {};
+
+      const buildingRecords = await this.buildingSchema.find(query);
+      
+      return buildingRecords;
+    } catch (err) {
+      throw err;
+    }
+
+  
+
+ 
+
+
   }
 }

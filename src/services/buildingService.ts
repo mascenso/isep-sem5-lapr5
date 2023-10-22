@@ -63,5 +63,20 @@ export default class BuildingServiceService implements IBuildingService {
     }
   }
 
+  public async getAllBuildings(buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO[]>> {
+    try {
+
+      const buildings = await this.buildingRepo.getAllBuildings();
+
+      const buildingDTOs = buildings.map((building) => BuildingMap.toDTO(building) as IBuildingDTO);
+  
+      return Result.ok<IBuildingDTO[]>(buildingDTOs);
+
+
+    } catch (e) {
+      throw e;
+    }
+  }
+
 
 }

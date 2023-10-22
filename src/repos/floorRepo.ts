@@ -45,20 +45,12 @@ export default class FloorRepo implements IFloorRepo {
         return FloorMap.toDomain(floorCreated);
       } else {
 
-        if (floor.floorNumber) {
-          floorDocument.floorNumber = floor.floorNumber;
-        }
-        if (floor.buildingId) {
-          floorDocument.buildingId = floor.buildingId;
-        }
-        if (floor.description) {
-            floorDocument.description = floor.description;
-        }
-        if (floor.width) {
-            floorDocument.width = floor.width;
-        }
-        if (floor.length) {
-            floorDocument.length = floor.length;
+        const fieldsToUpdate = ['floorNumber', 'buildingId', 'description', 'width', 'length', 'floorMap'];
+
+        for (const field of fieldsToUpdate) {
+          if (floor[field] !== undefined) {
+            floorDocument[field] = floor[field];
+          }
         }
 
         await floorDocument.save();
@@ -73,7 +65,7 @@ export default class FloorRepo implements IFloorRepo {
     const query = { domainId: floorId};
 
     const floorRecord = await this.floorSchema.findOne( query as FilterQuery<IFloorPersistence & Document> );
-
+    
     if( floorRecord != null) {
       return FloorMap.toDomain(floorRecord);
     }

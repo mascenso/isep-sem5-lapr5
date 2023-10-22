@@ -16,7 +16,8 @@ export class FloorMap extends Mapper<Floor> {
       description: floor.description,
       floorNumber: floor.floorNumber,
       width: floor.width,
-      length: floor.length
+      length: floor.length,
+      floorMap: floor.floorMap
     } as IFloorDTO;
   }
 
@@ -38,7 +39,8 @@ export class FloorMap extends Mapper<Floor> {
       description: floor.description,
       floorNumber: floor.floorNumber,
       width: floor.width,
-      length: floor.length
+      length: floor.length,
+      floorMap: floor.floorMap
     }
     return a;
   }

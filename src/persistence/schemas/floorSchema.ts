@@ -8,7 +8,8 @@ const FloorSchema = new mongoose.Schema(
     floorNumber: { type: Number, unique: false },
     description: { type: String, unique: false },
     width: {type: Number, unique: false},
-    length: {type: Number, unique: false}
+    length: {type: Number, unique: false},
+    floorMap: { type: [[Number]], unique: false } //array
   },
   {
     timestamps: true

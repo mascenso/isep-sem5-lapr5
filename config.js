@@ -14,7 +14,7 @@ export default {
   /**
    * Your favorite port : optional change to 4000 by JRT
    */
-  port: parseInt(process.env.PORT, 10) || 4000, 
+  port: parseInt(process.env.PORT, 10) || 4000,
 
   /**
    * That long string from mlab
@@ -44,6 +44,18 @@ export default {
     role: {
       name: "RoleController",
       path: "../controllers/roleController"
+    },
+    robot: {
+      name: "RobotController",
+      path: "../controllers/robotController"
+    },
+    building:  {
+      name: "BuildingController",
+      path: "../controllers/buildingController"
+    },
+    floor:  {
+      name: "FloorController",
+      path: "../controllers/floorController"
     }
   },
 
@@ -52,9 +64,21 @@ export default {
       name: "RoleRepo",
       path: "../repos/roleRepo"
     },
+    robot: {
+      name: "RobotRepo",
+      path: "../repos/robotRepo"
+    },
     user: {
       name: "UserRepo",
       path: "../repos/userRepo"
+    },
+    building: {
+      name: "Building",
+      path: "../repos/buildingRepo"
+    },
+    floor: {
+      name: "Floor",
+      path: "../repos/floorRepo"
     }
   },
 
@@ -62,6 +86,18 @@ export default {
     role: {
       name: "RoleService",
       path: "../services/roleService"
+    },
+    robot: {
+      name: "RobotService",
+      path: "../services/robotService"
+    },
+    building: {
+      name: "BuildingService",
+      path: "../services/buildingService"
+    },
+    floor: {
+      name: "FloorService",
+      path: "../services/floorService"
     }
   },
 };

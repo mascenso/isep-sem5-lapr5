@@ -5,7 +5,8 @@ import {Guard} from "../core/logic/Guard";
 
 interface BuildingProps {
   code: string;
-  dimensions: {maxWidth: number, maxLength: number};
+  maxWidth: number; 
+  maxLength: number;
   name?: string;
   description?: string;
 }
@@ -20,10 +21,12 @@ export class Building extends AggregateRoot<BuildingProps> {
 
     const guardedProps = [
       { argument: props.code, argumentName: 'code' },
-      { argument: props.dimensions, argumentName: 'dimensions' },
+      { argument: props.maxLength, argumentName: 'maxLength' },
+      { argument: props.maxWidth, argumentName: 'maxWidth' },
       { argument: props.name, argumentName: 'name' },
       { argument: props.description, argumentName: 'description' }
     ];
+
 
     const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
@@ -56,11 +59,30 @@ export class Building extends AggregateRoot<BuildingProps> {
   }
 
   get maxWidth(): number {
-    return this.props.dimensions.maxWidth;
+    return this.props.maxWidth;
   }
 
   get maxLength(): number {
-    return this.props.dimensions.maxLength;
+    return this.props.maxLength;
   }
 
+  set name ( value: string) {
+    this.props.name = value;
+  }
+
+  set description ( value: string) {
+    this.props.description = value;
+  }
+
+  set code ( value: string) {
+    this.props.code = value;
+  }
+
+  set maxWidth ( value: number) {
+    this.props.maxWidth = value;
+  }
+
+  set maxLength ( value: number) {
+    this.props.maxLength = value;
+  }
 }

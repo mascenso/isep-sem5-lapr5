@@ -44,9 +44,24 @@ export default class BuildingRepo implements IBuildingRepo {
 
         return BuildingMap.toDomain(buildingCreated);
       } else {
-        buildingDocument.name = building.name;
-        await buildingDocument.save();
 
+        if (building.name) {
+          buildingDocument.name = building.name;
+        }
+        if (building.code) {
+          buildingDocument.code = building.code;
+        }
+        if (building.description) {
+          buildingDocument.description = building.description;
+        }
+        if (building.maxWidth) {
+          buildingDocument.maxWidth = building.maxWidth;
+        }
+        if (building.maxLength) {
+          buildingDocument.maxLength = building.maxLength;
+        }
+
+        await buildingDocument.save();
         return building;
       }
     } catch (err) {
@@ -56,6 +71,7 @@ export default class BuildingRepo implements IBuildingRepo {
 
   public async findByDomainId (buildingId: BuildingId | string): Promise<Building> {
     const query = { domainId: buildingId};
+
     const buildingRecord = await this.buildingSchema.findOne( query as FilterQuery<IBuildingPersistence & Document> );
 
     if( buildingRecord != null) {

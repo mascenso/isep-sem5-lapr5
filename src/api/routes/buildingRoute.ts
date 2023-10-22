@@ -17,14 +17,27 @@ export default (app: Router) => {
     celebrate({
       body: Joi.object({
         code: Joi.string().required(),
-        dimensions: Joi.object({
+
           maxWidth: Joi.number().required(),
-          maxLength: Joi.number().required()
-        }).required(),
+          maxLength: Joi.number().required(),
+
         name: Joi.string(),
         description: Joi.string()
       })
     }),
     (req, res, next) => ctrl.createBuilding(req, res, next) );
+
+  route.patch('',
+    celebrate({
+      body: Joi.object({
+        id: Joi.string().required(),
+        code: Joi.string(),
+          maxWidth: Joi.number(),
+          maxLength: Joi.number(),
+        name: Joi.string(),
+        description: Joi.string()
+      })
+    }),
+    (req, res, next) => ctrl.updateBuilding(req, res, next) );  
 
 };

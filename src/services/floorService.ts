@@ -6,17 +6,25 @@ import {IFloorDTO} from "../dto/IFloorDTO";
 import {Result} from "../core/logic/Result";
 import {FloorMap} from "../mappers/FloorMap";
 import {Floor} from "../domain/floor";
+import IBuildingRepo from './IRepos/IBuildingRepo';
+import { IBuildingDTO } from '../dto/IBuildingDTO';
 
 
 @Service()
 export default class FloorService implements IFloorService {
   constructor(
-      @Inject(config.repos.floor.name) private floorRepo : IFloorRepo
+      @Inject(config.repos.floor.name) private floorRepo : IFloorRepo,
+      @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo
   ) {}
 
   public async createFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
     try {
 
+      const building = await this.buildingRepo.findByDomainId(floorDTO.buildingId);
+
+      if(building === null) {
+        return Result.fail<IFloorDTO>('Building not found');
+      }
       const floorOrError = await Floor.create( floorDTO );
 
       if (floorOrError.isFailure) {

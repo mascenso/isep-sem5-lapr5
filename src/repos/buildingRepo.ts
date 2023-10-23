@@ -90,4 +90,21 @@ export default class BuildingRepo implements IBuildingRepo {
 
 
   }
+
+  public async getBuildingsByMinMaxFloors (minFloors: number, maxFloors: number): Promise<any> {
+    try {
+      const query = {
+        floors: {
+          $gte: minFloors,
+          $lte: maxFloors
+        }
+      };
+
+      const buildingRecords = await this.buildingSchema.find(query);
+      
+      return buildingRecords;
+    } catch (err) {
+      throw err;
+    }
+  }
 }

@@ -7,12 +7,14 @@ import {Result} from "../core/logic/Result";
 import {BuildingMap} from "../mappers/BuildingMap";
 import {Building} from "../domain/building";
 import { ConnectionCheckedOutEvent } from 'mongodb';
+import IFloorRepo from './IRepos/IFloorRepo';
 
 
 @Service()
 export default class BuildingServiceService implements IBuildingService {
   constructor(
-      @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo
+      @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo,
+      @Inject(config.repos.floor.name) private floorRepo : IFloorRepo
   ) {}
 
   public async createBuilding(buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO>> {
@@ -77,6 +79,19 @@ export default class BuildingServiceService implements IBuildingService {
       throw e;
     }
   }
+
+  public async getBuildingsByMinMaxFloors(minFloors: number, maxFloors: number): Promise<Result<IBuildingDTO[]>> {
+    try {
+      const buildings = await this.buildingRepo.getBuildingsByMinMaxFloors(minFloors, maxFloors);
+  
+      const buildingDTOs = buildings.map((building) => BuildingMap.toDTO(building) as IBuildingDTO);
+  
+      return Result.ok<IBuildingDTO[]>(buildingDTOs);
+    } catch (e) {
+      throw e;
+    }
+  }
+  
 
 
 }

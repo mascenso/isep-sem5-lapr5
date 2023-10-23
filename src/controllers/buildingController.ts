@@ -67,4 +67,25 @@ export default class BuildingController implements IBuildingController /* TODO: 
       return next(e);
     }
   }
+
+  public async getBuildingsByMinMaxFloors(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const { minFloors, maxFloors } = req.query;
+
+      const buildingOrError = await this.buildingServiceInstance.getBuildingsByMinMaxFloors(minFloors, maxFloors) as Result<IBuildingDTO[]>;
+      
+      if (buildingOrError.isFailure) {
+        return res.status(402).json('Dont exist any building save on DB').send();
+      }
+
+      const buildingDTO = buildingOrError.getValue();
+      return res.json( buildingDTO ).status(201);
+    }
+    catch (e) {
+      return next(e);
+    }
+  }
+
 }

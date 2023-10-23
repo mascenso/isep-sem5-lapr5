@@ -45,6 +45,10 @@ export class Building extends AggregateRoot<BuildingProps> {
     return this._id;
   }
 
+  get domainId(): string {
+    return this.domainId;
+  }
+
   get name() : string {
     return this.props.name;
   }

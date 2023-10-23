@@ -11,8 +11,9 @@ import {IBuildingPersistence} from "../dataschema/IBuildingPersistence";
 export class BuildingMap extends Mapper<Building> {
 
   public static toDTO( building: Building): IBuildingDTO {
+    
     return {
-      id: building.id.toString(),
+      id: building.domainId,
       code: building.code,
       description: building.description,
       name: building.name,

@@ -31,4 +31,8 @@ export default (app: Router) => {
       }),
     }),
     (req, res, next) => ctrl.updateRobot(req, res, next) );
+
+    route.get('', 
+    (req, res, next) => { ctrl.getAllRobots(req, res, next);
+  });
 };

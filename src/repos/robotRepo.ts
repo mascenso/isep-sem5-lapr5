@@ -66,4 +66,16 @@ export default class RobotRepo implements IRobotRepo {
     else
       return null;
   }
+
+  public async getAllRobots (): Promise<any> {
+    try {
+      const query = {};
+
+      const robotRecords = await this.robotSchema.find(query);
+      
+      return robotRecords;
+    } catch (err) {
+      throw err;
+    }
+  }
 }

@@ -39,6 +39,12 @@ export default async ({ expressApp }) => {
     schema: '../persistence/schemas/robotSchema',
   };
 
+  const bridgeSchema = {
+    // compare with the approach followed in repos and services
+    name: 'bridgeSchema',
+    schema: '../persistence/schemas/bridgeSchema',
+  }
+
   const roleController = {
     name: config.controllers.role.name,
     path: config.controllers.role.path
@@ -57,6 +63,11 @@ export default async ({ expressApp }) => {
   const floorController = {
     name: config.controllers.floor.name,
     path: config.controllers.floor.path
+  }
+
+  const bridgeController = {
+    name: config.controllers.bridge.name,
+    path: config.controllers.bridge.path
   }
 
   const roleRepo = {
@@ -84,6 +95,11 @@ export default async ({ expressApp }) => {
     path: config.repos.floor.path
   }
 
+  const bridgeRepo = {
+    name: config.repos.bridge.name,
+    path: config.repos.bridge.path
+  }
+
   const roleService = {
     name: config.services.role.name,
     path: config.services.role.path
@@ -104,6 +120,11 @@ export default async ({ expressApp }) => {
     path: config.services.floor.path
   }
 
+  const bridgeService = {
+    name: config.services.bridge.name,
+    path: config.services.bridge.path
+  }
+
   await dependencyInjectorLoader({
     mongoConnection,
     schemas: [
@@ -111,26 +132,30 @@ export default async ({ expressApp }) => {
       roleSchema,
       buildingSchema,
       robotSchema,
-      floorSchema
+      floorSchema,
+      bridgeSchema
     ],
     controllers: [
       roleController,
       buildingController,
       robotController,
-      floorController
+      floorController,
+      bridgeController
     ],
     repos: [
       roleRepo,
       userRepo,
       buildingRepo,
       robotRepo,
-      floorRepo
+      floorRepo,
+      bridgeRepo
     ],
     services: [
       roleService,
       buildingService,
       robotService,
-      floorservice
+      floorservice,
+      bridgeService
     ]
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');

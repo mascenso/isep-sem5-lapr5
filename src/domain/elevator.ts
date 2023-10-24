@@ -5,8 +5,11 @@ import {Guard} from "../core/logic/Guard";
 
 interface ElevatorProps {
   code: string;
-  coordX: number; 
-  coordY: number;
+  floorId: string;
+  coordX1: number; 
+  coordY1: number;
+  coordX2: number; 
+  coordY2: number;
 }
 
 export class Elevator extends AggregateRoot<ElevatorProps> {
@@ -19,8 +22,11 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
 
     const guardedProps = [
       { argument: props.code, argumentName: 'code' },
-      { argument: props.coordX, argumentName: 'coordX' },
-      { argument: props.coordY, argumentName: 'coordY' }
+      { argument: props.floorId, argumentName: 'floorId' },
+      { argument: props.coordX1, argumentName: 'coordX1' },
+      { argument: props.coordY1, argumentName: 'coordY1' },
+      { argument: props.coordX2, argumentName: 'coordX2' },
+      { argument: props.coordY2, argumentName: 'coordY2' }
     ];
 
     const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
@@ -41,28 +47,48 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
     return this._id;
   }
 
+  get floorId() : string {
+    return this.props.floorId;
+  }
+
   get code() : string {
     return this.props.code;
   }
 
-  get coordX() : number {
-    return this.props.coordX;
+  get coordX1() : number {
+    return this.props.coordX1;
   }
 
-  get coordY() : number {
-    return this.props.coordY;
+  get coordY1() : number {
+    return this.props.coordY1;
+  }
+
+  get coordX2() : number {
+    return this.props.coordX2;
+  }
+
+  get coordY2() : number {
+    return this.props.coordY2;
   }
 
   set code ( value: string) {
     this.props.code = value;
   }
 
-  set coordX ( value: number) {
-    this.props.coordX = value;
+  set coordX1 ( value: number) {
+    this.props.coordX1 = value;
   }
 
-  set coordY ( value: number) {
-    this.props.coordY = value;
+  set coordY1 ( value: number) {
+    this.props.coordY1 = value;
+  }
+
+  set coordX2 ( value: number) {
+    this.props.coordX2 = value;
+  }
+
+  set coordY2 ( value: number) {
+    this.props.coordY2 = value;
   }
 
 }

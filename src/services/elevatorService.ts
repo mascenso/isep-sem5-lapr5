@@ -6,16 +6,25 @@ import {IElevatorDTO} from "../dto/IElevatorDTO";
 import {Result} from "../core/logic/Result";
 import {ElevatorMap} from "../mappers/ElevatorMap";
 import {Elevator} from "../domain/elevator";
+import IBuildingRepo from './IRepos/IBuildingRepo';
+import IFloorRepo from './IRepos/IFloorRepo';
 
 
 @Service()
 export default class ElevatorService implements IElevatorService {
   constructor(
-      @Inject(config.repos.elevator.name) private elevatorRepo : IElevatorRepo
+      @Inject(config.repos.elevator.name) private elevatorRepo : IElevatorRepo,
+      @Inject(config.repos.floor.name) private floorRepo : IFloorRepo
   ) {}
 
   public async createElevator(elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO>> {
     try {
+
+      const floor = await this.floorRepo.findByDomainId(elevatorDTO.floorId);
+
+      if(floor === null) {
+        return Result.fail<IElevatorDTO>('Floor not found');
+      }
 
       const elevatorOrError = await Elevator.create( elevatorDTO );
 
@@ -43,7 +52,7 @@ export default class ElevatorService implements IElevatorService {
         return Result.fail<IElevatorDTO>('Elevator not found');
       }
 
-      const fieldsToUpdate = ['code', 'coordX', 'coordY'];
+      const fieldsToUpdate = ['code', 'coordX1', 'coordY1', 'coordX2', 'coordY2'];
 
       for (const field of fieldsToUpdate) {
         if (elevatorDTO[field]) {

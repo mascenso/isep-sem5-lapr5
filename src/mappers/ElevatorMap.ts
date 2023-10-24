@@ -12,8 +12,11 @@ export class ElevatorMap extends Mapper<Elevator> {
   public static toDTO( elevator: Elevator): IElevatorDTO {
     return {
       code: elevator.code,
-      coordX: elevator.coordX,
-      coordY: elevator.coordY
+      floorId: elevator.floorId,
+      coordX1: elevator.coordX1,
+      coordY1: elevator.coordY1,
+      coordX2: elevator.coordX2,
+      coordY2: elevator.coordY2
     } as IElevatorDTO;
   }
 
@@ -33,8 +36,11 @@ export class ElevatorMap extends Mapper<Elevator> {
     const a = {
       domainId: elevator.id.toString(),
       code: elevator.code,
-      coordX: elevator.coordX,
-      coordY: elevator.coordY
+      floorId: elevator.floorId,
+      coordX1: elevator.coordX1,
+      coordY1: elevator.coordY1,
+      coordX2: elevator.coordX2,
+      coordY2: elevator.coordY2
     }
     return a;
   }

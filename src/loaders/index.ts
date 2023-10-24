@@ -39,6 +39,13 @@ export default async ({ expressApp }) => {
     schema: '../persistence/schemas/robotSchema',
   };
 
+  const elevatorSchema = {
+    // compare with the approach followed in repos and services
+    name: 'elevatorSchema',
+    schema: '../persistence/schemas/elevatorSchema',
+  };
+
+
   const roleController = {
     name: config.controllers.role.name,
     path: config.controllers.role.path
@@ -57,6 +64,11 @@ export default async ({ expressApp }) => {
   const floorController = {
     name: config.controllers.floor.name,
     path: config.controllers.floor.path
+  }
+
+  const elevatorController = {
+    name: config.controllers.elevator.name,
+    path: config.controllers.elevator.path
   }
 
   const roleRepo = {
@@ -84,6 +96,11 @@ export default async ({ expressApp }) => {
     path: config.repos.floor.path
   }
 
+  const elevatorRepo = {
+    name: config.repos.elevator.name,
+    path: config.repos.elevator.path
+  }
+
   const roleService = {
     name: config.services.role.name,
     path: config.services.role.path
@@ -99,9 +116,14 @@ export default async ({ expressApp }) => {
     path: config.services.building.path
   }
 
-  const floorservice = {
+  const floorService = {
     name: config.services.floor.name,
     path: config.services.floor.path
+  }
+
+  const elevatorService = {
+    name: config.services.elevator.name,
+    path: config.services.elevator.path
   }
 
   await dependencyInjectorLoader({
@@ -111,26 +133,30 @@ export default async ({ expressApp }) => {
       roleSchema,
       buildingSchema,
       robotSchema,
-      floorSchema
+      floorSchema,
+      elevatorSchema
     ],
     controllers: [
       roleController,
       buildingController,
       robotController,
-      floorController
+      floorController,
+      elevatorController
     ],
     repos: [
       roleRepo,
       userRepo,
       buildingRepo,
       robotRepo,
-      floorRepo
+      floorRepo,
+      elevatorRepo
     ],
     services: [
       roleService,
       buildingService,
       robotService,
-      floorservice
+      floorService,
+      elevatorService
     ]
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');

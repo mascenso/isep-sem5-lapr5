@@ -5,6 +5,7 @@ import role from './routes/roleRoute';
 import robot from './routes/robotRoute';
 import building from './routes/buildingRoute';
 import floor from './routes/floorRoute';
+import elevator from './routes/elevatorRoute';
 
 export default () => {
 	const app = Router();
@@ -15,6 +16,7 @@ export default () => {
 	robot(app);
  	building(app);
   	floor(app);
+	elevator(app);
 
 	return app
 }

@@ -12,6 +12,7 @@ export class FloorMap extends Mapper<Floor> {
 
   public static toDTO( floor: Floor): IFloorDTO {
     return {
+      id: floor.id.toString(),
       buildingId: floor.buildingId,
       description: floor.description,
       floorNumber: floor.floorNumber,

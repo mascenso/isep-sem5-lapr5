@@ -37,7 +37,7 @@ export default (app: Router) => {
       ctrl.getAllRobots(req, res, next);
     });
 
-  route.get('/robots',
+  route.get('/search',
     (req, res, next) => {
       ctrl.findByDesignationOrTaskType(req, res, next);
     });

@@ -112,6 +112,6 @@ export default class BridgeService implements IBridgeService {
     } catch (e) {
       throw e;
     }
-}
+  }
 
 }

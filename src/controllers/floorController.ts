@@ -67,4 +67,23 @@ export default class FloorController implements IFloorController /* TODO: extend
       return next(e);
     }
   }
+
+  public async getFloorsAtBuildings(req: Request, res: Response, next: NextFunction) {
+
+    try {
+      const building = req.query.building;
+
+      const floorOrError = await this.floorServiceInstance.getFloorsAtBuildings(building as string) as Result<IFloorDTO[]>;
+
+      if (floorOrError.isFailure) {
+        return res.status(402).json('Dont exist any floor saved on DB').send();
+      }
+
+      const floorDTO = floorOrError.getValue();
+      return res.json( floorDTO ).status(201);
+    }
+    catch (e) {
+      return next(e);
+    }
+  }
 }

@@ -62,4 +62,32 @@ export default class FloorService implements IFloorService {
     }
   }
 
+  public async updateFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
+    try {
+
+      let floor = await this.floorRepo.findByDomainId(floorDTO.id);
+
+      if (floor === null) {
+        return Result.fail<IFloorDTO>('Floor not found');
+      }
+
+      const fieldsToUpdate = ['width', 'length', 'floorNumber', 'description', 'floorMap'];
+
+      for (const field of fieldsToUpdate) {
+        if (floorDTO[field]) {
+          floor[field] = floorDTO[field];
+        }
+      }
+
+      await this.floorRepo.save(floor);
+  
+      const floorDTOResult = FloorMap.toDTO(floor) as IFloorDTO;
+      return Result.ok<IFloorDTO>(floorDTOResult);
+
+
+    } catch (e) {
+      throw e;
+    }
+  }
+
 }

@@ -9,7 +9,7 @@ import config from "../../../config";
 const route = Router();
 
 export default (app: Router) => {
-  app.use('/bridge', route);
+  app.use('/bridges', route);
 
   const ctrl = Container.get(config.controllers.bridge.name) as IBridgeController;
 

@@ -57,6 +57,10 @@ export default {
       name: "FloorController",
       path: "../controllers/floorController"
     },
+    bridge:  {
+      name: "BridgeController",
+      path: "../controllers/bridgeController"
+    },
     elevator:  {
       name: "ElevatorController",
       path: "../controllers/elevatorController"
@@ -84,6 +88,10 @@ export default {
       name: "Floor",
       path: "../repos/floorRepo"
     },
+    bridge: {
+      name: "Bridge",
+      path: "../repos/bridgeRepo"
+    },
     elevator: {
       name: "Elevator",
       path: "../repos/elevatorRepo"
@@ -106,6 +114,10 @@ export default {
     floor: {
       name: "FloorService",
       path: "../services/floorService"
+    },
+    bridge: {
+      name: "BridgeService",
+      path: "../services/bridgeService"
     },
     elevator: {
       name: "ElevatorService",

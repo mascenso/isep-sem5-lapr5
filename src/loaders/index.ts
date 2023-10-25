@@ -39,6 +39,12 @@ export default async ({ expressApp }) => {
     schema: '../persistence/schemas/robotSchema',
   };
 
+  const bridgeSchema = {
+    // compare with the approach followed in repos and services
+    name: 'bridgeSchema',
+    schema: '../persistence/schemas/bridgeSchema',
+  }
+
   const elevatorSchema = {
     // compare with the approach followed in repos and services
     name: 'elevatorSchema',
@@ -64,6 +70,11 @@ export default async ({ expressApp }) => {
   const floorController = {
     name: config.controllers.floor.name,
     path: config.controllers.floor.path
+  }
+
+  const bridgeController = {
+    name: config.controllers.bridge.name,
+    path: config.controllers.bridge.path
   }
 
   const elevatorController = {
@@ -96,6 +107,11 @@ export default async ({ expressApp }) => {
     path: config.repos.floor.path
   }
 
+  const bridgeRepo = {
+    name: config.repos.bridge.name,
+    path: config.repos.bridge.path
+  }
+
   const elevatorRepo = {
     name: config.repos.elevator.name,
     path: config.repos.elevator.path
@@ -121,6 +137,11 @@ export default async ({ expressApp }) => {
     path: config.services.floor.path
   }
 
+  const bridgeService = {
+    name: config.services.bridge.name,
+    path: config.services.bridge.path
+  }
+
   const elevatorService = {
     name: config.services.elevator.name,
     path: config.services.elevator.path
@@ -134,14 +155,16 @@ export default async ({ expressApp }) => {
       buildingSchema,
       robotSchema,
       floorSchema,
-      elevatorSchema
+      elevatorSchema,
+      bridgeSchema
     ],
     controllers: [
       roleController,
       buildingController,
       robotController,
       floorController,
-      elevatorController
+      elevatorController,
+      bridgeController
     ],
     repos: [
       roleRepo,
@@ -149,13 +172,15 @@ export default async ({ expressApp }) => {
       buildingRepo,
       robotRepo,
       floorRepo,
-      elevatorRepo
+      elevatorRepo,
+      bridgeRepo
     ],
     services: [
       roleService,
       buildingService,
       robotService,
       floorService,
+      bridgeService,
       elevatorService
     ]
   });

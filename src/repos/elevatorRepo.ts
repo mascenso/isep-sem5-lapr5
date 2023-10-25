@@ -60,7 +60,7 @@ export default class ElevatorRepo implements IElevatorRepo {
       throw err;
     }
   }
-/*
+
   public async findByDomainId (elevatorId: ElevatorId | string): Promise<Elevator> {
     const query = { domainId: elevatorId};
 
@@ -73,7 +73,6 @@ export default class ElevatorRepo implements IElevatorRepo {
       return null;
   }
 
-    */
   public async getAllElevators (): Promise<any> {
     try {
       const query = {};

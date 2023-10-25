@@ -42,4 +42,41 @@ export default (app: Router) => {
       req.body.id=req.params.id;
       ctrl.addMapToFloor(req, res, next) });
 
+    route.patch('',
+    celebrate({
+      body: Joi.object({
+        id: Joi.string().required(),
+        buildingId: Joi.string().required(),
+        width: Joi.number(),
+        length: Joi.number(),
+        floorNumber: Joi.number(),
+        description: Joi.string(),
+        floorMap: Joi.array().items(
+          Joi.array().items(Joi.number())
+        ).optional(),
+      })
+    }),
+    (req, res, next) => ctrl.updateFloor(req, res, next) );
+
+  route.put('',
+  celebrate({
+    body: Joi.object({
+      id: Joi.string().required(),
+      buildingId: Joi.string().required(),
+      width: Joi.number(),
+      length: Joi.number(),
+      floorNumber: Joi.number(),
+      description: Joi.string(),
+      floorMap: Joi.array().items(
+        Joi.array().items(Joi.number())
+      ).optional(),
+    })
+  }),
+  (req, res, next) => ctrl.updateFloor(req, res, next) );
+
+  //  GET /api/floors/buildings?building={building}
+  route.get('/buildings',  (req, res, next) => { ctrl.getFloorsAtBuildings(req, res, next); }  );
+
+    
+
 };

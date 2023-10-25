@@ -11,7 +11,7 @@ import IFloorRepo from './IRepos/IFloorRepo';
 
 
 @Service()
-export default class BuildingServiceService implements IBuildingService {
+export default class BuildingService implements IBuildingService {
   constructor(
       @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo,
       @Inject(config.repos.floor.name) private floorRepo : IFloorRepo
@@ -71,7 +71,7 @@ export default class BuildingServiceService implements IBuildingService {
       const buildings = await this.buildingRepo.getAllBuildings();
 
       const buildingDTOs = buildings.map((building) => BuildingMap.toDTO(building) as IBuildingDTO);
-  
+
       return Result.ok<IBuildingDTO[]>(buildingDTOs);
 
 

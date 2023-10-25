@@ -38,7 +38,7 @@ export default (app: Router) => {
     }),
     (req, res, next) => ctrl.updateElevator(req, res, next) );
 
-  route.put('/:id',
+  route.put('',
   celebrate({
     body: Joi.object({
       id:Joi.string().required(),
@@ -49,9 +49,6 @@ export default (app: Router) => {
       coordY2: Joi.number().required(),
       floorId: Joi.string().required()
     }),
-    params: {
-      id: Joi.string().required() // Validação para o ID no URL
-    }
   }),
   
   (req, res, next) => ctrl.updateElevator(req, res, next) );

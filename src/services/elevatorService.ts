@@ -55,7 +55,7 @@ export default class ElevatorService implements IElevatorService {
       const fieldsToUpdate = ['code', 'coordX1', 'coordY1', 'coordX2', 'coordY2'];
 
       for (const field of fieldsToUpdate) {
-        if (elevatorDTO[field]!== undefined) { // Para verificar se o campo foi fornecido na solicitação.
+        if (elevatorDTO[field]) { 
             elevator[field] = elevatorDTO[field];
         }
       }

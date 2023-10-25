@@ -36,7 +36,7 @@ export default class ElevatorController implements IElevatorController /* TODO: 
     try {
  
       const elevatorOrError = await this.elevatorServiceInstance.updateElevator(req.body as IElevatorDTO) as Result<IElevatorDTO>;
-      
+
       if (elevatorOrError.isFailure) {
         return res.status(402).json('Elevator does not exist.').send();
       }

@@ -23,30 +23,39 @@ export default (app: Router) => {
       })
     }),
     (req, res, next) => ctrl.createElevator(req, res, next) );
-/*
+
     route.patch('',
     celebrate({
       body: Joi.object({
-        id: Joi.string().required(),
+        id:Joi.string().required(),
         code: Joi.string(),
-        coordX: Joi.number(),
-        coordY: Joi.number()
+        coordX1: Joi.number(),
+        coordY1: Joi.number(),
+        coordX2: Joi.number(),
+        coordY2: Joi.number(),
+        floorId: Joi.string()
       })
     }),
     (req, res, next) => ctrl.updateElevator(req, res, next) );
 
-  route.put('',
+  route.put('/:id',
   celebrate({
     body: Joi.object({
-        id: Joi.string().required(),
-        code: Joi.string(),
-        coordX: Joi.number(),
-        coordY: Joi.number()
-    })
-
+      id:Joi.string().required(),
+      code: Joi.string().required(),
+      coordX1: Joi.number().required(),
+      coordY1: Joi.number().required(),
+      coordX2: Joi.number().required(),
+      coordY2: Joi.number().required(),
+      floorId: Joi.string().required()
+    }),
+    params: {
+      id: Joi.string().required() // Validação para o ID no URL
+    }
   }),
+  
   (req, res, next) => ctrl.updateElevator(req, res, next) );
-*/
+
     route.get('', 
     (req, res, next) => { ctrl.getAllElevators(req, res, next);
       

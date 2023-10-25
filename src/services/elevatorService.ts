@@ -42,20 +42,20 @@ export default class ElevatorService implements IElevatorService {
       throw e;
     }
   }
-/*
+
   public async updateElevator(elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO>> {
     try {
 
       let elevator = await this.elevatorRepo.findByDomainId(elevatorDTO.id);
 
       if (elevator === null) {
-        return Result.fail<IElevatorDTO>('Elevator not found');
+        return Result.fail<IElevatorDTO>('Elevator with that ID does not exist.');
       }
 
       const fieldsToUpdate = ['code', 'coordX1', 'coordY1', 'coordX2', 'coordY2'];
 
       for (const field of fieldsToUpdate) {
-        if (elevatorDTO[field]) {
+        if (elevatorDTO[field]!== undefined) { // Para verificar se o campo foi fornecido na solicitação.
             elevator[field] = elevatorDTO[field];
         }
       }
@@ -71,7 +71,6 @@ export default class ElevatorService implements IElevatorService {
     }
   }
 
-  */
   public async getAllElevators(elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO[]>> {
     try {
 
@@ -86,6 +85,4 @@ export default class ElevatorService implements IElevatorService {
       throw e;
     }
   }
-
-
 }

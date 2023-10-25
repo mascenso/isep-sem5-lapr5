@@ -11,6 +11,7 @@ export class ElevatorMap extends Mapper<Elevator> {
 
   public static toDTO( elevator: Elevator): IElevatorDTO {
     return {
+      id:elevator.id.toString(),
       code: elevator.code,
       floorId: elevator.floorId,
       coordX1: elevator.coordX1,

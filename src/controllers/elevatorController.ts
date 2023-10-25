@@ -30,15 +30,15 @@ export default class ElevatorController implements IElevatorController /* TODO: 
       return next(e);
     }
   }
-/*
+
   public async updateElevator(req: Request, res: Response, next: NextFunction) {
 
     try {
-
+ 
       const elevatorOrError = await this.elevatorServiceInstance.updateElevator(req.body as IElevatorDTO) as Result<IElevatorDTO>;
-      
+
       if (elevatorOrError.isFailure) {
-        return res.status(402).send();
+        return res.status(402).json('Elevator does not exist.').send();
       }
 
       const elevatorDTO = elevatorOrError.getValue();
@@ -48,7 +48,6 @@ export default class ElevatorController implements IElevatorController /* TODO: 
       return next(e);
     }
   }
-  */
 
   public async getAllElevators(req: Request, res: Response, next: NextFunction) {
 
@@ -57,7 +56,7 @@ export default class ElevatorController implements IElevatorController /* TODO: 
       const elevatorOrError = await this.elevatorServiceInstance.getAllElevators(req.body as IElevatorDTO) as Result<IElevatorDTO[]>;
       
       if (elevatorOrError.isFailure) {
-        return res.status(402).json('Dont exist any building save on DB').send();
+        return res.status(402).json('There is no elevators in DB').send();
       }
 
       const elevatorDTO = elevatorOrError.getValue();
@@ -66,7 +65,5 @@ export default class ElevatorController implements IElevatorController /* TODO: 
     catch (e) {
       return next(e);
     }
-  }
-
-    
+  }    
 }

@@ -80,4 +80,19 @@ export default class BridgeService implements IBridgeService {
     }
   }
 
+  public async getAllBridges(bridgeDTO: IBridgeDTO): Promise<Result<IBridgeDTO[]>> {
+    try {
+
+      const bridges = await this.bridgeRepo.getAllBridges();
+
+      const bridgeDTOs = bridges.map((bridge) => BridgeMap.toDTO(bridge) as IBridgeDTO);
+
+      return Result.ok<IBridgeDTO[]>(bridgeDTOs);
+
+
+    } catch (e) {
+      throw e;
+    }
+  }
+
 }

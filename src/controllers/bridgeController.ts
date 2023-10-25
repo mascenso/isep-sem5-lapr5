@@ -30,4 +30,23 @@ export default class BridgeController implements IBridgeController /* TODO: exte
       return next(e);
     }
   }
+
+  public async getAllBridges(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const buildingOrError = await this.bridgeServiceInstance.getAllBridges(req.body as IBridgeDTO) as Result<IBridgeDTO[]>;
+
+      if (buildingOrError.isFailure) {
+        return res.status(402).json('Dont exist any building save on DB').send();
+      }
+
+      const buildingDTO = buildingOrError.getValue();
+      return res.json( buildingDTO ).status(201);
+    }
+    catch (e) {
+      return next(e);
+    }
+  }
+
 }

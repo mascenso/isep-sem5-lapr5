@@ -26,4 +26,8 @@ export default (app: Router) => {
     }),
     (req, res, next) => ctrl.createBridge(req, res, next) );
 
+  route.get('',
+    (req, res, next) => { ctrl.getAllBridges(req, res, next);
+    });
+
 };

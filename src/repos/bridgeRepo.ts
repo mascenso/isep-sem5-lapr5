@@ -72,4 +72,16 @@ export default class BridgeRepo implements IBridgeRepo {
     else
       return null;
   }
+
+  public async getAllBridges (): Promise<any> {
+    try {
+      const query = {};
+
+      const bridgeRecords = await this.bridgeSchema.find(query);
+
+      return bridgeRecords;
+    } catch (err) {
+      throw err;
+    }
+  }
 }

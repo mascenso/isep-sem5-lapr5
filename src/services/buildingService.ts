@@ -10,7 +10,7 @@ import { ConnectionCheckedOutEvent } from 'mongodb';
 
 
 @Service()
-export default class BuildingServiceService implements IBuildingService {
+export default class BuildingService implements IBuildingService {
   constructor(
       @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo
   ) {}

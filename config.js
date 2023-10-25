@@ -60,6 +60,10 @@ export default {
     bridge:  {
       name: "BridgeController",
       path: "../controllers/bridgeController"
+    },
+    elevator:  {
+      name: "ElevatorController",
+      path: "../controllers/elevatorController"
     }
   },
 
@@ -87,6 +91,10 @@ export default {
     bridge: {
       name: "Bridge",
       path: "../repos/bridgeRepo"
+    },
+    elevator: {
+      name: "Elevator",
+      path: "../repos/elevatorRepo"
     }
   },
 
@@ -110,6 +118,10 @@ export default {
     bridge: {
       name: "BridgeService",
       path: "../services/bridgeService"
+    },
+    elevator: {
+      name: "ElevatorService",
+      path: "../services/elevatorService"
     }
   },
 };

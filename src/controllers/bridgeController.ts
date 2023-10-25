@@ -49,4 +49,23 @@ export default class BridgeController implements IBridgeController /* TODO: exte
     }
   }
 
+  public async getBridgesAtBuildings(req: Request, res: Response, next: NextFunction) {
+
+    try {
+      const building1 = req.query.building1;
+      const building2 = req.query.building2;
+
+      const bridgeOrError = await this.bridgeServiceInstance.getBridgesAtBuildings(building1 as string, building2 as string) as Result<IBridgeDTO[]>;
+
+      if (bridgeOrError.isFailure) {
+        return res.status(402).json('Dont exist any bridge save on DB').send();
+      }
+
+      const bridgeDTO = bridgeOrError.getValue();
+      return res.json( bridgeDTO ).status(201);
+    }
+    catch (e) {
+      return next(e);
+    }
+  }
 }

@@ -97,4 +97,21 @@ export default class BridgeService implements IBridgeService {
     }
   }
 
+  public async getBridgesAtBuildings(building1: string, building2: string): Promise<Result<IBridgeDTO[]>> {
+    try {
+
+      const bridges = await this.bridgeRepo.getBridgesAtBuildings(building1, building2);
+
+      if (bridges === null) {
+        return Result.fail<IBridgeDTO[]>("There's currently no bridges on those buildings");
+      }
+      else {
+        const bridgeDTOs = bridges.map((bridges) => BridgeMap.toDTO(bridges) as IBridgeDTO);
+        return Result.ok<IBridgeDTO[]>( bridgeDTOs)
+      }
+    } catch (e) {
+      throw e;
+    }
+}
+
 }

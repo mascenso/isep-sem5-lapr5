@@ -7,4 +7,6 @@ export default interface IBridgeService  {
 
   getBridge (roleId: string): Promise<Result<IBridgeDTO>>;
   getAllBridges(): Promise<Result<IBridgeDTO[]>>;
+
+  getBridgesAtBuildings(building1: string, building2: string): Promise<Result<IBridgeDTO[]>>;
 }

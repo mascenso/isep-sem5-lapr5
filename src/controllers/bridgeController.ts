@@ -35,14 +35,14 @@ export default class BridgeController implements IBridgeController /* TODO: exte
 
     try {
 
-      const buildingOrError = await this.bridgeServiceInstance.getAllBridges(req.body as IBridgeDTO) as Result<IBridgeDTO[]>;
+      const bridgeOrError = await this.bridgeServiceInstance.getAllBridges() as Result<IBridgeDTO[]>;
 
-      if (buildingOrError.isFailure) {
-        return res.status(402).json('Dont exist any building save on DB').send();
+      if (bridgeOrError.isFailure) {
+        return res.status(402).json('Dont exist any bridge save on DB').send();
       }
 
-      const buildingDTO = buildingOrError.getValue();
-      return res.json( buildingDTO ).status(201);
+      const bridgeDTO = bridgeOrError.getValue();
+      return res.json( bridgeDTO ).status(201);
     }
     catch (e) {
       return next(e);

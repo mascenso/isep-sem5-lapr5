@@ -39,6 +39,11 @@ export default async ({ expressApp }) => {
     schema: '../persistence/schemas/robotSchema',
   };
 
+  const robotTypeSchema = {
+    // compare with the approach followed in repos and services
+    name: 'robotTypeSchema',
+    schema: '../persistence/schemas/robotTypeSchema',
+  };
   const bridgeSchema = {
     // compare with the approach followed in repos and services
     name: 'bridgeSchema',
@@ -60,6 +65,11 @@ export default async ({ expressApp }) => {
   const robotController = {
     name: config.controllers.robot.name,
     path: config.controllers.robot.path
+  };
+
+  const robotTypeController = {
+    name: config.controllers.robotType.name,
+    path: config.controllers.robotType.path
   };
 
   const buildingController = {
@@ -90,6 +100,11 @@ export default async ({ expressApp }) => {
   const robotRepo = {
     name: config.repos.robot.name,
     path: config.repos.robot.path
+  };
+
+  const robotTypeRepo = {
+    name: config.repos.robotType.name,
+    path: config.repos.robotType.path
   };
 
   const userRepo = {
@@ -127,6 +142,11 @@ export default async ({ expressApp }) => {
     path: config.services.robot.path
   }
 
+  const robotTypeService = {
+    name: config.services.robotType.name,
+    path: config.services.robotType.path
+  }
+
   const buildingService = {
     name: config.services.building.name,
     path: config.services.building.path
@@ -154,6 +174,7 @@ export default async ({ expressApp }) => {
       roleSchema,
       buildingSchema,
       robotSchema,
+      robotTypeSchema,
       floorSchema,
       elevatorSchema,
       bridgeSchema
@@ -162,6 +183,7 @@ export default async ({ expressApp }) => {
       roleController,
       buildingController,
       robotController,
+      robotTypeController,
       floorController,
       elevatorController,
       bridgeController
@@ -171,6 +193,7 @@ export default async ({ expressApp }) => {
       userRepo,
       buildingRepo,
       robotRepo,
+      robotTypeRepo,
       floorRepo,
       elevatorRepo,
       bridgeRepo
@@ -179,6 +202,7 @@ export default async ({ expressApp }) => {
       roleService,
       buildingService,
       robotService,
+      robotTypeService,
       floorService,
       bridgeService,
       elevatorService

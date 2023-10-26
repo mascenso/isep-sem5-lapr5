@@ -7,6 +7,7 @@ import { RobotTypeMap } from "../mappers/RobotTypeMap";
 
 import { Document, FilterQuery, Model } from 'mongoose';
 import { IRobotTypePersistence } from '../dataschema/IRobotTypePersistence';
+import TaskType from '../enums/taskType';
 
 @Service()
 export default class RobotTypeRepo implements IRobotTypeRepo {
@@ -40,15 +41,17 @@ export default class RobotTypeRepo implements IRobotTypeRepo {
     try {
       if (robotTypeDocument === null ) {
         const rawRobotType: any = RobotTypeMap.toPersistence(robotType);
+        rawRobotType.tipoTarefas = robotType.tipoTarefas.map(taskType => taskType.toString());
 
         const robotTypeCreated = await this.robotTypeSchema.create(rawRobotType);
 
         return RobotTypeMap.toDomain(robotTypeCreated);
       } else {
-        robotTypeDocument.designacao = robotType.designacao;
-        robotTypeDocument.tipoTarefas = robotType.tipoTarefas;
-        await robotTypeDocument.save();
 
+        robotTypeDocument.designacao = robotType.designacao;
+        robotTypeDocument.tipoTarefas = robotType.tipoTarefas.map(taskTypeStr => TaskType[taskTypeStr]);
+
+        await robotTypeDocument.save();
         return robotType;
       }
     } catch (err) {
@@ -67,11 +70,11 @@ export default class RobotTypeRepo implements IRobotTypeRepo {
       return null;
   }
 
-  public async findByDesignationOrTaskType(designation: string, taskType: string): Promise<RobotType[]> {
+  public async findByDesignationOrTaskType(designation: string, taskType: TaskType[]): Promise<RobotType[]> {
     const query = {
       $or: [
         { designacao: designation },
-        { tipoTarefas: taskType }
+        { tipoTarefas: taskType.toString() },
       ]
     };
 

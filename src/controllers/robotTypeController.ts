@@ -7,6 +7,7 @@ import IRobotTypeService from '../services/IServices/IRobotTypeService';
 import IRobotTypeDTO from '../dto/IRobotTypeDTO';
 
 import { Result } from "../core/logic/Result";
+import TaskType from '../enums/taskType';
 
 @Service()
 export default class RobotTypeController implements IRobotTypeController /* TODO: extends ../core/infra/BaseController */ {
@@ -49,7 +50,7 @@ export default class RobotTypeController implements IRobotTypeController /* TODO
   public async findByDesignationOrTaskType(req: Request, res: Response, next: NextFunction) {
     try {
       const robotTypeOrError = await this.robotTypeServiceInstance.findByDesignationOrTaskType(
-                                req.query?.designation as string, req.query?.taskType as string) as Result<IRobotTypeDTO[]>;
+                                req.query?.designation as string, req.query?.taskType as TaskType[]) as Result<IRobotTypeDTO[]>;
       if (robotTypeOrError.isFailure) {
         return res.status(404).json(`There are no Robots Type in the database with the provided designation or able to to execute that task type.`);
       }

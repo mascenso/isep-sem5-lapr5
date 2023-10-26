@@ -6,6 +6,7 @@ import IRobotTypeRepo from './IRepos/IRobotTypeRepo';
 import IRobotTypeService from './IServices/IRobotTypeService';
 import { Result } from "../core/logic/Result";
 import { RobotTypeMap } from "../mappers/RobotTypeMap";
+import TaskType from '../enums/taskType';
 
 @Service()
 export default class RobotTypeService implements IRobotTypeService {
@@ -70,7 +71,7 @@ export default class RobotTypeService implements IRobotTypeService {
     }
   }
 
-  public async findByDesignationOrTaskType(designation: string, taskType: string): Promise<Result<IRobotTypeDTO[]>> {
+  public async findByDesignationOrTaskType(designation: string, taskType: TaskType[]): Promise<Result<IRobotTypeDTO[]>> {
     try {
 
       const robotTypeList = await this.robotTypeRepo.findByDesignationOrTaskType(designation, taskType);

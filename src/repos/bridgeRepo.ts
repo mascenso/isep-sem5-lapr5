@@ -87,9 +87,9 @@ export default class BridgeRepo implements IBridgeRepo {
 
   async getBridgesAtBuildings(building1: string, building2: string): Promise<any> {
     try {
-      const query = { $or: [{ floorA: building1, floorB: building2 }, { floorA: building1, floorB: building2 }] };
 
-      //const query = {code: "123"};
+      "guardava uma vez apenas na BD e a pesquisar pesquisava das 2 formas."
+      const query = { $or: [{ buildingA: building1, buildingB: building2 }, { buildingA: building1, buildingB: building2 }] };
 
       const bridgeRecords = await this.bridgeSchema.find(query);
 

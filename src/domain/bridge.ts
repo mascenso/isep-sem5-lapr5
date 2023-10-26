@@ -3,18 +3,18 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 import { Result } from "../core/logic/Result";
 import { BridgeId } from "./bridgeId";
 import IBridgeDTO from "../dto/IBridgeDTO";
-
+import { BridgedFloors } from "./bridgedFloors";
 
 interface BridgeProps {
   code: string;
   name: string;
   floorA: string;
   floorB: string;
-  //bridgedFloors: string[];
+  buildingA: string;
+  buildingB: string;
 }
 
 export class Bridge extends AggregateRoot<BridgeProps> {
-
 
   get id (): UniqueEntityID {
     return this._id;
@@ -26,6 +26,14 @@ export class Bridge extends AggregateRoot<BridgeProps> {
 
   get code() : string {
     return this.props.code;
+  }
+
+  get buildingA() : string {
+    return this.props.buildingA;
+  }
+
+  get buildingB() : string {
+    return this.props.buildingB;
   }
 
   get floorA() : string {
@@ -44,22 +52,20 @@ export class Bridge extends AggregateRoot<BridgeProps> {
     this.props.code = value;
   }
 
-  /*
-  get bridgedFloors() : string[] {
-    return this.props.bridgedFloors;
-  }
-
-  set bridgedFloors (value: string[]) {
-    this.props.bridgedFloors = value.sort();
-  }
-   */
-
   set floorA (value: string) {
     this.props.floorA = value;
   }
 
   set floorB (value: string) {
     this.props.floorB = value;
+  }
+
+  set buildingA (value: string) {
+    this.props.buildingA = value;
+  }
+
+  set buildingB (value: string) {
+    this.props.buildingB = value;
   }
 
   private constructor (props: BridgeProps, id?: UniqueEntityID) {
@@ -71,45 +77,21 @@ export class Bridge extends AggregateRoot<BridgeProps> {
     const code = roleDTO.code;
     const floorA = roleDTO.floorA;
     const floorB = roleDTO.floorB;
-    //const bridgedFloors = roleDTO.bridgedFloors;
+    const buildingA = roleDTO.buildingA;
+    const buildingB = roleDTO.buildingB;
 
     if (!!name === false || name.length === 0) {
-      return Result.fail<Bridge>('Must provide a role name')
+      return Result.fail<Bridge>('Must provide a bridge name')
     } else {
-      const role = new Bridge({
+      const bridge = new Bridge({
         name: name,
         code: code,
-        //bridgedFloors : bridgedFloors,
+        buildingA: buildingA,
+        buildingB: buildingB,
         floorA: floorA,
         floorB: floorB
       }, id);
-      return Result.ok<Bridge>( role )
+      return Result.ok<Bridge>( bridge )
     }
   }
-
-  /*
-  public static create (props: BridgeProps, id?: UniqueEntityID): Result<Bridge> {
-    const guardedProps = [
-      { argument: props.code, argumentName: 'code' },
-      { argument: props.name, argumentName: 'name' },
-      { argument: props.bridgedFloors, argumentName: 'bridgedFloors' },
-    ];
-
-    const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
-
-    if (!guardResult.succeeded) {
-      return Result.fail<Bridge>(guardResult.message)
-    }
-    else {
-      const building = new Bridge({
-        ...props
-      }, id);
-
-      return Result.ok<Bridge>(building);
-    }
-  }
-
-   */
-
-
 }

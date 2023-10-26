@@ -6,9 +6,6 @@ import IBridgeRepo from '../services/IRepos/IBridgeRepo';
 import IBridgeService from './IServices/IBridgeService';
 import { Result } from "../core/logic/Result";
 import { BridgeMap } from "../mappers/BridgeMap";
-import { IFloorDTO } from "../dto/IFloorDTO";
-import { Floor } from "../domain/floor";
-import { FloorMap } from "../mappers/FloorMap";
 import IFloorRepo from "./IRepos/IFloorRepo";
 
 @Service()
@@ -86,7 +83,7 @@ export default class BridgeService implements IBridgeService {
       const bridges = await this.bridgeRepo.getAllBridges();
 
       if (bridges === null) {
-        return Result.fail<IBridgeDTO[]>("There's currently no bridges");
+        return Result.fail<IBridgeDTO[]>("No bridges found");
       }
       else {
         const bridgeDTOs = bridges.map((bridges) => BridgeMap.toDTO(bridges) as IBridgeDTO);
@@ -103,7 +100,7 @@ export default class BridgeService implements IBridgeService {
       const bridges = await this.bridgeRepo.getBridgesAtBuildings(building1, building2);
 
       if (bridges === null) {
-        return Result.fail<IBridgeDTO[]>("There's currently no bridges on those buildings");
+        return Result.fail<IBridgeDTO[]>("Bridge not found");
       }
       else {
         const bridgeDTOs = bridges.map((bridges) => BridgeMap.toDTO(bridges) as IBridgeDTO);

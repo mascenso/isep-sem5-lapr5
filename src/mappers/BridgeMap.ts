@@ -16,9 +16,10 @@ export class BridgeMap extends Mapper<Bridge> {
       id: bridge.id.toString(),
       code: bridge.code,
       name: bridge.name,
+      buildingA: bridge.buildingA,
+      buildingB: bridge.buildingB,
       floorA: bridge.floorA,
       floorB: bridge.floorB,
-      //bridgedFloors: bridge.bridgedFloors,
     } as IBridgeDTO;
   }
 
@@ -38,9 +39,10 @@ export class BridgeMap extends Mapper<Bridge> {
       domainId: bridge.id.toString(),
       code: bridge.code,
       name: bridge.name,
+      buildingA: bridge.buildingA,
+      buildingB: bridge.buildingB,
       floorA: bridge.floorA,
       floorB: bridge.floorB,
-      //bridgedFloors: bridge.bridgedFloors,
     }
   }
 }

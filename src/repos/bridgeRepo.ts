@@ -98,6 +98,18 @@ export default class BridgeRepo implements IBridgeRepo {
     } catch (err) {
       throw err;
     }
+  }
 
+  async areConnected(floorA: string, floorB: string): Promise<boolean> {
+    try {
+      const query = { $or: [{ floorA: floorA, floorB: floorB }, { floorA: floorB, floorB: floorA }] };
+
+      const bridgeRecords = await this.bridgeSchema.findOne(query);
+
+      return bridgeRecords != null;
+
+    } catch (err) {
+      throw err;
+    }
   }
 }

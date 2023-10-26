@@ -47,12 +47,21 @@ export default class BridgeService implements IBridgeService {
         return Result.fail<IBridgeDTO>(bridgeOrError.errorValue());
       }
 
-      const bridgeResult = bridgeOrError.getValue();
+      if (await this.bridgeRepo.areConnected(bridgeDTO.floorA, bridgeDTO.floorB))
+      {
+        // Combinação já existente
+        return Result.fail<IBridgeDTO>('Bridge already exists');
+      }
+      else
+      {
+        // Criação e persistência do novo objeto Bridge
+        const bridgeResult = bridgeOrError.getValue();
+        await this.bridgeRepo.save(bridgeResult);
 
-      await this.bridgeRepo.save(bridgeResult);
+        const bridgeDTOResult = BridgeMap.toDTO( bridgeResult ) as IBridgeDTO;
+        return Result.ok<IBridgeDTO>( bridgeDTOResult )
+      }
 
-      const bridgeDTOResult = BridgeMap.toDTO( bridgeResult ) as IBridgeDTO;
-      return Result.ok<IBridgeDTO>( bridgeDTOResult )
     } catch (e) {
       throw e;
     }

@@ -1,14 +1,13 @@
 import { AggregateRoot } from "../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
-
 import { Result } from "../core/logic/Result";
 import { RobotTypeId } from "./robotTypeId";
-
 import IRobotTypeDTO from "../dto/IRobotTypeDTO";
+import TaskType from '../enums/taskType';
 
 interface RobotTypeProps {
   designacao: string;
-  tipoTarefas: string;
+  tipoTarefas: TaskType[];
 }
 
 export class RobotType extends AggregateRoot<RobotTypeProps> {
@@ -24,7 +23,7 @@ export class RobotType extends AggregateRoot<RobotTypeProps> {
     return this.props.designacao;
   }
 
-  get tipoTarefas (): string {
+  get tipoTarefas (): TaskType[] {
     return this.props.tipoTarefas;
   }
   
@@ -32,7 +31,7 @@ export class RobotType extends AggregateRoot<RobotTypeProps> {
     this.props.designacao = value;
   }
 
-  set tipoTarefas ( value: string) {
+  set tipoTarefas ( value: TaskType[]) {
     this.props.tipoTarefas = value;
   }
 
@@ -47,8 +46,7 @@ export class RobotType extends AggregateRoot<RobotTypeProps> {
     if (!!designacao === false || designacao.length === 0) {
       return Result.fail<RobotType>('Must provide a robot type designation.')
     } else {
-      const robotType = new RobotType({ designacao: designacao,
-      tipoTarefas: tipoTarefas }, id);
+      const robotType = new RobotType({ designacao: designacao, tipoTarefas: tipoTarefas }, id);
       return Result.ok<RobotType>( robotType )
     }
   }

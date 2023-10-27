@@ -7,6 +7,8 @@ import building from './routes/buildingRoute';
 import floor from './routes/floorRoute';
 import bridge from './routes/bridgeRoute';
 import elevator from './routes/elevatorRoute';
+import room from './routes/roomRoute';
+
 
 export default () => {
 	const app = Router();
@@ -16,9 +18,10 @@ export default () => {
 	role(app);
 	robot(app);
  	building(app);
-	 floor(app);
-	 bridge(app);
+  floor(app);
+  bridge(app);
 	elevator(app);
+  room(app);
 
 	return app
 }

@@ -5,7 +5,7 @@ import {Guard} from "../core/logic/Guard";
 
 interface FloorProps {
     buildingId: string;
-    width: number; 
+    width: number;
     length: number;
     floorNumber: number;
     description?: string;

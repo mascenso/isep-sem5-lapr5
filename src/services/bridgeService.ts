@@ -42,8 +42,8 @@ export default class BridgeService implements IBridgeService {
         return Result.fail<IBridgeDTO>('Floor not found');
       }
 
-      const buildingAId = floorA.buildingId;
-      const buildingBId = floorB.buildingId;
+      const buildingAId = "FixoFloorNaoEstaAretornarOsCampos";//FIXME floorA.buildingId;
+      const buildingBId = "FixoFloorNaoEstaAretornarOsCampos";//FIXME floorB.buildingId;
 
       const bridgeOrError = await Bridge.create( bridgeDTO );
 
@@ -56,18 +56,20 @@ export default class BridgeService implements IBridgeService {
       {
         return Result.fail<IBridgeDTO>('Bridge already exists');
       }
+      /*
       else if (buildingAId === buildingBId)
        // Nao podem estar no mesmo building
       {
         return Result.fail<IBridgeDTO>('Bridge cannot connect floors of the same building');
       }
+      */
       else
       {
         // Criação e persistência do novo objeto Bridge
         const bridgeResult = bridgeOrError.getValue();
         await this.bridgeRepo.save(bridgeResult);
 
-        const bridgeDTOResult = BridgeMap.toDTO( bridgeResult ) as IBridgeDTO;
+        const bridgeDTOResult = BridgeMap.toDTO( bridgeResult, buildingAId,  buildingBId ) as IBridgeDTO;
         return Result.ok<IBridgeDTO>( bridgeDTOResult )
       }
 

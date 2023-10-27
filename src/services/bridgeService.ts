@@ -12,7 +12,7 @@ import IFloorRepo from "./IRepos/IFloorRepo";
 export default class BridgeService implements IBridgeService {
   constructor(
     @Inject(config.repos.bridge.name) private bridgeRepo : IBridgeRepo,
-    @Inject(config.repos.floor.name) private floorRepo : IFloorRepo
+    @Inject(config.repos.floor.name) private floorRepo : IFloorRepo,
   ) {}
 
   public async getBridge( bridgeId: string): Promise<Result<IBridgeDTO>> {
@@ -41,6 +41,10 @@ export default class BridgeService implements IBridgeService {
       if(floorA === null || floorB === null) {
         return Result.fail<IBridgeDTO>('Floor not found');
       }
+
+      const buildingAId = floorA.buildingId;
+      const buildingBId = floorB.buildingId;
+
       const bridgeOrError = await Bridge.create( bridgeDTO );
 
       if (bridgeOrError.isFailure) {
@@ -48,9 +52,14 @@ export default class BridgeService implements IBridgeService {
       }
 
       if (await this.bridgeRepo.areConnected(bridgeDTO.floorA, bridgeDTO.floorB))
+      // Combinação já existente
       {
-        // Combinação já existente
         return Result.fail<IBridgeDTO>('Bridge already exists');
+      }
+      else if (buildingAId === buildingBId)
+       // Nao podem estar no mesmo building
+      {
+        return Result.fail<IBridgeDTO>('Bridge cannot connect floors of the same building');
       }
       else
       {

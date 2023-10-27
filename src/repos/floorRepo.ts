@@ -65,7 +65,7 @@ export default class FloorRepo implements IFloorRepo {
     const query = { domainId: floorId};
 
     const floorRecord = await this.floorSchema.findOne( query as FilterQuery<IFloorPersistence & Document> );
-    
+
     if( floorRecord != null) {
       return FloorMap.toDomain(floorRecord);
     }

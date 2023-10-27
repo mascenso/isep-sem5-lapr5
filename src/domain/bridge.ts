@@ -3,15 +3,12 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 import { Result } from "../core/logic/Result";
 import { BridgeId } from "./bridgeId";
 import IBridgeDTO from "../dto/IBridgeDTO";
-import { BridgedFloors } from "./bridgedFloors";
 
 interface BridgeProps {
   code: string;
   name: string;
   floorA: string;
   floorB: string;
-  buildingA: string;
-  buildingB: string;
 }
 
 export class Bridge extends AggregateRoot<BridgeProps> {
@@ -26,14 +23,6 @@ export class Bridge extends AggregateRoot<BridgeProps> {
 
   get code() : string {
     return this.props.code;
-  }
-
-  get buildingA() : string {
-    return this.props.buildingA;
-  }
-
-  get buildingB() : string {
-    return this.props.buildingB;
   }
 
   get floorA() : string {
@@ -60,25 +49,16 @@ export class Bridge extends AggregateRoot<BridgeProps> {
     this.props.floorB = value;
   }
 
-  set buildingA (value: string) {
-    this.props.buildingA = value;
-  }
-
-  set buildingB (value: string) {
-    this.props.buildingB = value;
-  }
-
   private constructor (props: BridgeProps, id?: UniqueEntityID) {
     super(props, id);
   }
 
-  public static create (roleDTO: IBridgeDTO, id?: UniqueEntityID): Result<Bridge> {
-    const name = roleDTO.name;
-    const code = roleDTO.code;
-    const floorA = roleDTO.floorA;
-    const floorB = roleDTO.floorB;
-    const buildingA = roleDTO.buildingA;
-    const buildingB = roleDTO.buildingB;
+  public static create (bridgeDTO: IBridgeDTO, id?: UniqueEntityID): Result<Bridge> {
+    const name = bridgeDTO.name;
+    const code = bridgeDTO.code;
+    const floorA = bridgeDTO.floorA;
+    const floorB = bridgeDTO.floorB;
+
 
     if (!!name === false || name.length === 0) {
       return Result.fail<Bridge>('Must provide a bridge name')
@@ -86,8 +66,6 @@ export class Bridge extends AggregateRoot<BridgeProps> {
       const bridge = new Bridge({
         name: name,
         code: code,
-        buildingA: buildingA,
-        buildingB: buildingB,
         floorA: floorA,
         floorB: floorB
       }, id);

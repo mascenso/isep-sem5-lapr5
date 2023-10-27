@@ -53,6 +53,10 @@ export default (app: Router) => {
     (req, res, next) => { ctrl.getAllBuildings(req, res, next);
   });
 
+  //  GET /api/buildings?building1={building1}&building2={building2}:
+  route.get('/minmaxfloors',  (req, res, next) => { ctrl.getBuildingsByMinMaxFloors(req, res, next); }  );
+
+  /*
   route.get('/buildings/minmaxfloors', async (req, res, next) => {
     const { minFloors, maxFloors } = req.query;
   
@@ -77,8 +81,9 @@ export default (app: Router) => {
     } catch (error) {
       next(error);
     }
+    
   });
-  
+  */
   
 
 

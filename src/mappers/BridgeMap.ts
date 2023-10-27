@@ -11,14 +11,15 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 export class BridgeMap extends Mapper<Bridge> {
 
-  public static toDTO( bridge: Bridge): IBridgeDTO {
+  public static toDTO( bridge: Bridge, buildingA?: string, buildingB?: string): IBridgeDTO {
     return {
       id: bridge.id.toString(),
       code: bridge.code,
       name: bridge.name,
+      buildingA: buildingA,
+      buildingB: buildingB,
       floorA: bridge.floorA,
       floorB: bridge.floorB,
-      //bridgedFloors: bridge.bridgedFloors,
     } as IBridgeDTO;
   }
 
@@ -33,14 +34,15 @@ export class BridgeMap extends Mapper<Bridge> {
     return bridgeOrError.isSuccess ? bridgeOrError.getValue() : null;
   }
 
-  public static toPersistence (bridge: Bridge): any {
+  public static toPersistence (bridge: Bridge, buildingAId:string, buildingBId:string): any {
     return {
       domainId: bridge.id.toString(),
       code: bridge.code,
       name: bridge.name,
       floorA: bridge.floorA,
       floorB: bridge.floorB,
-      //bridgedFloors: bridge.bridgedFloors,
+      buildingA: buildingAId,
+      buildingB: buildingBId,
     }
   }
 }

@@ -32,14 +32,14 @@ export default class BridgeRepo implements IBridgeRepo {
     return !!bridgeDocument === true;
   }
 
-  public async save (bridge: Bridge): Promise<Bridge> {
+  public async save (bridge: Bridge, buildingAId:string, buildingBId:string): Promise<Bridge> {
     const query = { domainId: bridge.id.toString()};
 
     const bridgeDocument = await this.bridgeSchema.findOne( query );
 
     try {
       if (bridgeDocument === null ) {
-        const rawBridge: any = BridgeMap.toPersistence(bridge);
+        const rawBridge: any = BridgeMap.toPersistence(bridge, buildingAId, buildingBId);
 
         const bridgeCreated = await this.bridgeSchema.create(rawBridge);
 
@@ -87,9 +87,9 @@ export default class BridgeRepo implements IBridgeRepo {
 
   async getBridgesAtBuildings(building1: string, building2: string): Promise<any> {
     try {
-      const query = { $or: [{ floorA: building1, floorB: building2 }, { floorA: building1, floorB: building2 }] };
 
-      //const query = {code: "123"};
+      "guardava uma vez apenas na BD e a pesquisar pesquisava das 2 formas."
+      const query = { $or: [{ buildingA: building1, buildingB: building2 }, { buildingA: building1, buildingB: building2 }] };
 
       const bridgeRecords = await this.bridgeSchema.find(query);
 
@@ -98,6 +98,18 @@ export default class BridgeRepo implements IBridgeRepo {
     } catch (err) {
       throw err;
     }
+  }
 
+  async areConnected(floorA: string, floorB: string): Promise<boolean> {
+    try {
+      const query = { $or: [{ floorA: floorA, floorB: floorB }, { floorA: floorB, floorB: floorA }] };
+
+      const bridgeRecords = await this.bridgeSchema.findOne(query);
+
+      return bridgeRecords != null;
+
+    } catch (err) {
+      throw err;
+    }
   }
 }

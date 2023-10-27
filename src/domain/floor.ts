@@ -5,7 +5,7 @@ import {Guard} from "../core/logic/Guard";
 
 interface FloorProps {
     buildingId: string;
-    width: number; 
+    width: number;
     length: number;
     floorNumber: number;
     description?: string;
@@ -53,7 +53,7 @@ export class Floor extends AggregateRoot<FloorProps> {
     return this._id;
   }
 
-  get buildingId() : string {
+  public get buildingId() : string {
     return this.props.buildingId;
   }
 

@@ -21,7 +21,6 @@ export default (app: Router) => {
         name: Joi.string().required(),
         floorA: Joi.string().required(),
           floorB: Joi.string().required(),
-          //bridgedFloors: Joi.array().items(Joi.string()).required(),
         })
     }),
     (req, res, next) => ctrl.createBridge(req, res, next) );

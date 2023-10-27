@@ -65,7 +65,7 @@ export default class FloorRepo implements IFloorRepo {
     const query = { domainId: floorId};
 
     const floorRecord = await this.floorSchema.findOne( query as FilterQuery<IFloorPersistence & Document> );
-    
+
     if( floorRecord != null) {
       return FloorMap.toDomain(floorRecord);
     }
@@ -84,6 +84,16 @@ export default class FloorRepo implements IFloorRepo {
     } catch (err) {
       throw err;
     }
+  }
 
+  async getAllFloors(): Promise<any> {
+    try {
+      const floorRecords = await this.floorSchema.find();
+
+      return floorRecords;
+
+    } catch (err) {
+      throw err;
+    }
   }
 }

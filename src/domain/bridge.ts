@@ -4,17 +4,14 @@ import { Result } from "../core/logic/Result";
 import { BridgeId } from "./bridgeId";
 import IBridgeDTO from "../dto/IBridgeDTO";
 
-
 interface BridgeProps {
   code: string;
   name: string;
   floorA: string;
   floorB: string;
-  //bridgedFloors: string[];
 }
 
 export class Bridge extends AggregateRoot<BridgeProps> {
-
 
   get id (): UniqueEntityID {
     return this._id;
@@ -44,16 +41,6 @@ export class Bridge extends AggregateRoot<BridgeProps> {
     this.props.code = value;
   }
 
-  /*
-  get bridgedFloors() : string[] {
-    return this.props.bridgedFloors;
-  }
-
-  set bridgedFloors (value: string[]) {
-    this.props.bridgedFloors = value.sort();
-  }
-   */
-
   set floorA (value: string) {
     this.props.floorA = value;
   }
@@ -66,50 +53,23 @@ export class Bridge extends AggregateRoot<BridgeProps> {
     super(props, id);
   }
 
-  public static create (roleDTO: IBridgeDTO, id?: UniqueEntityID): Result<Bridge> {
-    const name = roleDTO.name;
-    const code = roleDTO.code;
-    const floorA = roleDTO.floorA;
-    const floorB = roleDTO.floorB;
-    //const bridgedFloors = roleDTO.bridgedFloors;
+  public static create (bridgeDTO: IBridgeDTO, id?: UniqueEntityID): Result<Bridge> {
+    const name = bridgeDTO.name;
+    const code = bridgeDTO.code;
+    const floorA = bridgeDTO.floorA;
+    const floorB = bridgeDTO.floorB;
+
 
     if (!!name === false || name.length === 0) {
-      return Result.fail<Bridge>('Must provide a role name')
+      return Result.fail<Bridge>('Must provide a bridge name')
     } else {
-      const role = new Bridge({
+      const bridge = new Bridge({
         name: name,
         code: code,
-        //bridgedFloors : bridgedFloors,
         floorA: floorA,
         floorB: floorB
       }, id);
-      return Result.ok<Bridge>( role )
+      return Result.ok<Bridge>( bridge )
     }
   }
-
-  /*
-  public static create (props: BridgeProps, id?: UniqueEntityID): Result<Bridge> {
-    const guardedProps = [
-      { argument: props.code, argumentName: 'code' },
-      { argument: props.name, argumentName: 'name' },
-      { argument: props.bridgedFloors, argumentName: 'bridgedFloors' },
-    ];
-
-    const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
-
-    if (!guardResult.succeeded) {
-      return Result.fail<Bridge>(guardResult.message)
-    }
-    else {
-      const building = new Bridge({
-        ...props
-      }, id);
-
-      return Result.ok<Bridge>(building);
-    }
-  }
-
-   */
-
-
 }

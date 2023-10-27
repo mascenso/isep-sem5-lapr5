@@ -32,14 +32,14 @@ export default class BridgeRepo implements IBridgeRepo {
     return !!bridgeDocument === true;
   }
 
-  public async save (bridge: Bridge): Promise<Bridge> {
+  public async save (bridge: Bridge, buildingAId:string, buildingBId:string): Promise<Bridge> {
     const query = { domainId: bridge.id.toString()};
 
     const bridgeDocument = await this.bridgeSchema.findOne( query );
 
     try {
       if (bridgeDocument === null ) {
-        const rawBridge: any = BridgeMap.toPersistence(bridge);
+        const rawBridge: any = BridgeMap.toPersistence(bridge, buildingAId, buildingBId);
 
         const bridgeCreated = await this.bridgeSchema.create(rawBridge);
 

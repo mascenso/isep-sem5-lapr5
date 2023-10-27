@@ -84,6 +84,16 @@ export default class FloorRepo implements IFloorRepo {
     } catch (err) {
       throw err;
     }
+  }
 
+  async getAllFloors(): Promise<any> {
+    try {
+      const floorRecords = await this.floorSchema.find();
+
+      return floorRecords;
+
+    } catch (err) {
+      throw err;
+    }
   }
 }

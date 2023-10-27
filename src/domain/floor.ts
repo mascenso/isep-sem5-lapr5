@@ -53,7 +53,7 @@ export class Floor extends AggregateRoot<FloorProps> {
     return this._id;
   }
 
-  get buildingId() : string {
+  public get buildingId() : string {
     return this.props.buildingId;
   }
 

@@ -4,5 +4,6 @@ export default interface IBridgeDTO {
         name: string;
         floorA: string;
         floorB: string;
-  //bridgedFloors: string[];
+        buildingA: string;
+        buildingB: string;
 }

@@ -34,13 +34,15 @@ export class BridgeMap extends Mapper<Bridge> {
     return bridgeOrError.isSuccess ? bridgeOrError.getValue() : null;
   }
 
-  public static toPersistence (bridge: Bridge): any {
+  public static toPersistence (bridge: Bridge, buildingAId:string, buildingBId:string): any {
     return {
       domainId: bridge.id.toString(),
       code: bridge.code,
       name: bridge.name,
       floorA: bridge.floorA,
       floorB: bridge.floorB,
+      buildingA: buildingAId,
+      buildingB: buildingBId,
     }
   }
 }

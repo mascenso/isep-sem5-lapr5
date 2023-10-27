@@ -67,7 +67,7 @@ export default class BridgeService implements IBridgeService {
       {
         // Criação e persistência do novo objeto Bridge
         const bridgeResult = bridgeOrError.getValue();
-        await this.bridgeRepo.save(bridgeResult);
+        await this.bridgeRepo.save(bridgeResult, buildingAId, buildingBId);
 
         const bridgeDTOResult = BridgeMap.toDTO( bridgeResult, buildingAId,  buildingBId ) as IBridgeDTO;
         return Result.ok<IBridgeDTO>( bridgeDTOResult )

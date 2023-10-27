@@ -56,6 +56,12 @@ export default async ({ expressApp }) => {
     schema: '../persistence/schemas/elevatorSchema',
   };
 
+  const roomSchema = {
+    // compare with the approach followed in repos and services
+    name: 'roomSchema',
+    schema: '../persistence/schemas/roomSchema',
+  };
+
 
   const roleController = {
     name: config.controllers.role.name,
@@ -90,6 +96,11 @@ export default async ({ expressApp }) => {
   const elevatorController = {
     name: config.controllers.elevator.name,
     path: config.controllers.elevator.path
+  }
+
+  const roomController = {
+    name: config.controllers.room.name,
+    path: config.controllers.room.path
   }
 
   const roleRepo = {
@@ -132,6 +143,11 @@ export default async ({ expressApp }) => {
     path: config.repos.elevator.path
   }
 
+  const roomRepo = {
+    name: config.repos.room.name,
+    path: config.repos.room.path
+  }
+
   const roleService = {
     name: config.services.role.name,
     path: config.services.role.path
@@ -167,6 +183,11 @@ export default async ({ expressApp }) => {
     path: config.services.elevator.path
   }
 
+  const roomService = {
+    name: config.services.room.name,
+    path: config.services.room.path
+  }
+
   await dependencyInjectorLoader({
     mongoConnection,
     schemas: [
@@ -177,7 +198,8 @@ export default async ({ expressApp }) => {
       robotTypeSchema,
       floorSchema,
       elevatorSchema,
-      bridgeSchema
+      bridgeSchema,
+      roomSchema
     ],
     controllers: [
       roleController,
@@ -186,7 +208,8 @@ export default async ({ expressApp }) => {
       robotTypeController,
       floorController,
       elevatorController,
-      bridgeController
+      bridgeController,
+      roomController
     ],
     repos: [
       roleRepo,
@@ -196,7 +219,8 @@ export default async ({ expressApp }) => {
       robotTypeRepo,
       floorRepo,
       elevatorRepo,
-      bridgeRepo
+      bridgeRepo,
+      roomRepo
     ],
     services: [
       roleService,
@@ -205,7 +229,8 @@ export default async ({ expressApp }) => {
       robotTypeService,
       floorService,
       bridgeService,
-      elevatorService
+      elevatorService,
+      roomService
     ]
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');

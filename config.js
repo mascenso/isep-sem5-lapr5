@@ -68,6 +68,10 @@ export default {
     elevator:  {
       name: "ElevatorController",
       path: "../controllers/elevatorController"
+    },
+    room:  {
+      name: "RoomController",
+      path: "../controllers/roomController"
     }
   },
 
@@ -103,6 +107,10 @@ export default {
     elevator: {
       name: "Elevator",
       path: "../repos/elevatorRepo"
+    },
+    room: {
+      name: "Room",
+      path: "../repos/RoomRepo"
     }
   },
 
@@ -134,6 +142,10 @@ export default {
     elevator: {
       name: "ElevatorService",
       path: "../services/elevatorService"
+    },
+    room: {
+      name: "RoomService",
+      path: "../services/roomService"
     }
   },
 };

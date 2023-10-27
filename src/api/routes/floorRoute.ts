@@ -74,6 +74,9 @@ export default (app: Router) => {
   }),
   (req, res, next) => ctrl.updateFloor(req, res, next) );
 
+  //  GET /api/floors/buildings?building={building}
+  route.get('/buildings',  (req, res, next) => { ctrl.getFloorsAtBuildings(req, res, next); }  );
+
     
 
 };

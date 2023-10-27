@@ -5,4 +5,6 @@ export default interface IFloorController {
   addMapToFloor(req: Request, res: Response, next: NextFunction);
   updateFloor(req: Request, res: Response, next: NextFunction);
   getFloorsAtBuildings(req: Request, res: Response, next: NextFunction);
+
+  getAllFloors(req: Request, res: Response, next: NextFunction);
 }

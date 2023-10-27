@@ -8,9 +8,9 @@ const route = Router();
 
 export default (app: Router) => {
     app.use('/floors', route);
-  
+
     const ctrl = Container.get(config.controllers.floor.name) as IFloorController;
-  
+
     route.post('',
       celebrate({
         body: Joi.object({
@@ -77,6 +77,6 @@ export default (app: Router) => {
   //  GET /api/floors/buildings?building={building}
   route.get('/buildings',  (req, res, next) => { ctrl.getFloorsAtBuildings(req, res, next); }  );
 
-    
+  route.get('',  (req, res, next) => { ctrl.getAllFloors(req, res, next); }  );
 
 };

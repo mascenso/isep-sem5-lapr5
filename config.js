@@ -110,7 +110,7 @@ export default {
     },
     room: {
       name: "Room",
-      path: "../repos/RoomRepo"
+      path: "../repos/roomRepo"
     }
   },
 

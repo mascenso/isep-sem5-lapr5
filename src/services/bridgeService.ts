@@ -39,14 +39,14 @@ export default class BridgeService implements IBridgeService {
   public async createBridge(bridgeDTO: IBridgeDTO): Promise<Result<IBridgeDTO>> {
     try {
 
-      const floorA = await this.floorRepo.findByDomainId(bridgeDTO.floorA);
-      const floorB = await this.floorRepo.findByDomainId(bridgeDTO.floorB);
-      if (floorA === null || floorB === null) {
+      const floorAId = await this.floorRepo.findByDomainId(bridgeDTO.floorAId);
+      const floorBId = await this.floorRepo.findByDomainId(bridgeDTO.floorBId);
+      if (floorAId === null || floorBId === null) {
         return Result.fail<IBridgeDTO>('Floor not found');
       }
 
-      const buildingAId = floorA.buildingId;
-      const buildingBId = floorB.buildingId;
+      const buildingAId = floorAId.buildingId;
+      const buildingBId = floorBId.buildingId;
 
       const bridgeOrError = await Bridge.create(bridgeDTO);
 
@@ -54,7 +54,7 @@ export default class BridgeService implements IBridgeService {
         return Result.fail<IBridgeDTO>(bridgeOrError.errorValue());
       }
 
-      if (await this.bridgeRepo.areConnected(bridgeDTO.floorA, bridgeDTO.floorB))
+      if (await this.bridgeRepo.areConnected(bridgeDTO.floorAId, bridgeDTO.floorBId))
       // Combinação já existente
       {
         return Result.fail<IBridgeDTO>('Bridge already exists');
@@ -69,7 +69,9 @@ export default class BridgeService implements IBridgeService {
       else {
         // Criação e persistência do novo objeto Bridge
         const bridgeResult = bridgeOrError.getValue();
-        await this.bridgeRepo.save(bridgeResult, buildingAId, buildingBId);
+        bridgeResult.buildingBId = buildingBId;
+        bridgeResult.buildingAId = buildingAId;
+        await this.bridgeRepo.save(bridgeResult);
 
         const bridgeDTOResult = BridgeMap.toDTO(bridgeResult, buildingAId, buildingBId) as IBridgeDTO;
         return Result.ok<IBridgeDTO>(bridgeDTOResult)
@@ -91,8 +93,8 @@ export default class BridgeService implements IBridgeService {
       else {
         bridge.name = bridgeDTO.name;
         bridge.code = bridgeDTO.code;
-        bridge.floorA = bridgeDTO.floorA;
-        bridge.floorB = bridgeDTO.floorB;
+        bridge.floorAId = bridgeDTO.floorAId;
+        bridge.floorBId = bridgeDTO.floorBId;
         await this.bridgeRepo.save(bridge);
 
         const bridgeDTOResult = BridgeMap.toDTO(bridge) as IBridgeDTO;
@@ -160,9 +162,9 @@ export default class BridgeService implements IBridgeService {
         let floorNumber;
 
         if (buildingId === bridge.buildingA) {
-          floorNumber = await this.floorRepo.findByDomainId(bridge.floorA);
+          floorNumber = await this.floorRepo.findByDomainId(bridge.floorAId);
         } else if (buildingId === bridge.buildingB) {
-          floorNumber = await this.floorRepo.findByDomainId(bridge.floorB);
+          floorNumber = await this.floorRepo.findByDomainId(bridge.floorBId);
         }
 
         if (floorNumber) {

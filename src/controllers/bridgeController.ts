@@ -11,7 +11,6 @@ import IBuildingService from '../services/IServices/IBuildingService';
 export default class BridgeController implements IBridgeController /* TODO: extends ../core/infra/BaseController */ {
   constructor(
     @Inject(config.services.bridge.name) private bridgeServiceInstance: IBridgeService,
-    @Inject(config.services.building.name) private buildingServiceInstance: IBuildingService
   ) { }
 
   public async createBridge(req: Request, res: Response, next: NextFunction) {

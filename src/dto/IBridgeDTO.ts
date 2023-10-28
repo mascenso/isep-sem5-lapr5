@@ -2,8 +2,8 @@ export default interface IBridgeDTO {
         id: string;
         code: string;
         name: string;
-        floorA: string;
-        floorB: string;
-        buildingA: string;
-        buildingB: string;
+        floorAId: string;
+        floorBId: string;
+        buildingAId: string;
+        buildingBId: string;
 }

@@ -7,8 +7,10 @@ import IBridgeDTO from "../dto/IBridgeDTO";
 interface BridgeProps {
   code: string;
   name: string;
-  floorA: string;
-  floorB: string;
+  floorAId: string;
+  floorBId: string;
+  buildingAId?: string;
+  buildingBId?: string;
 }
 
 export class Bridge extends AggregateRoot<BridgeProps> {
@@ -25,12 +27,20 @@ export class Bridge extends AggregateRoot<BridgeProps> {
     return this.props.code;
   }
 
-  get floorA() : string {
-    return this.props.floorA;
+  get floorAId() : string {
+    return this.props.floorAId;
   }
 
-  get floorB() : string {
-    return this.props.floorB;
+  get floorBId() : string {
+    return this.props.floorBId;
+  }
+
+  get buildingAId() : string {
+    return this.props.buildingAId;
+  }
+
+  get buildingBId() : string {
+    return this.props.buildingBId;
   }
 
   set name ( value: string) {
@@ -41,12 +51,20 @@ export class Bridge extends AggregateRoot<BridgeProps> {
     this.props.code = value;
   }
 
-  set floorA (value: string) {
-    this.props.floorA = value;
+  set floorAId (value: string) {
+    this.props.floorAId = value;
   }
 
-  set floorB (value: string) {
-    this.props.floorB = value;
+  set floorBId (value: string) {
+    this.props.floorBId = value;
+  }
+
+  set buildingAId (value: string) {
+    this.props.buildingAId = value;
+  }
+
+  set buildingBId (value: string) {
+    this.props.buildingBId = value;
   }
 
   private constructor (props: BridgeProps, id?: UniqueEntityID) {
@@ -56,8 +74,8 @@ export class Bridge extends AggregateRoot<BridgeProps> {
   public static create (bridgeDTO: IBridgeDTO, id?: UniqueEntityID): Result<Bridge> {
     const name = bridgeDTO.name;
     const code = bridgeDTO.code;
-    const floorA = bridgeDTO.floorA;
-    const floorB = bridgeDTO.floorB;
+    const floorAId = bridgeDTO.floorAId;
+    const floorBId = bridgeDTO.floorBId;
 
 
     if (!!name === false || name.length === 0) {
@@ -66,8 +84,8 @@ export class Bridge extends AggregateRoot<BridgeProps> {
       const bridge = new Bridge({
         name: name,
         code: code,
-        floorA: floorA,
-        floorB: floorB
+        floorAId: floorAId,
+        floorBId: floorBId
       }, id);
       return Result.ok<Bridge>( bridge )
     }

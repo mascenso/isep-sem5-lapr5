@@ -67,4 +67,23 @@ export default class BuildingController implements IBuildingController /* TODO: 
       return next(e);
     }
   }
+
+  public async getBuildingById(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const buildingOrError = await this.buildingServiceInstance.getBuildingById(req.params.buildingId) as Result<IBuildingDTO>;
+
+      if (buildingOrError.isFailure) {
+        return res.status(404).json(`Building with id ${req.params.buildingId} not found!`).send();
+      }
+
+      const buildingDTO = buildingOrError.getValue();
+      return res.json( buildingDTO ).status(200);
+    }
+    catch (e) {
+      return next(e);
+    }
+  }
+
 }

@@ -9,13 +9,15 @@ import {Floor} from "../domain/floor";
 import IBuildingRepo from './IRepos/IBuildingRepo';
 import { IBuildingDTO } from '../dto/IBuildingDTO';
 import { BuildingMap } from '../mappers/BuildingMap';
+import IElevatorRepo from "./IRepos/IElevatorRepo";
 
 
 @Service()
 export default class FloorService implements IFloorService {
   constructor(
       @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo,
-      @Inject(config.repos.floor.name) private floorRepo : IFloorRepo
+      @Inject(config.repos.floor.name) private floorRepo : IFloorRepo,
+      @Inject(config.repos.elevator.name) private elevatorRepo : IElevatorRepo
   ) {}
 
   public async createFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
@@ -113,7 +115,7 @@ export default class FloorService implements IFloorService {
 
       const floors = await this.floorRepo.getFloorsAtBuildings(building);
 
-      if (floors === null) {
+      if (floors === null || floors.length === 0) {
         return Result.fail<IFloorDTO[]>("There's currently no floors on that building.");
       }
       else {
@@ -135,4 +137,29 @@ export default class FloorService implements IFloorService {
       throw e;
     }
   }
+
+  public async getFloorsWithElevatorByBuildingId(buildingId: string): Promise<Result<IFloorDTO[]>> {
+    try {
+      const floorListOrError = await this.getFloorsAtBuildings(buildingId) as Result<IFloorDTO[]>;
+      if (floorListOrError.isFailure) {
+        return Result.fail<IFloorDTO[]>(`Building with id ${buildingId} doesn't have any floors!`);
+      }
+      const floorDTOList = floorListOrError.getValue();
+      const elevatorsForFloorsList = await this.elevatorRepo.findByFloorIds(floorDTOList.map(floorDTO => floorDTO.id));
+      if (elevatorsForFloorsList === null) {
+        return Result.ok<IFloorDTO[]>([]);
+      }
+      // take the list of elevators, transform it in a list of floorIDs,
+      // filter the original floorDTO list by floorId
+      const floorDTOListResult = elevatorsForFloorsList
+        .map(elevator => elevator.floorId)
+        .flatMap(floorId => floorDTOList.filter(floorDTO => floorDTO.id === floorId));
+
+      return Result.ok<IFloorDTO[]>(floorDTOListResult);
+
+    } catch (e) {
+      throw e;
+    }
+  }
+
 }

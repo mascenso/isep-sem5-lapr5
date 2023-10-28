@@ -9,4 +9,5 @@ export default interface IFloorService  {
   getFloorsAtBuildings(building: string): Promise<Result<IFloorDTO[]>>;
   getBuildingsByMinMaxFloors(minFloors: number, maxFloors: number): Promise<Result<IBuildingDTO[]>>;
   getAllFloors(): Promise<Result<IFloorDTO[]>>;
+  getFloorsWithElevatorByBuildingId(buildingId: string): Promise<Result<IFloorDTO[]>>
 }

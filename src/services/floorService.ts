@@ -115,7 +115,7 @@ export default class FloorService implements IFloorService {
 
       const floors = await this.floorRepo.getFloorsAtBuildings(building);
 
-      if (floors === null) {
+      if (floors === null || floors.length === 0) {
         return Result.fail<IFloorDTO[]>("There's currently no floors on that building.");
       }
       else {

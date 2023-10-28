@@ -21,6 +21,9 @@ describe('Integration test floor controller -> service ', function () {
 		let buildingSchemaInstance = require("../../src/persistence/schemas/buildingSchema").default;
 		Container.set("buildingSchema", buildingSchemaInstance);
 
+		let elevatorSchemaClass = require("../../src/persistence/schemas/elevatorSchema").default;
+		Container.set("elevatorSchema", elevatorSchemaClass);
+
 		let floorSchemaInstance = require("../../src/persistence/schemas/floorSchema").default;
 		Container.set("floorSchema", floorSchemaInstance);
 
@@ -31,6 +34,10 @@ describe('Integration test floor controller -> service ', function () {
 		let floorRepoClass = require("../../src/repos/floorRepo").default;
 		let floorRepoInstance = Container.get(floorRepoClass);
 		Container.set("FloorRepo", floorRepoInstance);
+
+		let elevatorRepoClass = require("../../src/repos/elevatorRepo").default;
+		let elevatorRepoInstance = Container.get(elevatorRepoClass);
+		Container.set("ElevatorRepo", elevatorRepoInstance);
 
 		let buildingInstance = require("../../src/domain/building").Building;
 		Container.set("Building", buildingInstance);

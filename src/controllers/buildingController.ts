@@ -37,9 +37,9 @@ export default class BuildingController implements IBuildingController /* TODO: 
     try {
 
       const buildingOrError = await this.buildingServiceInstance.updateBuilding(req.body as IBuildingDTO) as Result<IBuildingDTO>;
-      
+
       if (buildingOrError.isFailure) {
-        return res.status(402).send();
+        return res.status(422).send(buildingOrError.errorValue());
       }
 
       const buildingDTO = buildingOrError.getValue();
@@ -54,10 +54,10 @@ export default class BuildingController implements IBuildingController /* TODO: 
 
     try {
 
-      const buildingOrError = await this.buildingServiceInstance.getAllBuildings(req.body as IBuildingDTO) as Result<IBuildingDTO[]>;
-      
+      const buildingOrError = await this.buildingServiceInstance.getAllBuildings() as Result<IBuildingDTO[]>;
+
       if (buildingOrError.isFailure) {
-        return res.status(402).json('Dont exist any building save on DB').send();
+        return res.status(402).json('There are no buildings registered in the system').send();
       }
 
       const buildingDTO = buildingOrError.getValue();
@@ -67,4 +67,23 @@ export default class BuildingController implements IBuildingController /* TODO: 
       return next(e);
     }
   }
+
+  public async getBuildingById(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const buildingOrError = await this.buildingServiceInstance.getBuildingById(req.params.buildingId) as Result<IBuildingDTO>;
+
+      if (buildingOrError.isFailure) {
+        return res.status(404).json(`Building with id ${req.params.buildingId} not found!`).send();
+      }
+
+      const buildingDTO = buildingOrError.getValue();
+      return res.json( buildingDTO ).status(200);
+    }
+    catch (e) {
+      return next(e);
+    }
+  }
+
 }

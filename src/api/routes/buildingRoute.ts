@@ -15,10 +15,8 @@ export default (app: Router) => {
     celebrate({
       body: Joi.object({
         code: Joi.string().required(),
-
-          maxWidth: Joi.number().required(),
-          maxLength: Joi.number().required(),
-
+        maxWidth: Joi.number().required(),
+        maxLength: Joi.number().required(),
         name: Joi.string(),
         description: Joi.string()
       })
@@ -51,9 +49,44 @@ export default (app: Router) => {
   }),
   (req, res, next) => ctrl.updateBuilding(req, res, next) );
 
-  route.get('', 
+  route.get('',
     (req, res, next) => { ctrl.getAllBuildings(req, res, next);
   });
- 
+
+  //  GET /api/buildings?building1={building1}&building2={building2}:
+  //route.get('/minmaxfloors',  (req, res, next) => { ctrl.getBuildingsByMinMaxFloors(req, res, next); }  );
+
+  /*
+  route.get('/buildings/minmaxfloors', async (req, res, next) => {
+    const { minFloors, maxFloors } = req.query;
+
+    try {
+      const result = await ctrl.getBuildingsByMinMaxFloors(req, res, next);
+
+      if (result.isFailure) {
+        return res.status(402).json('Error retrieving buildings').send();
+      }
+
+      let filteredBuildings = result.getValue();
+
+      if (minFloors) {
+        filteredBuildings = filteredBuildings.filter(building => building.floors >= minFloors);
+      }
+
+      if (maxFloors) {
+        filteredBuildings = filteredBuildings.filter(building => building.floors <= maxFloors);
+      }
+
+      res.json(filteredBuildings);
+    } catch (error) {
+      next(error);
+    }
+
+  });
+  */
+
+  route.get('/:buildingId',
+      (req, res, next) => { ctrl.getBuildingById(req, res, next);
+      });
 
 };

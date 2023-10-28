@@ -59,6 +59,21 @@ export default class RoomService implements IRoomService {
     }
   }
 
+  public async getRoomById(roomId: string): Promise<Result<IRoomDTO>> {
+    try {
+      const room = await this.roomRepo.findByDomainId(roomId);
+
+      if (room === null) {
+        return Result.fail<IRoomDTO>(`Room with id ${roomId} not found!`);
+      }
+      const roomDTO = RoomMap.toDTO(room) as IRoomDTO;
+      return Result.ok<IRoomDTO>(roomDTO);
+
+    } catch (e) {
+      throw e;
+    }
+  }
+
   private parseRoomType(roomTypeStr: string): RoomType | undefined {
     const roomType = Object.values(RoomType).find((value) => value === roomTypeStr);
     return roomType as RoomType | undefined;

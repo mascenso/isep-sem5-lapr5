@@ -23,4 +23,7 @@ export default (app: Router) => {
     }),
     (req, res, next) => ctrl.createRoom(req, res, next) );
 
+  route.get('/buildings/:buildingId/floors/:floorId/rooms/:roomId',
+    (req, res, next) => ctrl.getRoomById(req, res, next) );
+
 };

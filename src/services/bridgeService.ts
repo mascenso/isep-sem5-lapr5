@@ -7,12 +7,16 @@ import IBridgeService from './IServices/IBridgeService';
 import { Result } from "../core/logic/Result";
 import { BridgeMap } from "../mappers/BridgeMap";
 import IFloorRepo from "./IRepos/IFloorRepo";
+import IBuildingBridgeDTO from '../dto/IBuildingBridgeDTO';
+import IBuildingRepo from './IRepos/IBuildingRepo';
+import { BuildingBridge } from '../domain/buildingBridge';
 
 @Service()
 export default class BridgeService implements IBridgeService {
   constructor(
     @Inject(config.repos.bridge.name) private bridgeRepo : IBridgeRepo,
     @Inject(config.repos.floor.name) private floorRepo : IFloorRepo,
+    @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
   ) {}
 
   public async getBridge( bridgeId: string): Promise<Result<IBridgeDTO>> {
@@ -129,5 +133,46 @@ export default class BridgeService implements IBridgeService {
       throw e;
     }
   }
+
+  public async getBuildingBridges(buildingId: string): Promise<Result<IBuildingBridgeDTO[]>> {
+    try {
+      const building = await this.buildingRepo.findByDomainId(buildingId);
+
+      if (!building) {
+        return Result.fail<IBuildingBridgeDTO[]>('Building not found');
+      }
+
+      // Vai ao repositório de bridges para buscar as passagens relacionadas com o edifício.
+      const bridges = await this.bridgeRepo.getBridgesAtBuildings(buildingId, buildingId); // O metodo requer dois argumentos, passei o memso building duas vezes
+
+      if (bridges.length === 0) {
+        return Result.fail<IBuildingBridgeDTO[]>('No bridges with passageway found for this building');
+      }
+
+      // Array para armazenar os objetos BuildingBridge
+      const buildingBridges: IBuildingBridgeDTO[] = [];
+
+      bridges.forEach((bridge) => {
+
+        const buildingBridge = BuildingBridge.create({
+          buildingName: building.name,
+          floorNumber: parseInt(bridge.floorA),
+          description: bridge.name
+        });
+
+        if (buildingBridge.isSuccess) {
+          const buildingBridgeResult = buildingBridge.getValue();
+          buildingBridges.push(buildingBridgeResult);
+        } else {
+          console.error(buildingBridge.error);
+        }
+      });
+
+      return Result.ok<IBuildingBridgeDTO[]>(buildingBridges);
+    } catch (e) {
+      throw e;
+    }
+  }
+
 
 }

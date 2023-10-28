@@ -89,11 +89,36 @@ export default class FloorRepo implements IFloorRepo {
   async getAllFloors(): Promise<any> {
     try {
       const floorRecords = await this.floorSchema.find();
-
       return floorRecords;
 
     } catch (err) {
       throw err;
     }
   }
+
+  public async getBuildingsByMinMaxFloors (minFloors: number, maxFloors: number): Promise<any> {
+    try {
+      const allFloors = await this.floorSchema.find({});
+      const floorsGroupedByBuildingId = {};
+      allFloors.forEach(floor => {
+        if (!floorsGroupedByBuildingId[floor.buildingId]) {
+          floorsGroupedByBuildingId[floor.buildingId] = [];
+        }
+      floorsGroupedByBuildingId[floor.buildingId].push(floor);
+      });
+      const filteredBuildings = [];
+      for (const buildingId in floorsGroupedByBuildingId) {
+        const floors = floorsGroupedByBuildingId[buildingId];
+        const numberOfFloors = floors.length;
+        if (numberOfFloors >= minFloors && numberOfFloors <= maxFloors) {
+          const buildingInfo = buildingId;
+          filteredBuildings.push(buildingInfo);
+        }
+      }
+      return filteredBuildings;
+      } catch (err) {
+        throw err;
+      }
+  }
 }
+

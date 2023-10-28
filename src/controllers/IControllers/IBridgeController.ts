@@ -5,4 +5,5 @@ export default interface IBridgeController {
   getAllBridges(req: Request, res: Response, next: NextFunction);
 
   getBridgesAtBuildings(req: Request, res: Response, next: NextFunction);
+  updateBridge(req: Request, res: Response, next: NextFunction);
 }

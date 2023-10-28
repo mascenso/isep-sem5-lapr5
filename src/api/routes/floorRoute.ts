@@ -79,4 +79,7 @@ export default (app: Router) => {
 
   route.get('',  (req, res, next) => { ctrl.getAllFloors(req, res, next); }  );
 
+  //  GET /api/buildings?building1={building1}&building2={building2}:
+  route.get('/buildings/minmaxfloors',  (req, res, next) => { ctrl.getBuildingsByMinMaxFloors(req, res, next); }  );
+
 };

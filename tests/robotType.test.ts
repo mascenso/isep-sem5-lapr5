@@ -21,7 +21,7 @@ describe('RobotType', () => {
   it('should fail to create a RobotType with missing required properties', () => {
     const robotTypeProps = {
         id: "A",
-        designacao: null,
+        designacao: undefined,
         tipoTarefas: [TaskType.Task1, TaskType.Task2, TaskType.Task3]
     };
 

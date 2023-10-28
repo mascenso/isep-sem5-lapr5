@@ -23,11 +23,17 @@ export class ElevatorMap extends Mapper<Elevator> {
 
   public static toDomain (elevator: any | Model<IElevatorPersistence & Document> ): Elevator {
 
-    const elevatorOrError = Elevator.create(
-        elevator,
+    const elevatorOrError = Elevator.create({
+        code: elevator.code,
+        floorId: elevator.floorId,
+        coordX1: elevator.coordX1,
+        coordY1: elevator.coordY1,
+        coordX2: elevator.coordX2,
+        coordY2: elevator.coordY2
+      },
       new UniqueEntityID(elevator.domainId)
     );
-      
+
     elevatorOrError.isFailure ? console.log(elevatorOrError.error) : '';
 
     return elevatorOrError.isSuccess ? elevatorOrError.getValue() : null;

@@ -32,4 +32,10 @@ export default (app: Router) => {
   //  GET /api/bridges/buildings?building1={building1}&building2={building2}:
   route.get('/buildings',  (req, res, next) => { ctrl.getBridgesAtBuildings(req, res, next); }  );
 
+
+    //Para listar pisos de um edifício com passagem para outros edifícios
+  route.get('/:id/buldings-bridges', 
+    (req, res, next) => { ctrl.getBuildingBridges(req, res, next);
+  });
+
 };

@@ -14,8 +14,8 @@ import { BuildingMap } from '../mappers/BuildingMap';
 @Service()
 export default class FloorService implements IFloorService {
   constructor(
-      @Inject(config.repos.floor.name) private floorRepo : IFloorRepo,
-      @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo
+      @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo,
+      @Inject(config.repos.floor.name) private floorRepo : IFloorRepo
   ) {}
 
   public async createFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {

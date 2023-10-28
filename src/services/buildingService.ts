@@ -6,21 +6,19 @@ import {IBuildingDTO} from "../dto/IBuildingDTO";
 import {Result} from "../core/logic/Result";
 import {BuildingMap} from "../mappers/BuildingMap";
 import {Building} from "../domain/building";
-import IFloorRepo from './IRepos/IFloorRepo';
 
 
 @Service()
 export default class BuildingService implements IBuildingService {
   constructor(
       @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo,
-      //@Inject(config.repos.floor.name) private floorRepo : IFloorRepo
   ) {}
 
   public async createBuilding(buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO>> {
     try {
-      
+
       const buildingOrError = await Building.create( buildingDTO );
-      
+
       if (buildingOrError.isFailure) {
         return Result.fail<IBuildingDTO>(buildingOrError.errorValue());
       }

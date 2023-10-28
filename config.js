@@ -93,23 +93,23 @@ export default {
       path: "../repos/userRepo"
     },
     building: {
-      name: "Building",
+      name: "BuildingRepo",
       path: "../repos/buildingRepo"
     },
     floor: {
-      name: "Floor",
+      name: "FloorRepo",
       path: "../repos/floorRepo"
     },
     bridge: {
-      name: "Bridge",
+      name: "BridgeRepo",
       path: "../repos/bridgeRepo"
     },
     elevator: {
-      name: "Elevator",
+      name: "ElevatorRepo",
       path: "../repos/elevatorRepo"
     },
     room: {
-      name: "Room",
+      name: "RoomRepo",
       path: "../repos/roomRepo"
     }
   },

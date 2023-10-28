@@ -25,11 +25,24 @@ export default (app: Router) => {
     }),
     (req, res, next) => ctrl.createBridge(req, res, next) );
 
+  route.put('/:id',
+    celebrate({
+      body: Joi.object({
+        code: Joi.string().required(),
+        name: Joi.string().required(),
+        floorAId: Joi.string().required(),
+        floorBId: Joi.string().required(),
+      }),
+    }),
+    (req, res, next) => ctrl.updateBridge(req, res, next));
+
   route.get('',
     (req, res, next) => { ctrl.getAllBridges(req, res, next);
     });
 
   //  GET /api/bridges/buildings?building1={building1}&building2={building2}:
   route.get('/buildings',  (req, res, next) => { ctrl.getBridgesAtBuildings(req, res, next); }  );
+
+
 
 };

@@ -73,21 +73,14 @@ export default class BuildingRepo implements IBuildingRepo {
       return null;
   }
 
-  public async getAllBuildings (): Promise<any> {
+  public async getAllBuildings (): Promise<Building[]> {
     try {
       const query = {};
-
-      const buildingRecords = await this.buildingSchema.find(query);
-      
-      return buildingRecords;
+      const buildings = await this.buildingSchema.find(query);
+      return buildings.map(building => BuildingMap.toDomain(building));
     } catch (err) {
       throw err;
     }
-
-  
-
- 
-
-
   }
+
 }

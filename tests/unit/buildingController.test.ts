@@ -35,10 +35,11 @@ describe('building controller', function () {
     });
 
 	afterEach(function() {
+		sinon.restore();
 		sandbox.restore();
 	});
 
-    it('buildingController unit test using buildingService stub', async function () {
+    it('buildingController unit test using buildingService stub (createBuilding)', async function () {
 		// Arrange
         let body = { "code":'Building', "maxWidth":10,"maxLength":10,"name":"Edificio lindo","description":"Edificio muito alto." };
         let req: Partial<Request> = {};
@@ -74,7 +75,7 @@ describe('building controller', function () {
 		}));
 	});
 
-    it('buildingController unit test using buildingService mock', async function () {		
+    it('buildingController unit test using buildingService mock (createBuilding)', async function () {		
 		// Arrange
         let body = { "code":'Building', "maxWidth":10,"maxLength":10,"name":"Edificio lindo","description":"Edificio muito alto." };
         let req: Partial<Request> = {};
@@ -115,6 +116,78 @@ describe('building controller', function () {
 			"name":req.body.name,
 			"description":req.body.description
 		}));
+	});
+
+	it('buildingController unit test using buildingService stub (updateBuilding)', async function () {
+		// Arrange
+        let body = { "code":'Building', "maxWidth":10,"maxLength":10,"name":"Edificio lindo","description":"Edificio muito alto." };
+        let req: Partial<Request> = {};
+		req.body = body;
+        let res: Partial<Response> = {
+			json: sinon.spy()
+        };
+		let next: Partial<NextFunction> = () => {};
+
+		let buildingServiceInstance = Container.get("BuildingService");
+		sinon.stub(buildingServiceInstance, "updateBuilding").returns( Result.ok<IBuildingDTO>( {
+			"id":"123", 
+			"code": req.body.code,
+			"maxWidth":req.body.maxWidth,
+			"maxLength":req.body.maxLength,
+			"name":req.body.name,
+			"description":req.body.description} ));
+
+		const ctrl = new BuildingController(buildingServiceInstance as IBuildingService);
+
+		// Act
+		await ctrl.updateBuilding(<Request>req, <Response>res, <NextFunction>next);
+
+		// Assert
+		sinon.assert.calledOnce(res.json);
+		sinon.assert.calledWith(res.json, sinon.match({ 
+			"id":"123", 
+			"code": req.body.code,
+			"maxWidth":req.body.maxWidth,
+			"maxLength":req.body.maxLength,
+			"name":req.body.name,
+			"description":req.body.description
+		}));
+	});
+
+	it('buildingController unit test using buildingService stub (getAllBuildings)', async function () {
+		// Arrange
+        let body = { "code":'Building', "maxWidth":10,"maxLength":10,"name":"Edificio lindo","description":"Edificio muito alto." };
+        let req: Partial<Request> = {};
+		req.body = body;
+        let res: Partial<Response> = {
+			json: sinon.spy()
+        };
+		let next: Partial<NextFunction> = () => {};
+
+		let buildingServiceInstance = Container.get("BuildingService");
+		sinon.stub(buildingServiceInstance, "getAllBuildings").returns( Result.ok<IBuildingDTO[]>( [{
+			"id":"123", 
+			"code": req.body.code,
+			"maxWidth":req.body.maxWidth,
+			"maxLength":req.body.maxLength,
+			"name":req.body.name,
+			"description":req.body.description}]));
+
+		const ctrl = new BuildingController(buildingServiceInstance as IBuildingService);
+
+		// Act
+		await ctrl.getAllBuildings(<Request>req, <Response>res, <NextFunction>next);
+
+		// Assert
+		sinon.assert.calledOnce(res.json);
+		sinon.assert.calledWith(res.json, sinon.match([{ 
+			"id":"123", 
+			"code": req.body.code,
+			"maxWidth":req.body.maxWidth,
+			"maxLength":req.body.maxLength,
+			"name":req.body.name,
+			"description":req.body.description
+		}]));
 	});
 });
 

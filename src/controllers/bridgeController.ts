@@ -65,7 +65,7 @@ export default class BridgeController implements IBridgeController /* TODO: exte
     }
   }
 
-  public async getBridgesAtBuildings(req: Request, res: Response, next: NextFunction) {
+  public async getBridgesBetweenBuildings(req: Request, res: Response, next: NextFunction) {
 
     try {
       const building1 = req.query.building1;

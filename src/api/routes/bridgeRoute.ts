@@ -41,7 +41,7 @@ export default (app: Router) => {
     });
 
   //  GET /api/bridges/buildings?building1={building1}&building2={building2}:
-  route.get('/buildings',  (req, res, next) => { ctrl.getBridgesAtBuildings(req, res, next); }  );
+  route.get('/buildings',  (req, res, next) => { ctrl.getBridgesBetweenBuildings(req, res, next); }  );
 
 
 

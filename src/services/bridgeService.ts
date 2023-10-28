@@ -123,7 +123,7 @@ export default class BridgeService implements IBridgeService {
   public async getBridgesBetweenBuildings(building1: string, building2: string): Promise<Result<IBridgeDTO[]>> {
     try {
 
-      const bridges = await this.bridgeRepo.getBridgesAtBuildings(building1, building2);
+      const bridges = await this.bridgeRepo.getBridgesBetweenBuildings(building1, building2);
 
       if (bridges === null) {
         return Result.fail<IBridgeDTO[]>("Bridge not found");

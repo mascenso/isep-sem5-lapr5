@@ -49,6 +49,10 @@ export default {
       name: "RobotController",
       path: "../controllers/robotController"
     },
+    robotType: {
+      name: "RobotTypeController",
+      path: "../controllers/robotTypeController"
+    },
     building:  {
       name: "BuildingController",
       path: "../controllers/buildingController"
@@ -57,9 +61,17 @@ export default {
       name: "FloorController",
       path: "../controllers/floorController"
     },
+    bridge:  {
+      name: "BridgeController",
+      path: "../controllers/bridgeController"
+    },
     elevator:  {
       name: "ElevatorController",
       path: "../controllers/elevatorController"
+    },
+    room:  {
+      name: "RoomController",
+      path: "../controllers/roomController"
     }
   },
 
@@ -71,6 +83,10 @@ export default {
     robot: {
       name: "RobotRepo",
       path: "../repos/robotRepo"
+    },
+    robotType: {
+      name: "RobotTypeRepo",
+      path: "../repos/robotTypeRepo"
     },
     user: {
       name: "UserRepo",
@@ -84,9 +100,17 @@ export default {
       name: "Floor",
       path: "../repos/floorRepo"
     },
+    bridge: {
+      name: "Bridge",
+      path: "../repos/bridgeRepo"
+    },
     elevator: {
       name: "Elevator",
       path: "../repos/elevatorRepo"
+    },
+    room: {
+      name: "Room",
+      path: "../repos/roomRepo"
     }
   },
 
@@ -99,6 +123,10 @@ export default {
       name: "RobotService",
       path: "../services/robotService"
     },
+    robotType: {
+      name: "RobotTypeService",
+      path: "../services/robotTypeService"
+    },
     building: {
       name: "BuildingService",
       path: "../services/buildingService"
@@ -107,9 +135,17 @@ export default {
       name: "FloorService",
       path: "../services/floorService"
     },
+    bridge: {
+      name: "BridgeService",
+      path: "../services/bridgeService"
+    },
     elevator: {
       name: "ElevatorService",
       path: "../services/elevatorService"
+    },
+    room: {
+      name: "RoomService",
+      path: "../services/roomService"
     }
   },
 };

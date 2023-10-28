@@ -11,6 +11,7 @@ import {IBuildingPersistence} from "../dataschema/IBuildingPersistence";
 export class BuildingMap extends Mapper<Building> {
 
   public static toDTO( building: Building): IBuildingDTO {
+
     return {
       id: building.id.toString(),
       code: building.code,
@@ -23,11 +24,16 @@ export class BuildingMap extends Mapper<Building> {
 
   public static toDomain (building: any | Model<IBuildingPersistence & Document> ): Building {
 
-    const buildingOrError = Building.create(
-      building,
+    const buildingOrError = Building.create({
+        code: building.code,
+        description: building.description,
+        name: building.name,
+        maxWidth: building.maxWidth,
+        maxLength: building.maxLength
+      },
       new UniqueEntityID(building.domainId)
     );
-      
+
     buildingOrError.isFailure ? console.log(buildingOrError.error) : '';
 
     return buildingOrError.isSuccess ? buildingOrError.getValue() : null;

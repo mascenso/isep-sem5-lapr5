@@ -2,10 +2,12 @@ import {AggregateRoot} from "../core/domain/AggregateRoot";
 import {UniqueEntityID} from "../core/domain/UniqueEntityID";
 import {Result} from "../core/logic/Result";
 import {Guard} from "../core/logic/Guard";
+import {IFloorPersistence} from "../dataschema/IFloorPersistence";
+import {Document, Model} from "mongoose";
 
 interface FloorProps {
     buildingId: string;
-    width: number; 
+    width: number;
     length: number;
     floorNumber: number;
     description?: string;
@@ -53,7 +55,7 @@ export class Floor extends AggregateRoot<FloorProps> {
     return this._id;
   }
 
-  get buildingId() : string {
+  public get buildingId() : string {
     return this.props.buildingId;
   }
 

@@ -2,14 +2,14 @@ import { Router } from 'express';
 import { celebrate, Joi } from 'celebrate';
 
 import { Container } from 'typedi';
-import IRobotController from '../../controllers/IControllers/IRobotController'; 
+import IRobotController from '../../controllers/IControllers/IRobotController';
 
 import config from "../../../config";
 
 const route = Router();
 
 export default (app: Router) => {
-  app.use('/robot', route);
+  app.use('/robots', route);
 
   const ctrl = Container.get(config.controllers.robot.name) as IRobotController;
 
@@ -20,7 +20,7 @@ export default (app: Router) => {
         tarefas: Joi.string().required()
       })
     }),
-    (req, res, next) => ctrl.createRobot(req, res, next) );
+    (req, res, next) => ctrl.createRobot(req, res, next));
 
   route.put('',
     celebrate({
@@ -30,9 +30,16 @@ export default (app: Router) => {
         tarefas: Joi.string().required()
       }),
     }),
-    (req, res, next) => ctrl.updateRobot(req, res, next) );
+    (req, res, next) => ctrl.updateRobot(req, res, next));
 
-    route.get('', 
-    (req, res, next) => { ctrl.getAllRobots(req, res, next);
-  });
-};
+  route.get('',
+    (req, res, next) => {
+      ctrl.getAllRobots(req, res, next);
+    });
+
+  route.get('/search',
+    (req, res, next) => {
+      ctrl.findByDesignationOrTaskType(req, res, next);
+    });
+
+}

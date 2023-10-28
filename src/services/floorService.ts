@@ -8,6 +8,7 @@ import {FloorMap} from "../mappers/FloorMap";
 import {Floor} from "../domain/floor";
 import IBuildingRepo from './IRepos/IBuildingRepo';
 import { IBuildingDTO } from '../dto/IBuildingDTO';
+import { BuildingMap } from '../mappers/BuildingMap';
 
 
 @Service()
@@ -42,11 +43,28 @@ export default class FloorService implements IFloorService {
     }
   }
 
+  public async getAllFloors(): Promise<Result<IFloorDTO[]>> {
+    try {
+
+      const floor = await this.floorRepo.getAllFloors();
+
+      if (floor === null) {
+        return Result.fail<IFloorDTO[]>("No floors found.");
+      }
+      else {
+        const floorDTOs = floor.map((floor) => FloorMap.toDTO(floor) as IFloorDTO);
+        return Result.ok<IFloorDTO[]>( floorDTOs)
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
   public async addMapToFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
     try {
-    
+
       const floor = await this.floorRepo.findByDomainId(floorDTO.id);
-      
+
       if(floor === null) {
         return Result.fail<IFloorDTO>("Floor not found, you can't add a map to a floor that doesn't exist. ");
       }
@@ -62,4 +80,59 @@ export default class FloorService implements IFloorService {
     }
   }
 
+  public async updateFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
+    try {
+
+      let floor = await this.floorRepo.findByDomainId(floorDTO.id);
+
+      if (floor === null) {
+        return Result.fail<IFloorDTO>('Floor not found');
+      }
+
+      const fieldsToUpdate = ['width', 'length', 'floorNumber', 'description', 'floorMap'];
+
+      for (const field of fieldsToUpdate) {
+        if (floorDTO[field]) {
+          floor[field] = floorDTO[field];
+        }
+      }
+
+      await this.floorRepo.save(floor);
+
+      const floorDTOResult = FloorMap.toDTO(floor) as IFloorDTO;
+      return Result.ok<IFloorDTO>(floorDTOResult);
+
+
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  public async getFloorsAtBuildings(building: string): Promise<Result<IFloorDTO[]>> {
+    try {
+
+      const floors = await this.floorRepo.getFloorsAtBuildings(building);
+
+      if (floors === null) {
+        return Result.fail<IFloorDTO[]>("There's currently no floors on that building.");
+      }
+      else {
+        const floorDTOs = floors.map((floors) => FloorMap.toDTO(floors) as IFloorDTO);
+        return Result.ok<IFloorDTO[]>( floorDTOs)
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  public async getBuildingsByMinMaxFloors(minFloors: number, maxFloors: number): Promise<Result<IBuildingDTO[]>> {
+    try {
+      const buildingsByFloor = await this.floorRepo.getBuildingsByMinMaxFloors(minFloors, maxFloors);
+      const buildings = await this.buildingRepo.findByDomainIds(buildingsByFloor);
+      const buildingDTOs = buildings.map(building => BuildingMap.toDTO(building) as IBuildingDTO);
+      return Result.ok<IBuildingDTO[]>(buildingDTOs);
+    } catch (e) {
+      throw e;
+    }
+  }
 }

@@ -39,10 +39,27 @@ export default async ({ expressApp }) => {
     schema: '../persistence/schemas/robotSchema',
   };
 
+  const robotTypeSchema = {
+    // compare with the approach followed in repos and services
+    name: 'robotTypeSchema',
+    schema: '../persistence/schemas/robotTypeSchema',
+  };
+  const bridgeSchema = {
+    // compare with the approach followed in repos and services
+    name: 'bridgeSchema',
+    schema: '../persistence/schemas/bridgeSchema',
+  }
+
   const elevatorSchema = {
     // compare with the approach followed in repos and services
     name: 'elevatorSchema',
     schema: '../persistence/schemas/elevatorSchema',
+  };
+
+  const roomSchema = {
+    // compare with the approach followed in repos and services
+    name: 'roomSchema',
+    schema: '../persistence/schemas/roomSchema',
   };
 
 
@@ -56,6 +73,11 @@ export default async ({ expressApp }) => {
     path: config.controllers.robot.path
   };
 
+  const robotTypeController = {
+    name: config.controllers.robotType.name,
+    path: config.controllers.robotType.path
+  };
+
   const buildingController = {
     name: config.controllers.building.name,
     path: config.controllers.building.path
@@ -66,9 +88,19 @@ export default async ({ expressApp }) => {
     path: config.controllers.floor.path
   }
 
+  const bridgeController = {
+    name: config.controllers.bridge.name,
+    path: config.controllers.bridge.path
+  }
+
   const elevatorController = {
     name: config.controllers.elevator.name,
     path: config.controllers.elevator.path
+  }
+
+  const roomController = {
+    name: config.controllers.room.name,
+    path: config.controllers.room.path
   }
 
   const roleRepo = {
@@ -79,6 +111,11 @@ export default async ({ expressApp }) => {
   const robotRepo = {
     name: config.repos.robot.name,
     path: config.repos.robot.path
+  };
+
+  const robotTypeRepo = {
+    name: config.repos.robotType.name,
+    path: config.repos.robotType.path
   };
 
   const userRepo = {
@@ -96,9 +133,19 @@ export default async ({ expressApp }) => {
     path: config.repos.floor.path
   }
 
+  const bridgeRepo = {
+    name: config.repos.bridge.name,
+    path: config.repos.bridge.path
+  }
+
   const elevatorRepo = {
     name: config.repos.elevator.name,
     path: config.repos.elevator.path
+  }
+
+  const roomRepo = {
+    name: config.repos.room.name,
+    path: config.repos.room.path
   }
 
   const roleService = {
@@ -111,6 +158,11 @@ export default async ({ expressApp }) => {
     path: config.services.robot.path
   }
 
+  const robotTypeService = {
+    name: config.services.robotType.name,
+    path: config.services.robotType.path
+  }
+
   const buildingService = {
     name: config.services.building.name,
     path: config.services.building.path
@@ -121,9 +173,19 @@ export default async ({ expressApp }) => {
     path: config.services.floor.path
   }
 
+  const bridgeService = {
+    name: config.services.bridge.name,
+    path: config.services.bridge.path
+  }
+
   const elevatorService = {
     name: config.services.elevator.name,
     path: config.services.elevator.path
+  }
+
+  const roomService = {
+    name: config.services.room.name,
+    path: config.services.room.path
   }
 
   await dependencyInjectorLoader({
@@ -133,30 +195,42 @@ export default async ({ expressApp }) => {
       roleSchema,
       buildingSchema,
       robotSchema,
+      robotTypeSchema,
       floorSchema,
-      elevatorSchema
+      elevatorSchema,
+      bridgeSchema,
+      roomSchema
     ],
     controllers: [
       roleController,
       buildingController,
       robotController,
+      robotTypeController,
       floorController,
-      elevatorController
+      elevatorController,
+      bridgeController,
+      roomController
     ],
     repos: [
       roleRepo,
       userRepo,
       buildingRepo,
       robotRepo,
+      robotTypeRepo,
       floorRepo,
-      elevatorRepo
+      elevatorRepo,
+      bridgeRepo,
+      roomRepo
     ],
     services: [
       roleService,
       buildingService,
       robotService,
+      robotTypeService,
       floorService,
-      elevatorService
+      bridgeService,
+      elevatorService,
+      roomService
     ]
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');

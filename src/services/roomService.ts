@@ -22,6 +22,20 @@ export default class RoomService implements IRoomService {
   public async createRoom(roomDTO: IRoomDTO): Promise<Result<IRoomDTO>> {
     try {
 
+      const floor = await this.floorRepo.findByDomainId(roomDTO.floorId);
+      if (floor == null) {
+        return Result.fail<IRoomDTO>(`Floor with id ${roomDTO.floorId} not found!`);
+      }
+
+      const building = await this.buildingRepo.findByDomainId(roomDTO.buildingId);
+      if (building == null) {
+        return Result.fail<IRoomDTO>(`Building with id ${roomDTO.buildingId} not found!`);
+      }
+
+      if (roomDTO.buildingId !== floor.buildingId) {
+        return Result.fail<IRoomDTO>(`Floor with id ${roomDTO.floorId} doesn't belong to building with id ${roomDTO.buildingId}!`);
+      }
+
       const roomOrError = Room.create({
           buildingId:roomDTO.buildingId,
           floorId:roomDTO.floorId,

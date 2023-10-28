@@ -6,6 +6,8 @@ import {IBuildingPersistence} from "../dataschema/IBuildingPersistence";
 import {BuildingId} from "../domain/buildingId";
 import {BuildingMap} from "../mappers/BuildingMap";
 import {Building} from "../domain/building";
+import { min } from 'lodash';
+import { ObjectId } from 'mongodb';
 
 @Service()
 export default class BuildingRepo implements IBuildingRepo {
@@ -73,21 +75,31 @@ export default class BuildingRepo implements IBuildingRepo {
       return null;
   }
 
-  public async getAllBuildings (): Promise<any> {
+  public async findByDomainIds(buildingIds: BuildingId[]): Promise<Building[]> {
+    const buildings: Building[] = [];
+    for (const buildingId of buildingIds) {
+        const query = { domainId: buildingId};
+        const buildingRecord = await this.buildingSchema.findOne( query as FilterQuery<IBuildingPersistence & Document> );
+        if (buildingRecord != null) {
+            buildings.push(BuildingMap.toDomain(buildingRecord));
+        } 
+    }
+    if (buildings.length === 0) {
+        return []; 
+    }
+    return buildings;
+}
+
+
+
+  public async getAllBuildings (): Promise<Building[]> {
     try {
       const query = {};
-
-      const buildingRecords = await this.buildingSchema.find(query);
-      
-      return buildingRecords;
+      const buildings = await this.buildingSchema.find(query);
+      return buildings.map(building => BuildingMap.toDomain(building));
     } catch (err) {
       throw err;
     }
-
-  
-
- 
-
-
   }
+
 }

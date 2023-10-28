@@ -19,11 +19,10 @@ export default class RoomController implements IRoomController {
 
     try {
       const roomDto: IRoomDTO = {buildingId: req.params.buildingId, floorId: req.params.floorId, ...req.body};
-      console.log(roomDto);
       const roomOrError = await this.roomServiceInstance.createRoom(roomDto) as Result<IRoomDTO>;
 
       if (roomOrError.isFailure) {
-        return res.status(402).send();
+        return res.status(409).send(roomOrError.errorValue());
       }
 
       const roomDTO = roomOrError.getValue();

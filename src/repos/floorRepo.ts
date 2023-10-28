@@ -89,7 +89,6 @@ export default class FloorRepo implements IFloorRepo {
   async getAllFloors(): Promise<any> {
     try {
       const floorRecords = await this.floorSchema.find();
-
       return floorRecords;
 
     } catch (err) {
@@ -99,9 +98,7 @@ export default class FloorRepo implements IFloorRepo {
 
   public async getBuildingsByMinMaxFloors (minFloors: number, maxFloors: number): Promise<any> {
     try {
-      console.log("isto é chamado?");
       const allFloors = await this.floorSchema.find({});
-
       const floorsGroupedByBuildingId = {};
       allFloors.forEach(floor => {
         if (!floorsGroupedByBuildingId[floor.buildingId]) {
@@ -109,25 +106,15 @@ export default class FloorRepo implements IFloorRepo {
         }
       floorsGroupedByBuildingId[floor.buildingId].push(floor);
       });
-      console.log("teste: %s", floorsGroupedByBuildingId);
       const filteredBuildings = [];
       for (const buildingId in floorsGroupedByBuildingId) {
         const floors = floorsGroupedByBuildingId[buildingId];
         const numberOfFloors = floors.length;
         if (numberOfFloors >= minFloors && numberOfFloors <= maxFloors) {
           const buildingInfo = buildingId;
-          /*
-          const buildingInfo = {
-            buildingId: buildingId,
-            floors: floors
-          };
-          */
-          
           filteredBuildings.push(buildingInfo);
         }
       }
-      console.log("fdasdasdas:", JSON.stringify(filteredBuildings, null, 2));
-
       return filteredBuildings;
       } catch (err) {
         throw err;

@@ -128,25 +128,11 @@ export default class FloorService implements IFloorService {
   public async getBuildingsByMinMaxFloors(minFloors: number, maxFloors: number): Promise<Result<IBuildingDTO[]>> {
     try {
       const buildingsByFloor = await this.floorRepo.getBuildingsByMinMaxFloors(minFloors, maxFloors);
-
-      console.log("BATE? %s", buildingsByFloor);
-
       const buildings = await this.buildingRepo.findByDomainIds(buildingsByFloor);
-
-      console.log("BATE3? %s", buildings);
-  
       const buildingDTOs = buildings.map(building => BuildingMap.toDTO(building) as IBuildingDTO);
-
-      console.log("SERA AQUI? %s", buildingDTOs);
-
       return Result.ok<IBuildingDTO[]>(buildingDTOs);
-
-
-
     } catch (e) {
       throw e;
     }
   }
-  
-
 }

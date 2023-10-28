@@ -69,7 +69,6 @@ export default class BuildingRepo implements IBuildingRepo {
     const buildingRecord = await this.buildingSchema.findOne( query as FilterQuery<IBuildingPersistence & Document> );
 
     if( buildingRecord != null) {
-      console.log("buildingRecord22222: %s", buildingRecord);
       return BuildingMap.toDomain(buildingRecord);
     }
     else
@@ -78,28 +77,22 @@ export default class BuildingRepo implements IBuildingRepo {
 
   public async findByDomainIds(buildingIds: BuildingId[]): Promise<Building[]> {
     const buildings: Building[] = [];
-  
     for (const buildingId of buildingIds) {
         const query = { domainId: buildingId};
         const buildingRecord = await this.buildingSchema.findOne( query as FilterQuery<IBuildingPersistence & Document> );
-        console.log("buildingRecord: %s", buildingRecord);
         if (buildingRecord != null) {
             buildings.push(BuildingMap.toDomain(buildingRecord));
-            console.log("e aqui? %s", buildings)
         } 
     }
-
     if (buildings.length === 0) {
-        return []; // Or handle the case appropriately
+        return []; 
     }
-
-    console.log("hhhhhhhh: %s", buildings);
     return buildings;
 }
 
 
 
-  public async getAllBuildings (): Promise<any> {
+  public async getAllBuildings (): Promise<Building[]> {
     try {
       const query = {};
       const buildings = await this.buildingSchema.find(query);

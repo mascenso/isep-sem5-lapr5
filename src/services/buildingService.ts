@@ -2,29 +2,25 @@ import { Service, Inject } from 'typedi';
 import config from "../../config";
 import IBuildingRepo from './IRepos/IBuildingRepo';
 import IBuildingService from "./IServices/IBuildingService";
-import { IBuildingDTO } from "../dto/IBuildingDTO";
-import { Result } from "../core/logic/Result";
-import { BuildingMap } from "../mappers/BuildingMap";
-import { Building } from "../domain/building";
+import {IBuildingDTO} from "../dto/IBuildingDTO";
+import {Result} from "../core/logic/Result";
+import {BuildingMap} from "../mappers/BuildingMap";
+import {Building} from "../domain/building";
 import { ConnectionCheckedOutEvent } from 'mongodb';
-import IBridgeRepo from './IRepos/IBridgeRepo';
-import IBridgeDTO from '../dto/IBridgeDTO';
-import { BridgeMap } from '../mappers/BridgeMap';
-import IBuildingBridgeDTO from '../dto/IBuildingBridgeDTO';
-import { BuildingBridge } from '../domain/buildingBridge';
+import IFloorRepo from './IRepos/IFloorRepo';
 
 
 @Service()
 export default class BuildingService implements IBuildingService {
   constructor(
-    @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
-    @Inject(config.repos.bridge.name) private bridgeRepo: IBridgeRepo
-  ) { }
+      @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo,
+      @Inject(config.repos.floor.name) private floorRepo : IFloorRepo
+  ) {}
 
   public async createBuilding(buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO>> {
     try {
 
-      const buildingOrError = await Building.create(buildingDTO);
+      const buildingOrError = await Building.create( buildingDTO );
 
       if (buildingOrError.isFailure) {
         return Result.fail<IBuildingDTO>(buildingOrError.errorValue());
@@ -34,8 +30,8 @@ export default class BuildingService implements IBuildingService {
 
       await this.buildingRepo.save(buildingResult);
 
-      const buildingDTOResult = BuildingMap.toDTO(buildingResult) as IBuildingDTO;
-      return Result.ok<IBuildingDTO>(buildingDTOResult)
+      const buildingDTOResult = BuildingMap.toDTO( buildingResult ) as IBuildingDTO;
+      return Result.ok<IBuildingDTO>( buildingDTOResult )
     } catch (e) {
       throw e;
     }
@@ -69,15 +65,13 @@ export default class BuildingService implements IBuildingService {
     }
   }
 
-  public async getAllBuildings(buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO[]>> {
+  public async getAllBuildings(): Promise<Result<IBuildingDTO[]>> {
     try {
 
       const buildings = await this.buildingRepo.getAllBuildings();
 
       const buildingDTOs = buildings.map((building) => BuildingMap.toDTO(building) as IBuildingDTO);
-
       return Result.ok<IBuildingDTO[]>(buildingDTOs);
-
 
     } catch (e) {
       throw e;

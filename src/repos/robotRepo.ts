@@ -7,7 +7,6 @@ import { RobotMap } from "../mappers/RobotMap";
 
 import { Document, FilterQuery, Model } from 'mongoose';
 import { IRobotPersistence } from '../dataschema/IRobotPersistence';
-import {TaskType} from "../domain/taskType";
 
 @Service()
 export default class RobotRepo implements IRobotRepo {

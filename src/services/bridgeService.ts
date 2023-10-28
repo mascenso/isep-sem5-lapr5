@@ -80,8 +80,9 @@ export default class BridgeService implements IBridgeService {
     }
   }
 
-  public async updateBridge(bridgeDTO: IBridgeDTO): Promise<Result<IBridgeDTO>> {
+  public async updateBridge(bridgeDTO: IBridgeDTO, id:string): Promise<Result<IBridgeDTO>> {
     try {
+      bridgeDTO.id  = id;
       const bridge = await this.bridgeRepo.findByDomainId(bridgeDTO.id);
 
       if (bridge === null) {
@@ -89,6 +90,9 @@ export default class BridgeService implements IBridgeService {
       }
       else {
         bridge.name = bridgeDTO.name;
+        bridge.code = bridgeDTO.code;
+        bridge.floorA = bridgeDTO.floorA;
+        bridge.floorB = bridgeDTO.floorB;
         await this.bridgeRepo.save(bridge);
 
         const bridgeDTOResult = BridgeMap.toDTO(bridge) as IBridgeDTO;
@@ -98,6 +102,7 @@ export default class BridgeService implements IBridgeService {
       throw e;
     }
   }
+
 
   public async getAllBridges(): Promise<Result<IBridgeDTO[]>> {
     try {
@@ -116,10 +121,10 @@ export default class BridgeService implements IBridgeService {
     }
   }
 
-  public async getBridgesAtBuildings(building1: string, building2: string): Promise<Result<IBridgeDTO[]>> {
+  public async getBridgesBetweenBuildings(building1: string, building2: string): Promise<Result<IBridgeDTO[]>> {
     try {
 
-      const bridges = await this.bridgeRepo.getBridgesAtBuildings(building1, building2);
+      const bridges = await this.bridgeRepo.getBridgesBetweenBuildings(building1, building2);
 
       if (bridges === null) {
         return Result.fail<IBridgeDTO[]>("Bridge not found");

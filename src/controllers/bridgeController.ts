@@ -31,6 +31,22 @@ export default class BridgeController implements IBridgeController /* TODO: exte
     }
   }
 
+  public async updateBridge(req: Request, res: Response, next: NextFunction) {
+    try {
+      const bridgeOrError = await this.bridgeServiceInstance.updateBridge(req.body as IBridgeDTO, req.params.id) as Result<IBridgeDTO>;
+
+      if (bridgeOrError.isFailure) {
+        return res.status(404).send();
+      }
+
+      const robotDTO = bridgeOrError.getValue();
+      return res.status(200).json( robotDTO );
+    }
+    catch (e) {
+      return next(e);
+    }
+  };
+
   public async getAllBridges(req: Request, res: Response, next: NextFunction) {
 
     try {
@@ -49,13 +65,13 @@ export default class BridgeController implements IBridgeController /* TODO: exte
     }
   }
 
-  public async getBridgesAtBuildings(req: Request, res: Response, next: NextFunction) {
+  public async getBridgesBetweenBuildings(req: Request, res: Response, next: NextFunction) {
 
     try {
       const building1 = req.query.building1;
       const building2 = req.query.building2;
 
-      const bridgeOrError = await this.bridgeServiceInstance.getBridgesAtBuildings(building1 as string, building2 as string) as Result<IBridgeDTO[]>;
+      const bridgeOrError = await this.bridgeServiceInstance.getBridgesBetweenBuildings(building1 as string, building2 as string) as Result<IBridgeDTO[]>;
 
       if (bridgeOrError.isFailure) {
         return res.status(402).json('Dont exist any bridge save on DB').send();

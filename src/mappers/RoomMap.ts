@@ -21,7 +21,13 @@ export class RoomMap extends Mapper<Room> {
 
   public static toDomain(room: any | Model<IRoomPersistence & Document>): Room {
    const roomOrError = Room.create(
-     room,
+     {
+       buildingId: room.buildingId,
+       floorId: room.floorId,
+       name: room.name,
+       roomType: room.roomType,
+       description: room.description,
+     },
      new UniqueEntityID(room.domainId)
    );
 

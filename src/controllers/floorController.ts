@@ -8,6 +8,7 @@ import { Result } from "../core/logic/Result";
 import IFloorController from "./IControllers/IFloorController";
 import IFloorService from "../services/IServices/IFloorService";
 import {IFloorDTO} from "../dto/IFloorDTO";
+import { IBuildingDTO } from '../dto/IBuildingDTO';
 
 @Service()
 export default class FloorController implements IFloorController /* TODO: extends ../core/infra/BaseController */ {
@@ -101,5 +102,22 @@ export default class FloorController implements IFloorController /* TODO: extend
     }
   }
 
+  public async getBuildingsByMinMaxFloors(req: Request, res: Response, next: NextFunction) {
+    try {
+      const minFloors = parseInt(req.query.minFloors as string, 10);
+      const maxFloors = parseInt(req.query.maxFloors as string, 10);
+
+      const floorsOrError = await this.floorServiceInstance.getBuildingsByMinMaxFloors(minFloors, maxFloors) as Result<IBuildingDTO[]>;
+
+      if (floorsOrError.isFailure) {
+        return res.status(402).json({ errors: { message: 'No floors found in the given range' } }).send();
+      }
+
+      const floorDTOs = floorsOrError.getValue();
+      return res.json(floorDTOs).status(200);
+    } catch (e) {
+      return next(e);
+    }
+  }
 
 }

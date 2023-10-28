@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import { Floor } from '../src/domain/floor'
-import { Building } from '../src/domain/building'  
+import { Floor } from '../../src/domain/floor'
+import { Building } from '../../src/domain/building'  
 
-describe('Floor', () => {
+describe('Integration test Floor / Building /Repositorio', () => {
   it('should create a valid Floor instance', () => {
 
     const buildingProps = {

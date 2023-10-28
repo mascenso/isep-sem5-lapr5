@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import {Building} from '../src/domain/building'  
+import {Building} from '../../src/domain/building'  
 
-describe('Building', () => {
+describe('Integration test Building / Repositorio', () => {
   it('should create a valid Building instance', () => {
     const buildingProps = {
       code: 'B001',

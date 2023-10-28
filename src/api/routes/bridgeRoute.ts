@@ -19,8 +19,8 @@ export default (app: Router) => {
         {
         code: Joi.string().required(),
         name: Joi.string().required(),
-        floorA: Joi.string().required(),
-          floorB: Joi.string().required(),
+        floorAId: Joi.string().required(),
+        floorBId: Joi.string().required(),
         })
     }),
     (req, res, next) => ctrl.createBridge(req, res, next) );
@@ -41,8 +41,14 @@ export default (app: Router) => {
     });
 
   //  GET /api/bridges/buildings?building1={building1}&building2={building2}:
-  route.get('/buildings',  (req, res, next) => { ctrl.getBridgesAtBuildings(req, res, next); }  );
+  route.get('/buildings',  (req, res, next) => { ctrl.getBridgesBetweenBuildings(req, res, next); }  );
 
 
+
+
+    //Para listar pisos de um edifício com passagem para outros edifícios
+  route.get('/:id/buldings-bridges',
+    (req, res, next) => { ctrl.getBridgesForBuilding(req, res, next);
+  });
 
 };

@@ -6,15 +6,12 @@ import {IBuildingDTO} from "../dto/IBuildingDTO";
 import {Result} from "../core/logic/Result";
 import {BuildingMap} from "../mappers/BuildingMap";
 import {Building} from "../domain/building";
-import { ConnectionCheckedOutEvent } from 'mongodb';
-import IFloorRepo from './IRepos/IFloorRepo';
 
 
 @Service()
 export default class BuildingService implements IBuildingService {
   constructor(
       @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo,
-      @Inject(config.repos.floor.name) private floorRepo : IFloorRepo
   ) {}
 
   public async createBuilding(buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO>> {
@@ -31,6 +28,7 @@ export default class BuildingService implements IBuildingService {
       await this.buildingRepo.save(buildingResult);
 
       const buildingDTOResult = BuildingMap.toDTO( buildingResult ) as IBuildingDTO;
+
       return Result.ok<IBuildingDTO>( buildingDTOResult )
     } catch (e) {
       throw e;

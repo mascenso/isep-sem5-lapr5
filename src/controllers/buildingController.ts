@@ -67,6 +67,4 @@ export default class BuildingController implements IBuildingController /* TODO: 
       return next(e);
     }
   }
-
-
 }

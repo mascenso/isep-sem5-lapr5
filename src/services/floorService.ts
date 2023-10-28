@@ -15,8 +15,8 @@ import IElevatorRepo from "./IRepos/IElevatorRepo";
 @Service()
 export default class FloorService implements IFloorService {
   constructor(
-      @Inject(config.repos.floor.name) private floorRepo : IFloorRepo,
       @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo,
+      @Inject(config.repos.floor.name) private floorRepo : IFloorRepo,
       @Inject(config.repos.elevator.name) private elevatorRepo : IElevatorRepo
   ) {}
 
@@ -113,13 +113,13 @@ export default class FloorService implements IFloorService {
   public async getFloorsAtBuildings(building: string): Promise<Result<IFloorDTO[]>> {
     try {
 
-      const floor = await this.floorRepo.getFloorsAtBuildings(building);
+      const floors = await this.floorRepo.getFloorsAtBuildings(building);
 
-      if (floor === null) {
+      if (floors === null) {
         return Result.fail<IFloorDTO[]>("There's currently no floors on that building.");
       }
       else {
-        const floorDTOs = floor.map((floor) => FloorMap.toDTO(floor) as IFloorDTO);
+        const floorDTOs = floors.map((floors) => FloorMap.toDTO(floors) as IFloorDTO);
         return Result.ok<IFloorDTO[]>( floorDTOs)
       }
     } catch (e) {

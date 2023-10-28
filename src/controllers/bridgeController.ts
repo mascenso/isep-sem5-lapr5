@@ -69,12 +69,12 @@ export default class BridgeController implements IBridgeController /* TODO: exte
     }
   }
 
-  public async getBuildingBridges(req: Request, res: Response, next: NextFunction) {
+  public async getBridgesForBuilding(req: Request, res: Response, next: NextFunction) {
     try {
       const buildingId = req.params.id; // O ID do edifício do URL
 
         // Vai ao serviço buscar os pisos com passagem para outros edifícios.
-        const result = await this.bridgeServiceInstance.getBuildingBridges(buildingId);
+        const result = await this.bridgeServiceInstance.getBridgesForBuilding(buildingId);
 
         if (result.isFailure) {
           return res.status(404).json(result.errorValue()).send();

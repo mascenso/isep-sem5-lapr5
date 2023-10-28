@@ -35,7 +35,7 @@ export default (app: Router) => {
 
     //Para listar pisos de um edifício com passagem para outros edifícios
   route.get('/:id/buldings-bridges', 
-    (req, res, next) => { ctrl.getBuildingBridges(req, res, next);
+    (req, res, next) => { ctrl.getBridgesForBuilding(req, res, next);
   });
 
 };

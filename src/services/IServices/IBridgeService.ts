@@ -11,6 +11,6 @@ export default interface IBridgeService  {
 
   getBridgesAtBuildings(building1: string, building2: string): Promise<Result<IBridgeDTO[]>>;
 
-  getBuildingBridges(buildingId: string): Promise<Result<IBuildingBridgeDTO[]>>;
-  getBuildingBridges(buildingId: string): unknown;
+  getBridgesForBuilding(buildingId: string): Promise<Result<IBuildingBridgeDTO[]>>;
+  //getBuildingBridges(buildingId: string): unknown;
 }

@@ -10,6 +10,6 @@ export default interface IBridgeRepo extends Repo<Bridge> {
 
   getAllBridges (): Promise<Bridge[]>;
   getBridgesAtBuildings(building1: string, building2: string): Promise<Bridge[]>;
-
+  getBridgesForBuilding( buildingId: string): Promise<any>;
   areConnected(floorA: string, floorB: string): Promise<Boolean>;
 }

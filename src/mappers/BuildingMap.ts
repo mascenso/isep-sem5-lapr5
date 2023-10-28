@@ -24,8 +24,13 @@ export class BuildingMap extends Mapper<Building> {
 
   public static toDomain (building: any | Model<IBuildingPersistence & Document> ): Building {
 
-    const buildingOrError = Building.create(
-      building,
+    const buildingOrError = Building.create({
+      code: building.code,
+      description: building.description,
+      name: building.name,
+      maxWidth: building.maxWidth,
+      maxLength: building.maxLength
+    },
       new UniqueEntityID(building.domainId)
     );
 

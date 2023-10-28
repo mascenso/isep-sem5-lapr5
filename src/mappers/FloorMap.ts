@@ -23,8 +23,14 @@ export class FloorMap extends Mapper<Floor> {
   }
 
   public static toDomain (floor: any | Model<IFloorPersistence & Document> ): Floor {
-    const floorOrError = Floor.create(
-      floor,
+    const floorOrError = Floor.create({
+        buildingId: floor.buildingId,
+        width: floor.width,
+        length: floor.length,
+        floorNumber: floor.floorNumber,
+        description: floor.description,
+        floorMap: floor.floorMap
+      },
       new UniqueEntityID(floor.domainId)
     );
 

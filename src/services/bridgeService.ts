@@ -37,13 +37,12 @@ export default class BridgeService implements IBridgeService {
 
       const floorA = await this.floorRepo.findByDomainId(bridgeDTO.floorA);
       const floorB = await this.floorRepo.findByDomainId(bridgeDTO.floorB);
-
       if(floorA === null || floorB === null) {
         return Result.fail<IBridgeDTO>('Floor not found');
       }
 
-      const buildingAId = "FixoFloorNaoEstaAretornarOsCampos";//FIXME floorA.buildingId;
-      const buildingBId = "FixoFloorNaoEstaAretornarOsCampos";//FIXME floorB.buildingId;
+      const buildingAId = floorA.buildingId;
+      const buildingBId = floorB.buildingId;
 
       const bridgeOrError = await Bridge.create( bridgeDTO );
 

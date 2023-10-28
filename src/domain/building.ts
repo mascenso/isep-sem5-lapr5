@@ -5,7 +5,7 @@ import {Guard} from "../core/logic/Guard";
 
 interface BuildingProps {
   code: string;
-  maxWidth: number; 
+  maxWidth: number;
   maxLength: number;
   name?: string;
   description?: string;
@@ -45,9 +45,6 @@ export class Building extends AggregateRoot<BuildingProps> {
     return this._id;
   }
 
-  get domainId(): string {
-    return this.domainId;
-  }
 
   get name() : string {
     return this.props.name;

@@ -1,6 +1,5 @@
 export interface IBuildingDTO {
-  id:string;
-  domainId:string;
+  id: string;
   code: string;
   maxWidth: number,
   maxLength: number,

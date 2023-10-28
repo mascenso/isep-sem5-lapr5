@@ -85,6 +85,8 @@ export default (app: Router) => {
   });
   */
 
-
+  route.get('/:buildingId',
+      (req, res, next) => { ctrl.getBuildingById(req, res, next);
+      });
 
 };

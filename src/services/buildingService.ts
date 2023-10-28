@@ -6,6 +6,7 @@ import {IBuildingDTO} from "../dto/IBuildingDTO";
 import {Result} from "../core/logic/Result";
 import {BuildingMap} from "../mappers/BuildingMap";
 import {Building} from "../domain/building";
+import {BuildingId} from "../domain/buildingId";
 
 
 @Service()
@@ -70,6 +71,21 @@ export default class BuildingService implements IBuildingService {
 
       const buildingDTOs = buildings.map((building) => BuildingMap.toDTO(building) as IBuildingDTO);
       return Result.ok<IBuildingDTO[]>(buildingDTOs);
+
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  public async getBuildingById(buildingId: BuildingId | string): Promise<Result<IBuildingDTO>> {
+    try {
+
+      let building = await this.buildingRepo.findByDomainId(buildingId);
+
+      if (building === null) {
+        return Result.fail<IBuildingDTO>('Building not found');
+      }
+      return Result.ok<IBuildingDTO>(BuildingMap.toDTO(building));
 
     } catch (e) {
       throw e;

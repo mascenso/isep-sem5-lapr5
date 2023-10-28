@@ -8,6 +8,7 @@ import {FloorMap} from "../mappers/FloorMap";
 import {Floor} from "../domain/floor";
 import IBuildingRepo from './IRepos/IBuildingRepo';
 import { IBuildingDTO } from '../dto/IBuildingDTO';
+import { BuildingMap } from '../mappers/BuildingMap';
 
 
 @Service()
@@ -123,5 +124,29 @@ export default class FloorService implements IFloorService {
       throw e;
     }
   }
+
+  public async getBuildingsByMinMaxFloors(minFloors: number, maxFloors: number): Promise<Result<IBuildingDTO[]>> {
+    try {
+      const buildingsByFloor = await this.floorRepo.getBuildingsByMinMaxFloors(minFloors, maxFloors);
+
+      console.log("BATE? %s", buildingsByFloor);
+
+      const buildings = await this.buildingRepo.findByDomainIds(buildingsByFloor);
+
+      console.log("BATE3? %s", buildings);
+  
+      const buildingDTOs = buildings.map(building => BuildingMap.toDTO(building) as IBuildingDTO);
+
+      console.log("SERA AQUI? %s", buildingDTOs);
+
+      return Result.ok<IBuildingDTO[]>(buildingDTOs);
+
+
+
+    } catch (e) {
+      throw e;
+    }
+  }
+  
 
 }

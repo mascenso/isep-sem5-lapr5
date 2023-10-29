@@ -1,5 +1,5 @@
 export interface IElevatorDTO {
-    id:string;
+    id?:string;
     code: string;
     floorId:string;
     coordX1: number;

@@ -27,7 +27,7 @@ describe('Room Service', () => {
     let floorRepoInstance = Container.get(floorRepoClass);
     Container.set("FloorRepo", floorRepoInstance);
 
-    let roomRepoClass = require("../../src/repos/RoomRepo").default;
+    let roomRepoClass = require("../../src/repos/roomRepo").default;
     let roomRepoInstance = Container.get(roomRepoClass);
     Container.set("RoomRepo", roomRepoInstance);
 

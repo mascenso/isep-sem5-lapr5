@@ -1,11 +1,24 @@
-@startuml
-'https://plantuml.com/sequence-diagram
+@startuml US300
 
-autonumber
+participant "Route" as Route
+participant "Controller" as Controller
+participant "Service" as Service
+participant "Repositorio" as Repositorio
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+ -> Route : get(api/buildings/:buildingId/with-elevator)
+activate Route
+Route -> Controller : getFloorsWithElevatorByBuildingId()
+activate Controller
+Controller -> Service : getFloorsWithElevatorByBuildingId(buildingId)
+activate Service
+activate Repositorio
+Service -> Repositorio : floorDTOList=getFloorsAtBuildings(building)
+Service -> Repositorio : elevatorsForFloorsList=findByFloorIds(floorDTOList)
+Service --> Controller : elevatorsForFloorsListDTO
+Controller--> Route : Resposta HTTP
+Route --> : Resposta HTTP
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+note right of Service
+O DTO não está representado por questões de simplicidade (Ver US150).
+end note
 @enduml

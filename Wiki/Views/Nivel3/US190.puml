@@ -7,9 +7,9 @@ participant "Repositorio" as Repositorio
 
  -> Route : post(api/floors)
 activate Route
-Route -> Controller : createFloor
+Route -> Controller : createFloor()
 activate Controller
-Controller -> Service : createFloor
+Controller -> Service : createFloor()
 activate Service
 Controller -> Service : floorDTO
 Service -> Repositorio : save(DTObuilding)

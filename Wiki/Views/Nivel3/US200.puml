@@ -1,11 +1,25 @@
-@startuml
-'https://plantuml.com/sequence-diagram
+@startuml US200
 
-autonumber
+participant "Route" as Route
+participant "Controller" as Controller
+participant "Service" as Service
+participant "Repositorio" as Repositorio
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+ -> Route : patch(api/floors); put(api/floors)
+activate Route
+Route -> Controller : updateFloor()
+activate Controller
+Controller -> Service : updateFloor()
+activate Service
+Controller -> Service : floorDTO
+Service -> Repositorio : floor=findByDomainId(floorDTO.id)
+Service -> Repositorio : save(floor)
+activate Repositorio
+Service --> Controller : DTOfloor
+Controller--> Route : Resposta HTTP
+Route --> : Resposta HTTP
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+note right of Service
+O DTO não está representado por questões de simplicidade (Ver US150).
+end note
 @enduml

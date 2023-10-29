@@ -1,11 +1,25 @@
-@startuml
-'https://plantuml.com/sequence-diagram
+@startuml US180
 
-autonumber
+participant "Route" as Route
+participant "Controller" as Controller
+participant "Service" as Service
+participant "Repositorio" as Repositorio
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+ -> Route : get(api/buildings/minmaxfloors)
+activate Route
+Route -> Controller : getBuildingsByMinMaxFloors()
+activate Controller
+activate Service
+Controller -> Service: getBuildingsByMinMaxFloors(minFloors, maxFloors)
+activate Repositorio
+Service -> Repositorio : buildingsByFloor=getBuildingsByMinMaxFloors(minFloors, maxFloors)
+Service -> Repositorio : findByDomainId(buildingsByFloor)
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+Service --> Controller : floorDTOs
+Controller--> Route : Resposta HTTP
+Route --> : Resposta HTTP
+
+note right of Service
+O DTO não está representado por questões de simplicidade (Ver US150).
+end note
 @enduml

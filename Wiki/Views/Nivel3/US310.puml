@@ -1,11 +1,24 @@
-@startuml
-'https://plantuml.com/sequence-diagram
+@startuml US310
 
-autonumber
+participant "Route" as Route
+participant "Controller" as Controller
+participant "Service" as Service
+participant "Repositorio" as Repositorio
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+ -> Route : post(api/buildings/:buildingId/floors/:floorId/rooms)
+activate Route
+Route -> Controller : createRoom()
+activate Controller
+Controller -> Service : createRoom()
+activate Service
+Controller -> Service : roomDTO
+Service -> Repositorio : save(roomDTO)
+activate Repositorio
+Service --> Controller : DTOroom
+Controller--> Route : Resposta HTTP
+Route --> : Resposta HTTP
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+note right of Service
+O DTO não está representado por questões de simplicidade (Ver US150).
+end note
 @enduml

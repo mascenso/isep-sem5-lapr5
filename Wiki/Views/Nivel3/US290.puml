@@ -1,11 +1,23 @@
-@startuml
-'https://plantuml.com/sequence-diagram
+@startuml US290
 
-autonumber
+participant "Route" as Route
+participant "Controller" as Controller
+participant "Service" as Service
+participant "Repositorio" as Repositorio
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+ -> Route : get(api/elevators)
+activate Route
+Route -> Controller : getAllElevators()
+activate Controller
+Controller -> Service : getAllElevators()
+activate Service
+Service -> Repositorio : elevators=getAllElevators()
+activate Repositorio
+Service --> Controller : elevatorsDTO
+Controller--> Route : Resposta HTTP
+Route --> : Resposta HTTP
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+note right of Service
+O DTO não está representado por questões de simplicidade (Ver US150).
+end note
 @enduml

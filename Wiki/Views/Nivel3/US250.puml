@@ -1,11 +1,25 @@
-@startuml
-'https://plantuml.com/sequence-diagram
+@startuml US250
 
-autonumber
+participant "Route" as Route
+participant "Controller" as Controller
+participant "Service" as Service
+participant "Repositorio" as Repositorio
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+ -> Route : patch(api/bridges/:id); put(api/bridges/:id)
+activate Route
+Route -> Controller : updateBridge()
+activate Controller
+Controller -> Service : updateBridge()
+activate Service
+Controller -> Service : bridgeDTO
+Service -> Repositorio : bridge=findByDomainId(bridgeId)
+Service -> Repositorio : save(bridge)
+activate Repositorio
+Service --> Controller : DTObridge
+Controller--> Route : Resposta HTTP
+Route --> : Resposta HTTP
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+note right of Service
+O DTO não está representado por questões de simplicidade (Ver US150).
+end note
 @enduml

@@ -8,9 +8,9 @@ participant "Repositorio" as Repositorio
 
  -> Route : post(api/elevators)
 activate Route
-Route -> Controller : createElevator
+Route -> Controller : createElevator()
 activate Controller
-Controller -> Service : createElevator
+Controller -> Service : createElevator()
 activate Service
 Controller -> Service : elevatorDTO
 Service -> Repositorio : save(DTOelevator)

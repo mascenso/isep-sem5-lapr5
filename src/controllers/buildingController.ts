@@ -28,7 +28,11 @@ export default class BuildingController implements IBuildingController /* TODO: 
       return res.json( buildingDTO ).status(201);
     }
     catch (e) {
-      return next(e);
+      if(e.code ==11000){
+        return res.status(409).json("Already exist a building with this code.").send();
+      }else{
+        return next(e);
+      }
     }
   }
 
@@ -46,7 +50,11 @@ export default class BuildingController implements IBuildingController /* TODO: 
       return res.json( buildingDTO ).status(201);
     }
     catch (e) {
-      return next(e);
+      if(e.code ==11000){
+        return res.status(409).json("Already exist a building with this code.").send();
+      }else{
+        return next(e);
+      }
     }
   }
 

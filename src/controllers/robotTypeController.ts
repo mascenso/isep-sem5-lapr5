@@ -27,7 +27,11 @@ export default class RobotTypeController implements IRobotTypeController /* TODO
       return res.json( robotTypeDTO ).status(201);
     }
     catch (e) {
-      return next(e);
+      if(e.code ==11000){
+        return res.status(409).json("Already exist a robottype with this code.").send();
+      }else{
+        return next(e);
+      }
     }
   };
 
@@ -43,7 +47,11 @@ export default class RobotTypeController implements IRobotTypeController /* TODO
       return res.status(201).json( robotTypeDTO );
     }
     catch (e) {
-      return next(e);
+      if(e.code ==11000){
+        return res.status(409).json("Already exist a robottype with this code.").send();
+      }else{
+        return next(e);
+      }
     }
   };
 

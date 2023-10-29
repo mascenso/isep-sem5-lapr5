@@ -1,0 +1,28 @@
+@startuml US220
+
+participant "Route" as Route
+participant "Controller" as Controller
+participant "Service" as Service
+participant "Repositorio" as Repositorio
+
+ -> Route : get(api/bridges/:id/buldings-bridges)
+activate Route
+Route -> Controller : getBridgesForBuilding()
+activate Controller
+Controller -> Service : getBridgesForBuilding(buildingId)
+activate Service
+Service -> Repositorio : findByDomainId(buildingId)
+Repositorio--> Service: building
+Service -> Repositorio : getBridgesForBuilding(buildingId)
+Repositorio--> Service: bridges
+Service -> Repositorio : floor=findByDomainId(bridge.floorId)
+Service -> Service: Create(buildingBridge)
+activate Repositorio
+Service --> Controller : buildingBridgesDTO
+Controller--> Route : Resposta HTTP
+Route --> : Resposta HTTP
+
+note right of Service
+O DTO não está representado por questões de simplicidade (Ver US150).
+end note
+@enduml

@@ -29,7 +29,11 @@ export default class FloorController implements IFloorController /* TODO: extend
       const floorDTO = floorOrError.getValue();
       return res.json(floorDTO).status(201);
     } catch (e) {
-      return next(e);
+      if(e.code ==11000){
+        return res.status(409).json("Already exist a floor with this code.").send();
+      }else{
+        return next(e);
+      }
     }
   }
 
@@ -46,7 +50,11 @@ export default class FloorController implements IFloorController /* TODO: extend
       const floorDTO = floorOrError.getValue();
       return res.json(floorDTO).status(201);
     } catch (e) {
-      return next(e);
+      if(e.code ==11000){
+        return res.status(409).json("Already exist a floor with this code.").send();
+      }else{
+        return next(e);
+      }
     }
   }
 

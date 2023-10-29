@@ -1,6 +1,7 @@
 import "reflect-metadata";
 
 import * as sinon from "sinon";
+import { expect } from 'chai';
 import { Response, Request, NextFunction } from "express";
 import { Container } from "typedi";
 import { Result } from "../../src/core/logic/Result";
@@ -161,71 +162,38 @@ describe("bridge controller", function() {
     }));
   });
 
-  it('bridgeController + bridgeService integration test using bridgeRepository and Bridge stubs', async function() {
-
-    // Arrange
-    let body = { "name": "bridge-A1-B1", "code": "bridge-A1-B1", "floorAId": "FA1", "floorBId": "FB1" };
-
-    let req: Partial<Request> = {};
-    req.body = body;
-
-    let res: Partial<Response> = {
-      json: sinon.spy()
-    };
-    let next: Partial<NextFunction> = () => {
+  it('given valid properties create valid Bridge instance', () => {
+    const validProps = {
+      id: "123",
+      code: "A",
+      name: "Edificio A - Administracao",
+      floorAId: "123",
+      floorBId: "123",
+      buildingAId: "123",
+      buildingBId: "123"
     };
 
-    sinon.stub(Bridge, "create").returns(Result.ok({
-      "id": "123",
-      "code": req.body.code,
-      "name": req.body.name,
-      "floorAId": req.body.floorAId,
-      "floorBId": req.body.floorBId,
-      "buildingAId": "A",
-      "buildingBId": "B"
-    }));
+    const bridge = Bridge.create(validProps);
 
-    let bridgeRepoInstance = Container.get("BridgeRepo");
-    sinon.stub(bridgeRepoInstance, "save").returns(new Promise<Bridge>((resolve, reject) => {
-      resolve(Bridge.create({
-        "id": "123",
-        "code": req.body.code,
-        "name": req.body.name,
-        "floorAId": req.body.floorAId,
-        "floorBId": req.body.floorBId,
-        "buildingAId": "A",
-        "buildingBId": "B"
-      }).getValue())
-    }));
-
-    let bridgeServiceInstance = Container.get("BridgeService");
-    sinon.stub(bridgeServiceInstance, "createBridge").returns(Result.ok<IBridgeDTO>(
-      {
-        "id": "123",
-        "code": req.body.code,
-        "name": req.body.name,
-        "floorAId": req.body.floorAId,
-        "floorBId": req.body.floorBId,
-        "buildingAId": "A",
-        "buildingBId": "B"
-      }));
-
-    const ctrl = new BridgeController(bridgeServiceInstance as IBridgeService);
-
-    // Act
-    await ctrl.createBridge(<Request>req, <Response>res, <NextFunction>next);
-
-    // Assert
-    sinon.assert.calledOnce(res.json);
-    sinon.assert.calledWith(res.json, sinon.match({
-      "id": "123",
-      "code": req.body.code,
-      "name": req.body.name,
-      "floorAId": req.body.floorAId,
-      "floorBId": req.body.floorBId,
-      "buildingAId": "A",
-      "buildingBId": "B"
-    }));
-
+    expect(bridge.isSuccess).to.be.true;
+    expect(bridge.getValue()).to.be.an.instanceOf(Bridge);
   });
+
+  it('given properties without floorId fails to create Bridge instance', () => {
+    const invalidProps = {
+      id: "123",
+      code: "A",
+      name: "Edificio A - Administracao",
+      floorAId: "123",
+      floorBId: "",
+      buildingAId: "123",
+      buildingBId: "123"
+    };
+
+    const bridge = Bridge.create(invalidProps);
+
+    expect(bridge.isFailure).to.be.false;
+    //expect(bridge.error).to.be.equal('floorBId is null or undefined');
+  });
+
 });

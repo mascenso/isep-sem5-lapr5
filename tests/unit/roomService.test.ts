@@ -231,4 +231,66 @@ describe('Room Service', () => {
 
   });
 
+
+  it('given existing roomId when finding room by id returns a valid room instance', async () => {
+    // given
+    let roomInstance = Container.get("Room");
+    const roomStub = sinon.stub(roomInstance, "create").returns( Result.ok( {
+      id: 'R123',
+      buildingId: 'B123',
+      floorId: 'F123',
+      name: 'B306',
+      description: 'Sala muito linda',
+      roomType: RoomType.OFFICE
+    }) );
+
+    let roomRepoInstance = Container.get("RoomRepo");
+    const roomRepoStub = sinon.stub(roomRepoInstance, "findByDomainId")
+      .returns(new Promise<Room>( (resolve, _) => {resolve(Room.create({
+        buildingId: 'B123',
+        floorId: 'F123',
+        name: 'B306',
+        description: 'Sala muito linda',
+        roomType: RoomType.OFFICE}
+      ).getValue())} ));
+
+    const service = new RoomService(
+      Container.get("RoomRepo"),
+      Container.get("FloorRepo"),
+      Container.get("BuildingRepo")
+    );
+
+    // when creating room
+    const result = await service.getRoomById("R123");
+
+    // then
+    sinon.assert.called(roomStub);
+    sinon.assert.calledOnce(roomRepoStub);
+    sinon.assert.match(result.isSuccess, true);
+    sinon.assert.match(result.getValue().id, "R123");
+
+  });
+
+  it('given nonexistent roomId when finding room by id returns an error', async () => {
+    // given
+    let roomRepoInstance = Container.get("RoomRepo");
+    const roomRepoStub = sinon.stub(roomRepoInstance, "findByDomainId")
+      .returns(new Promise<Room>( (resolve, _) => {resolve(null)} ));
+
+    const service = new RoomService(
+      Container.get("RoomRepo"),
+      Container.get("FloorRepo"),
+      Container.get("BuildingRepo")
+    );
+
+    // when creating room
+    const result = await service.getRoomById("R123");
+
+    // then
+    sinon.assert.calledOnce(roomRepoStub);
+    sinon.assert.match(result.isFailure, true);
+    sinon.assert.match(result.errorValue(), "Room with id R123 not found!");
+
+  });
+
 });

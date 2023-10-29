@@ -32,14 +32,14 @@ export default class BridgeRepo implements IBridgeRepo {
     return !!bridgeDocument === true;
   }
 
-  public async save(bridge: Bridge, buildingAId: string, buildingBId: string): Promise<Bridge> {
+  public async save(bridge: Bridge): Promise<Bridge> {
     const query = { domainId: bridge.id.toString() };
 
     const bridgeDocument = await this.bridgeSchema.findOne(query);
 
     try {
       if (bridgeDocument === null) {
-        const rawBridge: any = BridgeMap.toPersistence(bridge, buildingAId, buildingBId);
+        const rawBridge: any = BridgeMap.toPersistence(bridge);
 
         const bridgeCreated = await this.bridgeSchema.create(rawBridge);
 
@@ -101,9 +101,9 @@ export default class BridgeRepo implements IBridgeRepo {
     }
   }
 
-  async areConnected(floorA: string, floorB: string): Promise<boolean> {
+  async areConnected(floorAId: string, floorBId: string): Promise<boolean> {
     try {
-      const query = { $or: [{ floorA: floorA, floorB: floorB }, { floorA: floorB, floorB: floorA }] };
+      const query = { $or: [{ floorAId: floorAId, floorBId: floorBId }, { floorAId: floorBId, floorBId: floorAId }] };
 
       const bridgeRecords = await this.bridgeSchema.findOne(query);
 
@@ -124,7 +124,7 @@ export default class BridgeRepo implements IBridgeRepo {
       };
 
       const bridgeRecords = await this.bridgeSchema.find(query);
-      
+
       return bridgeRecords;
 
     } catch (err) {

@@ -38,10 +38,11 @@ describe('building service', function () {
     });
 
 	afterEach(function() {
+		sinon.restore();
 		sandbox.restore();
 	});
 
-    it('buildingService unit test using building and buildingRepo stubs', async function () {
+    it('buildingService unit test using building and buildingRepo stubs (createBuilding)', async function () {
 		// Arrange
         let body = { "code":'Building', "maxWidth":10,"maxLength":10,"name":"Edificio lindo","description":"Edificio muito alto." };
         let req: Partial<Request> = {};
@@ -79,6 +80,80 @@ describe('building service', function () {
 		sinon.assert.called(buildingStub);
 		sinon.assert.calledOnce(buildingRepoStub);
 		sinon.assert.calledWith(buildingStub, sinon.match(buildingDTO));
+
+	});
+
+	it('buildingService unit test using building and buildingRepo stubs (updateBuilding)', async function () {
+		// Arrange
+        let body = { "code":'Building', "maxWidth":10,"maxLength":10,"name":"Edificio lindo","description":"Edificio muito alto." };
+        let req: Partial<Request> = {};
+		req.body = body;
+
+		let buildingRepoInstance = Container.get("BuildingRepo");
+		const buildingStub = sinon.stub(buildingRepoInstance, "findByDomainId").returns(new Promise<Building>((resolve, reject) => {
+			resolve(Building.create({
+				"code": req.body.code,
+				"maxWidth":req.body.maxWidth,
+				"maxLength":req.body.maxLength,
+				"name":req.body.name,
+				"description":req.body.description
+			}).getValue())
+		}));
+			
+
+		const buildingRepoStub = sinon.stub(buildingRepoInstance, "save").returns(new Promise<Building>((resolve, reject) => {
+			resolve(Building.create({
+				"code": req.body.code,
+				"maxWidth":req.body.maxWidth,
+				"maxLength":req.body.maxLength,
+				"name":req.body.name,
+				"description":req.body.description
+			}).getValue())
+		}));
+
+
+		const service = new BuildingService(Container.get("BuildingRepo"));
+
+		const buildingDTO = { "id":"123","code":'Building', "maxWidth":10,"maxLength":10,"name":"Edificio lindo","description":"Edificio muito alto." };
+		
+		// Act
+		await service.updateBuilding(buildingDTO);
+
+		// Assert
+		sinon.assert.called(buildingStub);
+		sinon.assert.calledOnce(buildingRepoStub);
+		sinon.assert.calledWith(buildingStub, sinon.match(123));
+
+	});
+
+	it('buildingService unit test using building and buildingRepo stubs (getAllBuildings)', async function () {
+		// Arrange
+        let body = { "code":'Building', "maxWidth":10,"maxLength":10,"name":"Edificio lindo","description":"Edificio muito alto." };
+        let req: Partial<Request> = {};
+		req.body = body;
+
+		let buildingRepoInstance = Container.get("BuildingRepo");
+			
+		const buildingRepoStub = sinon.stub(buildingRepoInstance, "getAllBuildings").returns(new Promise<Building[]>((resolve, reject) => {
+			resolve([Building.create({
+				"code": req.body.code,
+				"maxWidth":req.body.maxWidth,
+				"maxLength":req.body.maxLength,
+				"name":req.body.name,
+				"description":req.body.description
+			}).getValue()])
+		}));
+
+
+		const service = new BuildingService(Container.get("BuildingRepo"));
+
+		const buildingDTO = [{ "id":"123","code":'Building', "maxWidth":10,"maxLength":10,"name":"Edificio lindo","description":"Edificio muito alto." }];
+		
+		// Act
+		await service.getAllBuildings();
+
+		// Assert
+		sinon.assert.calledOnce(buildingRepoStub);
 
 	});
 });

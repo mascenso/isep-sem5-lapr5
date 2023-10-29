@@ -26,7 +26,11 @@ export default class BridgeController implements IBridgeController /* TODO: exte
       return res.json(bridgeDTO).status(201);
     }
     catch (e) {
-      return next(e);
+      if(e.code ==11000){
+        return res.status(409).json("Already exist a bridge with this code.").send();
+      }else{
+        return next(e);
+      }
     }
   }
 
@@ -42,7 +46,11 @@ export default class BridgeController implements IBridgeController /* TODO: exte
       return res.status(200).json( robotDTO );
     }
     catch (e) {
-      return next(e);
+      if(e.code ==11000){
+        return res.status(409).json("Already exist a bridge with this code.").send();
+      }else{
+        return next(e);
+      }
     }
   };
 

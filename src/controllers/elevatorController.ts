@@ -27,7 +27,11 @@ export default class ElevatorController implements IElevatorController /* TODO: 
       
     }
     catch (e) {
-      return next(e);
+      if(e.code ==11000){
+        return res.status(409).json("Already exist a elevator with this code.").send();
+      }else{
+        return next(e);
+      }
     }
   }
 
@@ -45,7 +49,11 @@ export default class ElevatorController implements IElevatorController /* TODO: 
       return res.json( elevatorDTO ).status(201);
     }
     catch (e) {
-      return next(e);
+      if(e.code ==11000){
+        return res.status(409).json("Already exist a elevator with this code.").send();
+      }else{
+        return next(e);
+      }
     }
   }
 

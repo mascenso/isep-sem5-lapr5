@@ -7,10 +7,12 @@ import { Result } from "../../src/core/logic/Result";
 import IBridgeService from "../../src/services/IServices/IBridgeService";
 import BridgeController from "../../src/controllers/bridgeController";
 import IBridgeDTO from "../../src/dto/IBridgeDTO";
+import { Bridge } from "../../src/domain/bridge";
 
 describe("bridge controller", function() {
-  const sandbox = sinon.createSandbox();
 
+
+  const sandbox = sinon.createSandbox();
   beforeEach(function() {
     this.timeout(6000);
     Container.reset();
@@ -58,7 +60,6 @@ describe("bridge controller", function() {
 
 
   });
-
   afterEach(function() {
     sinon.restore();
     sandbox.restore();
@@ -66,47 +67,29 @@ describe("bridge controller", function() {
 
 
   it("bridgeController unit test using bridgeService mock", async function() {
-      let body = { "name": "bridge-A1-B1", "code": "bridge-A1-B1", "floorAId": "FA1", "floorBId": "FB1" };
-      let req: Partial<Request> = {};
-      req.body = body;
+    let body = { "name": "bridge-A1-B1", "code": "bridge-A1-B1", "floorAId": "FA1", "floorBId": "FB1" };
+    let req: Partial<Request> = {};
+    req.body = body;
 
-      let res: Partial<Response> = {
-        json: sinon.spy()
-      };
+    let res: Partial<Response> = {
+      json: sinon.spy()
+    };
 
-      let next: Partial<NextFunction> = () => {
-      };
+    let next: Partial<NextFunction> = () => {
+    };
 
-      let bridgeServiceInstance = Container.get("BridgeService");
-      const bridgeServiceMock = sinon.mock(bridgeServiceInstance, "createBridge");
+    let bridgeServiceInstance = Container.get("BridgeService");
+    const bridgeServiceMock = sinon.mock(bridgeServiceInstance, "createBridge");
 
-      bridgeServiceMock.expects("createBridge")
-        .once()
-        .withArgs(sinon.match({
-          name: req.body.name,
-          code: req.body.code,
-          floorAId: req.body.floorAId,
-          floorBId: req.body.floorBId
-        }))
-        .returns(Result.ok<IBridgeDTO>({
-          "id": "123",
-          "code": req.body.code,
-          "name": req.body.name,
-          "floorAId": req.body.floorAId,
-          "floorBId": req.body.floorBId,
-          "buildingAId": "A",
-          "buildingBId": "B"
-        }));
-
-      const ctrl = new BridgeController(bridgeServiceInstance as IBridgeService);
-
-      // Act
-      await ctrl.createBridge(<Request>req, <Response>res, <NextFunction>next);
-
-      // Assert
-      bridgeServiceMock.verify();
-      sinon.assert.calledOnce(res.json);
-      sinon.assert.calledWith(res.json, sinon.match({
+    bridgeServiceMock.expects("createBridge")
+      .once()
+      .withArgs(sinon.match({
+        name: req.body.name,
+        code: req.body.code,
+        floorAId: req.body.floorAId,
+        floorBId: req.body.floorBId
+      }))
+      .returns(Result.ok<IBridgeDTO>({
         "id": "123",
         "code": req.body.code,
         "name": req.body.name,
@@ -115,8 +98,25 @@ describe("bridge controller", function() {
         "buildingAId": "A",
         "buildingBId": "B"
       }));
-    }
-  );
+
+    const ctrl = new BridgeController(bridgeServiceInstance as IBridgeService);
+
+    // Act
+    await ctrl.createBridge(<Request>req, <Response>res, <NextFunction>next);
+
+    // Assert
+    bridgeServiceMock.verify();
+    sinon.assert.calledOnce(res.json);
+    sinon.assert.calledWith(res.json, sinon.match({
+      "id": "123",
+      "code": req.body.code,
+      "name": req.body.name,
+      "floorAId": req.body.floorAId,
+      "floorBId": req.body.floorBId,
+      "buildingAId": "A",
+      "buildingBId": "B"
+    }));
+  });
 
   it("bridgeController unit test using bridgeService stub", async function() {
     // Arrange
@@ -161,5 +161,71 @@ describe("bridge controller", function() {
     }));
   });
 
+  it('bridgeController + bridgeService integration test using bridgeRepository and Bridge stubs', async function() {
 
+    // Arrange
+    let body = { "name": "bridge-A1-B1", "code": "bridge-A1-B1", "floorAId": "FA1", "floorBId": "FB1" };
+
+    let req: Partial<Request> = {};
+    req.body = body;
+
+    let res: Partial<Response> = {
+      json: sinon.spy()
+    };
+    let next: Partial<NextFunction> = () => {
+    };
+
+    sinon.stub(Bridge, "create").returns(Result.ok({
+      "id": "123",
+      "code": req.body.code,
+      "name": req.body.name,
+      "floorAId": req.body.floorAId,
+      "floorBId": req.body.floorBId,
+      "buildingAId": "A",
+      "buildingBId": "B"
+    }));
+
+    let bridgeRepoInstance = Container.get("BridgeRepo");
+    sinon.stub(bridgeRepoInstance, "save").returns(new Promise<Bridge>((resolve, reject) => {
+      resolve(Bridge.create({
+        "id": "123",
+        "code": req.body.code,
+        "name": req.body.name,
+        "floorAId": req.body.floorAId,
+        "floorBId": req.body.floorBId,
+        "buildingAId": "A",
+        "buildingBId": "B"
+      }).getValue())
+    }));
+
+    let bridgeServiceInstance = Container.get("BridgeService");
+    sinon.stub(bridgeServiceInstance, "createBridge").returns(Result.ok<IBridgeDTO>(
+      {
+        "id": "123",
+        "code": req.body.code,
+        "name": req.body.name,
+        "floorAId": req.body.floorAId,
+        "floorBId": req.body.floorBId,
+        "buildingAId": "A",
+        "buildingBId": "B"
+      }));
+
+    const ctrl = new BridgeController(bridgeServiceInstance as IBridgeService);
+
+    // Act
+    await ctrl.createBridge(<Request>req, <Response>res, <NextFunction>next);
+
+    // Assert
+    sinon.assert.calledOnce(res.json);
+    sinon.assert.calledWith(res.json, sinon.match({
+      "id": "123",
+      "code": req.body.code,
+      "name": req.body.name,
+      "floorAId": req.body.floorAId,
+      "floorBId": req.body.floorBId,
+      "buildingAId": "A",
+      "buildingBId": "B"
+    }));
+
+  });
 });

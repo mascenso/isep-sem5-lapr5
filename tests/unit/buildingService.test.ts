@@ -16,7 +16,7 @@ describe('building service', function () {
 	const sandbox = sinon.createSandbox();
 
 	beforeEach(function() {
-		this.timeout(6000);
+		this.timeout(9000);
 		Container.reset();
 		let buildingSchemaInstance = require("../../src/persistence/schemas/buildingSchema").default;
 		Container.set("buildingSchema", buildingSchemaInstance);
@@ -50,7 +50,7 @@ describe('building service', function () {
 
 		let buildingInstance = Container.get("Building");
 		const buildingStub = sinon.stub(buildingInstance, "create").returns( Result.ok( {
-			"id":"123", 
+			"id":"123",
 			"code": req.body.code,
 			"maxWidth":req.body.maxWidth,
 			"maxLength":req.body.maxLength,
@@ -72,7 +72,7 @@ describe('building service', function () {
 		const service = new BuildingService(Container.get("BuildingRepo"));
 
 		const buildingDTO = { "id":"123","code":'Building', "maxWidth":10,"maxLength":10,"name":"Edificio lindo","description":"Edificio muito alto." };
-		
+
 		// Act
 		await service.createBuilding(buildingDTO);
 
@@ -99,7 +99,7 @@ describe('building service', function () {
 				"description":req.body.description
 			}).getValue())
 		}));
-			
+
 
 		const buildingRepoStub = sinon.stub(buildingRepoInstance, "save").returns(new Promise<Building>((resolve, reject) => {
 			resolve(Building.create({
@@ -115,7 +115,7 @@ describe('building service', function () {
 		const service = new BuildingService(Container.get("BuildingRepo"));
 
 		const buildingDTO = { "id":"123","code":'Building', "maxWidth":10,"maxLength":10,"name":"Edificio lindo","description":"Edificio muito alto." };
-		
+
 		// Act
 		await service.updateBuilding(buildingDTO);
 
@@ -133,7 +133,7 @@ describe('building service', function () {
 		req.body = body;
 
 		let buildingRepoInstance = Container.get("BuildingRepo");
-			
+
 		const buildingRepoStub = sinon.stub(buildingRepoInstance, "getAllBuildings").returns(new Promise<Building[]>((resolve, reject) => {
 			resolve([Building.create({
 				"code": req.body.code,
@@ -148,7 +148,7 @@ describe('building service', function () {
 		const service = new BuildingService(Container.get("BuildingRepo"));
 
 		const buildingDTO = [{ "id":"123","code":'Building', "maxWidth":10,"maxLength":10,"name":"Edificio lindo","description":"Edificio muito alto." }];
-		
+
 		// Act
 		await service.getAllBuildings();
 

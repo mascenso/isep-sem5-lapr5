@@ -16,8 +16,12 @@ export default (app: Router) => {
   route.post('',
     celebrate({
       body: Joi.object({
-        designacao: Joi.string().required(),
-        tarefas: Joi.string().required()
+        id: Joi.string().required(),
+        nickName: Joi.string().required(),
+        robotType: Joi.string().required(),
+        serialNumber: Joi.string().required(),
+        description: Joi.string(),
+        inhibited: Joi.boolean().required()
       })
     }),
     (req, res, next) => ctrl.createRobot(req, res, next));
@@ -26,11 +30,27 @@ export default (app: Router) => {
     celebrate({
       body: Joi.object({
         id: Joi.string().required(),
-        designacao: Joi.string().required(),
-        tarefas: Joi.string().required()
+        nickName: Joi.string().required(),
+        robotType: Joi.string().required(),
+        serialNumber: Joi.string().required(),
+        description: Joi.string(),
+        inhibited: Joi.boolean().required()
       }),
     }),
     (req, res, next) => ctrl.updateRobot(req, res, next));
+
+  route.patch('',
+    celebrate({
+      body: Joi.object({
+        id: Joi.string().required(),
+        nickName: Joi.string(),
+        robotType: Joi.string(),
+        serialNumber: Joi.string(),
+        description: Joi.string(),
+        inhibited: Joi.boolean()
+      })
+    }),
+    (req, res, next) => ctrl.updateRobot(req, res, next) );
 
   route.get('',
     (req, res, next) => {

@@ -22,9 +22,7 @@ export class Building extends AggregateRoot<BuildingProps> {
     const guardedProps = [
       { argument: props.code, argumentName: 'code' },
       { argument: props.maxLength, argumentName: 'maxLength' },
-      { argument: props.maxWidth, argumentName: 'maxWidth' },
-      { argument: props.name, argumentName: 'name' },
-      { argument: props.description, argumentName: 'description' }
+      { argument: props.maxWidth, argumentName: 'maxWidth' }
     ];
 
     const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);

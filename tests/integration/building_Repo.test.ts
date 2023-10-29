@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import {Building} from '../../src/domain/building'  
+import {Building} from '../../src/domain/building'
 
 describe('Integration test Building / Repositorio', () => {
   it('should create a valid Building instance', () => {
@@ -24,7 +24,7 @@ describe('Integration test Building / Repositorio', () => {
 
   it('should fail to create a Building with missing required properties', () => {
     const buildingProps = {
-      code: 'B002',
+      code: undefined,
       maxWidth: 15,
       maxLength:15
     };

@@ -10,6 +10,17 @@ interface RobotTypeProps {
   tipoTarefas: TaskType[];
 }
 
+
+/**
+ * Tipo B: Robot marca W modelo Z com capacidade de executar tarefas de vigilância e pickeup&delivery
+ */
+/*
+tipo de robot: obrigatório, alfanum+ericos, maximo 25 caracteres
+marca: obrigatório, maximo 50 caracteres
+modelo: obrigatório, máximo 100 caracteres
+*/
+"o \"tipo de robot\" é um código identificativo desse tipo de robots."
+
 export class RobotType extends AggregateRoot<RobotTypeProps> {
   get id (): UniqueEntityID {
     return this._id;
@@ -26,7 +37,7 @@ export class RobotType extends AggregateRoot<RobotTypeProps> {
   get tipoTarefas (): TaskType[] {
     return this.props.tipoTarefas;
   }
-  
+
   set designacao ( value: string) {
     this.props.designacao = value;
   }

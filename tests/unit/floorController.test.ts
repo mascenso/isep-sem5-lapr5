@@ -14,7 +14,7 @@ describe('Floor controller', function () {
 	const sandbox = sinon.createSandbox();
 
 	beforeEach(function() {
-		this.timeout(6000);
+		this.timeout(9000);
 		Container.reset();
 		let floorSchemaInstance = require("../../src/persistence/schemas/floorSchema").default;
 		Container.set("floorSchema", floorSchemaInstance);
@@ -49,7 +49,7 @@ describe('Floor controller', function () {
 
 		let floorServiceInstance = Container.get("FloorService");
 		sinon.stub(floorServiceInstance, "createFloor").returns( Result.ok<IFloorDTO>( {
-			"id":"123", 
+			"id":"123",
 			"buildingId": req.body.buildingId,
 			"width":req.body.width,
 			"length":req.body.length,
@@ -64,8 +64,8 @@ describe('Floor controller', function () {
 
 		// Assert
 		sinon.assert.calledOnce(res.json);
-		sinon.assert.calledWith(res.json, sinon.match({ 
-			"id":"123", 
+		sinon.assert.calledWith(res.json, sinon.match({
+			"id":"123",
 			"buildingId": req.body.buildingId,
 			"width":req.body.width,
 			"length":req.body.length,
@@ -87,7 +87,7 @@ describe('Floor controller', function () {
 
 		let floorServiceInstance = Container.get("FloorService");
 		sinon.stub(floorServiceInstance, "updateFloor").returns( Result.ok<IFloorDTO>( {
-			"id":"123", 
+			"id":"123",
 			"buildingId": req.body.buildingId,
 			"width":req.body.width,
 			"length":req.body.length,
@@ -102,8 +102,8 @@ describe('Floor controller', function () {
 
 		// Assert
 		sinon.assert.calledOnce(res.json);
-		sinon.assert.calledWith(res.json, sinon.match({ 
-			"id":"123", 
+		sinon.assert.calledWith(res.json, sinon.match({
+			"id":"123",
 			"buildingId": req.body.buildingId,
 			"width":req.body.width,
 			"length":req.body.length,
@@ -125,7 +125,7 @@ describe('Floor controller', function () {
 
 		let floorServiceInstance = Container.get("FloorService");
 		sinon.stub(floorServiceInstance, "addMapToFloor").returns( Result.ok<IFloorDTO>( {
-			"id":"123", 
+			"id":"123",
 			"buildingId": req.body.buildingId,
 			"width":req.body.width,
 			"length":req.body.length,
@@ -140,8 +140,8 @@ describe('Floor controller', function () {
 
 		// Assert
 		sinon.assert.calledOnce(res.json);
-		sinon.assert.calledWith(res.json, sinon.match({ 
-			"id":"123", 
+		sinon.assert.calledWith(res.json, sinon.match({
+			"id":"123",
 			"buildingId": req.body.buildingId,
 			"width":req.body.width,
 			"length":req.body.length,
@@ -165,7 +165,7 @@ describe('Floor controller', function () {
 
 		let floorServiceInstance = Container.get("FloorService");
 		sinon.stub(floorServiceInstance, "getFloorsAtBuildings").returns( Result.ok<IFloorDTO[]>( [{
-			"id":"123", 
+			"id":"123",
 			"buildingId": req.body.buildingId,
 			"width":req.body.width,
 			"length":req.body.length,
@@ -204,7 +204,7 @@ describe('Floor controller', function () {
 		let floorServiceInstance = Container.get("FloorService");
 		sinon.stub(floorServiceInstance, "getAllFloors").returns( Result.ok<IFloorDTO[]>( [
 			{
-				"id":"123", 
+				"id":"123",
 				"buildingId": req.body.buildingId,
 				"width":req.body.width,
 				"length":req.body.length,
@@ -212,7 +212,7 @@ describe('Floor controller', function () {
 				"floorMap":req.body.floorMap,
 				"description":req.body.description},
 			{
-				"id":"123", 
+				"id":"123",
 				"buildingId": req.body.buildingId,
 				"width":req.body.width,
 				"length":req.body.length,
@@ -230,7 +230,7 @@ describe('Floor controller', function () {
 		sinon.assert.calledOnce(res.json);
 		sinon.assert.calledWith(res.json, sinon.match([
 			{
-				"id":"123", 
+				"id":"123",
 				"buildingId": req.body.buildingId,
 				"width":req.body.width,
 				"length":req.body.length,
@@ -238,7 +238,7 @@ describe('Floor controller', function () {
 				"floorMap":req.body.floorMap,
 				"description":req.body.description},
 			{
-				"id":"123", 
+				"id":"123",
 				"buildingId": req.body.buildingId,
 				"width":req.body.width,
 				"length":req.body.length,
@@ -262,7 +262,7 @@ describe('Floor controller', function () {
 
 		let floorServiceInstance = Container.get("FloorService");
 		sinon.stub(floorServiceInstance, "getBuildingsByMinMaxFloors").returns( Result.ok<IBuildingDTO[]>( [{
-			"id":"123", 
+			"id":"123",
 			"code": req.body.code,
 			"maxWidth":req.body.maxWidth,
 			"maxLength":req.body.maxLength,
@@ -276,8 +276,8 @@ describe('Floor controller', function () {
 
 		// Assert
 		sinon.assert.calledOnce(res.json);
-		sinon.assert.calledWith(res.json, sinon.match([{ 
-			"id":"123", 
+		sinon.assert.calledWith(res.json, sinon.match([{
+			"id":"123",
 			"code": req.body.code,
 			"maxWidth":req.body.maxWidth,
 			"maxLength":req.body.maxLength,

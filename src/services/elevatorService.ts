@@ -71,7 +71,7 @@ export default class ElevatorService implements IElevatorService {
     }
   }
 
-  public async getAllElevators(elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO[]>> {
+  public async getAllElevators(): Promise<Result<IElevatorDTO[]>> {
     try {
 
       const elevators = await this.elevatorRepo.getAllElevators();

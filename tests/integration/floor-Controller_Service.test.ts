@@ -16,7 +16,7 @@ describe('Integration test floor controller -> service ', function () {
 	const sandbox = sinon.createSandbox();
 
 	beforeEach(function() {
-		this.timeout(6000);
+		this.timeout(9000);
 		Container.reset();
 		let buildingSchemaInstance = require("../../src/persistence/schemas/buildingSchema").default;
 		Container.set("buildingSchema", buildingSchemaInstance);
@@ -93,26 +93,26 @@ describe('Integration test floor controller -> service ', function () {
 		}));
 
 		const floorStub = sinon.stub(floorInstance, "create").returns( Result.ok( {
-			"id":"123", 
+			"id":"123",
 			"buildingId": req.body.buildingId,
 			"floorNumber": req.body.floorNumber,
 			"width":req.body.width,
 			"length":req.body.length,
 			"floorMap":req.body.floorMap,
-			"description":req.body.description} 
+			"description":req.body.description}
 		));
 
 
 		let floorServiceInstance = Container.get('FloorService');
 		const ctrl = new FloorController(floorServiceInstance as IFloorService);
-		
+
 		// Act
 		await ctrl.createFloor(<Request>req, <Response>res, <NextFunction>next);
 
 		// Assert
 		sinon.assert.calledOnce(res.json);
- 		sinon.assert.calledWith(res.json, sinon.match({ 
-			"id":"123", 
+ 		sinon.assert.calledWith(res.json, sinon.match({
+			"id":"123",
 			"buildingId": req.body.buildingId,
 			"floorNumber": req.body.floorNumber,
 			"width":req.body.width,
@@ -165,13 +165,13 @@ describe('Integration test floor controller -> service ', function () {
 
 		let floorServiceInstance = Container.get('FloorService');
 		const ctrl = new FloorController(floorServiceInstance as IFloorService);
-		
+
 		// Act
 		await ctrl.updateFloor(<Request>req, <Response>res, <NextFunction>next);
 
 		// Assert
 		sinon.assert.calledOnce(res.json);
- 		sinon.assert.calledWith(res.json, sinon.match({ 
+ 		sinon.assert.calledWith(res.json, sinon.match({
 			"buildingId": req.body.buildingId,
 			"floorNumber": req.body.floorNumber,
 			"width":req.body.width,

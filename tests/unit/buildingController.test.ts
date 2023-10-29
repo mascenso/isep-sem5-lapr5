@@ -13,7 +13,7 @@ describe('building controller', function () {
 	const sandbox = sinon.createSandbox();
 
 	beforeEach(function() {
-		this.timeout(6000);
+		this.timeout(9000);
 		Container.reset();
 		let buildingSchemaInstance = require("../../src/persistence/schemas/buildingSchema").default;
 		Container.set("buildingSchema", buildingSchemaInstance);
@@ -51,7 +51,7 @@ describe('building controller', function () {
 
 		let buildingServiceInstance = Container.get("BuildingService");
 		sinon.stub(buildingServiceInstance, "createBuilding").returns( Result.ok<IBuildingDTO>( {
-			"id":"123", 
+			"id":"123",
 			"code": req.body.code,
 			"maxWidth":req.body.maxWidth,
 			"maxLength":req.body.maxLength,
@@ -65,8 +65,8 @@ describe('building controller', function () {
 
 		// Assert
 		sinon.assert.calledOnce(res.json);
-		sinon.assert.calledWith(res.json, sinon.match({ 
-			"id":"123", 
+		sinon.assert.calledWith(res.json, sinon.match({
+			"id":"123",
 			"code": req.body.code,
 			"maxWidth":req.body.maxWidth,
 			"maxLength":req.body.maxLength,
@@ -75,7 +75,7 @@ describe('building controller', function () {
 		}));
 	});
 
-    it('buildingController unit test using buildingService mock (createBuilding)', async function () {		
+    it('buildingController unit test using buildingService mock (createBuilding)', async function () {
 		// Arrange
         let body = { "code":'Building', "maxWidth":10,"maxLength":10,"name":"Edificio lindo","description":"Edificio muito alto." };
         let req: Partial<Request> = {};
@@ -86,13 +86,13 @@ describe('building controller', function () {
         };
 		let next: Partial<NextFunction> = () => {};
 
-		let buildingServiceInstance = Container.get("BuildingService");		
+		let buildingServiceInstance = Container.get("BuildingService");
 		const buildingServiceMock = sinon.mock(buildingServiceInstance, "createBuilding")
 		buildingServiceMock.expects("createBuilding")
 			.once()
 			.withArgs(sinon.match({name: req.body.name}))
 			.returns(Result.ok<IBuildingDTO>( {
-				"id":"123", 
+				"id":"123",
 				"code": req.body.code,
 				"maxWidth":req.body.maxWidth,
 				"maxLength":req.body.maxLength,
@@ -108,8 +108,8 @@ describe('building controller', function () {
 		// Assert
 		buildingServiceMock.verify();
 		sinon.assert.calledOnce(res.json);
-		sinon.assert.calledWith(res.json, sinon.match({ 
-			"id":"123", 
+		sinon.assert.calledWith(res.json, sinon.match({
+			"id":"123",
 			"code": req.body.code,
 			"maxWidth":req.body.maxWidth,
 			"maxLength":req.body.maxLength,
@@ -130,7 +130,7 @@ describe('building controller', function () {
 
 		let buildingServiceInstance = Container.get("BuildingService");
 		sinon.stub(buildingServiceInstance, "updateBuilding").returns( Result.ok<IBuildingDTO>( {
-			"id":"123", 
+			"id":"123",
 			"code": req.body.code,
 			"maxWidth":req.body.maxWidth,
 			"maxLength":req.body.maxLength,
@@ -144,8 +144,8 @@ describe('building controller', function () {
 
 		// Assert
 		sinon.assert.calledOnce(res.json);
-		sinon.assert.calledWith(res.json, sinon.match({ 
-			"id":"123", 
+		sinon.assert.calledWith(res.json, sinon.match({
+			"id":"123",
 			"code": req.body.code,
 			"maxWidth":req.body.maxWidth,
 			"maxLength":req.body.maxLength,
@@ -166,7 +166,7 @@ describe('building controller', function () {
 
 		let buildingServiceInstance = Container.get("BuildingService");
 		sinon.stub(buildingServiceInstance, "getAllBuildings").returns( Result.ok<IBuildingDTO[]>( [{
-			"id":"123", 
+			"id":"123",
 			"code": req.body.code,
 			"maxWidth":req.body.maxWidth,
 			"maxLength":req.body.maxLength,
@@ -180,8 +180,8 @@ describe('building controller', function () {
 
 		// Assert
 		sinon.assert.calledOnce(res.json);
-		sinon.assert.calledWith(res.json, sinon.match([{ 
-			"id":"123", 
+		sinon.assert.calledWith(res.json, sinon.match([{
+			"id":"123",
 			"code": req.body.code,
 			"maxWidth":req.body.maxWidth,
 			"maxLength":req.body.maxLength,

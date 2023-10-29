@@ -26,7 +26,11 @@ export default class RobotController implements IRobotController /* TODO: extend
       return res.json( robotDTO ).status(201);
     }
     catch (e) {
-      return next(e);
+      if(e.code ==11000){
+        return res.status(409).json("Already exist a robot with this code.").send();
+      }else{
+        return next(e);
+      }
     }
   };
 
@@ -42,7 +46,11 @@ export default class RobotController implements IRobotController /* TODO: extend
       return res.status(201).json( robotDTO );
     }
     catch (e) {
-      return next(e);
+      if(e.code ==11000){
+        return res.status(409).json("Already exist a robottype with this code.").send();
+      }else{
+        return next(e);
+      }
     }
   };
 
@@ -50,7 +58,7 @@ export default class RobotController implements IRobotController /* TODO: extend
 
     try {
 
-      const robotOrError = await this.robotServiceInstance.getAllRobots(req.body as IRobotDTO) as Result<IRobotDTO>;
+      const robotOrError = await this.robotServiceInstance.getAllRobots(req.body as IRobotDTO) as Result<IRobotDTO[]>;
 
       if (robotOrError.isFailure) {
         return res.status(402).json('Dont exist any robots saves on DB').send();

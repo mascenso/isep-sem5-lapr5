@@ -17,7 +17,7 @@ import { Guard } from "../core/logic/Guard";
 export interface RobotProps {
   nickName: string;
   robotType: string;
-  serialNumber: SerialNumber;
+  serialNumber: string;
   description?: string;
   inhibited: boolean;
 }
@@ -28,7 +28,7 @@ export class Robot extends AggregateRoot<RobotProps> {
     }
 
     get serialNumber() {
-        return this.props.serialNumber.value;
+        return this.props.serialNumber;
     }
 
     get nickName() {
@@ -43,9 +43,14 @@ export class Robot extends AggregateRoot<RobotProps> {
         return this.props.description;
     }
 
+    get robotType() {
+        return this.props.robotType;
+    }
+
     set serialNumber(serialNumber: string) {
         const sn = SerialNumber.create(serialNumber);
-        this.props.serialNumber = sn.getValue();
+        //this.props.serialNumber = sn.getValue();
+        this.props.serialNumber = serialNumber;
     }
 
     set nickName(nickName: string) {
@@ -60,12 +65,16 @@ export class Robot extends AggregateRoot<RobotProps> {
         this.props.inhibited = inhibited;
     }
 
+    set robotType(robotType: string) {
+        this.props.robotType = robotType;
+    }
+
 
     private constructor(props: RobotProps, id?: RobotId) {
         super(props, id);
     }
 
-    public static create(props: RobotProps, id: RobotId): Result<Robot> {
+    public static create(props: RobotProps, id?: UniqueEntityID): Result<Robot> {
 
           const guardedProps = [
 

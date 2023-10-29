@@ -7,7 +7,6 @@ import IRobotService from '../services/IServices/IRobotService';
 import IRobotDTO from '../dto/IRobotDTO';
 
 import { Result } from "../core/logic/Result";
-import IBridgeDTO from "../dto/IBridgeDTO";
 
 @Service()
 export default class RobotController implements IRobotController /* TODO: extends ../core/infra/BaseController */ {

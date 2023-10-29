@@ -6,6 +6,9 @@ import IRobotRepo from './IRepos/IRobotRepo';
 import IRobotService from './IServices/IRobotService';
 import { Result } from "../core/logic/Result";
 import { RobotMap } from "../mappers/RobotMap";
+import { IBuildingDTO } from "../dto/IBuildingDTO";
+import { Building } from "../domain/building";
+import { BuildingMap } from "../mappers/BuildingMap";
 
 @Service()
 export default class RobotService implements IRobotService {
@@ -58,8 +61,8 @@ export default class RobotService implements IRobotService {
         return Result.fail<IRobotDTO>("Robot not found");
       }
       else {
-        robot.designacao = robotDTO.designacao;
-        robot.tarefas = robotDTO.tarefas;
+        //robot.designacao = robotDTO.designacao;
+        //robot.tarefas = robotDTO.tarefas;
         await this.robotRepo.save(robot);
 
         const robotDTOResult = RobotMap.toDTO( robot ) as IRobotDTO;

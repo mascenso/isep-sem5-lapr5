@@ -9,18 +9,26 @@ import { Robot } from "../domain/robot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 export class RobotMap extends Mapper<Robot> {
-  
+
   public static toDTO( robot: Robot): IRobotDTO {
     return {
       id: robot.id.toString(),
-      designacao: robot.designacao,
-      tarefas: robot.tarefas,
+      nickName: robot.nickName.toString(),
+      robotType: robot.robotType,
+      serialNumber: robot.serialNumber,
+      description: robot.description,
+      inhibited: robot.inhibited
     } as IRobotDTO;
   }
 
   public static toDomain (robot: any | Model<IRobotPersistence & Document> ): Robot {
-    const robotOrError = Robot.create(
-      robot,
+    const robotOrError = Robot.create({
+        nickName: robot.nickName.toString(),
+        robotType: robot.robotType.toString(),
+        serialNumber: robot.serialNumber,
+        description: robot.description,
+        inhibited: robot.inhibited
+      },
       new UniqueEntityID(robot.domainId)
     );
 
@@ -32,8 +40,11 @@ export class RobotMap extends Mapper<Robot> {
   public static toPersistence (robot: Robot): any {
     return {
       domainId: robot.id.toString(),
-      designacao: robot.designacao,
-      tarefas: robot.tarefas
+      nickName: robot.nickName.toString(),
+      //robotType: robot.robotType.toString(),
+      serialNumber: robot.serialNumber,
+      description: robot.description,
+      inhibited: robot.inhibited
     }
   }
 }

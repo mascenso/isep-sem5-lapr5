@@ -7,6 +7,7 @@ import IRobotService from '../services/IServices/IRobotService';
 import IRobotDTO from '../dto/IRobotDTO';
 
 import { Result } from "../core/logic/Result";
+import IBridgeDTO from "../dto/IBridgeDTO";
 
 @Service()
 export default class RobotController implements IRobotController /* TODO: extends ../core/infra/BaseController */ {
@@ -50,7 +51,7 @@ export default class RobotController implements IRobotController /* TODO: extend
 
     try {
 
-      const robotOrError = await this.robotServiceInstance.getAllRobots(req.body as IRobotDTO) as Result<IRobotDTO>;
+      const robotOrError = await this.robotServiceInstance.getAllRobots(req.body as IRobotDTO) as Result<IRobotDTO[]>;
 
       if (robotOrError.isFailure) {
         return res.status(402).json('Dont exist any robots saves on DB').send();

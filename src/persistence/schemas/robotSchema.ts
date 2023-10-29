@@ -4,8 +4,11 @@ import mongoose from 'mongoose';
 const RobotSchema = new mongoose.Schema(
   {
     domainId: { type: String, unique: true },
-    designacao: { type: String, unique: true },
-    tarefas: {type: String, unique: false}
+    nickName: { type: String, unique: true },
+    robotType: {type: String, unique: false},
+    serialNumber: {type: String, unique: true},
+    description: {type: String, unique: false},
+    inhibited: {type: Boolean, unique: false}
   },
   {
     timestamps: true

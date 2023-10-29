@@ -19,11 +19,11 @@ export default () => {
 	role(app);
 	robot(app);
 	robotType(app);
- 	building(app);
-  floor(app);
-  bridge(app);
+	building(app);
+	floor(app);
+	bridge(app);
 	elevator(app);
-  room(app);
+	room(app);
 
 	return app
 }

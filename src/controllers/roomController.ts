@@ -29,7 +29,11 @@ export default class RoomController implements IRoomController {
       return res.json( roomDTO ).status(201);
     }
     catch (e) {
-      return next(e);
+      if(e.code ==11000){
+        return res.status(409).json("Already exist a room with this code.").send();
+      }else{
+        return next(e);
+      }
     }
   }
 

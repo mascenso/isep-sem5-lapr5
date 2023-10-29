@@ -129,8 +129,8 @@ describe('Integration test elevator controller -> service ', function () {
         sinon.assert.calledOnce(elevatorRepoStub);
         sinon.assert.calledOnce(floorRepoStub);
     });
-/*
-    it('elvatorController -> elevatorService integration test using elevatorRepo and elevator stub (updateElevator)', async function () {
+
+    it('elevatorController -> elevatorService integration test using elevatorRepo and elevator stub (updateElevator)', async function () {
         // Arrange
         let body = { "code": 'Elev1', "floorId": '1', "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3 };
         let bodyFloor = { "buildingId": 'Building', "width": 10, "length": 10, "floorNumber": 2, "floorMap": [[]], "description": "Edificio muito alto." };
@@ -145,14 +145,14 @@ describe('Integration test elevator controller -> service ', function () {
         let elevatorRepoInstance = Container.get("ElevatorRepo");
         let elevatorInstance = Container.get("Elevator");
 
-        const floorRepoStub = sinon.stub(floorRepoInstance, "findByDomainId").returns(new Promise<Floor>((resolve, reject) => {
-            resolve(Floor.create({
-                "buildingId": bodyFloor.buildingId,
-                "floorNumber": bodyFloor.floorNumber,
-                "width": bodyFloor.width,
-                "length": bodyFloor.length,
-                "floorMap": bodyFloor.floorMap,
-                "description": bodyFloor.description
+        const elevatorRepoStub2 = sinon.stub(elevatorRepoInstance, "findByDomainId").returns(new Promise<Elevator>((resolve, reject) => {
+            resolve(Elevator.create({
+                "code": req.body.code,
+                "coordX1": req.body.coordX1,
+                "coordY1": req.body.coordX2,
+                "coordX2": req.body.coordY1,
+                "coordY2": req.body.coordY2,
+                "floorId": req.body.floorId
             }).getValue())
         }));
 
@@ -167,17 +167,6 @@ describe('Integration test elevator controller -> service ', function () {
             }).getValue())
         }));
 
-        const elevatorStub = sinon.stub(elevatorInstance, "create").returns(Result.ok({
-            "id": "123",
-            "code": req.body.code,
-            "coordX1": req.body.coordX1,
-            "coordY1": req.body.coordX2,
-            "coordX2": req.body.coordY1,
-            "coordY2": req.body.coordY2,
-            "floorId": req.body.floorId
-        }
-        ));
-
 
         let elevatorServiceInstance = Container.get('ElevatorService');
         const ctrl = new ElevatorController(elevatorServiceInstance as IElevatorService);
@@ -188,20 +177,19 @@ describe('Integration test elevator controller -> service ', function () {
         // Assert
         sinon.assert.calledOnce(res.json);
         sinon.assert.calledWith(res.json, sinon.match({
-            "id": "123",
-            "code": req.body.code,
-            "coordX1": req.body.coordX1,
-            "coordY1": req.body.coordX2,
-            "coordX2": req.body.coordY1,
-            "coordY2": req.body.coordY2,
-            "floorId": req.body.floorId
+            code: "Elev1",
+            coordX1: 1,
+            coordX2: 1,
+            coordY1: 2,
+            coordY2: 3,
+            floorId: "1"
         }));
-        sinon.assert.calledOnce(elevatorStub);
+
         sinon.assert.calledOnce(elevatorRepoStub);
-        sinon.assert.calledOnce(floorRepoStub);
+        sinon.assert.calledOnce(elevatorRepoStub2);
     });
 
-*/
+
     it('elevatorController -> elevatorService integration test using elevatorRepo and Elevator stub (getAllElevators)', async function () {
         // Arrange
         let body = { "id": "123", "code": 'Elev1', "floorId": '1', "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3 };

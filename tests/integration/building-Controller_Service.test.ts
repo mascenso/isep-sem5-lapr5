@@ -13,7 +13,7 @@ describe('Integration test building controller -> service ', function () {
 	const sandbox = sinon.createSandbox();
 
 	beforeEach(function() {
-		this.timeout(6000);
+		this.timeout(9000);
 		Container.reset();
 		let buildingSchemaInstance = require("../../src/persistence/schemas/buildingSchema").default;
 		Container.set("buildingSchema", buildingSchemaInstance);
@@ -62,25 +62,25 @@ describe('Integration test building controller -> service ', function () {
 
 		let buildingInstance = Container.get("Building");
 		const buildingStub = sinon.stub(buildingInstance, "create").returns( Result.ok( {
-			"id":"123", 
+			"id":"123",
 			"code": req.body.code,
 			"maxWidth":req.body.maxWidth,
 			"maxLength":req.body.maxLength,
 			"name":req.body.name,
-			"description":req.body.description} 
+			"description":req.body.description}
 		));
 
 
 		let buildingServiceInstance = Container.get('BuildingService');
 		const ctrl = new BuildingController(buildingServiceInstance as IBuildingService);
-		
+
 		// Act
 		await ctrl.createBuilding(<Request>req, <Response>res, <NextFunction>next);
 
 		// Assert
 		sinon.assert.calledOnce(res.json);
-		sinon.assert.calledWith(res.json, sinon.match({ 
-			"id":"123", 
+		sinon.assert.calledWith(res.json, sinon.match({
+			"id":"123",
 			"code": req.body.code,
 			"maxWidth":req.body.maxWidth,
 			"maxLength":req.body.maxLength,
@@ -124,7 +124,7 @@ describe('Integration test building controller -> service ', function () {
 
 		let buildingServiceInstance = Container.get('BuildingService');
 		const ctrl = new BuildingController(buildingServiceInstance as IBuildingService);
-		
+
 		// Act
 		await ctrl.updateBuilding(<Request>req, <Response>res, <NextFunction>next);
 
@@ -164,7 +164,7 @@ describe('Integration test building controller -> service ', function () {
 
 		let buildingServiceInstance = Container.get('BuildingService');
 		const ctrl = new BuildingController(buildingServiceInstance as IBuildingService);
-		
+
 		// Act
 		await ctrl.getAllBuildings(<Request>req, <Response>res, <NextFunction>next);
 

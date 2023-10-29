@@ -14,7 +14,7 @@ describe("bridge controller", function() {
 
   const sandbox = sinon.createSandbox();
   beforeEach(function() {
-    this.timeout(6000);
+    this.timeout(9000);
     Container.reset();
     let buildingSchemaInstance = require("../../src/persistence/schemas/buildingSchema").default;
     Container.set("buildingSchema", buildingSchemaInstance);

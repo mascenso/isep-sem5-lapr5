@@ -9,7 +9,8 @@ import { BridgeMap } from "../mappers/BridgeMap";
 import IFloorRepo from "./IRepos/IFloorRepo";
 import IBuildingBridgeDTO from '../dto/IBuildingBridgeDTO';
 import IBuildingRepo from './IRepos/IBuildingRepo';
-import { BuildingBridge } from '../domain/buildingBridge';
+import { IFloorDTO } from "../dto/IFloorDTO";
+import { FloorMap } from "../mappers/FloorMap";
 
 @Service()
 export default class BridgeService implements IBridgeService {
@@ -146,50 +147,64 @@ export default class BridgeService implements IBridgeService {
 
   public async getBridgesForBuilding(buildingId: string): Promise<Result<IBuildingBridgeDTO[]>> {
     try {
-      const building = await this.buildingRepo.findByDomainId(buildingId);
-
-      if (!building) {
-        return Result.fail<IBuildingBridgeDTO[]>('Building not found');
-      }
-
       // Vai ao repositório de bridges para buscar as passagens relacionadas com o edifício.
-      const bridges = await this.bridgeRepo.getBridgesForBuilding(buildingId);
-
-      if (bridges.length === 0) {
-        return Result.fail<IBuildingBridgeDTO[]>('No bridges with passageway found for this building');
+      const bridgesDoc = await this.bridgeRepo.getBridgesForBuilding(buildingId);
+      const bridgeDTOs = bridgesDoc.map((bridges) => BridgeMap.toDTO(bridges) as IBridgeDTO);
+      if (bridgeDTOs === null) {
+        return Result.fail<null>("No bridges with passageway found for this building");
       }
 
-      // Array para armazenar os objetos BuildingBridge
-      const buildingBridges: IBuildingBridgeDTO[] = [];
+      // Mapa de Piso --> [Lista de Pisos] para construir os BuildingBridgeDTO, em O(n) já agora
+      const mapaBuildingBridges = new Map<string, IFloorDTO[]>();
 
-      for (const bridge of bridges) {
-        let floorNumber;
+      for (const bridgeDTO of bridgeDTOs) {
 
-        if (buildingId === bridge.buildingA) {
-          floorNumber = await this.floorRepo.findByDomainId(bridge.floorAId);
-        } else if (buildingId === bridge.buildingB) {
-          floorNumber = await this.floorRepo.findByDomainId(bridge.floorBId);
-        }
+            const floorObjA = await this.floorRepo.findByDomainId(bridgeDTO.floorAId);
+            const floorObjB = await this.floorRepo.findByDomainId(bridgeDTO.floorBId);
+            let floorDTOA;
+            let floorDTOB;
 
-        if (floorNumber) {
-          const buildingBridge = BuildingBridge.create({
-            buildingName: building.name,
-            floorNumber: floorNumber.props.floorNumber,
-            description: bridge.name
-          });
 
-          if (buildingBridge.isSuccess) {
-            const buildingBridgeResult = buildingBridge.getValue();
-            buildingBridges.push(buildingBridgeResult);
-          } else {
-            console.error(buildingBridge.error);
+            if (floorObjA == null || floorObjB == null) {
+              return Result.fail<null>(`ERR: Shouldn't get here`);
+            }
+            else {
+
+              if (floorObjA.buildingId == buildingId) {
+                floorDTOA = FloorMap.toDTO(floorObjA) as IFloorDTO;
+                floorDTOB = FloorMap.toDTO(floorObjB) as IFloorDTO;
+              } else {
+                floorDTOA = FloorMap.toDTO(floorObjB) as IFloorDTO;
+                floorDTOB = FloorMap.toDTO(floorObjA) as IFloorDTO;
+              }
+
+              // Just because JS doesn't allow to use objects as keys unlike Java
+              // we stringify and then parse again to floorDTO
+              const key  = JSON.stringify(floorDTOA);
+
+            if (mapaBuildingBridges.has(key)) {
+              const floors = mapaBuildingBridges.get(key);
+              floors.push(floorDTOB);
+              mapaBuildingBridges.set(key, floors);
+            }
+            else {
+                const floors: IFloorDTO[] = [];
+                floors.push(floorDTOB);
+                mapaBuildingBridges.set(key, floors);
+            }
           }
-        }
-      };
+      }
 
-      return Result.ok<IBuildingBridgeDTO[]>(buildingBridges);
+      const floorRelationshipDTOs: IBuildingBridgeDTO[] = [];
+      mapaBuildingBridges.forEach((connectedFloors, floor) => {
+        const floorKeyDTO = JSON.parse(floor) as IFloorDTO;
+        const floorRelationshipDTO = { floor: floorKeyDTO, connectedFloors: connectedFloors };
+        floorRelationshipDTOs.push(floorRelationshipDTO);
+      });
+
+      return Result.ok<IBuildingBridgeDTO[]>(floorRelationshipDTOs);
     } catch (e) {
       throw e;
-    }
+      }
   }
 }

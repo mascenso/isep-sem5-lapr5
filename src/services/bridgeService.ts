@@ -39,42 +39,46 @@ export default class BridgeService implements IBridgeService {
   public async createBridge(bridgeDTO: IBridgeDTO): Promise<Result<IBridgeDTO>> {
     try {
 
+      /* check if floors exist */
       const floorAId = await this.floorRepo.findByDomainId(bridgeDTO.floorAId);
       const floorBId = await this.floorRepo.findByDomainId(bridgeDTO.floorBId);
       if (floorAId === null || floorBId === null) {
         return Result.fail<IBridgeDTO>('Floor not found');
       }
 
+      /* retrieve building ids */
       const buildingAId = floorAId.buildingId;
       const buildingBId = floorBId.buildingId;
 
+      /* create bridge */
       const bridgeOrError = await Bridge.create(bridgeDTO);
 
       if (bridgeOrError.isFailure) {
         return Result.fail<IBridgeDTO>(bridgeOrError.errorValue());
       }
 
+      /* before saving, check if bridge already exists */
       if (await this.bridgeRepo.areConnected(bridgeDTO.floorAId, bridgeDTO.floorBId))
-      // Combinação já existente
+        // Combinação já existente
       {
-        return Result.fail<IBridgeDTO>('Bridge already exists');
+        return Result.fail<IBridgeDTO>("Bridge already exists");
       }
-      /*
       else if (buildingAId === buildingBId)
        // Nao podem estar no mesmo building
       {
         return Result.fail<IBridgeDTO>('Bridge cannot connect floors of the same building');
       }
-      */
       else {
         // Criação e persistência do novo objeto Bridge
         const bridgeResult = bridgeOrError.getValue();
         bridgeResult.buildingBId = buildingBId;
         bridgeResult.buildingAId = buildingAId;
+
+        /* Salva a bridge com os ids dos buildings correspondentes */
         await this.bridgeRepo.save(bridgeResult);
 
-        const bridgeDTOResult = BridgeMap.toDTO(bridgeResult, buildingAId, buildingBId) as IBridgeDTO;
-        return Result.ok<IBridgeDTO>(bridgeDTOResult)
+        const bridgeDTOResult = BridgeMap.toDTO(bridgeResult) as IBridgeDTO;
+        return Result.ok<IBridgeDTO>(bridgeDTOResult);
       }
 
     } catch (e) {

@@ -9,8 +9,8 @@ interface BridgeProps {
   name: string;
   floorAId: string;
   floorBId: string;
-  buildingAId?: string;
-  buildingBId?: string;
+  buildingAId: string;
+  buildingBId: string;
 }
 
 export class Bridge extends AggregateRoot<BridgeProps> {
@@ -76,6 +76,8 @@ export class Bridge extends AggregateRoot<BridgeProps> {
     const code = bridgeDTO.code;
     const floorAId = bridgeDTO.floorAId;
     const floorBId = bridgeDTO.floorBId;
+    const buildingAId = bridgeDTO.buildingAId;
+    const buildingBId = bridgeDTO.buildingBId;
 
 
     if (!!name === false || name.length === 0) {
@@ -85,7 +87,9 @@ export class Bridge extends AggregateRoot<BridgeProps> {
         name: name,
         code: code,
         floorAId: floorAId,
-        floorBId: floorBId
+        floorBId: floorBId,
+        buildingAId: buildingAId,
+        buildingBId: buildingBId
       }, id);
       return Result.ok<Bridge>( bridge )
     }

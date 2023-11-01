@@ -118,8 +118,8 @@ export default class BridgeRepo implements IBridgeRepo {
     try {
       const query = {
         $or: [
-          { buildingA: buildingId },
-          { buildingB: buildingId }
+          { buildingAId: buildingId },
+          { buildingBId: buildingId }
         ]
       };
 

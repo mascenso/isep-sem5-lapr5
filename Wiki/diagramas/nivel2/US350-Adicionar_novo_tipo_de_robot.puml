@@ -1,0 +1,8 @@
+@startuml US360
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita adicionar novo tipo de robot
+activate Sistema
+Sistema --> Utilizador : Confirmação de novo tipo de robot criado
+deactivate Sistema
+@enduml

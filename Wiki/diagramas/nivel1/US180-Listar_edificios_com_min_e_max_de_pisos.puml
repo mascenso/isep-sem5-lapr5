@@ -1,0 +1,8 @@
+@startuml US210
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita edifício com um min e max de pisos
+activate Sistema
+Sistema --> Utilizador : Lista edifícios com numero de pisos \ncompreendido entre o min e max
+deactivate Sistema
+@enduml

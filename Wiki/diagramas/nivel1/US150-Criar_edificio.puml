@@ -1,0 +1,9 @@
+@startuml US150
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Deseja criar edifício
+activate Sistema
+Sistema -> Sistema : Cria edifício
+Sistema --> Utilizador : Confirmação de criação
+deactivate Sistema
+@enduml

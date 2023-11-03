@@ -1,0 +1,10 @@
+@startuml US190
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita criar novo piso
+activate Sistema
+Sistema --> Sistema : Procura se edificio existe
+Sistema -> Sistema : Cria Piso
+Sistema --> Utilizador : Confirmação de criação
+deactivate Sistema
+@enduml

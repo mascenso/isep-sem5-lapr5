@@ -1,0 +1,8 @@
+@startuml US300
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita lista de pisos de edificio com elevador
+activate Sistema
+Sistema --> Utilizador : Lista de pisos de edificio com elevador
+deactivate Sistema
+@enduml

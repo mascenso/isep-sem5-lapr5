@@ -1,0 +1,10 @@
+@startuml US170
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita listar todos os edifícios
+activate Sistema
+Sistema --> Sistema : Procura todos os edifícios
+Sistema -> Sistema : Retorna lista de edifícios
+Sistema --> Utilizador : Lista de edifícios
+deactivate Sistema
+@enduml

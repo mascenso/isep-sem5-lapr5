@@ -1,0 +1,8 @@
+@startuml US270
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita criar elevador em edificio
+activate Sistema
+Sistema --> Utilizador : Confirmação de elevador em edificio criado
+deactivate Sistema
+@enduml

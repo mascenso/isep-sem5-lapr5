@@ -1,0 +1,24 @@
+@startuml
+title US260 - Listar passagens entre 2 edifícios
+
+participant "Route" as Route
+participant "Controller" as Controller
+participant "Service" as Service
+participant "Repositorio" as Repositorio
+
+ -> Route : get(api/bridges/buildings)
+activate Route
+Route -> Controller : getBridgesBetweenBuildings()
+activate Controller
+Controller -> Service : getBridgesBetweenBuildings(building1, building2)
+activate Service
+Service -> Repositorio : bridges=getBridgesBetweenBuildings(building1, building2)
+activate Repositorio
+Service --> Controller : bridgesDTO
+Controller--> Route : Resposta HTTP
+<-- Route : Resposta HTTP
+
+note right of Service
+O DTO não está representado por questões de simplicidade (Ver US150).
+end note
+@enduml

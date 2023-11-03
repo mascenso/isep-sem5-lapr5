@@ -1,0 +1,25 @@
+@startuml
+title US190 - Criar piso de edifício
+
+participant "Route" as Route
+participant "Controller" as Controller
+participant "Service" as Service
+participant "Repositorio" as Repositorio
+
+ -> Route : post(api/floors)
+activate Route
+Route -> Controller : createFloor()
+activate Controller
+Controller -> Service : createFloor()
+activate Service
+Controller -> Service : floorDTO
+Service -> Repositorio : save(DTObuilding)
+activate Repositorio
+Service --> Controller : DTObuilding
+Controller--> Route : Resposta HTTP
+<-- Route : Resposta HTTP
+
+note right of Service
+O DTO não está representado por questões de simplicidade (Ver US150).
+end note
+@enduml

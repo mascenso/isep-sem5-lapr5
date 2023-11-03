@@ -1,0 +1,24 @@
+@startuml
+title US170 - Listar todos os edifícios
+
+participant "Route" as Route
+participant "Controller" as Controller
+participant "Service" as Service
+participant "Repositorio" as Repositorio
+
+ -> Route : get(api/buildings)
+activate Route
+Route -> Controller : getAllBuildings()
+activate Controller
+Controller -> Service : getAllBuildings()
+activate Service
+Service -> Repositorio : buildings=getAllBuildings()
+activate Repositorio
+Service --> Controller : buildingsDTO
+Controller--> Route : Resposta HTTP
+<-- Route : Resposta HTTP
+
+note right of Service
+O DTO não está representado por questões de simplicidade (Ver US150).
+end note
+@enduml

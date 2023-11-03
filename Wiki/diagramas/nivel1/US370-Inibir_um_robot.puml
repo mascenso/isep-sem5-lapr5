@@ -1,0 +1,8 @@
+@startuml US370
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita inibir um robot
+activate Sistema
+Sistema --> Utilizador : Confirmação de robot inibido
+deactivate Sistema
+@enduml

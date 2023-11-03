@@ -1,0 +1,8 @@
+@startuml US310
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita criar sala em piso
+activate Sistema
+Sistema --> Utilizador : Confirmação de sala em piso criada
+deactivate Sistema
+@enduml

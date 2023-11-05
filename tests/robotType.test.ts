@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { RobotType } from '../src/domain/robotType';
+import { RobotType } from '../src/domain/robotType-agg/robotType';
 import TaskType from '../src/enums/taskType';
 
 describe('RobotType', () => {
@@ -50,6 +50,6 @@ describe('RobotType', () => {
     expect(robotType.designacao).to.equal('Robot B');
     expect(robotType.tipoTarefas).to.deep.equal([TaskType.Task1, TaskType.Task2]);
 
-   
+
   });
 });

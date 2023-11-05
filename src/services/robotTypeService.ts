@@ -1,7 +1,7 @@
 import { Service, Inject } from 'typedi';
 import config from "../../config";
 import IRobotTypeDTO from '../dto/IRobotTypeDTO';
-import { RobotType } from "../domain/robotType";
+import { RobotType } from "../domain/robotType-agg/robotType";
 import IRobotTypeRepo from './IRepos/IRobotTypeRepo';
 import IRobotTypeService from './IServices/IRobotTypeService';
 import { Result } from "../core/logic/Result";

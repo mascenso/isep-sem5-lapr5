@@ -1,9 +1,9 @@
-import { AggregateRoot } from "../core/domain/AggregateRoot";
-import { UniqueEntityID } from "../core/domain/UniqueEntityID";
-import { Result } from "../core/logic/Result";
+import { AggregateRoot } from "../../core/domain/AggregateRoot";
+import { UniqueEntityID } from "../../core/domain/UniqueEntityID";
+import { Result } from "../../core/logic/Result";
 import { RobotTypeId } from "./robotTypeId";
-import IRobotTypeDTO from "../dto/IRobotTypeDTO";
-import TaskType from '../enums/taskType';
+import IRobotTypeDTO from "../../dto/IRobotTypeDTO";
+import TaskType from '../../enums/taskType';
 
 interface RobotTypeProps {
   designacao: string;

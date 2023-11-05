@@ -1,4 +1,4 @@
-import { SerialNumber } from "../serialNumber";
+import { SerialNumber } from "./serialNumber";
 import { AggregateRoot } from "../../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../../core/domain/UniqueEntityID";
 import { RobotId } from "./robotId";

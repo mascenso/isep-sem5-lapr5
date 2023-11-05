@@ -7,7 +7,7 @@ import { Result } from '../../src/core/logic/Result';
 import IBuildingService from "../../src/services/IServices/IBuildingService";
 import BuildingService from "../../src/services/buildingService";
 import {IBuildingDTO} from '../../src/dto/IBuildingDTO';
-import { Building } from '../../src/domain/building';
+import { Building } from '../../src/domain/building-agg/building';
 import buildingRepo from '../../src/repos/buildingRepo';
 
 
@@ -25,7 +25,7 @@ describe('building service', function () {
 		let buildingRepoInstance = Container.get(buildingRepoClass);
 		Container.set("BuildingRepo", buildingRepoInstance);
 
-		let buildingInstance = require("../../src/domain/building").Building;
+		let buildingInstance = require("../../src/domain/building-agg/building").Building;
 		Container.set("Building", buildingInstance);
 
 		let floorInstance = require("../../src/domain/floor").default;

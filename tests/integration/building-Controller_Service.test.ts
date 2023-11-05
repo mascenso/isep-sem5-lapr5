@@ -7,7 +7,7 @@ import { Result } from '../../src/core/logic/Result';
 import IBuildingService from "../../src/services/IServices/IBuildingService";
 import BuildingController from "../../src/controllers/buildingController";
 import {IBuildingDTO} from '../../src/dto/IBuildingDTO';
-import { Building } from '../../src/domain/building';
+import { Building } from '../../src/domain/building-agg/building';
 
 describe('Integration test building controller -> service ', function () {
 	const sandbox = sinon.createSandbox();
@@ -22,7 +22,7 @@ describe('Integration test building controller -> service ', function () {
 		let buildingRepoInstance = Container.get(buildingRepoClass);
 		Container.set("BuildingRepo", buildingRepoInstance);
 
-		let buildingInstance = require("../../src/domain/building").Building;
+		let buildingInstance = require("../../src/domain/building-agg/building").Building;
 		Container.set("Building", buildingInstance);
 
 		let floorInstance = require("../../src/domain/floor").default;

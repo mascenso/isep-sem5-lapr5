@@ -3,9 +3,9 @@ import { Service, Inject } from 'typedi';
 import { Document, FilterQuery, Model } from 'mongoose';
 import IBuildingRepo from "../services/IRepos/IBuildingRepo";
 import {IBuildingPersistence} from "../dataschema/IBuildingPersistence";
-import {BuildingId} from "../domain/buildingId";
+import {BuildingId} from "../domain/building-agg/buildingId";
 import {BuildingMap} from "../mappers/BuildingMap";
-import {Building} from "../domain/building";
+import {Building} from "../domain/building-agg/building";
 import { min } from 'lodash';
 import { ObjectId } from 'mongodb';
 
@@ -82,10 +82,10 @@ export default class BuildingRepo implements IBuildingRepo {
         const buildingRecord = await this.buildingSchema.findOne( query as FilterQuery<IBuildingPersistence & Document> );
         if (buildingRecord != null) {
             buildings.push(BuildingMap.toDomain(buildingRecord));
-        } 
+        }
     }
     if (buildings.length === 0) {
-        return []; 
+        return [];
     }
     return buildings;
 }

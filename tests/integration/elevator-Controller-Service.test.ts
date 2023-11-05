@@ -37,7 +37,7 @@ describe('Integration test elevator controller -> service ', function () {
         let floorRepoInstance = Container.get(floorRepoClass);
         Container.set("FloorRepo", floorRepoInstance);
 
-        let buildingInstance = require("../../src/domain/building").Building;
+        let buildingInstance = require("../../src/domain/building-agg/building").Building;
         Container.set("Building", buildingInstance);
 
         let floorInstance = require("../../src/domain/floor").Floor;

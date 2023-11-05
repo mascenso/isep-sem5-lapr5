@@ -37,7 +37,7 @@ describe("bridge controller", function() {
     let elevatorRepoInstance = Container.get(elevatorRepoClass);
     Container.set("ElevatorRepo", elevatorRepoInstance);
 
-    let buildingInstance = require("../../src/domain/building").Building;
+    let buildingInstance = require("../../src/domain/building-agg/building").Building;
     Container.set("Building", buildingInstance);
 
     let floorInstance = require("../../src/domain/floor").Floor;

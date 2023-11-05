@@ -2,7 +2,7 @@ import 'reflect-metadata';
 
 import * as sinon from 'sinon';
 import {Container} from "typedi";
-import {Building} from "../../src/domain/building";
+import {Building} from "../../src/domain/building-agg/building";
 import {Result} from "../../src/core/logic/Result";
 import {Floor} from "../../src/domain/floor";
 import RoomService from "../../src/services/roomService";
@@ -31,7 +31,7 @@ describe('Room Service', () => {
     let roomRepoInstance = Container.get(roomRepoClass);
     Container.set("RoomRepo", roomRepoInstance);
 
-    let buildingInstance = require("../../src/domain/building").Building;
+    let buildingInstance = require("../../src/domain/building-agg/building").Building;
     Container.set("Building", buildingInstance);
 
     let floorInstance = require("../../src/domain/floor").Floor;

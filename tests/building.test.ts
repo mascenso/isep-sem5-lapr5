@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import {Building} from "../src/domain/building";
+import {Building} from "../src/domain/building-agg/building";
 
 describe('Building', () => {
   it('given valid properties creates a valid Building instance', () => {

@@ -1,5 +1,5 @@
 import { Repo } from "../../core/infra/Repo";
-import { BuildingId } from "../../domain/buildingId";
+import { BuildingId } from "../../domain/building-agg/buildingId";
 import {Floor} from "../../domain/floor";
 import {FloorId} from "../../domain/floorId";
 

@@ -1,6 +1,6 @@
 import {AggregateRoot} from "../core/domain/AggregateRoot";
 import {UniqueEntityID} from "../core/domain/UniqueEntityID";
-import {BuildingId} from "./buildingId";
+import {BuildingId} from "./building-agg/buildingId";
 import {FloorId} from "./floorId";
 import {RoomType} from "./roomType";
 import {Result} from "../core/logic/Result";

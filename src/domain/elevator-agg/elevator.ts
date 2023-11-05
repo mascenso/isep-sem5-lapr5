@@ -1,14 +1,14 @@
-import {AggregateRoot} from "../core/domain/AggregateRoot";
-import {UniqueEntityID} from "../core/domain/UniqueEntityID";
-import {Result} from "../core/logic/Result";
-import {Guard} from "../core/logic/Guard";
+import {AggregateRoot} from "../../core/domain/AggregateRoot";
+import {UniqueEntityID} from "../../core/domain/UniqueEntityID";
+import {Result} from "../../core/logic/Result";
+import {Guard} from "../../core/logic/Guard";
 
 interface ElevatorProps {
   code: string;
   floorId: string;
-  coordX1: number; 
+  coordX1: number;
   coordY1: number;
-  coordX2: number; 
+  coordX2: number;
   coordY2: number;
 }
 

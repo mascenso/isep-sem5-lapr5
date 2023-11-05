@@ -1,6 +1,6 @@
 import { Repo } from "../../core/infra/Repo";
-import {Elevator} from "../../domain/elevator";
-import {ElevatorId} from "../../domain/elevatorId";
+import {Elevator} from "../../domain/elevator-agg/elevator";
+import {ElevatorId} from "../../domain/elevator-agg/elevatorId";
 import {FloorId} from "../../domain/floorId";
 
 export default interface IElevatorRepo extends Repo<Elevator> {

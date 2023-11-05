@@ -6,7 +6,7 @@ import { NextFunction, Request } from 'express';
 import { Container } from 'typedi';
 import { Result } from '../../src/core/logic/Result';
 import ElevatorService from "../../src/services/elevatorService";
-import { Elevator } from '../../src/domain/elevator';
+import { Elevator } from '../../src/domain/elevator-agg/elevator';
 
 describe('elevator service', function () {
     const sandbox = sinon.createSandbox();
@@ -41,7 +41,7 @@ describe('elevator service', function () {
         let floorInstance = require("../../src/domain/floor").Floor;
         Container.set("Floor", floorInstance);
 
-        let elevatorInstance = require("../../src/domain/elevator").Elevator;
+        let elevatorInstance = require("../../src/domain/elevator-agg/elevator").Elevator;
         Container.set("Elevator", elevatorInstance);
 
         let elevatorServiceClass = require("../../src/services/elevatorService").default;

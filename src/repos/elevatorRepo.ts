@@ -3,9 +3,9 @@ import { Service, Inject } from 'typedi';
 import { Document, FilterQuery, Model } from 'mongoose';
 import IElevatorRepo from "../services/IRepos/IElevatorRepo";
 import {IElevatorPersistence} from "../dataschema/IElevatorPersistence";
-import {ElevatorId} from "../domain/elevatorId";
+import {ElevatorId} from "../domain/elevator-agg/elevatorId";
 import {ElevatorMap} from "../mappers/ElevatorMap";
-import {Elevator} from "../domain/elevator";
+import {Elevator} from "../domain/elevator-agg/elevator";
 import {FloorId} from "../domain/floorId";
 
 @Service()

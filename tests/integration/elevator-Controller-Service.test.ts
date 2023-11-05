@@ -7,7 +7,7 @@ import { Result } from '../../src/core/logic/Result';
 import IElevatorService from "../../src/services/IServices/IElevatorService";
 import ElevatorController from "../../src/controllers/elevatorController";
 import { IElevatorDTO } from '../../src/dto/IElevatorDTO';
-import { Elevator } from '../../src/domain/elevator';
+import { Elevator } from '../../src/domain/elevator-agg/elevator';
 import { Floor } from '../../src/domain/floor';
 
 describe('Integration test elevator controller -> service ', function () {
@@ -43,7 +43,7 @@ describe('Integration test elevator controller -> service ', function () {
         let floorInstance = require("../../src/domain/floor").Floor;
         Container.set("Floor", floorInstance);
 
-        let elevatorInstance = require("../../src/domain/elevator").Elevator;
+        let elevatorInstance = require("../../src/domain/elevator-agg/elevator").Elevator;
         Container.set("Elevator", elevatorInstance);
 
         let elevatorServiceClass = require("../../src/services/elevatorService").default;

@@ -44,7 +44,7 @@ describe('elevator controller', function () {
         let floorInstance = require("../../src/domain/floor").Floor;
         Container.set("Floor", floorInstance);
 
-        let elevatorInstance = require("../../src/domain/elevator").Elevator;
+        let elevatorInstance = require("../../src/domain/elevator-agg/elevator").Elevator;
         Container.set("Elevator", elevatorInstance);
 
         let elevatorServiceClass = require("../../src/services/elevatorService").default;

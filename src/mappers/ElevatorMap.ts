@@ -2,7 +2,7 @@ import { Mapper } from "../core/infra/Mapper";
 
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
-import {Elevator} from "../domain/elevator";
+import {Elevator} from "../domain/elevator-agg/elevator";
 import {IElevatorDTO} from "../dto/IElevatorDTO";
 import {Document, Model} from "mongoose";
 import {IElevatorPersistence} from "../dataschema/IElevatorPersistence";

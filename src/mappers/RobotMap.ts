@@ -41,7 +41,7 @@ export class RobotMap extends Mapper<Robot> {
     return {
       domainId: robot.id.toString(),
       nickName: robot.nickName.toString(),
-      //robotType: robot.robotType.toString(),
+      robotType: robot.robotType.toString(),
       serialNumber: robot.serialNumber,
       description: robot.description,
       inhibited: robot.inhibited

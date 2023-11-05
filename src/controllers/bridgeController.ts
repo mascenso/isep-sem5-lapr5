@@ -46,11 +46,7 @@ export default class BridgeController implements IBridgeController /* TODO: exte
       return res.status(200).json( robotDTO );
     }
     catch (e) {
-      if(e.code ==11000){
-        return res.status(409).json("Already exist a bridge with this code.").send();
-      }else{
-        return next(e);
-      }
+      return next(e);
     }
   };
 

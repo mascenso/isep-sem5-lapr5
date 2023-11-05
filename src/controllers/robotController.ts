@@ -19,7 +19,7 @@ export default class RobotController implements IRobotController /* TODO: extend
       const robotOrError = await this.robotServiceInstance.createRobot(req.body as IRobotDTO) as Result<IRobotDTO>;
 
       if (robotOrError.isFailure) {
-        return res.status(402).send();
+        return res.status(402).json(robotOrError.error).send();
       }
 
       const robotDTO = robotOrError.getValue();
@@ -46,11 +46,7 @@ export default class RobotController implements IRobotController /* TODO: extend
       return res.status(201).json( robotDTO );
     }
     catch (e) {
-      if(e.code ==11000){
-        return res.status(409).json("Already exist a robottype with this code.").send();
-      }else{
-        return next(e);
-      }
+      return next(e);
     }
   };
 

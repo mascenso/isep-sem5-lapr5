@@ -1,10 +1,10 @@
-import {AggregateRoot} from "../core/domain/AggregateRoot";
-import {UniqueEntityID} from "../core/domain/UniqueEntityID";
-import {BuildingId} from "./building-agg/buildingId";
-import {FloorId} from "./floor-agg/floorId";
+import {AggregateRoot} from "../../core/domain/AggregateRoot";
+import {UniqueEntityID} from "../../core/domain/UniqueEntityID";
+import {BuildingId} from "../building-agg/buildingId";
+import {FloorId} from "../floor-agg/floorId";
 import {RoomType} from "./roomType";
-import {Result} from "../core/logic/Result";
-import {Guard} from "../core/logic/Guard";
+import {Result} from "../../core/logic/Result";
+import {Guard} from "../../core/logic/Guard";
 import {RoomId} from "./roomId";
 
 interface RoomProps {

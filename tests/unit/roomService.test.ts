@@ -6,8 +6,8 @@ import {Building} from "../../src/domain/building-agg/building";
 import {Result} from "../../src/core/logic/Result";
 import {Floor} from "../../src/domain/floor-agg/floor";
 import RoomService from "../../src/services/roomService";
-import {RoomType} from "../../src/domain/roomType";
-import {Room} from "../../src/domain/room";
+import {RoomType} from "../../src/domain/Room-agg/roomType";
+import {Room} from "../../src/domain/Room-agg/room";
 
 
 describe('Room Service', () => {
@@ -37,7 +37,7 @@ describe('Room Service', () => {
     let floorInstance = require("../../src/domain/floor-agg/floor").Floor;
     Container.set("Floor", floorInstance);
 
-    let roomInstance = require("../../src/domain/room").Room;
+    let roomInstance = require("../../src/domain/Room-agg/room").Room;
     Container.set("Room", roomInstance);
 
     let roomServiceClass = require("../../src/services/roomService").default;

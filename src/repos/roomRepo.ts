@@ -1,7 +1,7 @@
 import {Inject, Service} from "typedi";
 import IRoomRepo from "../services/IRepos/IRoomRepo";
-import { Room } from "../domain/room";
-import {RoomId} from "../domain/roomId";
+import { Room } from "../domain/Room-agg/room";
+import {RoomId} from "../domain/Room-agg/roomId";
 import {Document, FilterQuery, Model} from "mongoose";
 import {IRoomPersistence} from "../dataschema/IRoomPersistence";
 import {RoomMap} from "../mappers/RoomMap";

@@ -4,11 +4,11 @@ import config from "../../config";
 import IRoomRepo from "./IRepos/IRoomRepo";
 import {Result} from "../core/logic/Result";
 import {IRoomDTO} from "../dto/IRoomDTO";
-import {Room} from "../domain/room";
+import {Room} from "../domain/Room-agg/room";
 import {RoomMap} from "../mappers/RoomMap";
 import IFloorRepo from "./IRepos/IFloorRepo";
 import IBuildingRepo from "./IRepos/IBuildingRepo";
-import {RoomType} from "../domain/roomType";
+import {RoomType} from "../domain/Room-agg/roomType";
 
 @Service()
 export default class RoomService implements IRoomService {

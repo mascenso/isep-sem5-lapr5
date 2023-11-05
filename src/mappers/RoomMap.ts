@@ -1,5 +1,5 @@
 import {Mapper} from "../core/infra/Mapper";
-import {Room} from "../domain/room";
+import {Room} from "../domain/Room-agg/room";
 import {IRoomDTO} from "../dto/IRoomDTO";
 import {IRoomPersistence} from "../dataschema/IRoomPersistence";
 import {Document, Model} from "mongoose";

@@ -4,11 +4,11 @@ import { Mapper } from "../core/infra/Mapper";
 
 import {IUserDTO} from "../dto/IUserDTO";
 
-import { User } from "../domain/user";
+import { User } from "../domain/user-agg/user";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
-import { UserEmail } from "../domain/userEmail";
-import { UserPassword } from "../domain/userPassword";
+import { UserEmail } from "../domain/user-agg/userEmail";
+import { UserPassword } from "../domain/user-agg/userPassword";
 
 import RoleRepo from "../repos/roleRepo";
 
@@ -40,7 +40,7 @@ export class UserMap extends Mapper<User> {
     }, new UniqueEntityID(raw.domainId))
 
     userOrError.isFailure ? console.log(userOrError.error) : '';
-    
+
     return userOrError.isSuccess ? userOrError.getValue() : null;
   }
 

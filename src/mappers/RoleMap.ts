@@ -4,7 +4,7 @@ import { Document, Model } from 'mongoose';
 import { IRolePersistence } from '../dataschema/IRolePersistence';
 
 import IRoleDTO from "../dto/IRoleDTO";
-import { Role } from "../domain/Role-agg/role";
+import { Role } from "../domain/role-agg/role";
 
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 

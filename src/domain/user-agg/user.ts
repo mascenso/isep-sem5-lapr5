@@ -1,11 +1,11 @@
-import { AggregateRoot } from "../core/domain/AggregateRoot";
-import { UniqueEntityID } from "../core/domain/UniqueEntityID";
-import { Result } from "../core/logic/Result";
+import { AggregateRoot } from "../../core/domain/AggregateRoot";
+import { UniqueEntityID } from "../../core/domain/UniqueEntityID";
+import { Result } from "../../core/logic/Result";
 import { UserId } from "./userId";
 import { UserEmail } from "./userEmail";
-import { Role } from "./Role-agg/role";
+import { Role } from "../role-agg/role";
 import { UserPassword } from "./userPassword";
-import { Guard } from "../core/logic/Guard";
+import { Guard } from "../../core/logic/Guard";
 
 
 interface UserProps {

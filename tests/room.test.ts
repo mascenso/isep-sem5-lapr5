@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import {RoomType} from "../src/domain/Room-agg/roomType";
-import {Room} from "../src/domain/Room-agg/room";
+import {RoomType} from "../src/domain/room-agg/roomType";
+import {Room} from "../src/domain/room-agg/room";
 
 describe('Room', () => {
   it('given valid properties create valid Room instance', () => {

@@ -14,11 +14,11 @@ import { IUserDTO } from '../dto/IUserDTO';
 import IUserRepo from './IRepos/IUserRepo';
 import IRoleRepo from './IRepos/IRoleRepo';
 
-import { User } from '../domain/user';
-import { UserPassword } from '../domain/userPassword';
-import { UserEmail } from '../domain/userEmail';
+import { User } from '../domain/user-agg/user';
+import { UserPassword } from '../domain/user-agg/userPassword';
+import { UserEmail } from '../domain/user-agg/userEmail';
 
-import { Role } from '../domain/Role-agg/role';
+import { Role } from '../domain/role-agg/role';
 
 import { Result } from "../core/logic/Result";
 

@@ -3,7 +3,7 @@ import {Container} from "typedi";
 import config from "../../../config";
 import {celebrate, Joi} from "celebrate";
 import IRoomController from "../../controllers/IControllers/IRoomController";
-import {RoomType} from "../../domain/Room-agg/roomType";
+import {RoomType} from "../../domain/room-agg/roomType";
 
 
 const route = Router();

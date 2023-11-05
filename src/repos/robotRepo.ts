@@ -1,8 +1,8 @@
 import { Service, Inject } from 'typedi';
 
 import IRobotRepo from "../services/IRepos/IRobotRepo";
-import { Robot } from "../domain/robot";
-import { RobotId } from "../domain/robotId";
+import { Robot } from "../domain/robot-agg/robot";
+import { RobotId } from "../domain/robot-agg/robotId";
 import { RobotMap } from "../mappers/RobotMap";
 
 import { Document, FilterQuery, Model } from 'mongoose';

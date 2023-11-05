@@ -1,9 +1,9 @@
-import { SerialNumber } from "./serialNumber";
-import { AggregateRoot } from "../core/domain/AggregateRoot";
-import { UniqueEntityID } from "../core/domain/UniqueEntityID";
+import { SerialNumber } from "../serialNumber";
+import { AggregateRoot } from "../../core/domain/AggregateRoot";
+import { UniqueEntityID } from "../../core/domain/UniqueEntityID";
 import { RobotId } from "./robotId";
-import { Result } from "../core/logic/Result";
-import { Guard } from "../core/logic/Guard";
+import { Result } from "../../core/logic/Result";
+import { Guard } from "../../core/logic/Guard";
 
 /*
 -- código identificativo, obrigatório, alfanumerico, max 30 caracteres, único no sistema

@@ -4,7 +4,7 @@ import { Document, Model } from 'mongoose';
 import { IRobotPersistence } from '../dataschema/IRobotPersistence';
 
 import IRobotDTO from "../dto/IRobotDTO";
-import { Robot } from "../domain/robot";
+import { Robot } from "../domain/robot-agg/robot";
 
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 

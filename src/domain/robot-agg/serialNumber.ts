@@ -1,7 +1,7 @@
-import { ValueObject } from "../core/domain/ValueObject";
-import { Result } from "../core/logic/Result";
-import { Guard } from "../core/logic/Guard";
-import { UniqueEntityID } from "../core/domain/UniqueEntityID";
+import { ValueObject } from "../../core/domain/ValueObject";
+import { Result } from "../../core/logic/Result";
+import { Guard } from "../../core/logic/Guard";
+import { UniqueEntityID } from "../../core/domain/UniqueEntityID";
 
 interface RobotSerialNumberProps {
     value: string;

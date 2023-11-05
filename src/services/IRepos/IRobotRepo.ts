@@ -1,6 +1,6 @@
 import { Repo } from "../../core/infra/Repo";
-import { Robot } from "../../domain/robot";
-import { RobotId } from "../../domain/robotId";
+import { Robot } from "../../domain/robot-agg/robot";
+import { RobotId } from "../../domain/robot-agg/robotId";
 
 export default interface IRobotRepo extends Repo<Robot> {
   save(robot: Robot): Promise<Robot>;

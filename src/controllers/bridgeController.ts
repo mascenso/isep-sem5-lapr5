@@ -5,7 +5,6 @@ import IBridgeController from "./IControllers/IBridgeController";
 import IBridgeService from "../services/IServices/IBridgeService";
 import IBridgeDTO from "../dto/IBridgeDTO";
 import config from "../../config";
-import IBuildingService from '../services/IServices/IBuildingService';
 
 @Service()
 export default class BridgeController implements IBridgeController /* TODO: extends ../core/infra/BaseController */ {
@@ -39,7 +38,7 @@ export default class BridgeController implements IBridgeController /* TODO: exte
       const bridgeOrError = await this.bridgeServiceInstance.updateBridge(req.body as IBridgeDTO, req.params.id) as Result<IBridgeDTO>;
 
       if (bridgeOrError.isFailure) {
-        return res.status(404).send();
+        return res.status(402).json(bridgeOrError.error).send();
       }
 
       const robotDTO = bridgeOrError.getValue();

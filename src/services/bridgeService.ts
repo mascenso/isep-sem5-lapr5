@@ -95,15 +95,50 @@ export default class BridgeService implements IBridgeService {
       if (bridge === null) {
         return Result.fail<IBridgeDTO>("Bridge not found");
       }
-      else {
-        bridge.name = bridgeDTO.name;
-        bridge.code = bridgeDTO.code;
-        bridge.floorAId = bridgeDTO.floorAId;
-        bridge.floorBId = bridgeDTO.floorBId;
-        await this.bridgeRepo.save(bridge);
 
-        const bridgeDTOResult = BridgeMap.toDTO(bridge) as IBridgeDTO;
-        return Result.ok<IBridgeDTO>(bridgeDTOResult)
+      /* check if floors exist */
+      const floorAId = await this.floorRepo.findByDomainId(bridgeDTO.floorAId);
+      const floorBId = await this.floorRepo.findByDomainId(bridgeDTO.floorBId);
+
+      if (floorAId === null || floorBId === null) {
+        return Result.fail<IBridgeDTO>('Floor not found');
+      }
+
+      /* retrieve building ids */
+      const buildingAId = floorAId.buildingId;
+      const buildingBId = floorBId.buildingId;
+
+      /* before saving, check if bridge already exists */
+      if (await this.bridgeRepo.areConnected(bridgeDTO.floorAId, bridgeDTO.floorBId))
+        // Combinação já existente
+      {
+        return Result.fail<IBridgeDTO>("Bridge already exists");
+      }
+
+      else if (buildingAId === buildingBId)
+        // Nao podem estar no mesmo building
+      {
+        return Result.fail<IBridgeDTO>('Bridge cannot connect floors of the same building');
+      }
+
+      else {
+
+        /* update bridge */
+        const bridgeOrError = await Bridge.create(bridgeDTO);
+
+        if (bridgeOrError.isFailure) {
+          return Result.fail<IBridgeDTO>(bridgeOrError.errorValue());
+        }
+
+        const bridgeResult = bridgeOrError.getValue();
+        bridgeResult.buildingBId = buildingBId;
+        bridgeResult.buildingAId = buildingAId;
+
+        /* Salva a bridge com os ids dos buildings correspondentes */
+        await this.bridgeRepo.save(bridgeResult);
+
+        const bridgeDTOResult = BridgeMap.toDTO(bridgeResult) as IBridgeDTO;
+        return Result.ok<IBridgeDTO>(bridgeDTOResult);
       }
     } catch (e) {
       throw e;

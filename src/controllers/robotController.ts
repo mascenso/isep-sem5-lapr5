@@ -26,11 +26,7 @@ export default class RobotController implements IRobotController /* TODO: extend
       return res.json( robotDTO ).status(201);
     }
     catch (e) {
-      if(e.code ==11000){
-        return res.status(409).json("Already exist a robot with this code.").send();
-      }else{
         return next(e);
-      }
     }
   };
 

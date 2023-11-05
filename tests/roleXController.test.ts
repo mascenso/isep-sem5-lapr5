@@ -7,7 +7,7 @@ import { Result } from '../src/core/logic/Result';
 import IRoleService from "../src/services/IServices/IRoleService";
 import RoleController from "../src/controllers/roleController";
 import IRoleDTO from '../src/dto/IRoleDTO';
-import { Role } from '../src/domain/role';
+import { Role } from '../src/domain/Role-agg/role';
 
 describe('role controller', function () {
 	const sandbox = sinon.createSandbox();

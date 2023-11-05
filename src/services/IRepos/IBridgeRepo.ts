@@ -1,6 +1,6 @@
 import { Repo } from "../../core/infra/Repo";
-import {Bridge} from "../../domain/bridge";
-import {BridgeId} from "../../domain/bridgeId";
+import {Bridge} from "../../domain/bridge-agg/bridge";
+import {BridgeId} from "../../domain/bridge-agg/bridgeId";
 
 export default interface IBridgeRepo extends Repo<Bridge> {
 

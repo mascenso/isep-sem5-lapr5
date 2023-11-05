@@ -1,8 +1,8 @@
 import { Service, Inject } from 'typedi';
 
 import IBridgeRepo from "../services/IRepos/IBridgeRepo";
-import { Bridge } from "../domain/bridge";
-import { BridgeId } from "../domain/bridgeId";
+import { Bridge } from "../domain/bridge-agg/bridge";
+import { BridgeId } from "../domain/bridge-agg/bridgeId";
 import { BridgeMap } from "../mappers/BridgeMap";
 
 import { Document, FilterQuery, Model } from 'mongoose';
@@ -88,13 +88,11 @@ export default class BridgeRepo implements IBridgeRepo {
   async getBridgesBetweenBuildings(building1: string, building2: string): Promise<any> {
     try {
 
-      console.log("getBridgesBetweenBuildings: " + building1 + " " + building2);
       //"guardava uma vez apenas na BD e a pesquisar pesquisava das 2 formas."
       const query = { $or: [{ buildingAId: building1, buildingBId: building2 }, { buildingAId: building2, buildingBId: building1 }] };
 
 
       const bridgeRecords = await this.bridgeSchema.find(query);
-      console.log("getBridgesBetweenBuildings: " + bridgeRecords);
 
       return bridgeRecords;
 

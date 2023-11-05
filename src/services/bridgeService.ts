@@ -1,7 +1,7 @@
 import { Service, Inject } from 'typedi';
 import config from "../../config";
 import IBridgeDTO from '../dto/IBridgeDTO';
-import { Bridge } from "../domain/bridge";
+import { Bridge } from "../domain/bridge-agg/bridge";
 import IBridgeRepo from '../services/IRepos/IBridgeRepo';
 import IBridgeService from './IServices/IBridgeService';
 import { Result } from "../core/logic/Result";

@@ -1,8 +1,8 @@
-import { AggregateRoot } from "../core/domain/AggregateRoot";
-import { UniqueEntityID } from "../core/domain/UniqueEntityID";
-import { Result } from "../core/logic/Result";
+import { AggregateRoot } from "../../core/domain/AggregateRoot";
+import { UniqueEntityID } from "../../core/domain/UniqueEntityID";
+import { Result } from "../../core/logic/Result";
 import { BridgeId } from "./bridgeId";
-import IBridgeDTO from "../dto/IBridgeDTO";
+import IBridgeDTO from "../../dto/IBridgeDTO";
 
 interface BridgeProps {
   code: string;

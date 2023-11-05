@@ -7,7 +7,7 @@ import { Result } from "../../src/core/logic/Result";
 import IBridgeService from "../../src/services/IServices/IBridgeService";
 import BridgeController from "../../src/controllers/bridgeController";
 import IBridgeDTO from "../../src/dto/IBridgeDTO";
-import { Bridge } from "../../src/domain/bridge";
+import { Bridge } from "../../src/domain/bridge-agg/bridge";
 
 describe("bridge controller", function() {
 

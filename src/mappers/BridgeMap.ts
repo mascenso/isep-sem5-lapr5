@@ -4,7 +4,7 @@ import { Document, Model } from 'mongoose';
 import { IBridgePersistence } from '../dataschema/IBridgePersistence';
 
 import IBridgeDTO from "../dto/IBridgeDTO";
-import { Bridge } from "../domain/bridge";
+import { Bridge } from "../domain/bridge-agg/bridge";
 
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 

@@ -6,7 +6,7 @@ import {IElevatorPersistence} from "../dataschema/IElevatorPersistence";
 import {ElevatorId} from "../domain/elevator-agg/elevatorId";
 import {ElevatorMap} from "../mappers/ElevatorMap";
 import {Elevator} from "../domain/elevator-agg/elevator";
-import {FloorId} from "../domain/floorId";
+import {FloorId} from "../domain/floor-agg/floorId";
 
 @Service()
 export default class ElevatorRepo implements IElevatorRepo {

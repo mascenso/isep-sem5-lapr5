@@ -4,7 +4,7 @@ import * as sinon from 'sinon';
 import {Container} from "typedi";
 import {Building} from "../../src/domain/building-agg/building";
 import {Result} from "../../src/core/logic/Result";
-import {Floor} from "../../src/domain/floor";
+import {Floor} from "../../src/domain/floor-agg/floor";
 import RoomService from "../../src/services/roomService";
 import {RoomType} from "../../src/domain/roomType";
 import {Room} from "../../src/domain/room";
@@ -34,7 +34,7 @@ describe('Room Service', () => {
     let buildingInstance = require("../../src/domain/building-agg/building").Building;
     Container.set("Building", buildingInstance);
 
-    let floorInstance = require("../../src/domain/floor").Floor;
+    let floorInstance = require("../../src/domain/floor-agg/floor").Floor;
     Container.set("Floor", floorInstance);
 
     let roomInstance = require("../../src/domain/room").Room;

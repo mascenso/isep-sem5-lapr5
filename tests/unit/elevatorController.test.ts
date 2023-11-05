@@ -41,7 +41,7 @@ describe('elevator controller', function () {
         let buildingInstance = require("../../src/domain/building-agg/building").Building;
         Container.set("Building", buildingInstance);
 
-        let floorInstance = require("../../src/domain/floor").Floor;
+        let floorInstance = require("../../src/domain/floor-agg/floor").Floor;
         Container.set("Floor", floorInstance);
 
         let elevatorInstance = require("../../src/domain/elevator-agg/elevator").Elevator;

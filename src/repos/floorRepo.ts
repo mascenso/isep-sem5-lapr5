@@ -3,9 +3,9 @@ import { Service, Inject } from 'typedi';
 import { Document, FilterQuery, Model } from 'mongoose';
 import IFloorRepo from "../services/IRepos/IFloorRepo";
 import {IFloorPersistence} from "../dataschema/IFloorPersistence";
-import {FloorId} from "../domain/floorId";
+import {FloorId} from "../domain/floor-agg/floorId";
 import {FloorMap} from "../mappers/FloorMap";
-import {Floor} from "../domain/floor";
+import {Floor} from "../domain/floor-agg/floor";
 
 @Service()
 export default class FloorRepo implements IFloorRepo {

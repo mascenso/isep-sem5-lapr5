@@ -3,7 +3,7 @@ import { Mapper } from "../core/infra/Mapper";
 
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
-import {Floor} from "../domain/floor";
+import {Floor} from "../domain/floor-agg/floor";
 import {IFloorDTO} from "../dto/IFloorDTO";
 import {Document, Model} from "mongoose";
 import {IFloorPersistence} from "../dataschema/IFloorPersistence";

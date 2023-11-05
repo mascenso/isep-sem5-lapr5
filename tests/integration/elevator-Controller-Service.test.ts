@@ -8,7 +8,7 @@ import IElevatorService from "../../src/services/IServices/IElevatorService";
 import ElevatorController from "../../src/controllers/elevatorController";
 import { IElevatorDTO } from '../../src/dto/IElevatorDTO';
 import { Elevator } from '../../src/domain/elevator-agg/elevator';
-import { Floor } from '../../src/domain/floor';
+import { Floor } from '../../src/domain/floor-agg/floor';
 
 describe('Integration test elevator controller -> service ', function () {
     const sandbox = sinon.createSandbox();
@@ -40,7 +40,7 @@ describe('Integration test elevator controller -> service ', function () {
         let buildingInstance = require("../../src/domain/building-agg/building").Building;
         Container.set("Building", buildingInstance);
 
-        let floorInstance = require("../../src/domain/floor").Floor;
+        let floorInstance = require("../../src/domain/floor-agg/floor").Floor;
         Container.set("Floor", floorInstance);
 
         let elevatorInstance = require("../../src/domain/elevator-agg/elevator").Elevator;

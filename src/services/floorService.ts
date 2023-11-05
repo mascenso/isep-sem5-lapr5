@@ -5,7 +5,7 @@ import IFloorService from "./IServices/IFloorService";
 import {IFloorDTO} from "../dto/IFloorDTO";
 import {Result} from "../core/logic/Result";
 import {FloorMap} from "../mappers/FloorMap";
-import {Floor} from "../domain/floor";
+import {Floor} from "../domain/floor-agg/floor";
 import IBuildingRepo from './IRepos/IBuildingRepo';
 import { IBuildingDTO } from '../dto/IBuildingDTO';
 import { BuildingMap } from '../mappers/BuildingMap';

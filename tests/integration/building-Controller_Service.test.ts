@@ -25,7 +25,7 @@ describe('Integration test building controller -> service ', function () {
 		let buildingInstance = require("../../src/domain/building-agg/building").Building;
 		Container.set("Building", buildingInstance);
 
-		let floorInstance = require("../../src/domain/floor").default;
+		let floorInstance = require("../../src/domain/floor-agg/floor").default;
 		Container.set("Floor", floorInstance);
 
 		let buildingServiceClass = require("../../src/services/buildingService").default;

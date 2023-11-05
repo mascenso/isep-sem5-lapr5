@@ -7,7 +7,7 @@ import { Result } from '../../src/core/logic/Result';
 import IFloorService from "../../src/services/IServices/IFloorService";
 import FloorController from "../../src/controllers/floorController";
 import {IFloorDTO} from '../../src/dto/IFloorDTO';
-import { Floor } from '../../src/domain/floor';
+import { Floor } from '../../src/domain/floor-agg/floor';
 import { IBuildingDTO } from '../../src/dto/IBuildingDTO';
 
 describe('Floor controller', function () {
@@ -23,7 +23,7 @@ describe('Floor controller', function () {
 		let floorRepoInstance = Container.get(floorRepoClass);
 		Container.set("FloorRepo", floorRepoInstance);
 
-		let floorInstance = require("../../src/domain/floor").default;
+		let floorInstance = require("../../src/domain/floor-agg/floor").default;
 		Container.set("Floor", floorInstance);
 
 		let floorServiceClass = require("../../src/services/floorService").default;

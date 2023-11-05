@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Floor } from '../../src/domain/floor'
+import { Floor } from '../../src/domain/floor-agg/floor'
 import { Building } from '../../src/domain/building-agg/building'
 
 describe('Integration test Floor / Building /Repositorio', () => {

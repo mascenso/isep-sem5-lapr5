@@ -150,13 +150,20 @@ package "Agg-Room" {
   }
 }
 
+package "Agg-RobotTypes" {
+  class "<<Root>>\nRobotType" as RobotType #03fc98{
+   - id: RobotTypeId
+   - taskType: enum
+   -description: string
+  }
+
+  class "<<Identifier>>\nRobotTypeId" as RobotTypeId #e4e6aa{
+   - id: string
+  }
+
+}
 
 package "Agg-Robots" {
-  class "<<Entity>>\nRobotType" as RobotType #9be0de{
-    - id: RobotTypeId
-    - taskType: enum
-    -description: string
-  }
 
   class "<<Root>>\nRobot" as Robot #03fc98{
     - id: RobotId
@@ -170,10 +177,6 @@ package "Agg-Robots" {
   }
 
   class "<<Entity>>\nDrone" as Drone #9be0de{
-  }
-
-  class "<<Identifier>>\nRobotTypeId" as RobotTypeId #e4e6aa{
-    - id: string
   }
 
   class "<<Identifier>>\nRobotId" as RobotId #e4e6aa{
@@ -300,63 +303,63 @@ package "Agg-Elevator" {
 
 
 
-  Building "1" --|> "*" Floor
-  Building "1" <|-- "1" BuildingId
-  Building "1" <|-- "1" BuildingDimensions
+  Building "1" --> "*" Floor
+  Building "1" <-- "1" BuildingId
+  Building "1" <-- "1" BuildingDimensions
 
-  Elevator "1" <|-- "1" ElevatorId
+  Elevator "1" <-- "1" ElevatorId
   'Campus "1" o-- "*" Building : Contem
   'Building "1" *-- "*" Robot : Contem
 
-  Floor "1" <|-- "1" FloorId
-  Floor "1" --|> "*" Room
-  Floor "1" --|> "1" FloorMap
-  Floor "1" --|> "0/1" Elevator
+  Floor "1" <-- "1" FloorId
+  Floor "1" --> "*" Room
+  Floor "1" --> "1" FloorMap
+  Floor "1" --> "0/1" Elevator
 
   'Floor "1" *-- "*" Porta : Contem
 
   Bridge "*" -- "2" Floor : Connects
-  Bridge "1" <|-- "1" BridgeId
-  'Bridge "1"--|> "1"Coordenadas
+  Bridge "1" <-- "1" BridgeId
+  'Bridge "1"--> "1"Coordenadas
 
-  Room "1" <|-- "1" RoomId
+  Room "1" <-- "1" RoomId
   Room -- RoomType
   'Room "1" *-- "1" DimensoesRoom : Tem
 
 
-  'Task "1" --|> "*"TarefaEntrega
-  'Task "1" --|> "*"TarefaVigilancia
-  Task "1"--|> "*" Robot : is assigned
+  'Task "1" --> "*"TarefaEntrega
+  'Task "1" --> "*"TarefaVigilancia
+  Task "1"--> "*" Robot : is assigned
   Task -- TaskType: is a
-  Task <|-- TaskId
-  'Tarefa "1"--|> "1"Percurso : Tem
-  'Tarefa --|> RegularUser : É criada
+  Task <-- TaskId
+  'Tarefa "1"--> "1"Percurso : Tem
+  'Tarefa --> RegularUser : É criada
 
-  'Robot "1" --|> "1" Coordenadas : Tem
+  'Robot "1" --> "1" Coordenadas : Tem
 
-  'RegularUser --|> Autorizacao : Tem
+  'RegularUser --> Autorizacao : Tem
 
-  RobotType "*" --|> "1" Robot
-  RobotType "*" --|> "1" Drone
-  RobotType "1" <|-- "1" RobotTypeId
+  RobotType "*" --> "1" Robot
+  RobotType "*" --> "1" Drone
+  RobotType "1" <-- "1" RobotTypeId
   RobotType -- TaskType
 
 
-  Robot "1" <|-- "1" RobotId
-  FleetManager --|> RobotType :Sets up
-  FleetManager --|> Task : Manages
-  'CampusManager --|> FloorMap :Gere
-  'CampusManager --|> Percurso :Gere
-  'CampusManager "1" --|> "*"Percurso: Gere
+  Robot "1" <-- "1" RobotId
+  FleetManager --> RobotType :Sets up
+  FleetManager --> Task : Manages
+  'CampusManager --> FloorMap :Gere
+  'CampusManager --> Percurso :Gere
+  'CampusManager "1" --> "*"Percurso: Gere
 
-  User "1"--|> RegularUser
-  User "1"--|> FleetManager
-  User "1"--|> CampusManager
-  User "1"--|> SystemAdmin
-  RegularUser "1"--|> Student
-  RegularUser "1"--|> Teacher
-  RegularUser "1"--|> Employee
-  User <|-- UserId
+  User "1"--> RegularUser
+  User "1"--> FleetManager
+  User "1"--> CampusManager
+  User "1"--> SystemAdmin
+  RegularUser "1"--> Student
+  RegularUser "1"--> Teacher
+  RegularUser "1"--> Employee
+  User <-- UserId
   'SystemAdmin "1"-- "*" User : Gere
 }
 

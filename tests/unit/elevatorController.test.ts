@@ -38,13 +38,13 @@ describe('elevator controller', function () {
         let floorRepoInstance = Container.get(floorRepoClass);
         Container.set("FloorRepo", floorRepoInstance);
 
-        let buildingInstance = require("../../src/domain/building").Building;
+        let buildingInstance = require("../../src/domain/building-agg/building").Building;
         Container.set("Building", buildingInstance);
 
-        let floorInstance = require("../../src/domain/floor").Floor;
+        let floorInstance = require("../../src/domain/floor-agg/floor").Floor;
         Container.set("Floor", floorInstance);
 
-        let elevatorInstance = require("../../src/domain/elevator").Elevator;
+        let elevatorInstance = require("../../src/domain/elevator-agg/elevator").Elevator;
         Container.set("Elevator", elevatorInstance);
 
         let elevatorServiceClass = require("../../src/services/elevatorService").default;
@@ -65,7 +65,7 @@ describe('elevator controller', function () {
     it('elevatorController unit test using elevatorService stub', async function () {
         // Arrange
         let body = {"code": 'Elev1', "floorId": 1, "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3};
-  
+
         let req: Partial<Request> = {};
         req.body = body;
         let res: Partial<Response> = {

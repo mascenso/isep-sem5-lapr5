@@ -1,0 +1,8 @@
+@startuml US240
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita lista de passagens entre edificios
+activate Sistema
+Sistema --> Utilizador : Lista de passagens entre edificios
+deactivate Sistema
+@enduml

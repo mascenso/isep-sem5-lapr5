@@ -1,0 +1,30 @@
+@startuml
+title US390 - Pesquisar robots por designação/tipo de tarefa
+
+participant "Route" as Route
+participant "Controller" as Controller
+participant "Service" as Service
+participant "Repositorio" as Repositorio
+
+ -> Route : get(api/robots/search)
+activate Route
+Route -> Controller : findByDesignationOrTaskType()
+activate Controller
+Controller -> Service : findByDesignationOrTaskType(designation, taskType)
+activate Service
+Service -> Repositorio : findByDesignationOrTaskType(designation, taskType)
+activate Repositorio
+Repositorio --> Service : robotDTOList
+deactivate Repositorio
+Service --> Controller : robotDTOList
+deactivate Service
+Controller--> Route : Resposta HTTP
+deactivate Controller
+<-- Route : Resposta HTTP
+deactivate Route
+
+note right of Service
+O DTO não está representado por
+forma a facilitar a leitura do diagrama.
+end note
+@enduml

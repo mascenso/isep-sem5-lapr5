@@ -1,0 +1,32 @@
+@startuml
+title US380 - Consultar todos os robots da frota
+
+participant "Route" as Route
+participant "Controller" as Controller
+participant "Service" as Service
+participant "Repositorio" as Repositorio
+
+ -> Route : get(api/robots)
+activate Route
+Route -> Controller : getAllRobots(req,res,next)
+activate Controller
+Controller -> Service : getAllRobots()
+activate Service
+Service -> Repositorio : getAllRobots()
+activate Repositorio
+Repositorio --> Service : robots
+deactivate Repositorio
+Service --> Controller : robotDTOs
+deactivate Service
+Controller--> Route : Resposta HTTP
+deactivate Controller
+<-- Route : Resposta HTTP
+deactivate Route
+
+note right of Service
+Algumas situações não estão representadas
+por forma a simplificar a leiturado diagrama,
+por exemplo interfaces e conversões de json
+ para dto e vice-versa.
+end note
+@enduml

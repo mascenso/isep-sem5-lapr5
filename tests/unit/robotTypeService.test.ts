@@ -6,7 +6,7 @@ import { NextFunction, Request } from 'express';
 import { Container } from 'typedi';
 import { Result } from '../../src/core/logic/Result';
 import RobotTypeService from "../../src/services/robotTypeService";
-import { RobotType } from '../../src/domain/robotType';
+import { RobotType } from '../../src/domain/robotType-agg/robotType';
 import TaskType from '../../src/enums/taskType';
 
 describe('robot Type service', function () {
@@ -22,7 +22,7 @@ describe('robot Type service', function () {
         let robotTypeRepoInstance = Container.get(robotTypeRepoClass);
         Container.set("RobotTypeRepo", robotTypeRepoInstance);
 
-        let robotTypeInstance = require("../../src/domain/robotType").RobotType;
+        let robotTypeInstance = require("../../src/domain/robotType-agg/robotType").RobotType;
         Container.set("RobotType", robotTypeInstance);
 
         let robotTypeServiceClass = require("../../src/services/robotTypeService").default;
@@ -72,7 +72,7 @@ describe('robot Type service', function () {
 
     });
 
-    /* 
+    /*
     it('robotTypeService unit test using robot type and robotTypeRepo stubs (updateRobotType)', async function () {
         // Arrange
         let body = {"id": '123', "designacao": "TypeX", "tipoTarefas": ["Outras"]};

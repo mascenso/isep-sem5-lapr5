@@ -5,8 +5,8 @@ import IBuildingService from "./IServices/IBuildingService";
 import {IBuildingDTO} from "../dto/IBuildingDTO";
 import {Result} from "../core/logic/Result";
 import {BuildingMap} from "../mappers/BuildingMap";
-import {Building} from "../domain/building";
-import {BuildingId} from "../domain/buildingId";
+import {Building} from "../domain/building-agg/building";
+import {BuildingId} from "../domain/building-agg/buildingId";
 
 
 @Service()

@@ -1,0 +1,8 @@
+@startuml US380
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita lista de robot da frota
+activate Sistema
+Sistema --> Utilizador : Lista de robots da frota
+deactivate Sistema
+@enduml

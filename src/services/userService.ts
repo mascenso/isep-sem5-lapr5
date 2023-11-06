@@ -14,11 +14,11 @@ import { IUserDTO } from '../dto/IUserDTO';
 import IUserRepo from './IRepos/IUserRepo';
 import IRoleRepo from './IRepos/IRoleRepo';
 
-import { User } from '../domain/user';
-import { UserPassword } from '../domain/userPassword';
-import { UserEmail } from '../domain/userEmail';
+import { User } from '../domain/user-agg/user';
+import { UserPassword } from '../domain/user-agg/userPassword';
+import { UserEmail } from '../domain/user-agg/userEmail';
 
-import { Role } from '../domain/role';
+import { Role } from '../domain/role-agg/role';
 
 import { Result } from "../core/logic/Result";
 
@@ -35,7 +35,7 @@ export default class UserService implements IUserService{
     try {
       const userDocument = await this.userRepo.findByEmail( userDTO.email );
       const found = !!userDocument;
-  
+
       if (found) {
         return Result.fail<{userDTO: IUserDTO, token: string}>("User already exists with email=" + userDTO.email);
       }
@@ -56,7 +56,7 @@ export default class UserService implements IUserService{
        * watches every API call and if it spots a 'password' and 'email' property then
        * it decides to steal them!? Would you even notice that? I wouldn't :/
        */
-      
+
 
       const salt = randomBytes(32);
       this.logger.silly('Hashing password');

@@ -1,0 +1,31 @@
+@startuml
+title US360 - Adicionar um novo robot à frota
+
+participant "Route" as Route
+participant "Controller" as Controller
+participant "Service" as Service
+participant "Robot" as Robot
+participant "Repositorio" as Repositorio
+
+ -> Route : post(api/robots)
+activate Route
+Route -> Controller : createRobot(req,res,next)
+activate Controller
+Controller -> Service : createRobot(robotDTO)
+activate Service
+Service -> Robot** : robot = create(robotDTO)
+Service -> Repositorio : save(robot)
+activate Repositorio
+deactivate Repositorio
+Service --> Controller : robotDTO
+deactivate Service
+Controller--> Route : Resposta HTTP
+deactivate Controller
+<-- Route : Resposta HTTP
+deactivate Route
+
+note right of Service
+Algumas situações não estão representadas por forma a simplificar a leitura
+do diagrama, por exemplo interfaces e conversões de json para dto e vice-versa.
+end note
+@enduml

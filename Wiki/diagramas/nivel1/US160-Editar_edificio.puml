@@ -1,0 +1,9 @@
+@startuml US160
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita editar edifício
+activate Sistema
+Sistema -> Sistema : Edita edifício
+Sistema --> Utilizador : Confirmação de edição
+deactivate Sistema
+@enduml

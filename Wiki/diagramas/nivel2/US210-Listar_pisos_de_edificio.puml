@@ -1,0 +1,8 @@
+@startuml US210
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita pisos de edifício
+activate Sistema
+Sistema --> Utilizador : Lista de pisos de edifíco
+deactivate Sistema
+@enduml

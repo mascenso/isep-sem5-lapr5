@@ -1,19 +1,18 @@
 import { Service, Inject } from 'typedi';
 import config from "../../config";
 import IRobotDTO from '../dto/IRobotDTO';
-import { Robot } from "../domain/robot";
+import { Robot } from "../domain/robot-agg/robot";
 import IRobotRepo from './IRepos/IRobotRepo';
 import IRobotService from './IServices/IRobotService';
 import { Result } from "../core/logic/Result";
 import { RobotMap } from "../mappers/RobotMap";
-import { IBuildingDTO } from "../dto/IBuildingDTO";
-import { Building } from "../domain/building";
-import { BuildingMap } from "../mappers/BuildingMap";
 import { Joi } from "celebrate";
+import IRobotTypeRepo from "./IRepos/IRobotTypeRepo";
 
 @Service()
 export default class RobotService implements IRobotService {
   constructor(
+      @Inject(config.repos.robotType.name) private robotTypeRepo : IRobotTypeRepo,
       @Inject(config.repos.robot.name) private robotRepo : IRobotRepo
   ) {}
 
@@ -36,6 +35,12 @@ export default class RobotService implements IRobotService {
 
   public async createRobot(robotDTO: IRobotDTO): Promise<Result<IRobotDTO>> {
     try {
+
+      /* check if robot type exists */
+      const robotTypeId = await this.robotTypeRepo.findByDomainId(robotDTO.robotType);
+      if (robotTypeId === null) {
+        return Result.fail<IRobotDTO>('Robot type not found');
+      }
 
       const robotOrError = await Robot.create( robotDTO );
 
@@ -75,7 +80,7 @@ export default class RobotService implements IRobotService {
     }
   }
 
-  public async getAllRobots(robotDTO: IRobotDTO): Promise<Result<IRobotDTO[]>> {
+  public async getAllRobots(): Promise<Result<IRobotDTO[]>> {
     try {
 
       const robots = await this.robotRepo.getAllRobots();

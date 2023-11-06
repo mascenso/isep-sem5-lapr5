@@ -1,0 +1,8 @@
+@startuml US220
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita Listar pisos de edificio  com passagem para outro edificio
+activate Sistema
+Sistema --> Utilizador : Lista de pisos de edificio com passagem
+deactivate Sistema
+@enduml

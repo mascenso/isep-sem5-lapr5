@@ -7,8 +7,8 @@ import { Result } from '../../src/core/logic/Result';
 import IFloorService from "../../src/services/IServices/IFloorService";
 import FloorController from "../../src/controllers/floorController";
 import {IBuildingDTO} from '../../src/dto/IBuildingDTO';
-import { Building } from '../../src/domain/building';
-import { Floor } from '../../src/domain/floor';
+import { Building } from '../../src/domain/building-agg/building';
+import { Floor } from '../../src/domain/floor-agg/floor';
 
 
 
@@ -39,10 +39,10 @@ describe('Integration test floor controller -> service ', function () {
 		let elevatorRepoInstance = Container.get(elevatorRepoClass);
 		Container.set("ElevatorRepo", elevatorRepoInstance);
 
-		let buildingInstance = require("../../src/domain/building").Building;
+		let buildingInstance = require("../../src/domain/building-agg/building").Building;
 		Container.set("Building", buildingInstance);
 
-		let floorInstance = require("../../src/domain/floor").Floor;
+		let floorInstance = require("../../src/domain/floor-agg/floor").Floor;
 		Container.set("Floor", floorInstance);
 
 		let floorServiceClass = require("../../src/services/floorService").default;

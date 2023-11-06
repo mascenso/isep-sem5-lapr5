@@ -7,7 +7,7 @@ import { Result } from "../../src/core/logic/Result";
 import IBridgeService from "../../src/services/IServices/IBridgeService";
 import BridgeController from "../../src/controllers/bridgeController";
 import IBridgeDTO from "../../src/dto/IBridgeDTO";
-import { Bridge } from "../../src/domain/bridge";
+import { Bridge } from "../../src/domain/bridge-agg/bridge";
 
 describe("bridge controller", function() {
 
@@ -37,10 +37,10 @@ describe("bridge controller", function() {
     let elevatorRepoInstance = Container.get(elevatorRepoClass);
     Container.set("ElevatorRepo", elevatorRepoInstance);
 
-    let buildingInstance = require("../../src/domain/building").Building;
+    let buildingInstance = require("../../src/domain/building-agg/building").Building;
     Container.set("Building", buildingInstance);
 
-    let floorInstance = require("../../src/domain/floor").Floor;
+    let floorInstance = require("../../src/domain/floor-agg/floor").Floor;
     Container.set("Floor", floorInstance);
 
     let floorServiceClass = require("../../src/services/floorService").default;

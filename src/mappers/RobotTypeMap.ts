@@ -4,12 +4,12 @@ import { Document, Model } from 'mongoose';
 import { IRobotTypePersistence } from '../dataschema/IRobotTypePersistence';
 
 import IRobotTypeDTO from "../dto/IRobotTypeDTO";
-import { RobotType } from "../domain/robotType";
+import { RobotType } from "../domain/robotType-agg/robotType";
 
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 export class RobotTypeMap extends Mapper<RobotType> {
-  
+
   public static toDTO( robotType: RobotType): IRobotTypeDTO {
     return {
       id: robotType.id.toString(),

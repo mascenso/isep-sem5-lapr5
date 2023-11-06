@@ -4,7 +4,7 @@ import { Document, Model } from 'mongoose';
 import { IRobotPersistence } from '../dataschema/IRobotPersistence';
 
 import IRobotDTO from "../dto/IRobotDTO";
-import { Robot } from "../domain/robot";
+import { Robot } from "../domain/robot-agg/robot";
 
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
@@ -41,7 +41,7 @@ export class RobotMap extends Mapper<Robot> {
     return {
       domainId: robot.id.toString(),
       nickName: robot.nickName.toString(),
-      //robotType: robot.robotType.toString(),
+      robotType: robot.robotType.toString(),
       serialNumber: robot.serialNumber,
       description: robot.description,
       inhibited: robot.inhibited

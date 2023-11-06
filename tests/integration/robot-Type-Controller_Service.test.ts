@@ -6,7 +6,7 @@ import { Container } from 'typedi';
 import { Result } from '../../src/core/logic/Result';
 import IRobotTypeService from "../../src/services/IServices/IRobotTypeService";
 import RobotTypeController from "../../src/controllers/robotTypeController";
-import { RobotType } from '../../src/domain/robotType';
+import { RobotType } from '../../src/domain/robotType-agg/robotType';
 
 describe('Integration test robot type controller -> service ', function () {
 	const sandbox = sinon.createSandbox();
@@ -21,7 +21,7 @@ describe('Integration test robot type controller -> service ', function () {
 		let robotTypeRepoInstance = Container.get(robotTypeRepoClass);
 		Container.set("RobotTypeRepo", robotTypeRepoInstance);
 
-		let robotTypeInstance = require("../../src/domain/robotType").RobotType;
+		let robotTypeInstance = require("../../src/domain/robotType-agg/robotType").RobotType;
 		Container.set("RobotType", robotTypeInstance);
 
 		let robotTypeServiceClass = require("../../src/services/robotTypeService").default;
@@ -56,22 +56,22 @@ describe('Integration test robot type controller -> service ', function () {
 
 		let robotTypeInstance = Container.get("RobotType");
 		const robotTypeStub = sinon.stub(robotTypeInstance, "create").returns( Result.ok( {
-			"id":"123", 
+			"id":"123",
 			"designacao": req.body.designacao,
-			"tipoTarefas": req.body.tipoTarefas} 
+			"tipoTarefas": req.body.tipoTarefas}
 		));
 
 
 		let robotTypeServiceInstance = Container.get('RobotTypeService');
 		const ctrl = new RobotTypeController(robotTypeServiceInstance as IRobotTypeService);
-		
+
 		// Act
 		await ctrl.createRobotType(<Request>req, <Response>res, <NextFunction>next);
 
 		// Assert
 		sinon.assert.calledOnce(res.json);
-		sinon.assert.calledWith(res.json, sinon.match({ 
-			"id":"123", 
+		sinon.assert.calledWith(res.json, sinon.match({
+			"id":"123",
 			"designacao": req.body.designacao,
 			"tipoTarefas": req.body.tipoTarefas
 		}));
@@ -118,12 +118,12 @@ describe('Integration test robot type controller -> service ', function () {
 		sinon.assert.calledWith(findByDesignationOrTaskTypeStub, sinon.match("123"));
 		sinon.assert.calledOnce(saveStub);
 		sinon.assert.calledWith(saveStub,sinon.match({
-			"id":"123", 
+			"id":"123",
 			"designacao": req.body.designacao,
 			"tipoTarefas": req.body.tipoTarefas}));
 	});
 	*/
-	
+
 
 });
 

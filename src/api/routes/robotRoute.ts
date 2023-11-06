@@ -16,11 +16,10 @@ export default (app: Router) => {
   route.post('',
     celebrate({
       body: Joi.object({
-        id: Joi.string().required(),
         nickName: Joi.string().required(),
         robotType: Joi.string().required(),
         serialNumber: Joi.string().required(),
-        description: Joi.string(),
+        description: Joi.string().optional(),
         inhibited: Joi.boolean().required()
       })
     }),

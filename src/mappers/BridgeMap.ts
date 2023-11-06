@@ -4,20 +4,20 @@ import { Document, Model } from 'mongoose';
 import { IBridgePersistence } from '../dataschema/IBridgePersistence';
 
 import IBridgeDTO from "../dto/IBridgeDTO";
-import { Bridge } from "../domain/bridge";
+import { Bridge } from "../domain/bridge-agg/bridge";
 
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 
 export class BridgeMap extends Mapper<Bridge> {
 
-  public static toDTO( bridge: Bridge, buildingAId?: string, buildingBId?: string): IBridgeDTO {
+  public static toDTO( bridge: Bridge): IBridgeDTO {
     return {
       id: bridge.id.toString(),
       code: bridge.code,
       name: bridge.name,
-      buildingAId: buildingAId,
-      buildingBId: buildingBId,
+      buildingAId: bridge.buildingAId,
+      buildingBId: bridge.buildingBId,
       floorAId: bridge.floorAId,
       floorBId: bridge.floorBId,
     } as IBridgeDTO;

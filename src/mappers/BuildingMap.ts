@@ -3,7 +3,7 @@ import { Mapper } from "../core/infra/Mapper";
 
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
-import {Building} from "../domain/building";
+import {Building} from "../domain/building-agg/building";
 import {IBuildingDTO} from "../dto/IBuildingDTO";
 import {Document, Model} from "mongoose";
 import {IBuildingPersistence} from "../dataschema/IBuildingPersistence";

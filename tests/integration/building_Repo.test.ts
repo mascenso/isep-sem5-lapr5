@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import {Building} from '../../src/domain/building'
+import {Building} from '../../src/domain/building-agg/building'
 
 describe('Integration test Building / Repositorio', () => {
   it('should create a valid Building instance', () => {

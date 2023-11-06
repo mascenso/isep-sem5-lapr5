@@ -1,0 +1,8 @@
+@startuml US290
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita listar elevadores em edificio
+activate Sistema
+Sistema --> Utilizador : Lista de elevadores em edificio
+deactivate Sistema
+@enduml

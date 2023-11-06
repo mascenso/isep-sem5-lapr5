@@ -4,9 +4,9 @@ import { Document, Model } from 'mongoose';
 import { IUserPersistence } from '../dataschema/IUserPersistence';
 
 import IUserRepo from "../services/IRepos/IUserRepo";
-import { User } from "../domain/user";
-import { UserId } from "../domain/userId";
-import { UserEmail } from "../domain/userEmail";
+import { User } from "../domain/user-agg/user";
+import { UserId } from "../domain/user-agg/userId";
+import { UserEmail } from "../domain/user-agg/userEmail";
 import { UserMap } from "../mappers/UserMap";
 
 @Service()
@@ -28,14 +28,14 @@ export default class UserRepo implements IUserRepo {
 
     const idX = userId instanceof UserId ? (<UserId>userId).id.toValue() : userId;
 
-    const query = { domainId: idX}; 
+    const query = { domainId: idX};
     const userDocument = await this.userSchema.findOne( query );
 
     return !!userDocument === true;
   }
 
   public async save (user: User): Promise<User> {
-    const query = { domainId: user.id.toString() }; 
+    const query = { domainId: user.id.toString() };
 
     const userDocument = await this.userSchema.findOne( query );
 
@@ -73,7 +73,7 @@ export default class UserRepo implements IUserRepo {
 
     const idX = userId instanceof UserId ? (<UserId>userId).id.toValue() : userId;
 
-    const query = { domainId: idX }; 
+    const query = { domainId: idX };
     const userRecord = await this.userSchema.findOne( query );
 
     if( userRecord != null) {

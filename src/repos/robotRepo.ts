@@ -1,8 +1,8 @@
 import { Service, Inject } from 'typedi';
 
 import IRobotRepo from "../services/IRepos/IRobotRepo";
-import { Robot } from "../domain/robot";
-import { RobotId } from "../domain/robotId";
+import { Robot } from "../domain/robot-agg/robot";
+import { RobotId } from "../domain/robot-agg/robotId";
 import { RobotMap } from "../mappers/RobotMap";
 
 import { Document, FilterQuery, Model } from 'mongoose';
@@ -45,8 +45,11 @@ export default class RobotRepo implements IRobotRepo {
 
         return RobotMap.toDomain(robotCreated);
       } else {
-        robotDocument.designacao = robot.designacao;
-        robotDocument.tarefas = robot.tarefas;
+        robotDocument.nickName = robot.nickName;
+        robotDocument.robotType = robot.robotType;
+        robotDocument.serialNumber = robot.serialNumber;
+        robotDocument.description = robot.description;
+        robotDocument.inhibited = robot.inhibited;
         await robotDocument.save();
 
         return robot;

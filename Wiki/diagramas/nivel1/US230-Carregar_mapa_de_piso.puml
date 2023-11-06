@@ -1,0 +1,8 @@
+@startuml US160
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita carregar mapa de piso
+activate Sistema
+Sistema --> Utilizador : Confirmação de carregamento de mapa de piso
+deactivate Sistema
+@enduml

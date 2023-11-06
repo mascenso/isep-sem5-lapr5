@@ -1,5 +1,6 @@
+import { IFloorDTO } from "./IFloorDTO";
+
 export default interface IBuildingBridgeDTO {
-    floorNumber: number;
-    description: string;
-    buildingName: string;
+  floor: IFloorDTO;
+  connectedFloors: IFloorDTO[];
 }

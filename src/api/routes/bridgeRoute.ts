@@ -40,14 +40,13 @@ export default (app: Router) => {
     (req, res, next) => { ctrl.getAllBridges(req, res, next);
     });
 
-  //  GET /api/bridges/buildings?building1={building1}&building2={building2}:
-  route.get('/buildings',  (req, res, next) => { ctrl.getBridgesBetweenBuildings(req, res, next); }  );
+  //  GET /api/bridges?building1={building1}&building2={building2}:
+  route.get('/building',  (req, res, next) => { ctrl.getBridgesBetweenBuildings(req, res, next); }  );
 
 
-
-
-    //Para listar pisos de um edifício com passagem para outros edifícios
-  route.get('/:id/buldings-bridges',
+  //Para listar pisos de um edifício com passagem para outros edifícios
+  //  GET /api/bridges/building/:id
+  route.get('/building/:id',
     (req, res, next) => { ctrl.getBridgesForBuilding(req, res, next);
   });
 

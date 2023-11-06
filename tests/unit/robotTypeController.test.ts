@@ -25,7 +25,7 @@ describe('robot Type controller', function () {
         let robotTypeRepoInstance = Container.get(robotTypeRepoClass);
         Container.set("RobotTypeRepo", robotTypeRepoInstance);
 
-        let robotTypeInstance = require("../../src/domain/robotType").RobotType;
+        let robotTypeInstance = require("../../src/domain/robotType-agg/robotType").RobotType;
         Container.set("RobotType", robotTypeInstance);
 
         let robotTypeServiceClass = require("../../src/services/robotTypeService").default;
@@ -42,7 +42,7 @@ describe('robot Type controller', function () {
     it('robotTypeController unit test using robotTypeService stub', async function () {
         // Arrange
         let body = {"id": '123', "designacao": "TypeX", "tipoTarefas": ["Outras"]};
-  
+
         let req: Partial<Request> = {};
         req.body = body;
         let res: Partial<Response> = {

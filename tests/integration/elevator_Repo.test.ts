@@ -1,12 +1,12 @@
 import { expect } from 'chai';
-import {Elevator} from '../../src/domain/elevator'  
+import {Elevator} from '../../src/domain/elevator-agg/elevator'
 import { UniqueEntityID } from '../../src/core/domain/UniqueEntityID';
 
 describe('Elevator', () => {
   it('should create a valid Elevator instance', () => {
     const elevatorProps = {
       code: 'Elev1',
-      floorId: 'F1', 
+      floorId: 'F1',
       coordX1: 2,
       coordY1: 2,
       coordX2: 2,
@@ -33,7 +33,7 @@ describe('Elevator', () => {
   it('should be possible edit the elevator props', () => {
     const elevatorProps = {
       code: 'Elev1',
-      floorId: 'F1', 
+      floorId: 'F1',
       coordX1: 2,
       coordY1: 2,
       coordX2: 2,

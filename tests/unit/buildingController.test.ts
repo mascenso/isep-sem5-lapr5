@@ -7,7 +7,7 @@ import { Result } from '../../src/core/logic/Result';
 import IBuildingService from "../../src/services/IServices/IBuildingService";
 import BuildingController from "../../src/controllers/buildingController";
 import {IBuildingDTO} from '../../src/dto/IBuildingDTO';
-import { Building } from '../../src/domain/building';
+import { Building } from '../../src/domain/building-agg/building';
 
 describe('building controller', function () {
 	const sandbox = sinon.createSandbox();
@@ -22,10 +22,10 @@ describe('building controller', function () {
 		let buildingRepoInstance = Container.get(buildingRepoClass);
 		Container.set("BuildingRepo", buildingRepoInstance);
 
-		let buildingInstance = require("../../src/domain/building").default;
+		let buildingInstance = require("../../src/domain/building-agg/building").default;
 		Container.set("Building", buildingInstance);
 
-		let floorInstance = require("../../src/domain/floor").default;
+		let floorInstance = require("../../src/domain/floor-agg/floor").default;
 		Container.set("Floor", floorInstance);
 
 		let buildingServiceClass = require("../../src/services/buildingService").default;

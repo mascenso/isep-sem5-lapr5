@@ -1,0 +1,35 @@
+@startuml
+title US370 - Inibir um robot
+
+participant "Route" as Route
+participant "Controller" as Controller
+participant "Service" as Service
+participant "Repositorio" as Repositorio
+
+ -> Route : patch(api/robots); put(api/robots)
+activate Route
+Route -> Controller : updateRobot(req,res,next)
+activate Controller
+Controller -> Service : updateRobot(robotDTO)
+activate Service
+Service -> Repositorio : findByDomainId(robotDTO.id)
+activate Repositorio
+Repositorio --> Service : robot
+deactivate Repositorio
+Service -> Repositorio : save(robot)
+activate Repositorio
+deactivate Repositorio
+Service --> Controller : robotDTO
+deactivate Service
+Controller--> Route : Resposta HTTP
+deactivate Controller
+<-- Route : Resposta HTTP
+deactivate Route
+
+note right of Service
+Algumas situações não estão representadas
+por forma a simplificar a leiturado diagrama,
+por exemplo interfaces e conversões de json
+ para dto e vice-versa.
+end note
+@enduml

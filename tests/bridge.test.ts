@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Bridge } from "../src/domain/bridge";
+import { Bridge } from "../src/domain/bridge-agg/bridge";
 
 describe('Bridge', () => {
   it('given valid properties create valid Bridge instance', () => {

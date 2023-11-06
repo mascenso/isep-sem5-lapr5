@@ -5,7 +5,7 @@ import IElevatorService from "./IServices/IElevatorService";
 import {IElevatorDTO} from "../dto/IElevatorDTO";
 import {Result} from "../core/logic/Result";
 import {ElevatorMap} from "../mappers/ElevatorMap";
-import {Elevator} from "../domain/elevator";
+import {Elevator} from "../domain/elevator-agg/elevator";
 import IBuildingRepo from './IRepos/IBuildingRepo';
 import IFloorRepo from './IRepos/IFloorRepo';
 
@@ -55,13 +55,13 @@ export default class ElevatorService implements IElevatorService {
       const fieldsToUpdate = ['code', 'coordX1', 'coordY1', 'coordX2', 'coordY2'];
 
       for (const field of fieldsToUpdate) {
-        if (elevatorDTO[field]) { 
+        if (elevatorDTO[field]) {
             elevator[field] = elevatorDTO[field];
         }
       }
 
       await this.elevatorRepo.save(elevator);
-  
+
       const elevatorDTOResult = ElevatorMap.toDTO(elevator) as IElevatorDTO;
       return Result.ok<IElevatorDTO>(elevatorDTOResult);
 
@@ -77,7 +77,7 @@ export default class ElevatorService implements IElevatorService {
       const elevators = await this.elevatorRepo.getAllElevators();
 
       const elevatorDTOs = elevators.map((elevator) => ElevatorMap.toDTO(elevator) as IElevatorDTO);
-  
+
       return Result.ok<IElevatorDTO[]>(elevatorDTOs);
 
 

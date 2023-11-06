@@ -1,0 +1,8 @@
+@startuml U390
+actor Utilizador
+participant "Sistema" as Sistema
+Utilizador -> Sistema : Solicita Listar robots por designacao ou tarefa
+activate Sistema
+Sistema --> Utilizador : Lista de robots por designção ou tarefa
+deactivate Sistema
+@enduml

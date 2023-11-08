@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+body{
+    background:  #302b63;
+}
+
+.title-app{
+    text-align: center;
+	color: #fff;
+	font-size: 3em;
+	font-weight: bold;
+	margin-top: 20px;
+	outline: none;
+	border: none;
+    background: none;
+}

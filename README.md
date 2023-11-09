@@ -39,11 +39,18 @@ or, run the mongodb in detach mode without visible log output:
 $ docker-compose up -d
 ```
 
-Then just start the server with
+Then just start all the servers with on root
+
+```shell
+$ node start.js
+```
+
+Or start the server inside folder with
 
 ```shell
 $ npm run start
 ```
+
 It uses nodemon for livereloading :peace-fingers:
 
 Afterwards, to stop the mongodb, use the following command:

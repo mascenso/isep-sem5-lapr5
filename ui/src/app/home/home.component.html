@@ -1,0 +1,20 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      mode='side'
+      opened='true'
+      disableClose='true'>
+    <mat-toolbar></mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item href="#">Campus Management</a>
+      <a mat-list-item href="#">Fleet Management</a>
+      <a mat-list-item href="#">Task Management</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <span>RobDroneGo</span>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

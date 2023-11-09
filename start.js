@@ -28,8 +28,8 @@ function runNpmInstallAndStart(directory, appName, color) {
 console.log('Iniciando o projeto...');
 
 // Iniciar a UI com cor verde
-runNpmInstallAndStart('./ui', 'UI Module', '32');
+runNpmInstallAndStart('./Frontend', 'UI Module', '32');
 
 // Iniciar o backend com cor azul
-runNpmInstallAndStart('./information', 'Information Module', '34');
+runNpmInstallAndStart('./Gestao_Informacao', 'Information Module', '34');
 

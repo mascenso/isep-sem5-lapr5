@@ -1,15 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+html, body { height: 100%; }
+
 body{
-    background:  #302b63;
+  background:  #302b63;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .title-app{
-    text-align: center;
+  text-align: center;
 	color: #fff;
 	font-size: 3em;
 	font-weight: bold;
 	margin-top: 20px;
 	outline: none;
 	border: none;
-    background: none;
+  background: none;
 }

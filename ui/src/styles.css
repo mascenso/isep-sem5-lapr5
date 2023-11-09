@@ -6,14 +6,3 @@ body{
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
-
-.title-app{
-  text-align: center;
-	color: #fff;
-	font-size: 3em;
-	font-weight: bold;
-	margin-top: 20px;
-	outline: none;
-	border: none;
-  background: none;
-}

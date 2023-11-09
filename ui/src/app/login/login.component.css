@@ -6,7 +6,7 @@ body{
 	align-items: center;
 	min-height: 100vh;
 	font-family: 'Jost', sans-serif;
-	
+
 }
 .main{
 	width: 350px;
@@ -94,8 +94,19 @@ button:hover{
 	transform: translateY(-500px);
 }
 #chk:checked ~ .login label{
-	transform: scale(1);	
+	transform: scale(1);
 }
 #chk:checked ~ .signup label{
 	transform: scale(.6);
+}
+
+.title-app{
+  text-align: center;
+  color: #fff;
+  font-size: 3em;
+  font-weight: bold;
+  margin-top: 20px;
+  outline: none;
+  border: none;
+  background: none;
 }

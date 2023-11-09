@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { loginService } from '../services/loginService.service';
+import { LoginService } from '../services/loginService.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  providers: [loginService]
+  providers: [LoginService]
 })
 export class LoginComponent {
   email: string = '';
@@ -13,17 +14,23 @@ export class LoginComponent {
   selectedRole: string = '';
   roles: any[] = [];
 
-  constructor(private loginService: loginService) {}
+  constructor(private loginService: LoginService, private router: Router) {}
 
   ngOnInit() {
-    this.loginService.getRoles().subscribe(roles => {
-      this.roles = roles;
-    });
+    //this.loginService.getRoles().subscribe(roles => {
+    //  this.roles = roles;
+    //});
+    this.roles = ['G_FROTA', 'G_CAMPUS'];
   }
 
   onSubmit(event:Event,email:string,password:string,role:string){
     event.preventDefault();
+    this.loginService.login();
+    this.router.navigate(['home']);
+  }
 
+  public isLoggedIn(): boolean {
+    return this.loginService.isLoggedId();
   }
 
 

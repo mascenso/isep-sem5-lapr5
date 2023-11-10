@@ -1,17 +1,53 @@
+.home-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .sidenav-container {
   height: 100%;
 }
 
 .sidenav {
-  width: 200px;
-}
-
-.sidenav .mat-toolbar {
   background: inherit;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 99;
 }
+
+.mat-toolbar {
+  height: 6rem;
+}
+
+.sidenav-button {
+  text-align: end;
+  margin-bottom: 1rem;
+}
+
+.sidenav-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.sidenav-item span {
+  margin-left: 1.4rem;
+}
+
+.sidenav-item-icon {
+  font-size: 3rem;
+  height: 3rem;
+  width: 3rem;
+  vertical-align: bottom;
+}
+
+.sidenav-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+

@@ -5,8 +5,7 @@ import {Router} from "@angular/router";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
-  providers: [LoginService]
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   email: string = '';
@@ -26,12 +25,13 @@ export class LoginComponent {
   onSubmit(event:Event,email:string,password:string,role:string){
     event.preventDefault();
     this.loginService.login();
-    this.router.navigate(['home']);
   }
 
   public isLoggedIn(): boolean {
     return this.loginService.isLoggedId();
   }
-
+  onLogin(event: Event) {
+    this.loginService.login();
+  }
 
 }

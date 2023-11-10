@@ -1,8 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 html, body { height: 100%; }
 
+html {
+  font-size: 62.5%; /* (62.5/100) * 16px = 10px */
+}
+
 body{
-  background:  #302b63;
   margin: 0;
+  padding: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+:root {
+  --main-bg-color-login: #302b63;
+  --color-black: #000;
 }

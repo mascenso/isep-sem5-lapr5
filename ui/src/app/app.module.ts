@@ -12,12 +12,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { CampusComponent } from './home/campus/campus.component';
+import { FleetComponent } from './home/fleet/fleet.component';
+import { TasksComponent } from './home/tasks/tasks.component';
+import {LoginService} from "./services/loginService.service";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    CampusComponent,
+    FleetComponent,
+    TasksComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +38,7 @@ import { MatListModule } from '@angular/material/list';
     MatIconModule,
     MatListModule
   ],
-  providers: [],
+  providers: [LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

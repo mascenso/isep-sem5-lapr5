@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class LoginService {
 
     private isLoggedIn = false;
+
+    login$ = new Subject<boolean>();
 
     constructor(private http: HttpClient) { }
 
@@ -15,6 +19,7 @@ export class LoginService {
     }
 
     public login(): void {
+      this.login$.next(true);
       this.isLoggedIn = true;
     }
 

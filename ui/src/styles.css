@@ -14,4 +14,8 @@ body{
 :root {
   --main-bg-color-login: #302b63;
   --color-black: #000;
+  --global-spacer-xl: 4rem;
+  --global-spacer-m: 2rem;
+  --global-spacer-s: 1rem;
+
 }

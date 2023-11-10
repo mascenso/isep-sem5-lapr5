@@ -10,7 +10,6 @@
 
 .sidenav {
   background: inherit;
-  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 
 .mat-toolbar.mat-primary {
@@ -21,6 +20,9 @@
 
 .mat-toolbar {
   height: 6rem;
+  display:flex;
+  justify-content: space-between;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
 .sidenav-button {
@@ -50,4 +52,3 @@
   flex-direction: column;
   gap: 2rem;
 }
-

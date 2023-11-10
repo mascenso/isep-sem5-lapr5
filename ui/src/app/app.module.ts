@@ -16,6 +16,12 @@ import { CampusComponent } from './home/campus/campus.component';
 import { FleetComponent } from './home/fleet/fleet.component';
 import { TasksComponent } from './home/tasks/tasks.component';
 import {LoginService} from "./services/loginService.service";
+import {MatExpansionModule} from "@angular/material/expansion";
+import {MatCardModule} from "@angular/material/card";
+import {MatInputModule} from "@angular/material/input";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatTableModule} from "@angular/material/table";
+import {MatSortModule} from "@angular/material/sort";
 
 @NgModule({
   declarations: [
@@ -36,6 +42,11 @@ import {LoginService} from "./services/loginService.service";
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
+    MatInputModule,
+    MatCardModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatSortModule,
     MatListModule
   ],
   providers: [LoginService],

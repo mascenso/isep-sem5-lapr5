@@ -1,0 +1,54 @@
+.home-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  background: inherit;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+
+.mat-toolbar {
+  height: 6rem;
+  display:flex;
+  justify-content: space-between;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.sidenav-button {
+  text-align: end;
+  margin-bottom: 1rem;
+}
+
+.sidenav-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.sidenav-item span {
+  margin-left: 1.4rem;
+}
+
+.sidenav-item-icon {
+  font-size: 3rem;
+  height: 3rem;
+  width: 3rem;
+  vertical-align: bottom;
+}
+
+.sidenav-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}

@@ -52,3 +52,7 @@
   flex-direction: column;
   gap: 2rem;
 }
+
+.is-active {
+  background-color: var(--color-grey-light);
+}

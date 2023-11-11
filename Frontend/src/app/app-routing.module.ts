@@ -5,15 +5,16 @@ import {CampusComponent} from "./home/campus/campus.component";
 import {FleetComponent} from "./home/fleet/fleet.component";
 import {TasksComponent} from "./home/tasks/tasks.component";
 import {LoginComponent} from "./login/login.component";
+import {CreateBuildingComponent} from "./home/campus/create-building/create-building.component";
 
 const routes: Routes = [
-  {path: '', component: LoginComponent},
+  {path: '', redirectTo: 'home', pathMatch:'full'},
   {
     path: 'home', component: HomeComponent,
     children: [
       {
         path: 'campus',
-        component: CampusComponent,
+        component: CampusComponent
       },
       {
         path: 'fleet',
@@ -22,6 +23,10 @@ const routes: Routes = [
       {
         path: 'tasks',
         component: TasksComponent,
+      },
+      {
+        path: 'campus/create-building',
+        component: CreateBuildingComponent,
       },
     ],
   },

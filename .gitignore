@@ -5,6 +5,8 @@
 /Frontend/.angular
 /Frontend/dist
 
+/Gestao_Informacao/node_modules
+
 # misc
 .DS_Store
 .env*

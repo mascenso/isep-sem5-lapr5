@@ -21,17 +21,17 @@
         </mat-list-item>
 
         <div class="sidenav-items">
-          <mat-list-item class="sidenav-item" routerLink="campus">
+          <mat-list-item class="sidenav-item" routerLink="campus" [routerLinkActive]="['is-active']">
             <mat-icon class="sidenav-item-icon" fontIcon="domain_add"></mat-icon>
             <span *ngIf="isExpanded">Campus management</span>
           </mat-list-item>
 
-          <mat-list-item class="sidenav-item" routerLink="fleet">
+          <mat-list-item class="sidenav-item" routerLink="fleet" [routerLinkActive]="['is-active']">
             <mat-icon class="sidenav-item-icon" fontIcon="precision_manufacturing"></mat-icon>
             <span *ngIf="isExpanded">Fleet management</span>
           </mat-list-item>
 
-          <mat-list-item class="sidenav-item" routerLink="tasks">
+          <mat-list-item class="sidenav-item" routerLink="tasks" [routerLinkActive]="['is-active']">
             <mat-icon class="sidenav-item-icon" fontIcon="list_alt"></mat-icon>
             <span *ngIf="isExpanded">Tasks management</span>
           </mat-list-item>

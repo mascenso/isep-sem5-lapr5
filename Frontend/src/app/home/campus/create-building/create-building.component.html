@@ -1,0 +1,66 @@
+<div class="create-building-container">
+  <div class="create-building-section">
+    <h2>Create a new Building</h2>
+    <mat-card class="form-card-container">
+      <mat-card-content>
+        <form class="form" [formGroup]="buildingForm" (ngSubmit)="onSubmit()">
+          <p>
+            <mat-form-field class="form-field form-field-code">
+              <mat-label>Code</mat-label>
+              <input matInput [formControl]="buildingForm.controls.code" #inputCode maxlength="5" placeholder="Ex. B1234" value="B1234">
+              <mat-hint align="end">{{inputCode.value.length}} / 5</mat-hint>
+              <mat-error *ngIf="buildingForm.controls.code.hasError('required')">Code is <strong>required</strong></mat-error>
+              <mat-error *ngIf="buildingForm.controls.code.hasError('pattern')">Code must be in <strong>format A1234</strong></mat-error>
+
+            </mat-form-field>
+          </p>
+
+          <table class="table">
+            <tr>
+              <td>
+                <mat-form-field class="form-field form-field-number">
+                  <mat-label>Width</mat-label>
+                  <input matInput [formControl]="buildingForm.controls.maxWidth" #inputWidth maxlength="2" placeholder="Ex. 10" value="10">
+                  <mat-hint align="end">{{inputWidth.value.length}} / 2</mat-hint>
+                  <mat-error *ngIf="buildingForm.controls.maxWidth.hasError('required')">Width is <strong>required</strong></mat-error>
+                  <mat-error *ngIf="buildingForm.controls.maxWidth.hasError('pattern')">Please enter a <strong>valid integer</strong></mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="form-field form-field-number">
+                  <mat-label>Length</mat-label>
+                  <input matInput [formControl]="buildingForm.controls.maxLength" #inputLength maxlength="2" placeholder="Ex. 10" value="10">
+                  <mat-hint align="end">{{inputLength.value.length}} / 2</mat-hint>
+                  <mat-error *ngIf="buildingForm.controls.maxLength.hasError('required')">Length is <strong>required</strong></mat-error>
+                  <mat-error *ngIf="buildingForm.controls.maxLength.hasError('pattern')">Please enter a <strong>valid integer</strong></mat-error>
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+          <p>
+            <mat-form-field class="form-field form-field-name">
+              <mat-label>Name</mat-label>
+              <input matInput [formControl]="buildingForm.controls.name">
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="form-field form-field-description">
+              <mat-label>Description</mat-label>
+              <textarea matInput [formControl]="buildingForm.controls.description"></textarea>
+            </mat-form-field>
+          </p>
+          <div class="form-button-group">
+            <button mat-flat-button color="primary" type="submit" [disabled]="!buildingForm.valid">Create</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="building-details-section">
+    <pre>{{this.createdBuilding | json}}</pre>
+  </div>
+</div>
+
+
+
+

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -16,12 +16,14 @@ import { CampusComponent } from './home/campus/campus.component';
 import { FleetComponent } from './home/fleet/fleet.component';
 import { TasksComponent } from './home/tasks/tasks.component';
 import {LoginService} from "./services/loginService.service";
-import {MatExpansionModule} from "@angular/material/expansion";
 import {MatCardModule} from "@angular/material/card";
 import {MatInputModule} from "@angular/material/input";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
+import { CreateBuildingComponent } from './home/campus/create-building/create-building.component';
+import {MatRippleModule} from "@angular/material/core";
+import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import {MatSortModule} from "@angular/material/sort";
     HomeComponent,
     CampusComponent,
     FleetComponent,
-    TasksComponent
+    TasksComponent,
+    CreateBuildingComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +50,10 @@ import {MatSortModule} from "@angular/material/sort";
     MatPaginatorModule,
     MatTableModule,
     MatSortModule,
-    MatListModule
+    MatListModule,
+    MatRippleModule,
+    ReactiveFormsModule,
+    MatSnackBarModule
   ],
   providers: [LoginService],
   bootstrap: [AppComponent]

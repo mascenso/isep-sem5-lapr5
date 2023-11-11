@@ -16,8 +16,25 @@ body{
   --primary-color: #009688;
   --primary-color-dark: #004d40;
   --color-black: #000;
+  --color-grey-light: #FAFAFA;
+  --color-grey: #9E9E9E;
+  --color-grey-dark: #424242;
+  --color-success: #00c853;
+  --color-error: #f44336;
   --global-spacer-xl: 4rem;
   --global-spacer-m: 2rem;
   --global-spacer-s: 1rem;
 
+}
+
+.snackbar-success {
+  --mdc-snackbar-container-color: var(--primary-color);
+  --mat-snack-bar-button-color: black;
+  --mdc-snackbar-supporting-text-color: white;
+}
+
+.snackbar-error {
+  --mdc-snackbar-container-color: var(--color-error);
+  --mat-snack-bar-button-color: black;
+  --mdc-snackbar-supporting-text-color: white;
 }

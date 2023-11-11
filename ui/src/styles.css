@@ -12,7 +12,9 @@ body{
 }
 
 :root {
-  --main-bg-color-login: #302b63;
+  --primary-color-light: #4db6ac;
+  --primary-color: #009688;
+  --primary-color-dark: #004d40;
   --color-black: #000;
   --global-spacer-xl: 4rem;
   --global-spacer-m: 2rem;

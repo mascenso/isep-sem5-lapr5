@@ -3,6 +3,7 @@
 /node_modules
 /ui/node_modules
 /ui/.angular
+/ui/dist
 
 # misc
 .DS_Store

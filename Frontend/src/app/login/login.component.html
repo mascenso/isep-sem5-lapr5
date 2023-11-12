@@ -1,25 +1,26 @@
-<body>
-	<div class="main">  	
-		<input type="checkbox" id="chk" aria-hidden="true">
-			<div class="signup">
-				<form (ngSubmit)="onSubmit($event,email,password,selectedRole)">
-					<label for="chk" aria-hidden="true">Sign up</label>
-					<input type="email" name="txt" placeholder="Email" required="">
-					<input type="password" name="pswd" placeholder="Password" required="">
+<div class="login-container">
+  <div class="title-app">RobDroneGo App</div>
+  <div class="main">
+    <input type="checkbox" id="chk" aria-hidden="true">
+      <div class="signup">
+        <form (ngSubmit)="onSubmit($event,email,password,selectedRole)">
+          <label for="chk" aria-hidden="true">Sign up</label>
+          <input type="email" name="txt" placeholder="Email" required="">
+          <input type="password" name="pswd" placeholder="Password" required="">
                     <select name="role" [(ngModel)]="selectedRole">
                         <option [ngValue]="role.name" *ngFor="let role of roles">{{ role.name }}</option>
                     </select>
-					<button>Sign up</button>
-				</form>
-			</div>
+          <button>Sign up</button>
+        </form>
+      </div>
 
-			<div class="login">
-				<form>
-					<label for="chk" aria-hidden="true">Login</label>
-					<input type="email" name="email" placeholder="Email" required="">
-					<input type="password" name="pswd" placeholder="Password" required="">
-					<button>Login</button>
-				</form>
-			</div>
-	</div>
-</body>
+      <div class="login">
+        <form (ngSubmit)="onLogin($event)">
+          <label for="chk" aria-hidden="true">Login</label>
+          <input type="email" name="email" placeholder="Email" required="">
+          <input type="password" name="pswd" placeholder="Password" required="">
+          <button>Login</button>
+        </form>
+      </div>
+  </div>
+</div>

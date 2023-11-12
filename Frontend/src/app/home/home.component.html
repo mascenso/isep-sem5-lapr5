@@ -1,0 +1,48 @@
+<div class="home-container">
+  <mat-toolbar color="primary">
+    <span>RobDroneGo</span>
+    <div class="toolbar-button-group">
+      <button mat-icon-button color="basic">
+        <mat-icon>person</mat-icon>
+      </button>
+      <button mat-icon-button color="basic">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+  <mat-progress-bar class="spinner" mode="indeterminate" *ngIf="spinnerService.loading | async" ></mat-progress-bar>
+  <mat-sidenav-container class="sidenav-container" autosize>
+    <mat-sidenav class="sidenav"
+                 mode='side'
+                 opened='true'
+                 disableClose='true'>
+      <mat-nav-list>
+        <mat-list-item class="sidenav-item sidenav-button" (click)="isExpanded = !isExpanded">
+          <mat-icon class="sidenav-item-icon" fontIcon="swap_horiz"></mat-icon>
+        </mat-list-item>
+
+        <div class="sidenav-items">
+          <mat-list-item class="sidenav-item" routerLink="campus" [routerLinkActive]="['is-active']">
+            <mat-icon class="sidenav-item-icon" fontIcon="domain_add"></mat-icon>
+            <span *ngIf="isExpanded">Campus management</span>
+          </mat-list-item>
+
+          <mat-list-item class="sidenav-item" routerLink="fleet" [routerLinkActive]="['is-active']">
+            <mat-icon class="sidenav-item-icon" fontIcon="precision_manufacturing"></mat-icon>
+            <span *ngIf="isExpanded">Fleet management</span>
+          </mat-list-item>
+
+          <mat-list-item class="sidenav-item" routerLink="tasks" [routerLinkActive]="['is-active']">
+            <mat-icon class="sidenav-item-icon" fontIcon="list_alt"></mat-icon>
+            <span *ngIf="isExpanded">Tasks management</span>
+          </mat-list-item>
+        </div>
+
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+

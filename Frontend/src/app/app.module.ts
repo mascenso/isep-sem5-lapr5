@@ -25,6 +25,7 @@ import { CreateBuildingComponent } from './home/campus/create-building/create-bu
 import {MatRippleModule} from "@angular/material/core";
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import { CreateRobotTypeComponent } from './home/fleet/create-robot-type/create-robot-type.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { CreateRobotTypeComponent } from './home/fleet/create-robot-type/create-
     MatListModule,
     MatRippleModule,
     ReactiveFormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSelectModule,
   ],
   providers: [LoginService],
   bootstrap: [AppComponent]

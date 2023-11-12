@@ -37,12 +37,12 @@ cria_grafo_lin(Col,Lin):-Col1 is Col-1,cria_grafo_lin(Col1,Lin).
 cria_conexoes(Col1,Lin1,Col2,Lin2,Peso) :-
     assertz(ligacel(cel(Col1,Lin1),cel(Col2,Lin2),Peso)).
 
-/* Predicado para mostrar as conexões criadas -> testar grafo
+/* Predicado para mostrar as conexões criadas -> testar grafo */
 mostra_conexoes :-
     ligacel(Cel1, Cel2, Peso),
     write('Conexão de '), write(Cel1), write(' para '), write(Cel2), write(' com peso '), write(Peso), nl,
     fail.
-mostra_conexoes.*/
+mostra_conexoes.
 
 /* DFS - Pesquisa em profundidade. Pesquisa a partir do nó inicial e segue o caminho até o fim, depois retrocede. */
 dfs(Orig,Dest,Cam):-

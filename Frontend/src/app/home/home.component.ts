@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {LoadingSpinnerService} from "../services/loading-spinner.service";
 
 @Component({
   selector: 'app-home',
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
   isExpanded: boolean = false;
+
+  constructor(public spinnerService: LoadingSpinnerService) {}
 }

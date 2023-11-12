@@ -10,6 +10,7 @@
       </button>
     </div>
   </mat-toolbar>
+  <mat-progress-bar class="spinner" mode="indeterminate" *ngIf="spinnerService.loading | async" ></mat-progress-bar>
   <mat-sidenav-container class="sidenav-container" autosize>
     <mat-sidenav class="sidenav"
                  mode='side'

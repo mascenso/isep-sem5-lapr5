@@ -4,7 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './home/home.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -23,7 +23,9 @@ import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
 import { CreateBuildingComponent } from './home/campus/create-building/create-building.component';
 import {MatRippleModule} from "@angular/material/core";
-import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {ServiceInterceptor} from "./interceptors/service.interceptor";
 
 @NgModule({
   declarations: [
@@ -35,27 +37,33 @@ import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
     TasksComponent,
     CreateBuildingComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatInputModule,
-    MatCardModule,
-    MatPaginatorModule,
-    MatTableModule,
-    MatSortModule,
-    MatListModule,
-    MatRippleModule,
-    ReactiveFormsModule,
-    MatSnackBarModule
-  ],
-  providers: [LoginService],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatSidenavModule,
+        MatIconModule,
+        MatInputModule,
+        MatCardModule,
+        MatPaginatorModule,
+        MatTableModule,
+        MatSortModule,
+        MatListModule,
+        MatRippleModule,
+        ReactiveFormsModule,
+        MatSnackBarModule,
+        MatProgressBarModule
+    ],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: ServiceInterceptor,
+    multi: true,
+  },
+  LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

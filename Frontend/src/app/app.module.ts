@@ -24,6 +24,7 @@ import {MatSortModule} from "@angular/material/sort";
 import { CreateBuildingComponent } from './home/campus/create-building/create-building.component';
 import {MatRippleModule} from "@angular/material/core";
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
+import { CreateRobotTypeComponent } from './home/fleet/create-robot-type/create-robot-type.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
     CampusComponent,
     FleetComponent,
     TasksComponent,
-    CreateBuildingComponent
+    CreateBuildingComponent,
+    CreateRobotTypeComponent
   ],
   imports: [
     BrowserModule,

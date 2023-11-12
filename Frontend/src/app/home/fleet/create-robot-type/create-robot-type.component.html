@@ -1,0 +1,38 @@
+<div class="create-robot-type-container">
+    <div class="create-robot-type-section">
+      <h2>Create a new Robot Type</h2>
+      <mat-card class="form-card-container">
+        <mat-card-content>
+          <form class="form" [formGroup]="robotTypeForm" (ngSubmit)="onSubmit()">
+            <p>
+              <mat-form-field class="form-field form-field-designacao">
+                <mat-label>designação</mat-label>
+                <input matInput [formControl]="robotTypeForm.controls.designacao" #inputCode maxlength="5" placeholder="Ex. B1234" value="B1234">
+                <mat-hint align="end">{{inputCode.value.length}} / 5</mat-hint>
+                <mat-error *ngIf="robotTypeForm.controls.designacao.hasError('required')">Designação is <strong>required</strong></mat-error>
+                <mat-error *ngIf="robotTypeForm.controls.designacao.hasError('pattern')">Designação must be in <strong>format A1234</strong></mat-error>
+  
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field class="form-field form-field-tipoTarefa">
+                <mat-label>Task type</mat-label>
+                <input matInput formControlName="tipoTarefas">
+              </mat-form-field>
+            </p>
+            <div class="form-button-group">
+              <button mat-flat-button color="primary" type="submit" [disabled]="!robotTypeForm.valid">Create</button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="robot-type-details-section">
+      <pre>{{this.createdRobotType | json}}</pre>
+    </div>
+  </div>
+  
+  
+  
+  
+  

@@ -24,6 +24,8 @@ import {MatSortModule} from "@angular/material/sort";
 import { CreateBuildingComponent } from './home/campus/create-building/create-building.component';
 import {MatRippleModule} from "@angular/material/core";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { CreateRobotTypeComponent } from './home/fleet/create-robot-type/create-robot-type.component';
+import { MatSelectModule } from '@angular/material/select';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {ServiceInterceptor} from "./interceptors/service.interceptor";
 
@@ -35,7 +37,8 @@ import {ServiceInterceptor} from "./interceptors/service.interceptor";
     CampusComponent,
     FleetComponent,
     TasksComponent,
-    CreateBuildingComponent
+    CreateBuildingComponent,
+    CreateRobotTypeComponent
   ],
     imports: [
         BrowserModule,

@@ -1,0 +1,13 @@
+<div class="floor-list-container">
+  <h4>Select building:</h4>
+  <mat-form-field>
+    <mat-label>Building</mat-label>
+    <mat-select [formControl]="buildingSelectionControl" name="building">
+      <mat-option></mat-option>
+      <div *ngFor="let building of buildingList;">
+        <mat-option  [value]="building.id">{{building.code}}</mat-option>
+      </div>
+    </mat-select>
+  </mat-form-field>
+</div>
+

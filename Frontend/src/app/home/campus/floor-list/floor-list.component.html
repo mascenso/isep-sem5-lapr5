@@ -1,13 +1,68 @@
 <div class="floor-list-container">
-  <h4>Select building:</h4>
-  <mat-form-field>
-    <mat-label>Building</mat-label>
-    <mat-select [formControl]="buildingSelectionControl" name="building">
-      <mat-option></mat-option>
-      <div *ngFor="let building of buildingList;">
-        <mat-option  [value]="building.id">{{building.code}}</mat-option>
-      </div>
-    </mat-select>
-  </mat-form-field>
-</div>
+  <div class="list-floors-sections">
+    <h2>List floors with access to elevator</h2>
+    <div class="building-selection-form">
+      <h4>Select building:</h4>
+      <mat-form-field>
+        <mat-label>Building</mat-label>
+        <mat-select [formControl]="buildingSelectionControl" (valueChange)="onSelectionUpdateTable($event)">
+          <mat-option></mat-option>
+          <div *ngFor="let building of buildingList;">
+            <mat-option  [value]="building.id">{{building.code}}</mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
+    <table mat-table
+           [dataSource]="dataSource" multiTemplateDataRows
+           class="mat-elevation-z8">
+      <div *ngFor="let column of columnsToDisplay;">
+        <ng-container matColumnDef="{{column}}">
+          <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+          <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+        </ng-container>
+      </div>
+      <ng-container matColumnDef="expand">
+        <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+            <ng-container *ngIf="expandedElement === element; else arrowDown;">
+              <mat-icon>keyboard_arrow_up</mat-icon>
+            </ng-container>
+            <ng-template #arrowDown>
+              <mat-icon>keyboard_arrow_down</mat-icon>
+            </ng-template>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+          <div class="floor-detail"
+               [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <div class="floor-diagram">
+              <div class="floor-position"> {{element.position}} </div>
+              <div class="floor-symbol"> {{element.symbol}} </div>
+              <div class="floor-name"> {{element.name}} </div>
+              <div class="floor-weight"> {{element.weight}} </div>
+            </div>
+            <div class="floor-description">
+              {{element.description}}
+              <span class="floor-description-attribution"> -- Wikipedia </span>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+          class="floor-row"
+          [class.example-expanded-row]="expandedElement === element"
+          (click)="expandedElement = expandedElement === element ? null : element">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="floor-detail-row"></tr>
+    </table>
+  </div>
+</div>

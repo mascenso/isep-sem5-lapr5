@@ -31,6 +31,7 @@ import {ServiceInterceptor} from "./interceptors/service.interceptor";
 import { ViewComponent } from './home/view/view.component';
 import { FloorListComponent } from './home/campus/floor-list/floor-list.component';
 import { BridgeListComponent } from "./home/campus/bridge-list/bridge-list.component";
+import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { BridgeListComponent } from "./home/campus/bridge-list/bridge-list.compo
     CreateRobotTypeComponent,
     ViewComponent,
     FloorListComponent,
-    BridgeListComponent
+    BridgeListComponent,
+    RobotListComponent
   ],
   imports: [
     BrowserModule,

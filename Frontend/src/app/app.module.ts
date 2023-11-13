@@ -28,6 +28,7 @@ import { CreateRobotTypeComponent } from './home/fleet/create-robot-type/create-
 import { MatSelectModule } from '@angular/material/select';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {ServiceInterceptor} from "./interceptors/service.interceptor";
+import { FloorListComponent } from './home/campus/floor-list/floor-list.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {ServiceInterceptor} from "./interceptors/service.interceptor";
     FleetComponent,
     TasksComponent,
     CreateBuildingComponent,
-    CreateRobotTypeComponent
+    CreateRobotTypeComponent,
+    FloorListComponent
   ],
   imports: [
     BrowserModule,

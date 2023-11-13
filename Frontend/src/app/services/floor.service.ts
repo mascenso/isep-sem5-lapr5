@@ -22,6 +22,10 @@ export class FloorService {
 
   constructor(private http: HttpClient) { }
 
+  public getFloorsAtBuildings(buildingId: string, showSpinner?:boolean): Observable<FloorDto[]> {
+    return this.http.get<FloorDto[]>(`${this.API_URL}/api/floors/buildings?building=${buildingId}`, {reportProgress: showSpinner});
+  }
+
   public getFloorsWithElevatorByBuildingId(buildingId: string, showSpinner?:boolean): Observable<FloorDto[]> {
     return this.http.get<FloorDto[]>(`${this.API_URL}/api/floors/buildings/${buildingId}/with-elevator`, {reportProgress: showSpinner});
   }

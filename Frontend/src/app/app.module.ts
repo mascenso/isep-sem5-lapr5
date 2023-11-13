@@ -29,6 +29,7 @@ import { MatSelectModule } from '@angular/material/select';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {ServiceInterceptor} from "./interceptors/service.interceptor";
 import { FloorListComponent } from './home/campus/floor-list/floor-list.component';
+import { BridgeListComponent } from "./home/campus/bridge-list/bridge-list.component";
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { FloorListComponent } from './home/campus/floor-list/floor-list.componen
     TasksComponent,
     CreateBuildingComponent,
     CreateRobotTypeComponent,
-    FloorListComponent
+    FloorListComponent,
+    BridgeListComponent
   ],
   imports: [
     BrowserModule,

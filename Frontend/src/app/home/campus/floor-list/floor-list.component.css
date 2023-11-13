@@ -8,6 +8,7 @@
   display:flex;
   align-content: space-between;
   flex-direction: column;
+  width: 100%;
 }
 
 h2 {
@@ -15,6 +16,13 @@ h2 {
   display: inline-block;
   margin-top: 0;
   margin-bottom: 2rem;
+  color: var(--color-grey-dark);
+}
+
+h4 {
+  font-size: 1.6rem;
+  display: block;
+  margin-bottom: 1rem;
   color: var(--color-grey-dark);
 }
 
@@ -64,4 +72,16 @@ tr.floor-row:not(.floor-expanded-row):active {
 
 .floor-description-attribution {
   opacity: 0.5;
+}
+
+.footer-row td {
+  font-style: italic;
+}
+
+.building-selection-form-field {
+  min-width: 50rem;
+}
+
+pre {
+  font-size: 1.6rem;
 }

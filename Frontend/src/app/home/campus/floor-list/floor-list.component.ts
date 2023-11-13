@@ -1,7 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl} from "@angular/forms";
-import { BuildingService } from "../../../services/building.service";
+import {BuildingResponseDto, BuildingService} from "../../../services/building.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {FloorDto, FloorService} from "../../../services/floor.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {Observable, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-floor-list',
@@ -15,57 +18,63 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
   ],
   styleUrls: ['./floor-list.component.css']
 })
-export class FloorListComponent implements OnInit {
+export class FloorListComponent implements OnInit, OnDestroy {
 
-  buildingList = [
-    {
-      id: 'random-id-1',
-      code: 'code1'
-    },
-    {
-      id: 'random-id-2',
-      code: 'code2'
-    },
-    {
-      id: 'random-id-3',
-      code: 'code3'
-    },
-    {
-      id: 'random-id-4',
-      code: 'code4'
-    }
-  ];
+  buildingList: BuildingResponseDto[] = [];
+  buildingSelectionControl =  new FormControl();
+  buildingServiceSubscription$ = new Subscription();
 
-  dataSource = FLOOR_DATA;
+  floorServiceSubscription$ = new Subscription();
+
+  dataSource: FloorDto[] = [];
   columnsToDisplay = ['id', 'floorNumber', 'width', 'length'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-  expandedElement: FloorDTO | null | undefined;
+  expandedElement: FloorDto | null | undefined;
 
-  buildingSelectionControl =  new FormControl();
-
-  constructor(private buildingService: BuildingService) {}
+  constructor(private buildingService: BuildingService,
+              private floorService: FloorService,
+              private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     // fetch building list from service
+    this.buildingServiceSubscription$ = this.buildingService.getAllBuildings().subscribe(
+      response => {
+        this.buildingList = response;
+      },
+      error => {
+        this._snackBar.open("Unable to get buildings!", "close", {
+          duration: 5000,
+          panelClass: ['snackbar-warning']
+        });
+      }
+    )
   }
 
-  onSelectionUpdateTable(selection: any) {
+  onSelectionUpdateTable(selection: any): void {
+    console.log(selection);
+    if (selection) {
+      this.floorServiceSubscription$ = this.floorService.getFloorsWithElevatorByBuildingId(selection, true ).subscribe(
+        floorData => {
+          this.dataSource = floorData;
+        },
+        error => {
+          this._snackBar.open(error.error, "close", {
+            duration: 5000,
+            panelClass: ['snackbar-error']
+          });
+        }
+      )
+    }
+  }
 
+  ngOnDestroy(): void {
+    this.buildingServiceSubscription$.unsubscribe();
+    this.floorServiceSubscription$.unsubscribe();
   }
 
 }
 
-export interface FloorDTO {
-  id: string;
-  buildingId:string;
-  width: number;
-  length: number;
-  floorNumber: number;
-  description: string;
-  floorMap: number[][];
-}
-
-const FLOOR_DATA: FloorDTO[] = [
+const FLOOR_DATA: FloorDto[] = [
   {
     id: 'floor-id-1',
     buildingId: 'building-id-1',

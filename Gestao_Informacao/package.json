@@ -6,7 +6,7 @@
   "scripts": {
     "build": "./node_modules/.bin/tsc",
     "heroku-postbuild": "npm run build",
-    "start": "./node_modules/.bin/nodemon",
+    "start": ".\\node_modules\\.bin\\nodemon",
     "inspect": "./node_modules/.bin/nodemon --inspect information/src/app.ts",
     "test": "./node_modules/.bin/mocha -r ts-node/register **/*.test.ts **/**/*.test.ts",
     "lint": "npm run lint:js ",

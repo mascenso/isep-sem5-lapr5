@@ -36,6 +36,11 @@
             <mat-icon class="sidenav-item-icon" fontIcon="list_alt"></mat-icon>
             <span *ngIf="isExpanded">Tasks management</span>
           </mat-list-item>
+
+          <mat-list-item class="sidenav-item" routerLink="view" [routerLinkActive]="['is-active']">
+            <mat-icon class="sidenav-item-icon" fontIcon="view_in_ar"></mat-icon>
+            <span *ngIf="isExpanded">3D visualization</span>
+          </mat-list-item>
         </div>
 
       </mat-nav-list>

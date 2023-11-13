@@ -25,7 +25,7 @@ export class CreateBuildingComponent {
 
 
   public onSubmit() {
-    this.buildingService.createBuilding(this.buildingForm.value as CreateBuildingRequestDto).subscribe(
+    this.buildingService.createBuilding(this.buildingForm.value as CreateBuildingRequestDto, true).subscribe(
       response => {
           this.createdBuilding = response;
           this._snackBar.open("Building created!", "close", {

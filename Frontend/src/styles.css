@@ -21,6 +21,7 @@ body{
   --color-grey-dark: #424242;
   --color-success: #00c853;
   --color-error: #f44336;
+  --color-warning: #ffa726;
   --global-spacer-xl: 4rem;
   --global-spacer-m: 2rem;
   --global-spacer-s: 1rem;
@@ -29,12 +30,18 @@ body{
 
 .snackbar-success {
   --mdc-snackbar-container-color: var(--primary-color);
-  --mat-snack-bar-button-color: black;
+  --mat-snack-bar-button-color: white;
   --mdc-snackbar-supporting-text-color: white;
 }
 
 .snackbar-error {
   --mdc-snackbar-container-color: var(--color-error);
-  --mat-snack-bar-button-color: black;
+  --mat-snack-bar-button-color: white;
+  --mdc-snackbar-supporting-text-color: white;
+}
+
+.snackbar-warning {
+  --mdc-snackbar-container-color: var(--color-warning);
+  --mat-snack-bar-button-color: white;
   --mdc-snackbar-supporting-text-color: white;
 }

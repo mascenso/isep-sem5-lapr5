@@ -12,10 +12,15 @@ import {LoadingSpinnerService} from "../services/loading-spinner.service";
 export class ServiceInterceptor implements HttpInterceptor {
   constructor(private spinnerService: LoadingSpinnerService) {}
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.spinnerService.loading.next(true);
-    return next.handle(request)
-      .pipe(
-        finalize(() => this.spinnerService.loading.next(false) )
-      );
+    if (request.reportProgress) {
+      this.spinnerService.loading.next(true);
+
+      return next.handle(request)
+        .pipe(
+          finalize(() => this.spinnerService.loading.next(false))
+        );
+    } else {
+      return next.handle(request);
+    }
   }
 }

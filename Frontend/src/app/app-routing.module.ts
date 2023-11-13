@@ -8,6 +8,8 @@ import {ViewComponent} from "./home/view/view.component";
 import {LoginComponent} from "./login/login.component";
 import {CreateBuildingComponent} from "./home/campus/create-building/create-building.component";
 import {CreateRobotTypeComponent} from "./home/fleet/create-robot-type/create-robot-type.component";
+import {FloorListComponent} from "./home/campus/floor-list/floor-list.component";
+import {BridgeListComponent} from "./home/campus/bridge-list/bridge-list.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -33,6 +35,14 @@ const routes: Routes = [
       {
         path: 'campus/create-building',
         component: CreateBuildingComponent,
+      },
+      {
+        path: 'campus/list-floors',
+        component: FloorListComponent,
+      },
+      {
+        path: 'campus/list-bridges',
+        component: BridgeListComponent,
       },
       {
         path: 'fleet/create-robot-type',

@@ -7,8 +7,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {Observable, Subscription} from "rxjs";
 
 @Component({
-  selector: 'app-floor-list',
-  templateUrl: './floor-list.component.html',
+  selector: 'app-list-building-floors',
+  templateUrl: './list-building-floors.component.html',
   animations: [
     trigger('detailExpand', [
       state('collapsed,void', style({height: '0px', minHeight: '0'})),
@@ -16,9 +16,9 @@ import {Observable, Subscription} from "rxjs";
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
-  styleUrls: ['./floor-list.component.css']
+  styleUrls: ['./list-building-floors.component.css']
 })
-export class FloorListComponent implements OnInit, OnDestroy {
+export class ListBuildingFloorsComponent implements OnInit, OnDestroy {
 
   buildingList: BuildingResponseDto[] = [];
   buildingSelectionControl =  new FormControl();
@@ -53,7 +53,7 @@ export class FloorListComponent implements OnInit, OnDestroy {
   onSelectionUpdateTable(selection: any): void {
     console.log(selection);
     if (selection) {
-      this.floorServiceSubscription$ = this.floorService.getFloorsWithElevatorByBuildingId(selection, true ).subscribe(
+      this.floorServiceSubscription$ = this.floorService.getFloorsAtBuildings(selection, true ).subscribe(
         floorData => {
           this.dataSource = floorData;
         },

@@ -30,8 +30,12 @@ export class BuildingService {
 
   constructor(private http: HttpClient) { }
 
-  public createBuilding(building: CreateBuildingRequestDto): Observable<BuildingResponseDto> {
-    return this.http.post<BuildingResponseDto>(`${this.API_URL}/api/buildings`, building);
+  public createBuilding(building: CreateBuildingRequestDto, showSpinner?: boolean): Observable<BuildingResponseDto> {
+    return this.http.post<BuildingResponseDto>(`${this.API_URL}/api/buildings`, building, {reportProgress: showSpinner});
+  }
+
+  public getAllBuildings(): Observable<BuildingResponseDto[]> {
+    return this.http.get<BuildingResponseDto[]>(`${this.API_URL}/api/buildings`);
   }
 
 }

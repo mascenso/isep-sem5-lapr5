@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {FormControl, FormGroup } from "@angular/forms";
 import TaskType from "../../../../../../Gestao_Informacao/src/enums/taskType";
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {RobotDto, RobotService} from "../../../services/robot.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-robot-list',
@@ -17,7 +19,7 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 })
 export class RobotListComponent {
 
-  dataSource: RobotDto[] = ROBOT_DATA;
+  dataSource: RobotDto[] = [];
   columnsToDisplay = ['id', 'nickName', 'robotType', 'serialNumber', 'inhibited'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: RobotDto | null | undefined;
@@ -29,59 +31,26 @@ export class RobotListComponent {
 
   taskTypes = Object.values(TaskType);
 
+  constructor(private robotService: RobotService,
+              private _snackBar: MatSnackBar) {}
+
   onSubmit(): void {
-    console.log(this.listRobotsForm);
-/*    this.buildingService.createBuilding(this.buildingForm.value as CreateBuildingRequestDto, true).subscribe(
+    console.log(this.listRobotsForm.controls.taskTypeControl.value);
+    console.log(this.listRobotsForm.controls.designationControl.value);
+    this.robotService.findRobotsByTaskTypeOrDesignation(
+      this.listRobotsForm.controls.taskTypeControl.value,
+      this.listRobotsForm.controls.designationControl.value, true).subscribe(
       response => {
-        this.createdBuilding = response;
-        this._snackBar.open("Building created!", "close", {
-          duration: 5000,
-          panelClass: ['snackbar-success']
-        });
+        console.log(response);
+          this.dataSource = response;
       },
       error => {
-        console.log('Error creating building: ', error);
-        this._snackBar.open(error.message, "close", {
+        this._snackBar.open(error.error, "close", {
           duration: 5000,
           panelClass: ['snackbar-error']
         });
       }
-    );*/
+    );
   }
 
 }
-export interface RobotDto {
-  id: string;
-  nickName: string;
-  robotType: string;
-  serialNumber: string;
-  description?: string;
-  inhibited: boolean;
-}
-
-const ROBOT_DATA = [
-  {
-    id: 'robot-id-1',
-    nickName: 'robotronic',
-    robotType: 'ix5000',
-    serialNumber: 'EAN123001230',
-    description: 'Um Robot muito lindo',
-    inhibited: false
-  },
-  {
-    id: 'robot-id-2',
-    nickName: 'robotronic2x',
-    robotType: 'ix6000',
-    serialNumber: 'EAN123001230',
-    description: 'Um Robot muito lindo',
-    inhibited: false
-  },
-  {
-    id: 'robot-id-3',
-    nickName: 'robotronic',
-    robotType: 'ix9000',
-    serialNumber: 'EAN123001230',
-    description: 'Um Robot ainda mais lindo',
-    inhibited: true
-  }
-]

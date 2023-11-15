@@ -27,10 +27,12 @@ export default class ElevatorService implements IElevatorService {
         return Result.fail<IElevatorDTO>('Building not found');
       }
 
-      const floor = await this.floorRepo.findByDomainId(elevatorDTO.floorList);
+      for (const floorId of elevatorDTO.floorList) {
+        const floor = await this.floorRepo.findByDomainId(floorId);
 
-      if(floor === null) {
-        return Result.fail<IElevatorDTO>('Floor not found');
+        if(floor === null) {
+          return Result.fail<IElevatorDTO>('Floor not found');
+        }
       }
 
       const elevatorOrError = await Elevator.create( elevatorDTO );

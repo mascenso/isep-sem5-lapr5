@@ -77,11 +77,8 @@ describe('elevator controller', function () {
         sinon.stub(elevatorServiceInstance, "createElevator").returns(Result.ok<IElevatorDTO>({
             "id": "123",
             "code": req.body.code,
-            "floorId": req.body.floorId,
-            "coordX1": req.body.coordX1,
-            "coordY1": req.body.coordX2,
-            "coordX2": req.body.coordY1,
-            "coordY2": req.body.coordY2
+            "buildingId": req.body.buildingId,
+            "floorList": req.body.floorList
         }));
 
         const ctrl = new ElevatorController(elevatorServiceInstance as IElevatorService);
@@ -94,11 +91,8 @@ describe('elevator controller', function () {
         sinon.assert.calledWith(res.json, sinon.match({
             "id": "123",
             "code": req.body.code,
-            "floorId": req.body.floorId,
-            "coordX1": req.body.coordX1,
-            "coordY1": req.body.coordX2,
-            "coordX2": req.body.coordY1,
-            "coordY2": req.body.coordY2
+            "buildingId": req.body.buildingId,
+            "floorList": req.body.floorList
         }));
     });
 
@@ -121,11 +115,8 @@ describe('elevator controller', function () {
             .returns(Result.ok<IElevatorDTO>({
                 "id": "123",
                 "code": req.body.code,
-                "floorId": req.body.floorId,
-                "coordX1": req.body.coordX1,
-                "coordY1": req.body.coordX2,
-                "coordX2": req.body.coordY1,
-                "coordY2": req.body.coordY2
+                "buildingId": req.body.buildingId,
+                "floorList": req.body.floorList
             }));
 
         const ctrl = new ElevatorController(elevatorServiceInstance as IElevatorService);
@@ -139,11 +130,8 @@ describe('elevator controller', function () {
         sinon.assert.calledWith(res.json, sinon.match({
             "id": "123",
             "code": req.body.code,
-            "floorId": req.body.floorId,
-            "coordX1": req.body.coordX1,
-            "coordY1": req.body.coordX2,
-            "coordX2": req.body.coordY1,
-            "coordY2": req.body.coordY2
+            "buildingId": req.body.buildingId,
+            "floorList": req.body.floorList
         }));
     });
 

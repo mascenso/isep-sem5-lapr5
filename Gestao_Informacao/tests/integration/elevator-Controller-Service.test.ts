@@ -63,7 +63,7 @@ describe('Integration test elevator controller -> service ', function () {
 
     it('elevatorController -> elevatorService integration test using elevatorRepo and elevator stub (createElevator)', async function () {
         // Arrange
-        let body = { "code": 'Elev1', "floorId": '1', "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3 };
+        let body = { "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
         let bodyFloor = { "buildingId": 'Building', "width": 10, "length": 10, "floorNumber": 2, "floorMap": [[]], "description": "Edificio muito alto." };
         let req: Partial<Request> = {};
         req.body = body;
@@ -90,22 +90,16 @@ describe('Integration test elevator controller -> service ', function () {
         const elevatorRepoStub = sinon.stub(elevatorRepoInstance, "save").returns(new Promise<Elevator>((resolve, reject) => {
             resolve(Elevator.create({
                 "code": req.body.code,
-                "coordX1": req.body.coordX1,
-                "coordY1": req.body.coordX2,
-                "coordX2": req.body.coordY1,
-                "coordY2": req.body.coordY2,
-                "floorId": req.body.floorId
+                "buildingId": req.body.buildingId,
+                "floorList": req.body.floorList
             }).getValue())
         }));
 
         const elevatorStub = sinon.stub(elevatorInstance, "create").returns(Result.ok({
             "id": "123",
             "code": req.body.code,
-            "coordX1": req.body.coordX1,
-            "coordY1": req.body.coordX2,
-            "coordX2": req.body.coordY1,
-            "coordY2": req.body.coordY2,
-            "floorId": req.body.floorId
+            "buildingId": req.body.buildingId,
+            "floorList": req.body.floorList    
         }));
 
         let elevatorServiceInstance = Container.get('ElevatorService');
@@ -119,11 +113,8 @@ describe('Integration test elevator controller -> service ', function () {
         sinon.assert.calledWith(res.json, sinon.match({
             "id": "123",
             "code": req.body.code,
-            "coordX1": req.body.coordX1,
-            "coordY1": req.body.coordX2,
-            "coordX2": req.body.coordY1,
-            "coordY2": req.body.coordY2,
-            "floorId": req.body.floorId
+            "buildingId": req.body.buildingId,
+            "floorList": req.body.floorList
         }));
         sinon.assert.calledOnce(elevatorStub);
         sinon.assert.calledOnce(elevatorRepoStub);
@@ -132,7 +123,7 @@ describe('Integration test elevator controller -> service ', function () {
 
     it('elevatorController -> elevatorService integration test using elevatorRepo and elevator stub (updateElevator)', async function () {
         // Arrange
-        let body = { "code": 'Elev1', "floorId": '1', "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3 };
+        let body = { "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
         let bodyFloor = { "buildingId": 'Building', "width": 10, "length": 10, "floorNumber": 2, "floorMap": [[]], "description": "Edificio muito alto." };
         let req: Partial<Request> = {};
         req.body = body;
@@ -148,22 +139,16 @@ describe('Integration test elevator controller -> service ', function () {
         const elevatorRepoStub2 = sinon.stub(elevatorRepoInstance, "findByDomainId").returns(new Promise<Elevator>((resolve, reject) => {
             resolve(Elevator.create({
                 "code": req.body.code,
-                "coordX1": req.body.coordX1,
-                "coordY1": req.body.coordX2,
-                "coordX2": req.body.coordY1,
-                "coordY2": req.body.coordY2,
-                "floorId": req.body.floorId
+                "buildingId": req.body.buildingId,
+                "floorList": req.body.floorList
             }).getValue())
         }));
 
         const elevatorRepoStub = sinon.stub(elevatorRepoInstance, "save").returns(new Promise<Elevator>((resolve, reject) => {
             resolve(Elevator.create({
                 "code": req.body.code,
-                "coordX1": req.body.coordX1,
-                "coordY1": req.body.coordX2,
-                "coordX2": req.body.coordY1,
-                "coordY2": req.body.coordY2,
-                "floorId": req.body.floorId
+                "buildingId": req.body.buildingId,
+                "floorList": req.body.floorList
             }).getValue())
         }));
 
@@ -178,11 +163,8 @@ describe('Integration test elevator controller -> service ', function () {
         sinon.assert.calledOnce(res.json);
         sinon.assert.calledWith(res.json, sinon.match({
             code: "Elev1",
-            coordX1: 1,
-            coordX2: 1,
-            coordY1: 2,
-            coordY2: 3,
-            floorId: "1"
+            buildingId: "1",
+            floorList: ['F1', 'F2']
         }));
 
         sinon.assert.calledOnce(elevatorRepoStub);
@@ -192,7 +174,7 @@ describe('Integration test elevator controller -> service ', function () {
 
     it('elevatorController -> elevatorService integration test using elevatorRepo and Elevator stub (getAllElevators)', async function () {
         // Arrange
-        let body = { "id": "123", "code": 'Elev1', "floorId": '1', "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3 };
+        let body = { "id": "123", "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
         let req: Partial<Request> = {};
         req.body = body;
         let res: Partial<Response> = {
@@ -204,11 +186,8 @@ describe('Integration test elevator controller -> service ', function () {
         const getAllElevatorsStub = sinon.stub(elevatorRepoInstance, "getAllElevators").returns(new Promise<Elevator[]>((resolve, reject) => {
             resolve([Elevator.create({
                 "code": req.body.code,
-                "coordX1": req.body.coordX1,
-                "coordY1": req.body.coordX2,
-                "coordX2": req.body.coordY1,
-                "coordY2": req.body.coordY2,
-                "floorId": req.body.floorId
+                "buildingId": req.body.buildingId,
+                "floorList": req.body.floorList
             }).getValue()])
         }));
 

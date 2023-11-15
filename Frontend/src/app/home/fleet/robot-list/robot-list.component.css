@@ -1,0 +1,83 @@
+.robot-list-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 3rem 4rem;
+}
+
+.list-robots-section {
+  width: 100%;
+}
+
+.form {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+
+  margin-bottom: 1rem;
+}
+
+.form-field {
+  min-width: 10rem;
+}
+
+.form-field-task-type {
+  margin-right: 2rem;
+}
+
+.form-field-designation {
+  min-width: 35rem;
+}
+
+.form-button-group {
+  margin-left: 2rem;
+}
+
+h2 {
+  font-size: 3rem;
+  display: inline-block;
+  margin-top: 0;
+  margin-bottom: 3rem;
+  color: var(--color-grey-dark);
+}
+
+.list-robots-card {
+  width: 100%;
+  padding: 1rem 2rem;
+}
+
+table {
+  width: 100%;
+}
+
+tr.robot-detail-row {
+  height: 0;
+}
+
+tr.robot-row:not(.robot-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.robot-row:not(.robot-expanded-row):active {
+  background: #efefef;
+}
+
+.robot-row td {
+  border-bottom-width: 0;
+}
+
+.robot-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.robot-description-attribution {
+  opacity: 0.5;
+}
+
+.footer-row td {
+  font-style: italic;
+}
+
+pre {
+  font-size: 1.6rem;
+}

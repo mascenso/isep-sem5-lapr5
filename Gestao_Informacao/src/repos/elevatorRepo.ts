@@ -46,7 +46,7 @@ export default class ElevatorRepo implements IElevatorRepo {
         return ElevatorMap.toDomain(elevatorCreated);
       } else {
 
-        const updateFields = ['code', 'coordX1', 'coordY1', 'coordX2', 'coordY2'];
+        const updateFields = ['code','floorList'];
 
         for (const field of updateFields) {
           if (elevator[field] !== undefined) {

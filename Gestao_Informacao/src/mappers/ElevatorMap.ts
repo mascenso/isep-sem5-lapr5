@@ -13,11 +13,8 @@ export class ElevatorMap extends Mapper<Elevator> {
     return {
       id:elevator.id.toString(),
       code: elevator.code,
-      floorId: elevator.floorId,
-      coordX1: elevator.coordX1,
-      coordY1: elevator.coordY1,
-      coordX2: elevator.coordX2,
-      coordY2: elevator.coordY2
+      floorList: elevator.floorList,
+      buildingId: elevator.buildingId
     } as IElevatorDTO;
   }
 
@@ -25,11 +22,8 @@ export class ElevatorMap extends Mapper<Elevator> {
 
     const elevatorOrError = Elevator.create({
         code: elevator.code,
-        floorId: elevator.floorId,
-        coordX1: elevator.coordX1,
-        coordY1: elevator.coordY1,
-        coordX2: elevator.coordX2,
-        coordY2: elevator.coordY2
+        floorList: elevator.floorList,
+        buildingId: elevator.buildingId
       },
       new UniqueEntityID(elevator.domainId)
     );
@@ -43,11 +37,8 @@ export class ElevatorMap extends Mapper<Elevator> {
     const a = {
       domainId: elevator.id.toString(),
       code: elevator.code,
-      floorId: elevator.floorId,
-      coordX1: elevator.coordX1,
-      coordY1: elevator.coordY1,
-      coordX2: elevator.coordX2,
-      coordY2: elevator.coordY2
+      floorList: elevator.floorList,
+      buildingId: elevator.buildingId
     }
     return a;
   }

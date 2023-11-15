@@ -64,7 +64,7 @@ describe('elevator controller', function () {
 
     it('elevatorController unit test using elevatorService stub', async function () {
         // Arrange
-        let body = {"code": 'Elev1', "floorId": 1, "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3};
+        let body = { "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
 
         let req: Partial<Request> = {};
         req.body = body;
@@ -77,11 +77,8 @@ describe('elevator controller', function () {
         sinon.stub(elevatorServiceInstance, "createElevator").returns(Result.ok<IElevatorDTO>({
             "id": "123",
             "code": req.body.code,
-            "floorId": req.body.floorId,
-            "coordX1": req.body.coordX1,
-            "coordY1": req.body.coordX2,
-            "coordX2": req.body.coordY1,
-            "coordY2": req.body.coordY2
+            "buildingId": req.body.buildingId,
+            "floorList": req.body.floorList
         }));
 
         const ctrl = new ElevatorController(elevatorServiceInstance as IElevatorService);
@@ -94,17 +91,14 @@ describe('elevator controller', function () {
         sinon.assert.calledWith(res.json, sinon.match({
             "id": "123",
             "code": req.body.code,
-            "floorId": req.body.floorId,
-            "coordX1": req.body.coordX1,
-            "coordY1": req.body.coordX2,
-            "coordX2": req.body.coordY1,
-            "coordY2": req.body.coordY2
+            "buildingId": req.body.buildingId,
+            "floorList": req.body.floorList
         }));
     });
 
     it('elevatorController unit test using elevatorService mock', async function () {
         // Arrange
-        let body = {"code": 'Elev1', "floorId": 1, "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3};
+        let body = { "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
         let req: Partial<Request> = {};
         req.body = body;
 
@@ -121,11 +115,8 @@ describe('elevator controller', function () {
             .returns(Result.ok<IElevatorDTO>({
                 "id": "123",
                 "code": req.body.code,
-                "floorId": req.body.floorId,
-                "coordX1": req.body.coordX1,
-                "coordY1": req.body.coordX2,
-                "coordX2": req.body.coordY1,
-                "coordY2": req.body.coordY2
+                "buildingId": req.body.buildingId,
+                "floorList": req.body.floorList
             }));
 
         const ctrl = new ElevatorController(elevatorServiceInstance as IElevatorService);
@@ -139,11 +130,8 @@ describe('elevator controller', function () {
         sinon.assert.calledWith(res.json, sinon.match({
             "id": "123",
             "code": req.body.code,
-            "floorId": req.body.floorId,
-            "coordX1": req.body.coordX1,
-            "coordY1": req.body.coordX2,
-            "coordX2": req.body.coordY1,
-            "coordY2": req.body.coordY2
+            "buildingId": req.body.buildingId,
+            "floorList": req.body.floorList
         }));
     });
 

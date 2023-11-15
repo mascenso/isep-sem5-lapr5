@@ -31,6 +31,7 @@ import {ServiceInterceptor} from "./interceptors/service.interceptor";
 import { ViewComponent } from './home/view/view.component';
 import { FloorListComponent } from './home/campus/floor-list/floor-list.component';
 import { BridgeListComponent } from "./home/campus/bridge-list/bridge-list.component";
+import { ListBuildingFloorsComponent } from './home/campus/list-building-floors/list-building-floors.component';
 import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
 
 @NgModule({
@@ -46,6 +47,7 @@ import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
     ViewComponent,
     FloorListComponent,
     BridgeListComponent,
+    ListBuildingFloorsComponent,
     RobotListComponent
   ],
   imports: [

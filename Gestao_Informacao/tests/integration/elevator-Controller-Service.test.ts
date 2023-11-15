@@ -9,6 +9,7 @@ import ElevatorController from "../../src/controllers/elevatorController";
 import { IElevatorDTO } from '../../src/dto/IElevatorDTO';
 import { Elevator } from '../../src/domain/elevator-agg/elevator';
 import { Floor } from '../../src/domain/floor-agg/floor';
+import { Building } from '../../src/domain/building-agg/building';
 
 describe('Integration test elevator controller -> service ', function () {
     const sandbox = sinon.createSandbox();
@@ -50,6 +51,11 @@ describe('Integration test elevator controller -> service ', function () {
         let elevatorServiceInstance = Container.get(elevatorServiceClass);
         Container.set("ElevatorService", elevatorServiceInstance);
 
+
+        let buildingServiceClass = require("../../src/services/buildingService").default;
+        let buildingServiceInstance = Container.get(buildingServiceClass);
+        Container.set("BuildingService", buildingServiceInstance);
+
         let floorServiceClass = require("../../src/services/floorService").default;
         let floorServiceInstance = Container.get(floorServiceClass);
         Container.set("FloorService", floorServiceInstance);
@@ -65,6 +71,8 @@ describe('Integration test elevator controller -> service ', function () {
         // Arrange
         let body = { "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
         let bodyFloor = { "buildingId": 'Building', "width": 10, "length": 10, "floorNumber": 2, "floorMap": [[]], "description": "Edificio muito alto." };
+        let bodyBuilding = { "maxWidth": 10, "maxLength": 20, "code": "Edificio teste" };
+
         let req: Partial<Request> = {};
         req.body = body;
         let res: Partial<Response> = {
@@ -74,7 +82,18 @@ describe('Integration test elevator controller -> service ', function () {
 
         let floorRepoInstance = Container.get("FloorRepo");
         let elevatorRepoInstance = Container.get("ElevatorRepo");
+        let buildingRepoInstance = Container.get("BuildingRepo");
         let elevatorInstance = Container.get("Elevator");
+
+
+        const buildingRepoStub = sinon.stub(buildingRepoInstance, "findByDomainId").returns(new Promise<Building>((resolve, reject) => {
+            resolve(Building.create({
+                "code": bodyBuilding.code,
+                "maxLength": bodyBuilding.maxLength,
+                "maxWidth": bodyBuilding.maxWidth
+
+            }).getValue())
+        }));
 
         const floorRepoStub = sinon.stub(floorRepoInstance, "findByDomainId").returns(new Promise<Floor>((resolve, reject) => {
             resolve(Floor.create({
@@ -118,7 +137,9 @@ describe('Integration test elevator controller -> service ', function () {
         }));
         sinon.assert.calledOnce(elevatorStub);
         sinon.assert.calledOnce(elevatorRepoStub);
-        sinon.assert.calledOnce(floorRepoStub);
+        sinon.assert.called(floorRepoStub);
+        sinon.assert.calledOnce(buildingRepoStub);
+
     });
 
     it('elevatorController -> elevatorService integration test using elevatorRepo and elevator stub (updateElevator)', async function () {

@@ -48,6 +48,10 @@ describe('elevator service', function () {
         let elevatorServiceInstance = Container.get(elevatorServiceClass);
         Container.set("ElevatorService", elevatorServiceInstance);
 
+        let buildingServiceClass = require("../../src/services/buildingService").default;
+        let buildingServiceInstance = Container.get(buildingServiceClass);
+        Container.set("BuildingService", buildingServiceInstance);
+
         let floorServiceClass = require("../../src/services/floorService").default;
         let floorServiceInstance = Container.get(floorServiceClass);
         Container.set("FloorService", floorServiceInstance);
@@ -61,7 +65,7 @@ describe('elevator service', function () {
 
     it('elevatorService unit test using elevator and elevatorRepo stubs (createElevator)', async function () {
         // Arrange
-        let body = { "code": 'Elev1', "floorId": 1, "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3 };
+        let body = { "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
         let req: Partial<Request> = {};
         req.body = body;
 
@@ -89,8 +93,14 @@ describe('elevator service', function () {
         };
         Container.set("FloorRepo", floorRepoInstance);
 
-        const service = new ElevatorService(Container.get("ElevatorRepo"), Container.get("FloorRepo"), Container.get("BuildingRepo"));
+        // Stub para IFloorRepo
+        const buildingRepoInstance = {
+            save: sinon.stub(),
+            findByDomainId: sinon.stub(),
+        };
+        Container.set("BuildingRepo", buildingRepoInstance);
 
+        const service = new ElevatorService(Container.get("ElevatorRepo"), Container.get("FloorRepo"), Container.get("BuildingRepo"));
         const elevatorDTO = { "id": "123", "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
 
         // Act
@@ -105,7 +115,7 @@ describe('elevator service', function () {
 
     it('elevatorService unit test using elevator and elevatorRepo stubs (updateElevator)', async function () {
         // Arrange
-        let body = { "code": 'Elev1', "floorId": 1, "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3 };
+        let body = { "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
         let req: Partial<Request> = {};
         req.body = body;
 
@@ -150,7 +160,7 @@ describe('elevator service', function () {
 
     it('elevatorService unit test using elevator and elevatorRepo stubs (getAllElevators)', async function () {
         // Arrange
-        let body = { "code": 'Elev1', "floorId": 1, "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3 };
+        let body = { "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
         let req: Partial<Request> = {};
         req.body = body;
 
@@ -179,7 +189,7 @@ describe('elevator service', function () {
         Container.set("FloorRepo", floorRepoInstance);
 
         const service = new ElevatorService(Container.get("ElevatorRepo"), Container.get("FloorRepo"), Container.get("BuildingRepo"));
-        const elevatorDTO = { "id": "123", "code": 'Elev1', "floorId": "1", "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3 };
+        const elevatorDTO = { "id": "123", "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2']};
 
         // Act
         await service.getAllElevators();

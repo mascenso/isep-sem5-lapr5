@@ -64,7 +64,7 @@ describe('elevator controller', function () {
 
     it('elevatorController unit test using elevatorService stub', async function () {
         // Arrange
-        let body = {"code": 'Elev1', "floorId": 1, "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3};
+        let body = { "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
 
         let req: Partial<Request> = {};
         req.body = body;
@@ -98,7 +98,7 @@ describe('elevator controller', function () {
 
     it('elevatorController unit test using elevatorService mock', async function () {
         // Arrange
-        let body = {"code": 'Elev1', "floorId": 1, "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3};
+        let body = { "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
         let req: Partial<Request> = {};
         req.body = body;
 

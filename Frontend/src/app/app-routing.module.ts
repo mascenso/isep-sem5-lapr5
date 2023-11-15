@@ -11,6 +11,7 @@ import {CreateRobotTypeComponent} from "./home/fleet/create-robot-type/create-ro
 import {FloorListComponent} from "./home/campus/floor-list/floor-list.component";
 import {BridgeListComponent} from "./home/campus/bridge-list/bridge-list.component";
 import { ListBuildingFloorsComponent } from './home/campus/list-building-floors/list-building-floors.component';
+import { EditFloorsComponent } from './home/campus/edit-floors/edit-floors.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -44,6 +45,10 @@ const routes: Routes = [
       {
         path: 'campus/list-bridges',
         component: BridgeListComponent,
+      },
+      {
+        path: 'campus/edit-floors',
+        component: EditFloorsComponent,
       },
       {
         path: 'campus/list-building-floors',

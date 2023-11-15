@@ -32,6 +32,7 @@ import { ViewComponent } from './home/view/view.component';
 import { FloorListComponent } from './home/campus/floor-list/floor-list.component';
 import { BridgeListComponent } from "./home/campus/bridge-list/bridge-list.component";
 import { ListBuildingFloorsComponent } from './home/campus/list-building-floors/list-building-floors.component';
+import { EditFloorsComponent } from './home/campus/edit-floors/edit-floors.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { ListBuildingFloorsComponent } from './home/campus/list-building-floors/
     ViewComponent,
     FloorListComponent,
     BridgeListComponent,
-    ListBuildingFloorsComponent
+    ListBuildingFloorsComponent,
+    EditFloorsComponent
   ],
   imports: [
     BrowserModule,

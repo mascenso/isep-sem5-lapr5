@@ -62,6 +62,7 @@ dfs2(Act,Dest,LA,Cam):-
 Devolve uma lista com todos os caminhos possiveis */
 all_dfs(Orig,Dest,LCam):-findall(Cam,dfs(Orig,Dest,Cam),LCam).
 
+
 /* Algoritmo para encontrar o melhor o caminho entre dois pontos. */
 better_dfs(Orig,Dest,Cam):-all_dfs(Orig,Dest,LCam), shortlist(LCam,Cam,_).
 
@@ -83,8 +84,7 @@ bfs2(Dest, [LA|Outros], Cam):-
     LA = [Act|_],
     findall([X|LA], (Dest \== Act, edge(Act, X), \+ member(X, LA)),Novos),
     append(Outros, Novos, Todos),
-    sort(Todos, TodosOrd),
-    bfs2(Dest, TodosOrd, Cam).
+    bfs2(Dest, Todos, Cam).
 
 
 /* BFS - Best First Search sem custo */

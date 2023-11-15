@@ -5,11 +5,8 @@ import {Guard} from "../../core/logic/Guard";
 
 interface ElevatorProps {
   code: string;
-  floorId: string;
-  coordX1: number;
-  coordY1: number;
-  coordX2: number;
-  coordY2: number;
+  buildingId: string;
+  floorList: string[];
 }
 
 export class Elevator extends AggregateRoot<ElevatorProps> {
@@ -22,11 +19,8 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
 
     const guardedProps = [
       { argument: props.code, argumentName: 'code' },
-      { argument: props.floorId, argumentName: 'floorId' },
-      { argument: props.coordX1, argumentName: 'coordX1' },
-      { argument: props.coordY1, argumentName: 'coordY1' },
-      { argument: props.coordX2, argumentName: 'coordX2' },
-      { argument: props.coordY2, argumentName: 'coordY2' }
+      { argument: props.floorList, argumentName: 'floorList' },
+      { argument: props.buildingId, argumentName: 'buldingId' }
     ];
 
     const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
@@ -47,48 +41,25 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
     return this._id;
   }
 
-  get floorId() : string {
-    return this.props.floorId;
+  get floorList() : string[] {
+    return this.props.floorList;
   }
 
   get code() : string {
     return this.props.code;
   }
 
-  get coordX1() : number {
-    return this.props.coordX1;
-  }
-
-  get coordY1() : number {
-    return this.props.coordY1;
-  }
-
-  get coordX2() : number {
-    return this.props.coordX2;
-  }
-
-  get coordY2() : number {
-    return this.props.coordY2;
+  get buildingId() : string {
+    return this.props.buildingId;
   }
 
   set code ( value: string) {
     this.props.code = value;
   }
 
-  set coordX1 ( value: number) {
-    this.props.coordX1 = value;
+  set floorList (value: string[]) {
+    this.props.floorList=value;
   }
 
-  set coordY1 ( value: number) {
-    this.props.coordY1 = value;
-  }
-
-  set coordX2 ( value: number) {
-    this.props.coordX2 = value;
-  }
-
-  set coordY2 ( value: number) {
-    this.props.coordY2 = value;
-  }
 
 }

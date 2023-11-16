@@ -83,7 +83,7 @@ export default class FloorController implements IFloorController /* TODO: extend
       const floorOrError = await this.floorServiceInstance.getFloorsAtBuildings(building as string) as Result<IFloorDTO[]>;
 
       if (floorOrError.isFailure) {
-        return res.status(402).json('Dont exist any floor saved on DB').send();
+        return res.status(402).json('This building has no floors allocated.').send();
       }
 
       const floorDTO = floorOrError.getValue();
@@ -100,7 +100,7 @@ export default class FloorController implements IFloorController /* TODO: extend
       const floorOrError = await this.floorServiceInstance.getAllFloors() as Result<IFloorDTO[]>;
 
       if (floorOrError.isFailure) {
-        return res.status(402).json('Dont exist any floor saved on DB').send();
+        return res.status(402).json('This building has no floors allocated.').send();
       }
 
       const floorDTO = floorOrError.getValue();

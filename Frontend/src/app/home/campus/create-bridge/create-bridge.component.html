@@ -1,0 +1,95 @@
+<div class="create-bridge-container">
+  <div class="create-bridge-section">
+    <h2>Create a new Bridge</h2>
+
+    <div class="building-selection-form">
+      <h4>Select building A:</h4>
+      <mat-form-field class="building-selection-form-field">
+        <mat-label>Building</mat-label>
+        <mat-select [formControl]="buildingSelectionControl" (valueChange)="onSelectionUpdateSelectionControlA($event)">
+          <mat-option></mat-option>
+          <div *ngFor="let building of buildingList;">
+            <mat-option  [value]="building.id">{{building.code}} - {{building.id}}</mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="floorA-selection-form">
+      <h4>Select floor A:</h4>
+      <mat-form-field class="floorA-selection-form-field">
+        <mat-label>FloorAId</mat-label>
+        <mat-select [formControl]="floorASelectionControl">
+          <mat-option></mat-option>
+          <div *ngFor="let floorA of floorAList;">
+            <mat-option  [value]="floorA.id">{{floorA.floorNumber}}</mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+
+    <div class="buildingB-selection-form">
+      <h4>Select building B:</h4>
+      <mat-form-field class="buildingB-selection-form-field">
+        <mat-label>BuildingB</mat-label>
+        <mat-select [formControl]="buildingBSelectionControl" (valueChange)="onSelectionUpdateSelectionControlB($event)">
+          <mat-option></mat-option>
+          <div *ngFor="let buildingB of buildingBList;">
+            <mat-option  [value]="buildingB.id">{{buildingB.code}} - {{buildingB.id}}</mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="floorB-selection-form">
+      <h4>Select floor B:</h4>
+      <mat-form-field class="floorB-selection-form-field">
+        <mat-label>FloorBId</mat-label>
+        <mat-select [formControl]="floorBSelectionControl" >
+          <mat-option></mat-option>
+          <div *ngFor="let floorB of floorBList;">
+            <mat-option  [value]="floorB.id">{{floorB.floorNumber}}</mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-card class="form-card-container">
+      <mat-card-content>
+
+
+        <form class="form" [formGroup]="bridgeForm" (ngSubmit)="onSubmit()">
+
+          <p>
+            <mat-form-field class="form-field form-field-code">
+              <mat-label>Code</mat-label>
+              <input matInput [formControl]="bridgeForm.controls.code" #inputCode maxlength="5" placeholder="Ex. A1-B1" value="A1-B1">
+              <mat-hint align="end">{{inputCode.value.length}} / 5</mat-hint>
+              <mat-error *ngIf="bridgeForm.controls.code.hasError('required')">Code is <strong>required</strong></mat-error>
+
+            </mat-form-field>
+          </p>
+
+          <p>
+            <mat-form-field class="form-field form-field-name">
+              <mat-label>Name</mat-label>
+              <input matInput [formControl]="bridgeForm.controls.name">
+            </mat-form-field>
+          </p>
+
+          <div class="form-button-group">
+            <button mat-flat-button color="primary" type="submit" >Create</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="bridge-details-section">
+    <pre>{{this.createdBridge | json}}</pre>
+  </div>
+</div>
+
+
+
+

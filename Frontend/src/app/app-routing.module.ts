@@ -12,6 +12,7 @@ import {FloorListComponent} from "./home/campus/floor-list/floor-list.component"
 import {BridgeListComponent} from "./home/campus/bridge-list/bridge-list.component";
 import { ListBuildingFloorsComponent } from './home/campus/list-building-floors/list-building-floors.component';
 import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
+import { CreateBridgeComponent } from "./home/campus/create-bridge/create-bridge.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -37,6 +38,10 @@ const routes: Routes = [
       {
         path: 'campus/create-building',
         component: CreateBuildingComponent,
+      },
+      {
+        path: 'campus/create-bridge',
+        component: CreateBridgeComponent,
       },
       {
         path: 'campus/list-floors',

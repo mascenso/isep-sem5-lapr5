@@ -50,34 +50,22 @@ export class CreateBridgeComponent {
   bridgeForm = new FormGroup({
     code: new FormControl('', [Validators.required]),
     name: new FormControl(''),
-    floorAId: new FormControl('', [Validators.required]),
-    floorBId: new FormControl('', [Validators.required])
+    floorAId: new FormControl(''),
+    floorBId: new FormControl('')
   });
 
   createdBridge: BridgeResponseDto | undefined;
-
 
   constructor(private bridgeService: BridgeService,
               private _snackBar: MatSnackBar) {
   }
 
-
-
   public onSubmit() {
-
-    const selectedFloorA = this.floorASelectionControl.value;
-    const selectedFloorB = this.floorBSelectionControl.value;
-
     this.bridgeForm.patchValue({
-      floorAId: selectedFloorA,
-      floorBId: selectedFloorB
+      floorAId: this.floorASelectionControl.value,
+      floorBId: this.floorBSelectionControl.value
     });
 
-
-    console.log(selectedFloorA);
-
-
-console.log(this.bridgeForm.value);
     this.bridgeService.createBridge(this.bridgeForm.value as CreateBridgeRequestDto, true).subscribe(
       response => {
         this.createdBridge = response;

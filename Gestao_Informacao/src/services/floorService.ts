@@ -137,7 +137,7 @@ export default class FloorService implements IFloorService {
       throw e;
     }
   }
-
+  
   public async getFloorsWithElevatorByBuildingId(buildingId: string): Promise<Result<IFloorDTO[]>> {
     try {
       const floorListOrError = await this.getFloorsAtBuildings(buildingId) as Result<IFloorDTO[]>;
@@ -152,8 +152,10 @@ export default class FloorService implements IFloorService {
       // take the list of elevators, transform it in a list of floorIDs,
       // filter the original floorDTO list by floorId
       const floorDTOListResult = elevatorsForFloorsList
-        .map(elevator => elevator.floorId)
-        .flatMap(floorId => floorDTOList.filter(floorDTO => floorDTO.id === floorId));
+      .flatMap(elevator => elevator.floorList) // Transforma a matriz de matrizes em uma única matriz
+      .flatMap(floorId =>
+        floorDTOList.filter(floorDTO => floorDTO.id === floorId)
+      );
 
       return Result.ok<IFloorDTO[]>(floorDTOListResult);
 

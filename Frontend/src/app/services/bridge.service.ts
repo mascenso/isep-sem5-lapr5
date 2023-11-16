@@ -25,6 +25,26 @@ export interface BridgeDto {
   floorBId : string;
 }
 
+export interface BuildingResponseDto {
+  id: string;
+  code: string;
+  maxWidth: string,
+  maxLength: string,
+  name: string;
+  description: string;
+}
+
+export interface FloorResponseDto {
+  id: string;
+  buildingId:string;
+  width: number;
+  length: number;
+  floorNumber: number;
+  description: string;
+  floorMap: number[][];
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,6 +55,7 @@ export class BridgeService {
   constructor(private http: HttpClient) { }
 
   public createBridge(bridge: CreateBridgeRequestDto, showSpinner?: boolean): Observable<BridgeResponseDto> {
+    console.log(bridge);
     return this.http.post<BridgeResponseDto>(`${this.API_URL}/api/bridges`, bridge, {reportProgress: showSpinner});
   }
 
@@ -42,4 +63,11 @@ export class BridgeService {
     return this.http.get<BridgeResponseDto[]>(`${this.API_URL}/api/bridges`);
   }
 
+  getAllBuildings() {
+    return this.http.get<BuildingResponseDto[]>(`${this.API_URL}/api/buildings`);
+  }
+
+  getFloorsByBuildingId($event: any, b: boolean) {
+    return this.http.get<FloorResponseDto[]>(`${this.API_URL}/api/floors/buildings?building=${$event}`, {reportProgress: b});
+  }
 }

@@ -73,36 +73,3 @@ export class FloorListComponent implements OnInit, OnDestroy {
   }
 
 }
-
-const FLOOR_DATA: FloorDto[] = [
-  {
-    id: 'floor-id-1',
-    buildingId: 'building-id-1',
-    width: 10,
-    length: 10,
-    floorNumber: 1,
-    description: `Hydrogen is a chemical element with symbol H and atomic number 1. With a standard
-        atomic weight of 1.008, hydrogen is the lightest element on the periodic table.`,
-    floorMap: [[0,1,0,1,1],[0,0,0,0,0],[0,1,0,1,1],[0,1,0,1,1],[0,1,0,1,1]]
-  },
-  {
-    id: 'floor-id-2',
-    buildingId: 'building-id-2',
-    width: 10,
-    length: 10,
-    floorNumber: 2,
-    description: `Hydrogen is a chemical element with symbol H and atomic number 1. With a standard
-        atomic weight of 1.008, hydrogen is the lightest element on the periodic table.`,
-    floorMap: [[0,1,0,1,1],[0,0,0,0,0],[0,1,0,1,1],[0,1,0,1,1],[0,1,0,1,1]]
-  },
-  {
-    id: 'floor-id-3',
-    buildingId: 'building-id-2',
-    width: 10,
-    length: 10,
-    floorNumber: 3,
-    description: `Hydrogen is a chemical element with symbol H and atomic number 1. With a standard
-        atomic weight of 1.008, hydrogen is the lightest element on the periodic table.`,
-    floorMap: [[0,1,0,1,1],[0,0,0,0,0],[0,1,0,1,1],[0,1,0,1,1],[0,1,0,1,1]]
-  },
-];

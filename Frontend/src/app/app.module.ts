@@ -32,6 +32,8 @@ import { ViewComponent } from './home/view/view.component';
 import { FloorListComponent } from './home/campus/floor-list/floor-list.component';
 import { BridgeListComponent } from "./home/campus/bridge-list/bridge-list.component";
 import { ListBuildingFloorsComponent } from './home/campus/list-building-floors/list-building-floors.component';
+import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
+import { CreateBridgeComponent } from "./home/campus/create-bridge/create-bridge.component";
 import { EditFloorsComponent } from './home/campus/edit-floors/edit-floors.component';
 
 @NgModule({
@@ -43,11 +45,13 @@ import { EditFloorsComponent } from './home/campus/edit-floors/edit-floors.compo
     FleetComponent,
     TasksComponent,
     CreateBuildingComponent,
+    CreateBridgeComponent,
     CreateRobotTypeComponent,
     ViewComponent,
     FloorListComponent,
     BridgeListComponent,
     ListBuildingFloorsComponent,
+    RobotListComponent,
     EditFloorsComponent
   ],
   imports: [

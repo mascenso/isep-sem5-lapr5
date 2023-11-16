@@ -14,16 +14,25 @@ import IFloorRepo from './IRepos/IFloorRepo';
 export default class ElevatorService implements IElevatorService {
   constructor(
       @Inject(config.repos.elevator.name) private elevatorRepo : IElevatorRepo,
+      @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo,
       @Inject(config.repos.floor.name) private floorRepo : IFloorRepo
   ) {}
 
   public async createElevator(elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO>> {
     try {
 
-      const floor = await this.floorRepo.findByDomainId(elevatorDTO.floorId);
+      const building = await this.buildingRepo.findByDomainId(elevatorDTO.buildingId);
 
-      if(floor === null) {
-        return Result.fail<IElevatorDTO>('Floor not found');
+      if(building === null) {
+        return Result.fail<IElevatorDTO>('Building not found');
+      }
+
+      for (const floorId of elevatorDTO.floorList) {
+        const floor = await this.floorRepo.findByDomainId(floorId);
+
+        if(floor === null) {
+          return Result.fail<IElevatorDTO>('Floor not found');
+        }
       }
 
       const elevatorOrError = await Elevator.create( elevatorDTO );
@@ -52,7 +61,7 @@ export default class ElevatorService implements IElevatorService {
         return Result.fail<IElevatorDTO>('Elevator with that ID does not exist.');
       }
 
-      const fieldsToUpdate = ['code', 'coordX1', 'coordY1', 'coordX2', 'coordY2'];
+      const fieldsToUpdate = ['code', 'floorList'];
 
       for (const field of fieldsToUpdate) {
         if (elevatorDTO[field]) {

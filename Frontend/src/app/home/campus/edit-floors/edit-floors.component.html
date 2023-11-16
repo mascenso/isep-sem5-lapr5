@@ -22,6 +22,14 @@
             <div *ngFor="let floor of floorList;">
               <mat-option  [value]="floor.id">{{floor.buildingId}} - {{floor.id}}</mat-option>
             </div>
+            
           </mat-select>
+          
         </mat-form-field>
+      </div>
+
+      <div class="buttons-container">
+        <button mat-raised-button color="primary" (click)="onUpdate()">Update</button>
+        <button mat-raised-button color="accent" (click)="onChange()">Change</button>
+        <button mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
       </div>

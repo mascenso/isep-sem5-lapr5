@@ -5,6 +5,7 @@ import {FloorResponseDto, FloorDto, FloorService} from "../../../services/floor.
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Observable, Subscription} from "rxjs";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-floors',
@@ -36,7 +37,8 @@ export class EditFloorsComponent {
 
   constructor(private buildingService: BuildingService,
               private floorService: FloorService,
-              private _snackBar: MatSnackBar) {}
+              private _snackBar: MatSnackBar,
+              private router: Router) {}
 
   ngOnInit(): void {
     // fetch building list from service
@@ -73,6 +75,21 @@ export class EditFloorsComponent {
   ngOnDestroy(): void {
     this.buildingServiceSubscription$.unsubscribe();
     this.floorServiceSubscription$.unsubscribe();
+  }
+
+  onUpdate() {
+    // Add logic for the Update button click event
+    // For example:
+    console.log('Update button clicked');
+    // Perform relevant actions
+  }
+
+  onChange() {
+    console.log('Change button clicked');
+  }
+
+  onCancel() {
+    return this.router.navigate(['../home/campus']);
   }
 
 }

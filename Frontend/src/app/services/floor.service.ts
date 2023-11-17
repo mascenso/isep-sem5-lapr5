@@ -21,4 +21,18 @@ export class FloorService {
     return this.http.get<FloorResponseDTO[]>(`${this.API_URL}/api/floors/buildings/${buildingId}/with-elevator`, {reportProgress: showSpinner});
   }
 
+  //update is a patch
+  public updateFloor(floor: FloorResponseDTO): Observable<FloorResponseDTO[]> {
+    return this.http.patch<FloorResponseDTO[]>(`${this.API_URL}/api/floors`, floor);
+  }
+
+  //edit is a put
+  public editFloor(floor: FloorResponseDTO): Observable<FloorResponseDTO[]> {
+    return this.http.put<FloorResponseDTO[]>(`${this.API_URL}/api/floors`, floor);
+  }
+
+
+
+
+
 }

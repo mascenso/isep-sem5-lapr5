@@ -9,6 +9,7 @@ import IFloorController from "./IControllers/IFloorController";
 import IFloorService from "../services/IServices/IFloorService";
 import {IFloorDTO} from "../dto/IFloorDTO";
 import { IBuildingDTO } from '../dto/IBuildingDTO';
+import { BuildingId } from '../domain/building-agg/buildingId';
 
 @Service()
 export default class FloorController implements IFloorController /* TODO: extends ../core/infra/BaseController */ {
@@ -83,7 +84,7 @@ export default class FloorController implements IFloorController /* TODO: extend
       const floorOrError = await this.floorServiceInstance.getFloorsAtBuildings(building as string) as Result<IFloorDTO[]>;
 
       if (floorOrError.isFailure) {
-        return res.status(402).json('Dont exist any floor saved on DB').send();
+        return res.status(402).json(`The building with id ${building} has no floors allocated.`).send();
       }
 
       const floorDTO = floorOrError.getValue();
@@ -100,7 +101,7 @@ export default class FloorController implements IFloorController /* TODO: extend
       const floorOrError = await this.floorServiceInstance.getAllFloors() as Result<IFloorDTO[]>;
 
       if (floorOrError.isFailure) {
-        return res.status(402).json('Dont exist any floor saved on DB').send();
+        return res.status(402).json('This building has no floors allocated.').send();
       }
 
       const floorDTO = floorOrError.getValue();

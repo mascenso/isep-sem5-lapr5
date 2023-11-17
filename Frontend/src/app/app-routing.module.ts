@@ -13,6 +13,7 @@ import {BridgeListComponent} from "./home/campus/bridge-list/bridge-list.compone
 import { ListBuildingFloorsComponent } from './home/campus/list-building-floors/list-building-floors.component';
 import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
 import { CreateBridgeComponent } from "./home/campus/create-bridge/create-bridge.component";
+import { ErrorCheckGuard } from "./error-check.guard";
 import { EditFloorsComponent } from './home/campus/edit-floors/edit-floors.component';
 
 const routes: Routes = [
@@ -43,6 +44,7 @@ const routes: Routes = [
       {
         path: 'campus/create-bridge',
         component: CreateBridgeComponent,
+        canActivate: [ErrorCheckGuard],
       },
       {
         path: 'campus/list-floors',

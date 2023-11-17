@@ -16,7 +16,7 @@
       </mat-card-actions>
     </mat-card>
 
-    <mat-card class="card" routerLink="create-bridge" matRipple>
+    <mat-card *ngIf="canActivateBridge" class="card" routerLink="create-bridge" matRipple>
       <mat-card-header class="card-header">
         <mat-card-title>Create bridge</mat-card-title>
         <mat-card-subtitle>&nbsp;</mat-card-subtitle>

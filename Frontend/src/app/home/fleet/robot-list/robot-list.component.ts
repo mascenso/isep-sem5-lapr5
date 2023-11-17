@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import {FormControl, FormGroup } from "@angular/forms";
 import TaskType from "../../../../../../Gestao_Informacao/src/enums/taskType";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {RobotDto, RobotService} from "../../../services/robot.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import { RobotDTO } from "../../../../dto/robotDTO";
+import { RobotService } from "../../../services/robot.service";
 
 @Component({
   selector: 'app-robot-list',
@@ -19,10 +20,10 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 export class RobotListComponent {
 
-  dataSource: RobotDto[] = [];
+  dataSource: RobotDTO[] = [];
   columnsToDisplay = ['id', 'nickName', 'robotType', 'serialNumber', 'inhibited'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-  expandedElement: RobotDto | null | undefined;
+  expandedElement: RobotDTO | null | undefined;
 
   listRobotsForm = new FormGroup({
     taskTypeControl: new FormControl(),

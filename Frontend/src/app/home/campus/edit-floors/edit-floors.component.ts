@@ -1,11 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
-import {BuildingResponseDto, BuildingService} from "../../../services/building.service";
-import {FloorResponseDto, FloorDto, FloorService} from "../../../services/floor.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Observable, Subscription} from "rxjs";
 import { Router } from '@angular/router';
+import { FloorDTO, FloorResponseDTO } from "../../../../dto/floorDTO";
+import { BuildingResponseDTO } from "../../../../dto/buildingDTO";
+import { BuildingService } from "../../../services/building.service";
+import { FloorService } from "../../../services/floor.service";
 
 @Component({
   selector: 'app-edit-floors',
@@ -29,20 +31,20 @@ export class EditFloorsComponent {
   });
 
   showForm = false; // Initially, the form is hidden
-  buildingList: BuildingResponseDto[] = [];
+  buildingList: BuildingResponseDTO[] = [];
   buildingSelectionControl =  new FormControl();
   buildingServiceSubscription$ = new Subscription();
 
 
-  floorList: FloorResponseDto[] = [];
+  floorList: FloorResponseDTO[] = [];
   floorSelectionControl =  new FormControl();
   floorServiceSubscription$ = new Subscription();
 
 
-  dataSource: FloorDto[] = [];
+  dataSource: FloorDTO[] = [];
   columnsToDisplay = ['id', 'floorNumber', 'width', 'length'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-  expandedElement: FloorDto | null | undefined;
+  expandedElement: FloorDTO | null | undefined;
 
   constructor(private buildingService: BuildingService,
               private floorService: FloorService,

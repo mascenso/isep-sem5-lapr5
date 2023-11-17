@@ -19,10 +19,12 @@ export class GlobalErrorHandler implements ErrorHandler {
             duration: 5000,
             panelClass: ['snackbar-warning']
           });
-
           this.ngZone.run(() => this.router.navigateByUrl('/home/campus'));
         }
       }
+
     }
+
+
 
 }

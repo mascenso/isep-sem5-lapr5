@@ -44,12 +44,7 @@ export class CreateBridgeComponent {
         this.buildingList = response;
         this.buildingBList = response;
       },
-      error => {
-        this._snackBar.open("Unable to get buildings!", "close", {
-          duration: 5000,
-          panelClass: ['snackbar-warning']
-        });
-      }
+
     )
   }
 
@@ -73,13 +68,7 @@ export class CreateBridgeComponent {
           panelClass: ['snackbar-success']
         });
       },
-      error => {
-        console.log('Error creating bridge: ', error);
-        this._snackBar.open(error.message, "close", {
-          duration: 5000,
-          panelClass: ['snackbar-error']
-        });
-      }
+
     );
   }
 

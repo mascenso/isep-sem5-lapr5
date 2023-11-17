@@ -1,14 +1,11 @@
 import { Component } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {
-  BridgeResponseDto,
-  BridgeService,
-  CreateBridgeRequestDto,
-  FloorResponseDto
-} from "../../../services/bridge.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import { BuildingResponseDto } from "../../../services/building.service";
 import { Subscription } from "rxjs";
+import { BridgeService } from "../../../services/bridge.service";
+import { BuildingResponseDTO } from "../../../../dto/buildingDTO";
+import { FloorResponseDTO } from "../../../../dto/floorDTO";
+import { BridgeResponseDTO, CreateBridgeRequestDTO } from "../../../../dto/bridgeDTO";
 
 @Component({
   selector: 'app-create-bridge',
@@ -17,20 +14,29 @@ import { Subscription } from "rxjs";
 })
 export class CreateBridgeComponent {
 
-  buildingList: BuildingResponseDto[] = [];
+  buildingList: BuildingResponseDTO[] = [];
   buildingSelectionControl = new FormControl();
   buildingServiceSubscription$ = new Subscription();
 
-  buildingBList: BuildingResponseDto[] = [];
+  buildingBList: BuildingResponseDTO[] = [];
   buildingBSelectionControl = new FormControl();
 
-  floorAList: FloorResponseDto[] = [];
+  floorAList: FloorResponseDTO[] = [];
   floorASelectionControl = new FormControl();
   floorAServiceSubscription$ = new Subscription();
 
-  floorBList: FloorResponseDto[] = [];
+  floorBList: FloorResponseDTO[] = [];
   floorBSelectionControl = new FormControl();
   floorBServiceSubscription$ = new Subscription();
+
+
+  bridgeForm = new FormGroup({
+    code: new FormControl('', [Validators.required]),
+    name: new FormControl(''),
+    floorAId: new FormControl(''),
+    floorBId: new FormControl('')
+  });
+
 
   ngOnInit(): void {
     this.buildingServiceSubscription$ = this.bridgeService.getAllBuildings().subscribe(
@@ -47,38 +53,19 @@ export class CreateBridgeComponent {
     )
   }
 
-  bridgeForm = new FormGroup({
-    code: new FormControl('', [Validators.required]),
-    name: new FormControl(''),
-    floorAId: new FormControl('', [Validators.required]),
-    floorBId: new FormControl('', [Validators.required])
-  });
-
-  createdBridge: BridgeResponseDto | undefined;
-
+  createdBridge: BridgeResponseDTO | undefined;
 
   constructor(private bridgeService: BridgeService,
               private _snackBar: MatSnackBar) {
   }
 
-
-
   public onSubmit() {
-
-    const selectedFloorA = this.floorASelectionControl.value;
-    const selectedFloorB = this.floorBSelectionControl.value;
-
     this.bridgeForm.patchValue({
-      floorAId: selectedFloorA,
-      floorBId: selectedFloorB
+      floorAId: this.floorASelectionControl.value,
+      floorBId: this.floorBSelectionControl.value
     });
 
-
-    console.log(selectedFloorA);
-
-
-console.log(this.bridgeForm.value);
-    this.bridgeService.createBridge(this.bridgeForm.value as CreateBridgeRequestDto, true).subscribe(
+    this.bridgeService.createBridge(this.bridgeForm.value as CreateBridgeRequestDTO, true).subscribe(
       response => {
         this.createdBridge = response;
         this._snackBar.open("Bridge created!", "close", {

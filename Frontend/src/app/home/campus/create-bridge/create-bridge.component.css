@@ -44,3 +44,7 @@ pre {
   font-size: 3rem;
 }
 
+mat-card{
+  width: 500px;
+}
+

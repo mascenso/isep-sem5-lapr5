@@ -1,10 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl} from "@angular/forms";
-import {BuildingResponseDto, BuildingService} from "../../../services/building.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {FloorDto, FloorService} from "../../../services/floor.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Observable, Subscription} from "rxjs";
+import { BuildingResponseDTO } from "../../../../dto/buildingDTO";
+import { BuildingService } from "../../../services/building.service";
+import { FloorService } from "../../../services/floor.service";
+import { FloorResponseDTO } from "../../../../dto/floorDTO";
 
 @Component({
   selector: 'app-floor-list',
@@ -20,16 +22,16 @@ import {Observable, Subscription} from "rxjs";
 })
 export class FloorListComponent implements OnInit, OnDestroy {
 
-  buildingList: BuildingResponseDto[] = [];
+  buildingList: BuildingResponseDTO[] = [];
   buildingSelectionControl =  new FormControl();
   buildingServiceSubscription$ = new Subscription();
 
   floorServiceSubscription$ = new Subscription();
 
-  dataSource: FloorDto[] = [];
+  dataSource: FloorResponseDTO[] = [];
   columnsToDisplay = ['id', 'floorNumber', 'width', 'length'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-  expandedElement: FloorDto | null | undefined;
+  expandedElement: FloorResponseDTO | null | undefined;
 
   constructor(private buildingService: BuildingService,
               private floorService: FloorService,

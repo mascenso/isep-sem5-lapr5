@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormControl} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
 import {BuildingResponseDto, BuildingService} from "../../../services/building.service";
 import {FloorResponseDto, FloorDto, FloorService} from "../../../services/floor.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
@@ -20,6 +20,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./edit-floors.component.css']
 })
 export class EditFloorsComponent {
+
+  floorForm = new FormGroup({
+    Width: new FormControl(''),
+    Length: new FormControl(''),
+    FloorNumber: new FormControl(''),
+    description: new FormControl('')
+  });
+
+  showForm = false; // Initially, the form is hidden
   buildingList: BuildingResponseDto[] = [];
   buildingSelectionControl =  new FormControl();
   buildingServiceSubscription$ = new Subscription();
@@ -55,7 +64,7 @@ export class EditFloorsComponent {
     )
   }
 
-  onSelectionUpdateTable(selection: any): void {
+  onSelectionUpdateForm(selection: any): void {
     console.log(selection);
     if (selection) {
       this.floorServiceSubscription$ = this.floorService.getFloorsAtBuildings(selection, true ).subscribe(
@@ -82,9 +91,21 @@ export class EditFloorsComponent {
     // For example:
     console.log('Update button clicked');
     // Perform relevant actions
+    if(this.showForm == false) {
+      this.showForm = true;
+    } else {
+      this.showForm = false;
+
+    }
   }
 
   onChange() {
+    if(this.showForm == false) {
+      this.showForm = true;
+    } else {
+      this.showForm = false;
+
+    }
     console.log('Change button clicked');
   }
 

@@ -6,8 +6,8 @@ import IRobotRepo from './IRepos/IRobotRepo';
 import IRobotService from './IServices/IRobotService';
 import { Result } from "../core/logic/Result";
 import { RobotMap } from "../mappers/RobotMap";
-import { Joi } from "celebrate";
 import IRobotTypeRepo from "./IRepos/IRobotTypeRepo";
+import {RobotType} from "../domain/robotType-agg/robotType";
 
 @Service()
 export default class RobotService implements IRobotService {
@@ -97,11 +97,28 @@ export default class RobotService implements IRobotService {
 
   public async findByDesignationOrTaskType(designation: string, taskType: string): Promise<Result<IRobotDTO[]>> {
     try {
+      // if no criteria is provided return all robots
+      if ((taskType === '' || undefined) && (designation === '' || undefined)) {
+        return this.getAllRobots();
+      }
 
-      const robotList = await this.robotRepo.findByDesignationOrTaskType(designation, taskType);
+      // find robotTypes that include the taskType
+      let robotTypesList: RobotType[] = [];
+      if (taskType) {
+        robotTypesList = await this.robotTypeRepo.findByTaskType(taskType);
+      }
+
+      const robotList = await this.robotRepo.findByDesignationOrTaskType(
+                      designation,
+                      robotTypesList.flatMap(robotType => robotType.id.toString())
+      );
+
+      if (robotList.length === 0) {
+        return Result.fail<IRobotDTO[]>(`Unable to find Robots that perform ${taskType} or designated by ${designation}`);
+
+      }
 
       const robotDTOList = robotList.map(robot => RobotMap.toDTO(robot) as IRobotDTO);
-
       return Result.ok<IRobotDTO[]>(robotDTOList);
 
     } catch (e) {

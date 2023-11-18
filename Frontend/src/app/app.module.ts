@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from "@angular/core";
 import { BrowserModule } from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
@@ -33,6 +33,9 @@ import { FloorListComponent } from './home/campus/floor-list/floor-list.componen
 import { BridgeListComponent } from "./home/campus/bridge-list/bridge-list.component";
 import { ListBuildingFloorsComponent } from './home/campus/list-building-floors/list-building-floors.component';
 import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
+import { CreateBridgeComponent } from "./home/campus/create-bridge/create-bridge.component";
+import { EditFloorsComponent } from "./home/campus/edit-floors/edit-floors.component";
+import { GlobalErrorHandler } from "./global-exception";
 
 @NgModule({
   declarations: [
@@ -43,12 +46,14 @@ import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
     FleetComponent,
     TasksComponent,
     CreateBuildingComponent,
+    CreateBridgeComponent,
     CreateRobotTypeComponent,
     ViewComponent,
     FloorListComponent,
     BridgeListComponent,
     ListBuildingFloorsComponent,
-    RobotListComponent
+    RobotListComponent,
+    EditFloorsComponent
   ],
   imports: [
     BrowserModule,
@@ -72,12 +77,18 @@ import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
     MatProgressBarModule,
     MatSelectModule
   ],
-  providers: [{
+  providers: [
+    {
     provide: HTTP_INTERCEPTORS,
     useClass: ServiceInterceptor,
     multi: true,
-  },
-  LoginService],
+    },
+  LoginService,
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

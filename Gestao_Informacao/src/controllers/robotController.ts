@@ -53,7 +53,7 @@ export default class RobotController implements IRobotController /* TODO: extend
       const robotOrError = await this.robotServiceInstance.getAllRobots(req.body as IRobotDTO) as Result<IRobotDTO[]>;
 
       if (robotOrError.isFailure) {
-        return res.status(402).json('Dont exist any robots saves on DB').send();
+        return res.status(402).json('There are no robots saved in the database.').send();
       }
 
       const robotDTO = robotOrError.getValue();

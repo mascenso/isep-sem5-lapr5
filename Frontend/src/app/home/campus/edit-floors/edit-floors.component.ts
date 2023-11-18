@@ -1,16 +1,17 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormControl} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Observable, Subscription} from "rxjs";
+import { Router } from '@angular/router';
+import { FloorDTO, FloorResponseDTO } from "../../../../dto/floorDTO";
 import { BuildingResponseDTO } from "../../../../dto/buildingDTO";
 import { BuildingService } from "../../../services/building.service";
 import { FloorService } from "../../../services/floor.service";
-import { FloorResponseDTO } from "../../../../dto/floorDTO";
 
 @Component({
-  selector: 'app-floor-list',
-  templateUrl: './floor-list.component.html',
+  selector: 'app-edit-floors',
+  templateUrl: './edit-floors.component.html',
   animations: [
     trigger('detailExpand', [
       state('collapsed,void', style({height: '0px', minHeight: '0'})),
@@ -18,24 +19,37 @@ import { FloorResponseDTO } from "../../../../dto/floorDTO";
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
-  styleUrls: ['./floor-list.component.css']
+  styleUrls: ['./edit-floors.component.css']
 })
-export class FloorListComponent implements OnInit, OnDestroy {
+export class EditFloorsComponent {
 
+  floorForm = new FormGroup({
+    Width: new FormControl(''),
+    Length: new FormControl(''),
+    FloorNumber: new FormControl(''),
+    description: new FormControl('')
+  });
+
+  showForm = false; // Initially, the form is hidden
   buildingList: BuildingResponseDTO[] = [];
   buildingSelectionControl =  new FormControl();
   buildingServiceSubscription$ = new Subscription();
 
+
+  floorList: FloorResponseDTO[] = [];
+  floorSelectionControl =  new FormControl();
   floorServiceSubscription$ = new Subscription();
 
-  dataSource: FloorResponseDTO[] = [];
+
+  dataSource: FloorDTO[] = [];
   columnsToDisplay = ['id', 'floorNumber', 'width', 'length'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-  expandedElement: FloorResponseDTO | null | undefined;
+  expandedElement: FloorDTO | null | undefined;
 
   constructor(private buildingService: BuildingService,
               private floorService: FloorService,
-              private _snackBar: MatSnackBar) {}
+              private _snackBar: MatSnackBar,
+              private router: Router) {}
 
   ngOnInit(): void {
     // fetch building list from service
@@ -52,15 +66,14 @@ export class FloorListComponent implements OnInit, OnDestroy {
     )
   }
 
-  onSelectionUpdateTable(selection: any): void {
+  onSelectionUpdateForm(selection: any): void {
     console.log(selection);
     if (selection) {
-      this.floorServiceSubscription$ = this.floorService.getFloorsWithElevatorByBuildingId(selection, true ).subscribe(
+      this.floorServiceSubscription$ = this.floorService.getFloorsAtBuildings(selection, true ).subscribe(
         floorData => {
           this.dataSource = floorData;
         },
         error => {
-          console.log(error);
           this._snackBar.open(error.error, "close", {
             duration: 5000,
             panelClass: ['snackbar-error']
@@ -73,6 +86,33 @@ export class FloorListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.buildingServiceSubscription$.unsubscribe();
     this.floorServiceSubscription$.unsubscribe();
+  }
+
+  onUpdate() {
+    // Add logic for the Update button click event
+    // For example:
+    console.log('Update button clicked');
+    // Perform relevant actions
+    if(this.showForm == false) {
+      this.showForm = true;
+    } else {
+      this.showForm = false;
+
+    }
+  }
+
+  onChange() {
+    if(this.showForm == false) {
+      this.showForm = true;
+    } else {
+      this.showForm = false;
+
+    }
+    console.log('Change button clicked');
+  }
+
+  onCancel() {
+    return this.router.navigate(['../home/campus']);
   }
 
 }

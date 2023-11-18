@@ -1,0 +1,101 @@
+<div class="edit-floors-container">
+    <div class="edit-floors-section">
+      <h2>Edit floors</h2>
+      <div class="building-selection-form">
+        <h4>Select building:</h4>
+        <mat-form-field class="building-selection-form-field">
+          <mat-label>Building</mat-label>
+          <mat-select [formControl]="buildingSelectionControl" (valueChange)="onSelectionUpdateForm($event)">
+            <mat-option></mat-option>
+            <div *ngFor="let building of buildingList;">
+              <mat-option  [value]="building.id">{{building.code}} - {{building.id}}</mat-option>
+            </div>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="Floor-selection-form">
+        <h4>Select floor:</h4>
+        <mat-form-field class="floor-selection-form-field">
+          <mat-label>Floor</mat-label>
+          <mat-select [formControl]="floorSelectionControl">
+            <mat-option></mat-option>
+            <div *ngFor="let floor of dataSource;">
+              <mat-option  [value]="floor.id"> {{floor.floorNumber}}º Piso - {{floor.id}}</mat-option>
+            </div>
+            
+          </mat-select>
+          
+        </mat-form-field>
+      </div>
+
+      <div class="buttons-container">
+        
+        <div [@detailExpand] *ngIf="showForm">
+
+          <table class="table">
+            <tr>
+              <td>
+                <mat-form-field class="form-field form-field-number">
+                  <mat-label>Width</mat-label>
+                  <input matInput [formControl]="floorForm.controls.Width" #inputWidth placeholder="Width" value="10">
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="form-field form-field-number">
+                  <mat-label>Length</mat-label>
+                  <input matInput [formControl]="floorForm.controls.Length" placeholder="Length" value="10">
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="form-field form-field-number">
+                  <mat-label>Floor Number</mat-label>
+                  <input matInput [formControl]="floorForm.controls.FloorNumber" placeholder="floor number">
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="form-field form-field-number">
+                  <mat-label>Description</mat-label>
+                  <textarea matInput [formControl]="floorForm.controls.description" placeholder="Description"></textarea>
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+
+
+
+          <form>
+            <form>
+              <mat-form-field>
+                <mat-label>Width</mat-label>
+                <input matInput formControlName="width" placeholder="Width" />
+              </mat-form-field>
+          
+              <mat-form-field>
+                <mat-label>Length</mat-label>
+                <input matInput formControlName="length" placeholder="Length" />
+              </mat-form-field>
+          
+              <mat-form-field>
+                <mat-label>Floor Number</mat-label>
+                <input matInput formControlName="floorNumber" placeholder="Floor Number" />
+              </mat-form-field>
+          
+              
+          
+            </form>
+            <mat-form-field>
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" placeholder="Description"></textarea>
+            </mat-form-field>
+          </form>
+        </div>
+
+        <button mat-raised-button color="primary" (click)="onUpdate()">Update</button>
+        <button mat-raised-button color="accent" (click)="onChange()">Change</button>
+        <button mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
+
+
+      </div>
+    </div>
+</div>

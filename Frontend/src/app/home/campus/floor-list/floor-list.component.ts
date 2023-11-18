@@ -58,6 +58,7 @@ export class FloorListComponent implements OnInit, OnDestroy {
           this.dataSource = floorData;
         },
         error => {
+          console.log(error);
           this._snackBar.open(error.error, "close", {
             duration: 5000,
             panelClass: ['snackbar-error']

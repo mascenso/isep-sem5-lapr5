@@ -7,6 +7,7 @@ import {ElevatorId} from "../domain/elevator-agg/elevatorId";
 import {ElevatorMap} from "../mappers/ElevatorMap";
 import {Elevator} from "../domain/elevator-agg/elevator";
 import {FloorId} from "../domain/floor-agg/floorId";
+import {BuildingId} from "../domain/building-agg/buildingId";
 
 @Service()
 export default class ElevatorRepo implements IElevatorRepo {
@@ -101,5 +102,18 @@ export default class ElevatorRepo implements IElevatorRepo {
     }
 
   }
+
+  public async findByBuildingId(buildingId: BuildingId | string): Promise<Elevator> {
+    const query = {buildingId: buildingId};
+    const elevatorRecord = await this.elevatorSchema.findOne( query as FilterQuery<IElevatorPersistence & Document> );
+
+    if (elevatorRecord != null) {
+      return ElevatorMap.toDomain(elevatorRecord);
+    }
+    else {
+      return null;
+    }
+  }
+
 
 }

@@ -66,7 +66,7 @@ m(col,lin,valor)
 
 */
 
-/*
+
 % Base de conhecimento representando a matriz exemplo da TP
 m(1,1,1).
 m(2,1,1).
@@ -130,7 +130,7 @@ m(5,7,0).
 m(6,7,0).
 m(7,7,0).
 m(8,7,1).
-*/
+
 
 /*
 MATRIZ MAZE - Edificio A, Piso 1
@@ -156,6 +156,7 @@ Legenda:
 5- passagens entre edificios.
 */
 
+/*
 % Base de conhecimento representando a matriz do mapa
 m(1,1,3).
 m(2,1,2).
@@ -410,3 +411,4 @@ m(20,11,2).
 m(21,11,2).
 m(22,11,0).
 
+*/

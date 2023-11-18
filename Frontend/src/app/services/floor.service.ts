@@ -2,16 +2,7 @@ import { Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-
-export interface FloorDto {
-  id: string;
-  buildingId:string;
-  width: number;
-  length: number;
-  floorNumber: number;
-  description: string;
-  floorMap: number[][];
-}
+import { FloorResponseDTO } from "../../dto/floorDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +13,26 @@ export class FloorService {
 
   constructor(private http: HttpClient) { }
 
-  public getFloorsWithElevatorByBuildingId(buildingId: string, showSpinner?:boolean): Observable<FloorDto[]> {
-    return this.http.get<FloorDto[]>(`${this.API_URL}/api/floors/buildings/${buildingId}/with-elevator`, {reportProgress: showSpinner});
+  public getFloorsAtBuildings(buildingId: string, showSpinner?:boolean): Observable<FloorResponseDTO[]> {
+    return this.http.get<FloorResponseDTO[]>(`${this.API_URL}/api/floors/buildings?building=${buildingId}`, {reportProgress: showSpinner});
   }
+
+  public getFloorsWithElevatorByBuildingId(buildingId: string, showSpinner?:boolean): Observable<FloorResponseDTO[]> {
+    return this.http.get<FloorResponseDTO[]>(`${this.API_URL}/api/floors/buildings/${buildingId}/with-elevator`, {reportProgress: showSpinner});
+  }
+
+  //update is a patch
+  public updateFloor(floor: FloorResponseDTO): Observable<FloorResponseDTO[]> {
+    return this.http.patch<FloorResponseDTO[]>(`${this.API_URL}/api/floors`, floor);
+  }
+
+  //edit is a put
+  public editFloor(floor: FloorResponseDTO): Observable<FloorResponseDTO[]> {
+    return this.http.put<FloorResponseDTO[]>(`${this.API_URL}/api/floors`, floor);
+  }
+
+
+
+
 
 }

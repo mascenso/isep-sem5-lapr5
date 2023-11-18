@@ -46,34 +46,44 @@ caminho_pisos(PisoOr,PisoDest,LCam,LLig):- pisos(EdOr,LPisosOr),
 
 segue_pisos(PisoDest,PisoDest,_,[]).
 
-segue_pisos(PisoDest1,PisoDest,[EdDest],[elev(PisoDest1,PisoDest)]):- PisoDest\==PisoDest1,
-    elevador(EdDest,LPisos), member(PisoDest1,LPisos), member(PisoDest,LPisos).
+segue_pisos(PisoDest1,PisoDest,[EdDest],[elev(PisoDest1,PisoDest)]):- 
+    PisoDest\==PisoDest1,
+    elevador(EdDest,LPisos), 
+    member(PisoDest1,LPisos), 
+    member(PisoDest,LPisos).
 
-segue_pisos(PisoAct,PisoDest,[EdAct,EdSeg|LOutrosEd],[cor(PisoAct,PisoSeg)|LOutrasLig]):- (corredor(EdAct,EdSeg,PisoAct,PisoSeg);corredor(EdSeg,EdAct,PisoSeg,PisoAct)),
-segue_pisos(PisoSeg, PisoDest, [EdSeg|LOutrosEd], LOutrasLig).
+segue_pisos(PisoAct,PisoDest,[EdAct,EdSeg|LOutrosEd],[cor(PisoAct,PisoSeg)|LOutrasLig]):- 
+    (corredor(EdAct,EdSeg,PisoAct,PisoSeg);corredor(EdSeg,EdAct,PisoSeg,PisoAct)),
+    segue_pisos(PisoSeg, PisoDest, [EdSeg|LOutrosEd], LOutrasLig).
 
 segue_pisos(PisoAct,PisoDest,[EdAct,EdSeg|LOutrosEd],[elev(PisoAct,PisoAct1),cor(PisoAct1,PisoSeg)|LOutrasLig]):-
-(corredor(EdAct,EdSeg,PisoAct1,PisoSeg);corredor(EdSeg,EdAct,PisoSeg,PisoAct1)),PisoAct1\==PisoAct,
-elevador(EdAct,LPisos),member(PisoAct,LPisos),member(PisoAct1,LPisos),
-segue_pisos(PisoSeg,PisoDest,[EdSeg|LOutrosEd],LOutrasLig).
+    (corredor(EdAct,EdSeg,PisoAct1,PisoSeg);corredor(EdSeg,EdAct,PisoSeg,PisoAct1)),
+    PisoAct1\==PisoAct,
+    elevador(EdAct,LPisos),member(PisoAct,LPisos),member(PisoAct1,LPisos),
+    segue_pisos(PisoSeg,PisoDest,[EdSeg|LOutrosEd],LOutrasLig).
 
 
 /* Algortimo para encontrar o melhor caminho entre dois pisos com menor utilização de elevadores.
 Em caso de empate, ou seja, mesmo numero de utilização de elevadores em dois caminhos, opta pelo que tem 
 menos corredores no trajecto. */
-melhor_caminho_pisos(PisoOr,PisoDest,LLigMelhor):-findall(LLig,caminho_pisos(PisoOr,PisoDest,_,LLig),LLLig),
-menos_elevadores(LLLig,LLigMelhor,_,_).
+melhor_caminho_pisos(PisoOr,PisoDest,LLigMelhor):-
+    findall(LLig,caminho_pisos(PisoOr,PisoDest,_,LLig),LLLig),
+    menos_elevadores(LLLig,LLigMelhor,_,_).
 
 menos_elevadores([LLig],LLig,NElev,NCor):-conta(LLig,NElev,NCor).
 
 menos_elevadores([LLig|OutrosLLig],LLigR,NElevR,NCorR):-
     menos_elevadores(OutrosLLig,LLigM,NElev,NCor),
     conta(LLig,NElev1,NCor1),
-    (((NElev1<NElev;(NElev1==NElev,NCor1<NCor)),!, NElevR is NElev1, NCorR is NCor1,LLigR=LLig);
+    (((NElev1<NElev;(NElev1==NElev,NCor1<NCor)),!,
+    NElevR is NElev1, NCorR is NCor1,LLigR=LLig);
     (NElevR is NElev,NCorR is NCor,LLigR=LLigM)).
 
 conta([],0,0).
-conta([elev(_,_)|L],NElev,NCor):-conta(L,NElevL,NCor),NElev is NElevL+1.
-conta([cor(_,_)|L],NElev,NCor):-conta(L,NElev,NCorL),NCor is NCorL+1.
+conta([elev(_,_)|L],NElev,NCor):-
+    conta(L,NElevL,NCor),NElev is NElevL+1.
+
+conta([cor(_,_)|L],NElev,NCor):-
+    conta(L,NElev,NCorL),NCor is NCorL+1.
 
 

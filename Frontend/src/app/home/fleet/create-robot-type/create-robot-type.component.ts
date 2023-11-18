@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
-import {RobotTypeResponseDto, RobotTypeService, CreateRobotTypeRequestDto} from "../../../services/robot-type.service";
 import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
 import TaskType from "../../../../../../Gestao_Informacao/src/enums/taskType";
+import { CreateRobotTypeRequestDTO, RobotTypeResponseDTO } from "../../../../dto/robotTypeDTO";
+import { RobotTypeService } from "../../../services/robot-type.service";
 
 @Component({
   selector: 'app-create-robot-type',
@@ -11,14 +12,14 @@ import TaskType from "../../../../../../Gestao_Informacao/src/enums/taskType";
 })
 
 export class CreateRobotTypeComponent {
-  
-  
+
+
   robotTypeForm = new FormGroup({
     designacao: new FormControl(''),
     tipoTarefas: new FormControl(''),
   });
 
-  createdRobotType: RobotTypeResponseDto | undefined;
+  createdRobotType: RobotTypeResponseDTO | undefined;
 
   taskTypes = Object.values(TaskType);
 
@@ -27,7 +28,7 @@ export class CreateRobotTypeComponent {
 }
 
 public onSubmit() {
-  this.robotTypeService.createRobotType(this.robotTypeForm.value as CreateRobotTypeRequestDto).subscribe(
+  this.robotTypeService.createRobotType(this.robotTypeForm.value as CreateRobotTypeRequestDTO).subscribe(
     response => {
         this.createdRobotType = response;
         this._snackBar.open("Robot Type created!", "close", {

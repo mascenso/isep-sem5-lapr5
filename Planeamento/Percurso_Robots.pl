@@ -1,6 +1,7 @@
 /* ## ALGORITMOS PARA O CALCULO DOS CAMINHOS/TRAJECTOS DO ROBDRONEGO NUM PISO. GRANULARIDADE PEQUENA ## */
 
-:-dynamic ligacel/2.
+:-dynamic ligacel/3.
+:-dynamic edge/2.
 
 :- consult('BC_trajectos.pl').
 
@@ -35,7 +36,8 @@ cria_grafo_lin(Col,Lin):-Col1 is Col-1,cria_grafo_lin(Col1,Lin).
 
 /*Predicado auxiliar para adicionar conexões com pesos */
 cria_conexoes(Col1,Lin1,Col2,Lin2,Peso) :-
-    assertz(ligacel(cel(Col1,Lin1),cel(Col2,Lin2),Peso)).
+    assertz(ligacel(cel(Col1,Lin1),cel(Col2,Lin2),Peso)),
+	assertz(edge(cel(Col1,Lin1),cel(Col2,Lin2))).
 
 /* Predicado para mostrar as conexões criadas -> testar grafo */
 mostra_conexoes :-
@@ -51,12 +53,8 @@ dfs(Orig,Dest,Cam):-
 dfs2(Dest,Dest,LA,Cam):-reverse(LA,Cam).
 
 dfs2(Act,Dest,LA,Cam):-
-	write('Act '),write(Act),nl,
-	write('LA'),write(LA),nl,
-	ligacel(Act,X),
-	write('ligaçoes'),nl,
+	edge(Act,X),
     \+ member(X,LA),
-	write('recursividae'),nl,
 	dfs2(X,Dest,[X|LA],Cam).
 
 
@@ -64,13 +62,15 @@ dfs2(Act,Dest,LA,Cam):-
 Devolve uma lista com todos os caminhos possiveis */
 all_dfs(Orig,Dest,LCam):-findall(Cam,dfs(Orig,Dest,Cam),LCam).
 
+
 /* Algoritmo para encontrar o melhor o caminho entre dois pontos. */
 better_dfs(Orig,Dest,Cam):-all_dfs(Orig,Dest,LCam), shortlist(LCam,Cam,_).
 
 shortlist([L],L,N):-!,length(L,N).
-shortlist([L|LL],Lm,Nm):-shortlist(LL,Lm1,Nm1),
-				length(L,NL),
-			((NL<Nm1,!,Lm=L,Nm is NL);(Lm=Lm1,Nm is Nm1)).
+shortlist([L|LL],Lm,Nm):-
+	shortlist(LL,Lm1,Nm1),
+	length(L,NL),
+	((NL<Nm1,!,Lm=L,Nm is NL);(Lm=Lm1,Nm is Nm1)).
 
 
 /* BFS - Pesquisa em largura. Primeiro pesquisa os nós adajacentes ao nó inicial antes de ir ver os nós vizinhos do nó vizinho.
@@ -82,17 +82,13 @@ bfs2(Dest, [[Dest|T]|_], Cam):-reverse([Dest|T], Cam).
 
 bfs2(Dest, [LA|Outros], Cam):-
     LA = [Act|_],
-    write('Celula: '), write(Act), nl,
-    findall([X|LA], (Dest \== Act, ligacel(Act, X), \+ member(X, LA)),Novos),
-	write('Novos: '), write(Novos), nl,
+    findall([X|LA], (Dest \== Act, edge(Act, X), \+ member(X, LA)),Novos),
     append(Outros, Novos, Todos),
-    sort(Todos, TodosOrd),
-    write('Apos append: '), write(TodosOrd), nl,
-    bfs2(Dest, TodosOrd, Cam).
+    bfs2(Dest, Todos, Cam).
 
 
 /* BFS - Best First Search sem custo */
-/*
+
 bestfs(Orig,Dest,Cam):- bestfs2(Dest,[Orig],Cam).
 
 %condicao final: destino = nó à cabeça do caminho actual
@@ -102,7 +98,7 @@ bestfs2(Dest,[Dest|T],Cam):-!,
 
 bestfs2(Dest,LA,Cam):- LA=[Act|_], % substituir por member(Act,LA), caso haja cortes nos caminhos
     %calcular todos os nós adjacentes não visitados e guarda um tuplo com a estimativa e novo caminho
-    findall((EstX,[X|LA]), ((ligacel(Act,X);ligacel(X,Act)), \+ member(X,LA), estimativa(X,Dest,EstX)), Novos),
+    findall((EstX,[X|LA]), ((edge(Act,X);edge(X,Act)), \+ member(X,LA), estimativa(X,Dest,EstX)), Novos),
     %ordena pela estimativa
     sort(Novos,NovosOrd),
     %extrai o melhor (header)
@@ -110,7 +106,7 @@ bestfs2(Dest,LA,Cam):- LA=[Act|_], % substituir por member(Act,LA), caso haja co
     %chama-se recursivamente
     bestfs2(Dest,Melhor,Cam).
 
-*/
+
 /* BFS - Best First Search com Custo */
 /*
 bestfs(Orig,Dest,Cam,Custo):- bestfs2(Dest,[Orig],Cam,Custo).

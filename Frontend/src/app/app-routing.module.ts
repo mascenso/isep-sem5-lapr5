@@ -10,6 +10,11 @@ import {CreateBuildingComponent} from "./home/campus/create-building/create-buil
 import {CreateRobotTypeComponent} from "./home/fleet/create-robot-type/create-robot-type.component";
 import {FloorListComponent} from "./home/campus/floor-list/floor-list.component";
 import {BridgeListComponent} from "./home/campus/bridge-list/bridge-list.component";
+import { ListBuildingFloorsComponent } from './home/campus/list-building-floors/list-building-floors.component';
+import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
+import { CreateBridgeComponent } from "./home/campus/create-bridge/create-bridge.component";
+import { ErrorCheckGuard } from "./error-check.guard";
+import { EditFloorsComponent } from './home/campus/edit-floors/edit-floors.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -37,6 +42,11 @@ const routes: Routes = [
         component: CreateBuildingComponent,
       },
       {
+        path: 'campus/create-bridge',
+        component: CreateBridgeComponent,
+        canActivate: [ErrorCheckGuard],
+      },
+      {
         path: 'campus/list-floors',
         component: FloorListComponent,
       },
@@ -45,8 +55,20 @@ const routes: Routes = [
         component: BridgeListComponent,
       },
       {
+        path: 'campus/edit-floors',
+        component: EditFloorsComponent,
+      },
+      {
+        path: 'campus/list-building-floors',
+        component: ListBuildingFloorsComponent,
+      },
+      {
         path: 'fleet/create-robot-type',
         component: CreateRobotTypeComponent,
+      },
+      {
+        path: 'fleet/list-robots',
+        component: RobotListComponent,
       },
     ],
   },

@@ -15,11 +15,8 @@ export default (app: Router) => {
     celebrate({
       body: Joi.object({
         code: Joi.string().required(),
-        coordX1: Joi.number().required(),
-        coordY1: Joi.number().required(),
-        coordX2: Joi.number().required(),
-        coordY2: Joi.number().required(),
-        floorId: Joi.string().required()
+        buildingId: Joi.string().required(),
+        floorList: Joi.array().items(Joi.string()).required()
       })
     }),
     (req, res, next) => ctrl.createElevator(req, res, next) );
@@ -29,11 +26,8 @@ export default (app: Router) => {
       body: Joi.object({
         id:Joi.string().required(),
         code: Joi.string(),
-        coordX1: Joi.number(),
-        coordY1: Joi.number(),
-        coordX2: Joi.number(),
-        coordY2: Joi.number(),
-        floorId: Joi.string()
+        buildingId: Joi.string(),
+        floorList: Joi.array().items(Joi.string())
       })
     }),
     (req, res, next) => ctrl.updateElevator(req, res, next) );
@@ -43,11 +37,8 @@ export default (app: Router) => {
     body: Joi.object({
       id:Joi.string().required(),
       code: Joi.string().required(),
-      coordX1: Joi.number().required(),
-      coordY1: Joi.number().required(),
-      coordX2: Joi.number().required(),
-      coordY2: Joi.number().required(),
-      floorId: Joi.string().required()
+      buildingId: Joi.string().required(),
+      floorList: Joi.array().items(Joi.string()).required() 
     }),
   }),
   

@@ -48,6 +48,10 @@ describe('elevator service', function () {
         let elevatorServiceInstance = Container.get(elevatorServiceClass);
         Container.set("ElevatorService", elevatorServiceInstance);
 
+        let buildingServiceClass = require("../../src/services/buildingService").default;
+        let buildingServiceInstance = Container.get(buildingServiceClass);
+        Container.set("BuildingService", buildingServiceInstance);
+
         let floorServiceClass = require("../../src/services/floorService").default;
         let floorServiceInstance = Container.get(floorServiceClass);
         Container.set("FloorService", floorServiceInstance);
@@ -61,7 +65,7 @@ describe('elevator service', function () {
 
     it('elevatorService unit test using elevator and elevatorRepo stubs (createElevator)', async function () {
         // Arrange
-        let body = { "code": 'Elev1', "floorId": 1, "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3 };
+        let body = { "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
         let req: Partial<Request> = {};
         req.body = body;
 
@@ -69,22 +73,16 @@ describe('elevator service', function () {
         const elevatorStub = sinon.stub(elevatorInstance, "create").returns(Result.ok({
             "id": "123",
             "code": req.body.code,
-            "floorId": req.body.floorId,
-            "coordX1": req.body.coordX1,
-            "coordY1": req.body.coordX2,
-            "coordX2": req.body.coordY1,
-            "coordY2": req.body.coordY2
+            "buildingId": req.body.buildingId,
+            "floorList": req.body.floorList
         }));
 
         let elevatorRepoInstance = Container.get("ElevatorRepo");
         const elevatorRepoStub = sinon.stub(elevatorRepoInstance, "save").returns(new Promise<Elevator>((resolve, reject) => {
             resolve(Elevator.create({
                 "code": req.body.code,
-                "floorId": req.body.floorId,
-                "coordX1": req.body.coordX1,
-                "coordY1": req.body.coordX2,
-                "coordX2": req.body.coordY1,
-                "coordY2": req.body.coordY2
+                "buildingId": req.body.buildingId,
+                "floorList": req.body.floorList
             }).getValue())
         }));
 
@@ -95,9 +93,15 @@ describe('elevator service', function () {
         };
         Container.set("FloorRepo", floorRepoInstance);
 
-        const service = new ElevatorService(Container.get("ElevatorRepo"), Container.get("FloorRepo"));
+        // Stub para IFloorRepo
+        const buildingRepoInstance = {
+            save: sinon.stub(),
+            findByDomainId: sinon.stub(),
+        };
+        Container.set("BuildingRepo", buildingRepoInstance);
 
-        const elevatorDTO = { "id": "123", "code": 'Elev1', "floorId": "1", "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3 };
+        const service = new ElevatorService(Container.get("ElevatorRepo"), Container.get("FloorRepo"), Container.get("BuildingRepo"));
+        const elevatorDTO = { "id": "123", "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
 
         // Act
         await service.createElevator(elevatorDTO);
@@ -111,7 +115,7 @@ describe('elevator service', function () {
 
     it('elevatorService unit test using elevator and elevatorRepo stubs (updateElevator)', async function () {
         // Arrange
-        let body = { "code": 'Elev1', "floorId": 1, "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3 };
+        let body = { "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
         let req: Partial<Request> = {};
         req.body = body;
 
@@ -119,11 +123,8 @@ describe('elevator service', function () {
         const elevatorStub = sinon.stub(elevatorRepoInstance, "findByDomainId").returns(new Promise<Elevator>((resolve, reject) => {
             resolve(Elevator.create({
                 "code": req.body.code,
-                "floorId": req.body.floorId,
-                "coordX1": req.body.coordX1,
-                "coordY1": req.body.coordX2,
-                "coordX2": req.body.coordY1,
-                "coordY2": req.body.coordY2
+                "buildingId": req.body.buildingId,
+                "floorList": req.body.floorList
             }).getValue())
         }));
 
@@ -131,11 +132,8 @@ describe('elevator service', function () {
         const elevatorRepoStub = sinon.stub(elevatorRepoInstance, "save").returns(new Promise<Elevator>((resolve, reject) => {
             resolve(Elevator.create({
                 "code": req.body.code,
-                "floorId": req.body.floorId,
-                "coordX1": req.body.coordX1,
-                "coordY1": req.body.coordX2,
-                "coordX2": req.body.coordY1,
-                "coordY2": req.body.coordY2
+                "buildingId": req.body.buildingId,
+                "floorList": req.body.floorList
             }).getValue())
         }));
 
@@ -146,9 +144,9 @@ describe('elevator service', function () {
         };
         Container.set("FloorRepo", floorRepoInstance);
 
-        const service = new ElevatorService(Container.get("ElevatorRepo"), Container.get("FloorRepo"));
+        const service = new ElevatorService(Container.get("ElevatorRepo"), Container.get("FloorRepo"), Container.get("BuildingRepo"));
 
-        const elevatorDTO = { "id": "123", "code": 'Elev1', "floorId": "1", "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3 };
+        const elevatorDTO = { "id": "123", "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
 
         // Act
         await service.updateElevator(elevatorDTO);
@@ -162,7 +160,7 @@ describe('elevator service', function () {
 
     it('elevatorService unit test using elevator and elevatorRepo stubs (getAllElevators)', async function () {
         // Arrange
-        let body = { "code": 'Elev1', "floorId": 1, "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3 };
+        let body = { "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2'] };
         let req: Partial<Request> = {};
         req.body = body;
 
@@ -171,11 +169,8 @@ describe('elevator service', function () {
         const elevatorRepoStub = sinon.stub(elevatorRepoInstance, "getAllElevators").returns(new Promise<Elevator[]>((resolve, reject) => {
             resolve([Elevator.create({
                 "code": req.body.code,
-                "floorId": req.body.floorId,
-                "coordX1": req.body.coordX1,
-                "coordY1": req.body.coordX2,
-                "coordX2": req.body.coordY1,
-                "coordY2": req.body.coordY2
+                "buildingId": req.body.buildingId,
+                "floorList": req.body.floorList
             }).getValue()])
         }));
         const buildingProps = {
@@ -193,8 +188,8 @@ describe('elevator service', function () {
         };
         Container.set("FloorRepo", floorRepoInstance);
 
-        const service = new ElevatorService(Container.get("ElevatorRepo"), Container.get("FloorRepo"));
-        const elevatorDTO = { "id": "123", "code": 'Elev1', "floorId": "1", "coordX1": 1, "coordY1": 2, "coordX2": 1, "coordY2": 3 };
+        const service = new ElevatorService(Container.get("ElevatorRepo"), Container.get("FloorRepo"), Container.get("BuildingRepo"));
+        const elevatorDTO = { "id": "123", "code": 'Elev1', "buildingId": '1', "floorList": ['F1', 'F2']};
 
         // Act
         await service.getAllElevators();

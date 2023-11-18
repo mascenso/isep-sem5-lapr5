@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {BuildingResponseDto, BuildingService, CreateBuildingRequestDto} from "../../../services/building.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import { BuildingService } from "../../../services/building.service";
+import { BuildingResponseDTO, CreateBuildingRequestDTO } from "../../../../dto/buildingDTO";
 
 @Component({
   selector: 'app-create-building',
@@ -17,7 +18,7 @@ export class CreateBuildingComponent {
     description: new FormControl('')
   });
 
-  createdBuilding: BuildingResponseDto | undefined;
+  createdBuilding: BuildingResponseDTO | undefined;
 
   constructor(private buildingService: BuildingService,
               private _snackBar: MatSnackBar) {
@@ -25,7 +26,7 @@ export class CreateBuildingComponent {
 
 
   public onSubmit() {
-    this.buildingService.createBuilding(this.buildingForm.value as CreateBuildingRequestDto, true).subscribe(
+    this.buildingService.createBuilding(this.buildingForm.value as CreateBuildingRequestDTO, true).subscribe(
       response => {
           this.createdBuilding = response;
           this._snackBar.open("Building created!", "close", {

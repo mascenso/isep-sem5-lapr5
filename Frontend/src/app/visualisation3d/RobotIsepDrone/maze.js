@@ -123,6 +123,40 @@ export default class Maze {
                     
                 }
             }
+
+            /**
+             * Adicionar cacifos ao piso
+             */
+            if (description.locker){
+                for(let i = 0 ; i< description.locker.length ; i++){
+                    const loader = new GLTFLoader();
+                    loader.load("./models/gltf/RobotExpressive/colared_school_lockers__game_ready__4k.glb", (gltf) => {
+                        const lockerModel = gltf.scene;
+                        // You may need to adjust the position and scale of the model
+                        lockerModel.position.set(description.locker[i].position[0] - description.size.width  / 2.0 +0.5 ,0, description.locker[i].position[1] - description.size.height / 2.0-0.25);
+                        lockerModel.scale.set(0.5, 0.45, 0.2);
+                        this.object.add(lockerModel);
+                    });
+                }
+            }
+
+            /**
+             * Adicionar mesas ao piso
+             */
+            if (description.tables){
+                for(let i = 0 ; i< description.tables.length ; i++){
+                    const loader = new GLTFLoader();
+                    loader.load("./models/gltf/RobotExpressive/school_desk.glb", (gltf) => {
+                        const tableModel = gltf.scene;
+                        // You may need to adjust the position and scale of the model
+                        tableModel.position.set(description.tables[i].position[0] - description.size.width  / 2.0 +0.5 ,0, description.tables[i].position[1] - description.size.height / 2.0-0.25);
+                        tableModel.scale.set(0.005, 0.005, 0.005);
+                        tableModel.rotation.y += Math.PI / 1.3
+                        tableModel.rotation.y += this.rotation(description.tables[i].orientation)
+                        this.object.add(tableModel);
+                    });
+                }
+            }
             
             this.object.scale.set(this.scale.x, this.scale.y, this.scale.z);
 
@@ -168,6 +202,23 @@ export default class Maze {
         );
     }
 
+    rotation(orientation){
+        switch(orientation){
+            case "S":
+                return 0;
+                break;
+            case "E":
+                return Math.PI /2;
+                break;
+            case "N":
+                return Math.PI;
+                break;
+            case "O":
+                return Math.PI * 1.5;
+                break;
+        }
+    }
+
     /**
      * Create a ceel with door open to North
      */
@@ -183,7 +234,6 @@ export default class Maze {
         object.add(doorObject);
         object.add(wallObject);
     }
-
     /**
      * Create a ceel with door open to South
      */

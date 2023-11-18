@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, FormBuilder} from "@angular/forms";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Observable, Subscription} from "rxjs";
@@ -46,6 +46,8 @@ export class EditFloorsComponent {
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: FloorDTO | null | undefined;
 
+  selectedFloor: FloorDTO | undefined;
+
   constructor(private buildingService: BuildingService,
               private floorService: FloorService,
               private _snackBar: MatSnackBar,
@@ -63,7 +65,7 @@ export class EditFloorsComponent {
           panelClass: ['snackbar-warning']
         });
       }
-    )
+    );
   }
 
   onSelectionUpdateForm(selection: any): void {
@@ -88,26 +90,44 @@ export class EditFloorsComponent {
     this.floorServiceSubscription$.unsubscribe();
   }
 
-  onUpdate() {
-    // Add logic for the Update button click event
-    // For example:
-    console.log('Update button clicked');
-    // Perform relevant actions
+  onEdit() {
+    console.log('Edit button clicked');
     if(this.showForm == false) {
       this.showForm = true;
     } else {
       this.showForm = false;
-
     }
   }
 
-  onChange() {
-    if(this.showForm == false) {
-      this.showForm = true;
-    } else {
-      this.showForm = false;
+  onFloorSelected(selectedFloorId: any): void {
+    this.selectedFloor = this.dataSource.find(floor => floor.id === selectedFloorId);
+  }
 
+  onUpdate() {
+    console.log('Update button clicked');
+    console.log(this.floorForm.value);
+    if(this.selectedFloor) {
+      this.floorService.updateFloor(this.selectedFloor as FloorResponseDTO).subscribe(
+        response => {
+            this.dataSource = response;
+            this._snackBar.open("floor updated!", "close", {
+              duration: 5000,
+              panelClass: ['snackbar-success']
+            });
+        },
+        error => {
+            console.log('Error editing floor: ', error);
+            this._snackBar.open(error.message, "close", {
+              duration: 5000,
+              panelClass: ['snackbar-error']
+            });
+        }
+      );
     }
+    
+  }
+
+  onChange() {
     console.log('Change button clicked');
   }
 

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { LoginService } from '../services/loginService.service';
 import {Router} from "@angular/router";
+import UserRole from "../../../../Gestao_Informacao/src/enums/userRole";
+import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-login',
@@ -11,27 +12,26 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
   selectedRole: string = '';
-  roles: any[] = [];
+  roles= Object.values(UserRole);
 
-  constructor(private loginService: LoginService, private router: Router) {}
-
-  ngOnInit() {
-    //this.loginService.getRoles().subscribe(roles => {
-    //  this.roles = roles;
-    //});
-    this.roles = ['G_FROTA', 'G_CAMPUS'];
-  }
+  constructor(private authService: AuthService,
+              private router: Router) {}
 
   onSubmit(event:Event,email:string,password:string,role:string){
     event.preventDefault();
-    this.loginService.login();
+    this.onLogin(event, email, password, role);
   }
 
-  public isLoggedIn(): boolean {
-    return this.loginService.isLoggedId();
-  }
-  onLogin(event: Event) {
-    this.loginService.login();
+  onLogin(event:Event,email:string,password:string,role:string) {
+    this.authService.login(email, password, role).subscribe(
+      result => {
+        if (result != null) {
+          localStorage.setItem('token', Math.random().toString());
+          localStorage.setItem('role', result.role);
+          this.router.navigate(['home']);
+        }
+      }
+    )
   }
 
 }

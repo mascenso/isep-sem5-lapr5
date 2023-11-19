@@ -1,66 +1,71 @@
 <div class="floor-list-container">
   <div class="list-floors-section">
     <h2>List floors with access to elevator</h2>
-    <div class="building-selection-form">
-      <h4>Select building:</h4>
-      <mat-form-field class="building-selection-form-field">
-        <mat-label>Building</mat-label>
-        <mat-select [formControl]="buildingSelectionControl" (valueChange)="onSelectionUpdateTable($event)">
-          <mat-option></mat-option>
-          <div *ngFor="let building of buildingList;">
-            <mat-option  [value]="building.id">{{building.code}} - {{building.id}}</mat-option>
-          </div>
-        </mat-select>
-      </mat-form-field>
-    </div>
 
-    <table mat-table
-           [dataSource]="dataSource" multiTemplateDataRows
-           class="mat-elevation-z8">
-      <div *ngFor="let column of columnsToDisplay;">
-        <ng-container matColumnDef="{{column}}">
-          <th mat-header-cell *matHeaderCellDef> {{column}} </th>
-          <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
-        </ng-container>
-      </div>
-      <ng-container matColumnDef="expand">
-        <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
-            <ng-container *ngIf="expandedElement === element; else arrowDown;">
-              <mat-icon>keyboard_arrow_up</mat-icon>
+    <mat-card class="list-floors-card">
+      <mat-card-content>
+        <div class="building-selection-form">
+          <h4>Select building:</h4>
+          <mat-form-field class="building-selection-form-field">
+            <mat-label>Building</mat-label>
+            <mat-select [formControl]="buildingSelectionControl" (valueChange)="onSelectionUpdateTable($event)">
+              <mat-option></mat-option>
+              <div *ngFor="let building of buildingList;">
+                <mat-option  [value]="building.id">{{building.code}} - {{building.id}}</mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <table mat-table
+               [dataSource]="dataSource" multiTemplateDataRows
+               class="mat-elevation-z8">
+          <div *ngFor="let column of columnsToDisplay;">
+            <ng-container matColumnDef="{{column}}">
+              <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+              <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
             </ng-container>
-            <ng-template #arrowDown>
-              <mat-icon>keyboard_arrow_down</mat-icon>
-            </ng-template>
-          </button>
-        </td>
-      </ng-container>
-
-      <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-      <ng-container matColumnDef="expandedDetail">
-        <td mat-cell *matCellDef="let element" [attr.colspan]="5">
-          <div class="floor-detail"
-               [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-            <pre>{{element | json}}</pre>
           </div>
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="expand">
+            <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+                <ng-container *ngIf="expandedElement === element; else arrowDown;">
+                  <mat-icon>keyboard_arrow_up</mat-icon>
+                </ng-container>
+                <ng-template #arrowDown>
+                  <mat-icon>keyboard_arrow_down</mat-icon>
+                </ng-template>
+              </button>
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="disclaimer">
-        <td mat-footer-cell *matFooterCellDef [attr.colspan]="columnsToDisplayWithExpand.length">
-          No data to display
-        </td>
-      </ng-container>
+          <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+          <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let element" [attr.colspan]="5">
+              <div class="floor-detail"
+                   [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                <pre>{{element | json}}</pre>
+              </div>
+            </td>
+          </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
-      <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
-          class="floor-row"
-          [class.example-expanded-row]="expandedElement === element"
-          (click)="expandedElement = expandedElement === element ? null : element">
-      </tr>
-      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="floor-detail-row"></tr>
-      <tr mat-footer-row *matFooterRowDef="['disclaimer']" class="footer-row" [style.display]="dataSource.length === 0 ? 'block' : 'none'"></tr>
-    </table>
+          <ng-container matColumnDef="disclaimer">
+            <td mat-footer-cell *matFooterCellDef [attr.colspan]="columnsToDisplayWithExpand.length">
+              No data to display
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+          <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+              class="floor-row"
+              [class.example-expanded-row]="expandedElement === element"
+              (click)="expandedElement = expandedElement === element ? null : element">
+          </tr>
+          <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="floor-detail-row"></tr>
+          <tr mat-footer-row *matFooterRowDef="['disclaimer']" class="footer-row" [style.display]="dataSource.length === 0 ? 'block' : 'none'"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

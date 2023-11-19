@@ -27,7 +27,7 @@ function runNpmInstallAndStart(directory, appName, color) {
 
 // Função para iniciar o Live Server para um arquivo HTML
 function runLiveServer(directory, htmlFileName, appName, color) {
-  const liveServerProcess = spawn('npx', ['five-server', `--open=${htmlFileName}`], { cwd: directory });
+  const liveServerProcess = spawn('npx', ['live-server', `--open=${htmlFileName}`], { cwd: directory });
 
   liveServerProcess.stdout.on('data', (data) => {
     console.log(`\x1b[${color}m[${appName} Live Server]\x1b[0m ${data.toString()}`);

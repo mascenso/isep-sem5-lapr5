@@ -15,7 +15,7 @@ import { MatListModule } from '@angular/material/list';
 import { CampusComponent } from './home/campus/campus.component';
 import { FleetComponent } from './home/fleet/fleet.component';
 import { TasksComponent } from './home/tasks/tasks.component';
-import {LoginService} from "./services/loginService.service";
+import {AuthService} from "./services/auth.service";
 import {MatCardModule} from "@angular/material/card";
 import {MatInputModule} from "@angular/material/input";
 import {MatPaginatorModule} from "@angular/material/paginator";
@@ -83,7 +83,7 @@ import { GlobalErrorHandler } from "./global-exception";
     useClass: ServiceInterceptor,
     multi: true,
     },
-  LoginService,
+    AuthService,
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandler

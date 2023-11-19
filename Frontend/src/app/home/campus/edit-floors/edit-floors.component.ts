@@ -104,6 +104,15 @@ export class EditFloorsComponent {
     }
   }
 
+  onModify() {
+    console.log('Edit button clicked');
+    if(this.showForm == false) {
+      this.showForm = true;
+    } else {
+      this.showForm = false;
+    }
+  }
+
   onFloorSelected(selectedFloorId: any): void {
     this.selectedFloor = this.dataSource.find(floor => floor.id === selectedFloorId);
   }
@@ -145,7 +154,6 @@ export class EditFloorsComponent {
   }
 
   onChange() {
-    console.log('Change button clicked');
     if (this.selectedFloor) {
       const updatedFloorData = {
         id: this.selectedFloor.id,

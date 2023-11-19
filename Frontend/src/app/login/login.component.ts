@@ -17,15 +17,8 @@ export class LoginComponent {
   constructor(private authService: AuthService,
               private router: Router) {}
 
-  ngOnInit() {
-    //this.loginService.getRoles().subscribe(roles => {
-    //  this.roles = roles;
-    //});
-  }
-
   onSubmit(event:Event,email:string,password:string,role:string){
     event.preventDefault();
-    //this.loginService.login();
     this.onLogin(event, email, password, role);
   }
 

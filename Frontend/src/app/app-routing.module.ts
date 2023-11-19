@@ -16,6 +16,7 @@ import { CreateBridgeComponent } from "./home/campus/create-bridge/create-bridge
 import { ErrorCheckGuard } from "./error-check.guard";
 import { EditFloorsComponent } from './home/campus/edit-floors/edit-floors.component';
 import {authGuard} from "./guards/auth.guard";
+import {ListBuildingsComponent} from "./home/campus/list-buildings/list-buildings.component"
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -63,6 +64,10 @@ const routes: Routes = [
       {
         path: 'campus/list-building-floors',
         component: ListBuildingFloorsComponent,
+      },
+      {
+        path: 'campus/list-buildings',
+        component: ListBuildingsComponent,
       },
       {
         path: 'fleet/create-robot-type',

@@ -22,14 +22,6 @@ import { FloorService } from "../../../services/floor.service";
   styleUrls: ['./edit-floors.component.css']
 })
 export class EditFloorsComponent {
-
-  floorForm = new FormGroup({
-    Width: new FormControl(''),
-    Length: new FormControl(''),
-    FloorNumber: new FormControl(''),
-    description: new FormControl('')
-  });
-
   showForm = false; // Initially, the form is hidden
   buildingList: BuildingResponseDTO[] = [];
   buildingSelectionControl =  new FormControl();
@@ -47,6 +39,13 @@ export class EditFloorsComponent {
   expandedElement: FloorDTO | null | undefined;
 
   selectedFloor: FloorDTO | undefined;
+
+  floorForm = new FormGroup({
+    Width: new FormControl<number>(0),
+    Length: new FormControl<number>(0),
+    FloorNumber: new FormControl<number>(0),
+    description: new FormControl(''),
+  });
 
   constructor(private buildingService: BuildingService,
               private floorService: FloorService,
@@ -91,6 +90,21 @@ export class EditFloorsComponent {
   }
 
   onEdit() {
+    this.floorForm = new FormGroup({
+      Width: new FormControl<number>(this.selectedFloor ? this.selectedFloor.width : 0),
+      Length: new FormControl<number>(this.selectedFloor ? this.selectedFloor.length : 0),
+      FloorNumber: new FormControl<number>(this.selectedFloor ? this.selectedFloor.floorNumber : 0),
+      description: new FormControl(this.selectedFloor ? this.selectedFloor.description : ''),
+    });
+    console.log('Edit button clicked');
+    if(this.showForm == false) {
+      this.showForm = true;
+    } else {
+      this.showForm = false;
+    }
+  }
+
+  onModify() {
     console.log('Edit button clicked');
     if(this.showForm == false) {
       this.showForm = true;
@@ -105,32 +119,75 @@ export class EditFloorsComponent {
 
   onUpdate() {
     console.log('Update button clicked');
-    console.log(this.floorForm.value);
-    if(this.selectedFloor) {
-      this.floorService.updateFloor(this.selectedFloor as FloorResponseDTO).subscribe(
+  
+    if (this.selectedFloor) {
+      const updatedFloorData = {
+        id: this.selectedFloor.id,
+        buildingId: this.selectedFloor.buildingId,
+        width: null ? this.selectedFloor : this.floorForm.value.Width,
+        length: this.selectedFloor.length ? this.floorForm.value.Length : this.selectedFloor.length,
+        floorNumber: this.floorForm.value.FloorNumber,
+        description: this.floorForm.value.description,
+        floorMap: this.selectedFloor.floorMap
+      };
+
+      console.log(this.floorForm.value.FloorNumber);
+      console.log(updatedFloorData);
+
+      this.floorService.updateFloor(updatedFloorData as FloorDTO).subscribe(
         response => {
-            this.dataSource = response;
-            this._snackBar.open("floor updated!", "close", {
-              duration: 5000,
-              panelClass: ['snackbar-success']
-            });
+          this.dataSource = response;
+          this._snackBar.open("floor updated!", "close", {
+            duration: 5000,
+            panelClass: ['snackbar-success']
+          });
         },
         error => {
-            console.log('Error editing floor: ', error);
-            this._snackBar.open(error.message, "close", {
-              duration: 5000,
-              panelClass: ['snackbar-error']
-            });
+          console.log('Error editing floor: ', error);
+          this._snackBar.open(error.message, "close", {
+            duration: 5000,
+            panelClass: ['snackbar-error']
+          });
         }
       );
     }
-    
   }
 
   onChange() {
-    console.log('Change button clicked');
-  }
+    if (this.selectedFloor) {
+      const updatedFloorData = {
+        id: this.selectedFloor.id,
+        buildingId: this.selectedFloor.buildingId,
+        width: this.floorForm.value.Width,
+        length: this.floorForm.value.Length,
+        floorNumber: this.floorForm.value.FloorNumber,
+        description: this.floorForm.value.description,
+        floorMap: this.selectedFloor.floorMap
+      };
 
+      console.log(this.floorForm.value.FloorNumber);
+      console.log(updatedFloorData);
+
+      this.floorService.editFloor(updatedFloorData as FloorDTO).subscribe(
+        response => {
+          this.dataSource = response;
+          this._snackBar.open("floor updated!", "close", {
+            duration: 5000,
+            panelClass: ['snackbar-success']
+          });
+        },
+        error => {
+          console.log('Error editing floor: ', error);
+          this._snackBar.open(error.message, "close", {
+            duration: 5000,
+            panelClass: ['snackbar-error']
+          });
+        }
+      );
+    }
+  }
+  
+  
   onCancel() {
     return this.router.navigate(['../home/campus']);
   }

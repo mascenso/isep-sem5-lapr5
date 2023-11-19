@@ -18,7 +18,7 @@
         <h4>Select floor:</h4>
         <mat-form-field class="floor-selection-form-field">
           <mat-label>Floor</mat-label>
-          <mat-select [formControl]="floorSelectionControl">
+          <mat-select [formControl]="floorSelectionControl" (valueChange)="onFloorSelected($event)">
             <mat-option></mat-option>
             <div *ngFor="let floor of dataSource;">
               <mat-option  [value]="floor.id"> {{floor.floorNumber}}º Piso - {{floor.id}}</mat-option>
@@ -68,6 +68,7 @@
         </div>
 
         <button mat-raised-button color="primary" (click)="onEdit()">Edit</button>
+        <button mat-raised-button color="accent" (click)="onModify()">Modify</button>
         <button mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
 
 

@@ -51,24 +51,6 @@ tr.floor-row:not(.floor-expanded-row):active {
   display: flex;
 }
 
-.floor-diagram {
-  min-width: 8rem;
-  border: 2px solid black;
-  padding: 8px;
-  font-weight: lighter;
-  margin: 8px 0;
-  height: 10.4rem;
-}
-
-.floor-symbol {
-  font-weight: bold;
-  font-size: 4rem;
-  line-height: normal;
-}
-
-.floor-description {
-  padding: 1.6rem;
-}
 
 .floor-description-attribution {
   opacity: 0.5;

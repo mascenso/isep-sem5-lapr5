@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {LoadingSpinnerService} from "../services/loading-spinner.service";
+import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-home',
@@ -9,5 +10,10 @@ import {LoadingSpinnerService} from "../services/loading-spinner.service";
 export class HomeComponent {
   isExpanded: boolean = false;
 
-  constructor(public spinnerService: LoadingSpinnerService) {}
+  constructor(private authService: AuthService,
+              public spinnerService: LoadingSpinnerService) {}
+
+  public onLogout() {
+    this.authService.logout();
+  }
 }

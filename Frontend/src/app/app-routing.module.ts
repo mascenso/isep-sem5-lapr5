@@ -15,11 +15,13 @@ import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
 import { CreateBridgeComponent } from "./home/campus/create-bridge/create-bridge.component";
 import { ErrorCheckGuard } from "./error-check.guard";
 import { EditFloorsComponent } from './home/campus/edit-floors/edit-floors.component';
+import {authGuard} from "./guards/auth.guard";
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
+  {path: 'login', component: LoginComponent},
   {
-    path: 'home', component: HomeComponent,
+    path: 'home', component: HomeComponent, canActivate: [authGuard],
     children: [
       {
         path: 'campus',

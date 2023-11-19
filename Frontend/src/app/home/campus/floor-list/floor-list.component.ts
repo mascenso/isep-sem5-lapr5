@@ -1,10 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl} from "@angular/forms";
-import {BuildingResponseDto, BuildingService} from "../../../services/building.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {FloorDto, FloorService} from "../../../services/floor.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Observable, Subscription} from "rxjs";
+import { BuildingResponseDTO } from "../../../../dto/buildingDTO";
+import { BuildingService } from "../../../services/building.service";
+import { FloorService } from "../../../services/floor.service";
+import { FloorResponseDTO } from "../../../../dto/floorDTO";
 
 @Component({
   selector: 'app-floor-list',
@@ -20,16 +22,16 @@ import {Observable, Subscription} from "rxjs";
 })
 export class FloorListComponent implements OnInit, OnDestroy {
 
-  buildingList: BuildingResponseDto[] = [];
+  buildingList: BuildingResponseDTO[] = [];
   buildingSelectionControl =  new FormControl();
   buildingServiceSubscription$ = new Subscription();
 
   floorServiceSubscription$ = new Subscription();
 
-  dataSource: FloorDto[] = [];
+  dataSource: FloorResponseDTO[] = [];
   columnsToDisplay = ['id', 'floorNumber', 'width', 'length'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-  expandedElement: FloorDto | null | undefined;
+  expandedElement: FloorResponseDTO | null | undefined;
 
   constructor(private buildingService: BuildingService,
               private floorService: FloorService,
@@ -58,6 +60,7 @@ export class FloorListComponent implements OnInit, OnDestroy {
           this.dataSource = floorData;
         },
         error => {
+          console.log(error);
           this._snackBar.open(error.error, "close", {
             duration: 5000,
             panelClass: ['snackbar-error']
@@ -73,36 +76,3 @@ export class FloorListComponent implements OnInit, OnDestroy {
   }
 
 }
-
-const FLOOR_DATA: FloorDto[] = [
-  {
-    id: 'floor-id-1',
-    buildingId: 'building-id-1',
-    width: 10,
-    length: 10,
-    floorNumber: 1,
-    description: `Hydrogen is a chemical element with symbol H and atomic number 1. With a standard
-        atomic weight of 1.008, hydrogen is the lightest element on the periodic table.`,
-    floorMap: [[0,1,0,1,1],[0,0,0,0,0],[0,1,0,1,1],[0,1,0,1,1],[0,1,0,1,1]]
-  },
-  {
-    id: 'floor-id-2',
-    buildingId: 'building-id-2',
-    width: 10,
-    length: 10,
-    floorNumber: 2,
-    description: `Hydrogen is a chemical element with symbol H and atomic number 1. With a standard
-        atomic weight of 1.008, hydrogen is the lightest element on the periodic table.`,
-    floorMap: [[0,1,0,1,1],[0,0,0,0,0],[0,1,0,1,1],[0,1,0,1,1],[0,1,0,1,1]]
-  },
-  {
-    id: 'floor-id-3',
-    buildingId: 'building-id-2',
-    width: 10,
-    length: 10,
-    floorNumber: 3,
-    description: `Hydrogen is a chemical element with symbol H and atomic number 1. With a standard
-        atomic weight of 1.008, hydrogen is the lightest element on the periodic table.`,
-    floorMap: [[0,1,0,1,1],[0,0,0,0,0],[0,1,0,1,1],[0,1,0,1,1],[0,1,0,1,1]]
-  },
-];

@@ -1,10 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {BridgeDto, BridgeService} from "../../../services/bridge.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Observable, Subscription} from "rxjs";
-import { FloorDto, FloorService } from "../../../services/floor.service";
+import { BridgeService } from "../../../services/bridge.service";
+import { BridgeDTO } from "../../../../dto/bridgeDTO";
+import { FloorService } from "../../../services/floor.service";
+import { FloorResponseDTO } from "../../../../dto/floorDTO";
 
 @Component({
   selector: 'app-bridge-list',
@@ -20,16 +22,16 @@ import { FloorDto, FloorService } from "../../../services/floor.service";
 })
 export class BridgeListComponent implements OnInit, OnDestroy {
 
-  floorList: FloorDto[] = [];
+  floorList: FloorResponseDTO[] = [];
   floorSelectionControl =  new FormControl();
   floorServiceSubscription$ = new Subscription();
 
   bridgeServiceSubscription$ = new Subscription();
 
-  dataSource: BridgeDto[] = [];
+  dataSource: BridgeDTO[] = [];
   columnsToDisplay = ['id', 'name', 'floorAId', 'floorBId'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-  expandedElement: BridgeDto | null | undefined;
+  expandedElement: BridgeDTO | null | undefined;
 
   constructor(private floorService: FloorService,
               private bridgeService: BridgeService,

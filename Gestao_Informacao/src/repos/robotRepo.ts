@@ -82,13 +82,25 @@ export default class RobotRepo implements IRobotRepo {
     }
   }
 
-  public async findByDesignationOrTaskType(designation: string, taskType: string): Promise<Robot[]> {
-    const query = {
-      $or: [
-        { designacao: designation },
-        { tarefas: taskType }
-      ]
-    };
+  public async findByDesignationOrTaskType(designation: string, robotTypeList: string[]): Promise<Robot[]> {
+    let query;
+    if (designation && robotTypeList.length === 0) {
+      query = {nickName: designation };
+    }
+    else if (robotTypeList.length != 0 && designation) {
+      query = {
+        $and: [
+              { nickName: designation },
+              { robotType: {$in: robotTypeList} },
+            ]
+      };
+    }
+    else if ( robotTypeList.length != 0 && designation === null) {
+      query = {robotType: {$in: robotTypeList} };
+    }
+    else {
+     query = {};
+    }
 
     const robotRecords = await this.robotSchema.find(query);
     if (robotRecords != null) {

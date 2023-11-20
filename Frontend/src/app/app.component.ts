@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {LoginService} from "./services/loginService.service";
+import {AuthService} from "./services/auth.service";
 import {Router} from "@angular/router";
 
 @Component({
@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
   title = 'angularFirstApp';
   loggedIn: boolean = false;
 
-  constructor(private loginService: LoginService, private router: Router) {
+  constructor(private loginService: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {

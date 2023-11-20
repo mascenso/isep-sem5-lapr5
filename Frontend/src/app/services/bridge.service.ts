@@ -2,28 +2,10 @@ import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
+import { BridgeResponseDTO, CreateBridgeRequestDTO } from "../../dto/bridgeDTO";
+import { BuildingResponseDTO } from "../../dto/buildingDTO";
+import { FloorResponseDTO } from "../../dto/floorDTO";
 
-export interface BridgeResponseDto {
-  id: string;
-  name: string;
-  code : string;
-  floorAId : string;
-  floorBId : string;
-}
-
-export interface CreateBridgeRequestDto {
-  name: string;
-  code : string;
-  floorAId : string;
-  floorBId : string;
-}
-
-export interface BridgeDto {
-  name: string;
-  code : string;
-  floorAId : string;
-  floorBId : string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -34,12 +16,20 @@ export class BridgeService {
 
   constructor(private http: HttpClient) { }
 
-  public createBridge(bridge: CreateBridgeRequestDto, showSpinner?: boolean): Observable<BridgeResponseDto> {
-    return this.http.post<BridgeResponseDto>(`${this.API_URL}/api/bridges`, bridge, {reportProgress: showSpinner});
+  public createBridge(bridge: CreateBridgeRequestDTO, showSpinner?: boolean): Observable<BridgeResponseDTO> {
+    const url = `${this.API_URL}/api/bridges`;
+    return this.http.post<BridgeResponseDTO>(url, bridge, {reportProgress: showSpinner});
   }
 
-  public getAllBridges(): Observable<BridgeResponseDto[]> {
-    return this.http.get<BridgeResponseDto[]>(`${this.API_URL}/api/bridges`);
+  public getAllBridges(): Observable<BridgeResponseDTO[]> {
+    return this.http.get<BridgeResponseDTO[]>(`${this.API_URL}/api/bridges`);
   }
 
+  getAllBuildings() : Observable<BuildingResponseDTO[]> {
+      return this.http.get<BuildingResponseDTO[]>(`${this.API_URL}/api/buildings`);
+  }
+
+  getFloorsByBuildingId($event: any, b: boolean) : Observable<FloorResponseDTO[]>  {
+    return this.http.get<FloorResponseDTO[]>(`${this.API_URL}/api/floors/buildings?building=${$event}`, {reportProgress: b});
+  }
 }

@@ -70,12 +70,9 @@ export default class RobotTypeRepo implements IRobotTypeRepo {
       return null;
   }
 
-  public async findByDesignationOrTaskType(designation: string, taskType: TaskType[]): Promise<RobotType[]> {
+  public async findByTaskType(taskType: string): Promise<RobotType[]> {
     const query = {
-      $or: [
-        { designacao: designation },
-        { tipoTarefas: taskType.toString() },
-      ]
+      tipoTarefas: taskType
     };
 
     const robotTypeRecords = await this.robotTypeSchema.find(query);

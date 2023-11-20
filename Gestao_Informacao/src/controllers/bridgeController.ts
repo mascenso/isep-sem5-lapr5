@@ -56,7 +56,7 @@ export default class BridgeController implements IBridgeController /* TODO: exte
       const bridgeOrError = await this.bridgeServiceInstance.getAllBridges() as Result<IBridgeDTO[]>;
 
       if (bridgeOrError.isFailure) {
-        return res.status(402).json('Dont exist any bridge save on DB').send();
+        return res.status(402).json('This building has no bridges allocated').send();
       }
 
       const bridgeDTO = bridgeOrError.getValue();
@@ -76,7 +76,7 @@ export default class BridgeController implements IBridgeController /* TODO: exte
       const bridgeOrError = await this.bridgeServiceInstance.getBridgesBetweenBuildings(building1 as string, building2 as string) as Result<IBridgeDTO[]>;
 
       if (bridgeOrError.isFailure) {
-        return res.status(402).json('Dont exist any bridge save on DB').send();
+        return res.status(402).json('This building has no bridges allocated.').send();
       }
 
       const bridgeDTO = bridgeOrError.getValue();

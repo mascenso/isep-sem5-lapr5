@@ -16,6 +16,36 @@
       </mat-card-actions>
     </mat-card>
 
+    <mat-card *ngIf="canActivateBridge" class="card" routerLink="create-bridge" matRipple>
+      <mat-card-header class="card-header">
+        <mat-card-title>Create bridge</mat-card-title>
+        <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="card-content">
+        <mat-icon class="card-icon">directions</mat-icon>
+      </mat-card-content>
+      <mat-card-actions class="card-actions">
+        <button mat-mini-fab color="primary" class="card-button">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card *ngIf="canActivateBridge" class="card" routerLink="create-elevator" matRipple>
+      <mat-card-header class="card-header">
+        <mat-card-title>Create elevator</mat-card-title>
+        <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="card-content">
+        <mat-icon class="card-icon">elevator</mat-icon>
+      </mat-card-content>
+      <mat-card-actions class="card-actions">
+        <button mat-mini-fab color="primary" class="card-button">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
     <mat-card class="card" matRipple>
       <mat-card-header class="card-header">
         <mat-card-title>Edit building</mat-card-title>
@@ -31,17 +61,32 @@
       </mat-card-actions>
     </mat-card>
 
+    <mat-card class="card" routerLink="edit-floors" matRipple>
+      <mat-card-header class="card-header">
+        <mat-card-title>Edit floor</mat-card-title>
+        <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="card-content">
+        <mat-icon class="card-icon">home</mat-icon>
+      </mat-card-content>
+      <mat-card-actions class="card-actions">
+        <button mat-mini-fab color="primary" class="card-button">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
     <mat-card class="card" routerLink="list-building-floors" matRipple>
       <mat-card-header class="card-header">
         <mat-card-title>List Floors</mat-card-title>
         <mat-card-subtitle>Of a Building</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content class="card-content">
-        <mat-icon class="card-icon">search</mat-icon>
+        <mat-icon class="card-icon">list</mat-icon>
       </mat-card-content>
       <mat-card-actions class="card-actions">
         <button mat-mini-fab color="primary" class="card-button">
-          <mat-icon>add</mat-icon>
+          <mat-icon>search</mat-icon>
         </button>
       </mat-card-actions>
     </mat-card>
@@ -65,7 +110,7 @@
     <mat-card class="card" routerLink="list-bridges" matRipple>
       <mat-card-header class="card-header">
         <mat-card-title>List Bridges</mat-card-title>
-        <mat-card-subtitle>with access to elevator</mat-card-subtitle>
+        <mat-card-subtitle>between buildings</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content class="card-content">
         <mat-icon class="card-icon">search</mat-icon>
@@ -73,6 +118,21 @@
       <mat-card-actions class="card-actions">
         <button mat-mini-fab color="primary" class="card-button">
           <mat-icon>search</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="card" routerLink="list-buildings" matRipple>
+      <mat-card-header class="card-header">
+        <mat-card-title>List Buildings</mat-card-title>
+        <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="card-content">
+        <mat-icon class="card-icon">list</mat-icon>
+      </mat-card-content>
+      <mat-card-actions class="card-actions">
+        <button mat-mini-fab color="primary" class="card-button">
+          <mat-icon>list</mat-icon>
         </button>
       </mat-card-actions>
     </mat-card>

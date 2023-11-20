@@ -12,11 +12,18 @@ import {FloorListComponent} from "./home/campus/floor-list/floor-list.component"
 import {BridgeListComponent} from "./home/campus/bridge-list/bridge-list.component";
 import { ListBuildingFloorsComponent } from './home/campus/list-building-floors/list-building-floors.component';
 import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
+import { CreateBridgeComponent } from "./home/campus/create-bridge/create-bridge.component";
+import { ErrorCheckGuard } from "./error-check.guard";
+import { EditFloorsComponent } from './home/campus/edit-floors/edit-floors.component';
+import { CreateElevatorComponent } from './home/campus/create-elevator/create-elevator.component';
+import {authGuard} from "./guards/auth.guard";
+import {ListBuildingsComponent} from "./home/campus/list-buildings/list-buildings.component"
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
+  {path: 'login', component: LoginComponent},
   {
-    path: 'home', component: HomeComponent,
+    path: 'home', component: HomeComponent, canActivate: [authGuard],
     children: [
       {
         path: 'campus',
@@ -39,6 +46,11 @@ const routes: Routes = [
         component: CreateBuildingComponent,
       },
       {
+        path: 'campus/create-bridge',
+        component: CreateBridgeComponent,
+        canActivate: [ErrorCheckGuard],
+      },
+      {
         path: 'campus/list-floors',
         component: FloorListComponent,
       },
@@ -47,8 +59,20 @@ const routes: Routes = [
         component: BridgeListComponent,
       },
       {
+        path: 'campus/edit-floors',
+        component: EditFloorsComponent,
+      },
+      {
         path: 'campus/list-building-floors',
         component: ListBuildingFloorsComponent,
+      },
+      {
+        path: 'campus/create-elevator',
+        component: CreateElevatorComponent,
+      },
+      {
+        path: 'campus/list-buildings',
+        component: ListBuildingsComponent,
       },
       {
         path: 'fleet/create-robot-type',
@@ -60,7 +84,7 @@ const routes: Routes = [
       },
     ],
   },
-  { path: '**', redirectTo: ''}
+  { path: '**', redirectTo: 'home'}
 ];
 
 @NgModule({

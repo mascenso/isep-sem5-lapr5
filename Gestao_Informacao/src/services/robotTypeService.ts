@@ -71,10 +71,10 @@ export default class RobotTypeService implements IRobotTypeService {
     }
   }
 
-  public async findByDesignationOrTaskType(designation: string, taskType: TaskType[]): Promise<Result<IRobotTypeDTO[]>> {
+  public async findByDesignationOrTaskType(taskType: TaskType | string): Promise<Result<IRobotTypeDTO[]>> {
     try {
 
-      const robotTypeList = await this.robotTypeRepo.findByDesignationOrTaskType(designation, taskType);
+      const robotTypeList = await this.robotTypeRepo.findByTaskType(taskType);
 
       const robotTypeDTOList = robotTypeList.map(robotType => RobotTypeMap.toDTO(robotType) as IRobotTypeDTO);
 

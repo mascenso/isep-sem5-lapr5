@@ -16,11 +16,14 @@ import { CreateBridgeComponent } from "./home/campus/create-bridge/create-bridge
 import { ErrorCheckGuard } from "./error-check.guard";
 import { EditFloorsComponent } from './home/campus/edit-floors/edit-floors.component';
 import { CreateElevatorComponent } from './home/campus/create-elevator/create-elevator.component';
+import {authGuard} from "./guards/auth.guard";
+import {ListBuildingsComponent} from "./home/campus/list-buildings/list-buildings.component"
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
+  {path: 'login', component: LoginComponent},
   {
-    path: 'home', component: HomeComponent,
+    path: 'home', component: HomeComponent, canActivate: [authGuard],
     children: [
       {
         path: 'campus',
@@ -68,6 +71,10 @@ const routes: Routes = [
         component: CreateElevatorComponent,
       },
       {
+        path: 'campus/list-buildings',
+        component: ListBuildingsComponent,
+      },
+      {
         path: 'fleet/create-robot-type',
         component: CreateRobotTypeComponent,
       },
@@ -77,7 +84,7 @@ const routes: Routes = [
       },
     ],
   },
-  { path: '**', redirectTo: ''}
+  { path: '**', redirectTo: 'home'}
 ];
 
 @NgModule({

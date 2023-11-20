@@ -15,7 +15,7 @@ import { MatListModule } from '@angular/material/list';
 import { CampusComponent } from './home/campus/campus.component';
 import { FleetComponent } from './home/fleet/fleet.component';
 import { TasksComponent } from './home/tasks/tasks.component';
-import {LoginService} from "./services/loginService.service";
+import {AuthService} from "./services/auth.service";
 import {MatCardModule} from "@angular/material/card";
 import {MatInputModule} from "@angular/material/input";
 import {MatPaginatorModule} from "@angular/material/paginator";
@@ -37,6 +37,7 @@ import { CreateBridgeComponent } from "./home/campus/create-bridge/create-bridge
 import { EditFloorsComponent } from "./home/campus/edit-floors/edit-floors.component";
 import { GlobalErrorHandler } from "./global-exception";
 import { CreateElevatorComponent } from './home/campus/create-elevator/create-elevator.component';
+import { ListBuildingsComponent } from './home/campus/list-buildings/list-buildings.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { CreateElevatorComponent } from './home/campus/create-elevator/create-el
     ListBuildingFloorsComponent,
     RobotListComponent,
     EditFloorsComponent,
-    CreateElevatorComponent
+    CreateElevatorComponent,
+    ListBuildingsComponent
   ],
   imports: [
     BrowserModule,
@@ -85,7 +87,7 @@ import { CreateElevatorComponent } from './home/campus/create-elevator/create-el
     useClass: ServiceInterceptor,
     multi: true,
     },
-  LoginService,
+    AuthService,
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandler

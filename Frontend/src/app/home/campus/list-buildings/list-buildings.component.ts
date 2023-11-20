@@ -19,9 +19,7 @@ export class ListBuildingsComponent implements OnInit{
 
   carregarEdificios() {
     this.buildingService.getAllBuildings().subscribe(edificios => {
-      console.log(edificios)
       this.edificios = edificios;
-      console.log(this.edificios)
     });
     
   }

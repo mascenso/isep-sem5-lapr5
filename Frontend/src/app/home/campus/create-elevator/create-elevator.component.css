@@ -79,11 +79,11 @@ tr.floor-row:not(.floor-expanded-row):active {
 }
 
 .building-selection-form-field {
-  min-width: 50rem;
+  min-width: 45rem;
 }
 
 .floor-selection-form-field {
-  min-width: 50rem;
+  min-width: 5r4em;
 }
 
 td {

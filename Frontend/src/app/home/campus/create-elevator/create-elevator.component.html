@@ -1,31 +1,57 @@
-//fiquei aqui a criar o form para os floors. Ao selecionar os multiplos floors cria o elevador para cada um 
-
 <div class="create-elevator-container">
     <div class="create-elevator-section">
-      <h2>Create Elevator</h2>
-      <div class="building-selection-form">
-        <h4>Select building:</h4>
-        <mat-form-field class="form" [formGroup]="createElevatorForm" (ngSubmit)="onSubmit()">
-          <mat-label>Building</mat-label>
-          <mat-select [formControl]="buildingSelectionControl">
-            <mat-option></mat-option>
-            <div *ngFor="let building of buildingList;">
-              <mat-option  [value]="building.id">{{building.code}} - {{building.id}}</mat-option>
-            </div>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <p>
-        <mat-form-field class="form">
-            <mat-label>List Floors</mat-label>
-            <mat-select matInput [formControl]="createElevatorForm.controls.listFloors" formControlName="listaFloors" multiple>
-              <mat-option *ngFor="let floors of listFloors" [value]="floor">{{ floor }}</mat-option>
-            </mat-select>
-          </mat-form-field>   
-    </p>
-    </div>
-    <div class="form-button-group">
-        <button mat-flat-button color="primary" type="submit" [disabled]="!createElevatorForm.valid">Create</button>
+      <h2>Create a new Elevator</h2>
+  
+      <mat-card class="form-card-container">
+        <mat-card-content>
 
-      </div>
-</div>
+          <form class="form" [formGroup]="elevatorForm" (ngSubmit)="onSubmit()">
+            <p>
+                <mat-form-field class="form-field form-field-code">
+                  <mat-label>Code</mat-label>
+                  <input matInput [formControl]="codeSelectionControl" #inputCode maxlength="15" placeholder="Ex. E-P-123" value="E-P-123">
+                  <mat-hint align="end">{{inputCode.value.length}} / 15</mat-hint>
+                  <mat-error *ngIf="elevatorForm.controls.code.hasError('required')">Code is <strong>required</strong></mat-error>
+    
+                </mat-form-field>
+              </p>
+  
+            <div class="floor-selection-form">
+  
+              <h4>Select building:</h4>
+              <mat-form-field class="form-field building-selection-form-field">
+                <mat-select [formControl]="buildingSelectionControl" (valueChange)="onSelectionUpdateSelectionControl($event)">
+                  <mat-option></mat-option>
+                  <div *ngFor="let building of buildingList;">
+                    <mat-option  [value]="building.id">{{building.code}} - {{building.id}}</mat-option>
+                  </div>
+                </mat-select>
+              </mat-form-field>
+  
+              <h4>Select floor:</h4>
+              <mat-form-field class="form-field floor-selection-form-field">
+                <mat-select [formControl]="floorSelectionControl" multiple>
+                  <mat-option></mat-option>
+                  <div *ngFor="let floorId of floorList;">
+                    <mat-option  [value]="floorId.id">Piso {{floorId.floorNumber}}</mat-option>
+                  </div>
+                </mat-select>
+              </mat-form-field>
+  
+            </div>  
+            <div class="form-button-group">
+              <button mat-flat-button color="primary" type="submit" [disabled]="!elevatorForm.valid">Create</button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="elevator-details-section">
+      <pre>{{this.createdElevator | json}}</pre>
+    </div>
+  </div>
+  
+  
+  
+  
+  

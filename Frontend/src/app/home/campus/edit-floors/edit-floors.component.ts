@@ -150,6 +150,7 @@ export class EditFloorsComponent {
           });
         }
       );
+      this.showForm = false;
     }
   }
 

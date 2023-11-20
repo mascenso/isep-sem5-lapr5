@@ -16,3 +16,8 @@ pipelines:
               - cd Gestao_Informacao
               - npm install
               - npm test
+              - npm install -g newman
+              - |
+                set +e  # Ignore newman fails, it should work when backend is running remotely
+                newman run tests/RobDroneGo.postman_collection.json -e tests/RobDroneGoEnv.postman_environment.json
+                set -e

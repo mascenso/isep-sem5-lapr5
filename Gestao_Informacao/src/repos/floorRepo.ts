@@ -6,6 +6,7 @@ import {IFloorPersistence} from "../dataschema/IFloorPersistence";
 import {FloorId} from "../domain/floor-agg/floorId";
 import {FloorMap} from "../mappers/FloorMap";
 import {Floor} from "../domain/floor-agg/floor";
+import {ElevatorMap} from "../mappers/ElevatorMap";
 
 @Service()
 export default class FloorRepo implements IFloorRepo {
@@ -120,5 +121,22 @@ export default class FloorRepo implements IFloorRepo {
         throw err;
       }
   }
+
+  public async findFloorsByListOfIds(floorIdList: FloorId[] | string[]): Promise<Floor[]> {
+    const query = {
+      domainId: {$in: floorIdList}
+    };
+
+    const floorRecords = await this.floorSchema.find(query);
+
+    if( floorRecords != null) {
+      return floorRecords.map(floor => FloorMap.toDomain(floor));
+    }
+    else {
+      return null;
+    }
+
+  }
+
 }
 

@@ -10,6 +10,7 @@ import IBuildingRepo from './IRepos/IBuildingRepo';
 import { IBuildingDTO } from '../dto/IBuildingDTO';
 import { BuildingMap } from '../mappers/BuildingMap';
 import IElevatorRepo from "./IRepos/IElevatorRepo";
+import {floor} from "lodash";
 
 
 @Service()
@@ -137,25 +138,26 @@ export default class FloorService implements IFloorService {
       throw e;
     }
   }
-  
+
   public async getFloorsWithElevatorByBuildingId(buildingId: string): Promise<Result<IFloorDTO[]>> {
     try {
-      const floorListOrError = await this.getFloorsAtBuildings(buildingId) as Result<IFloorDTO[]>;
-      if (floorListOrError.isFailure) {
-        return Result.fail<IFloorDTO[]>(`Building with id ${buildingId} doesn't have any floors!`);
+      // get elevator by building Id
+      const elevator = await this.elevatorRepo.findByBuildingId(buildingId);
+      if (elevator == null) {
+        return Result.fail<IFloorDTO[]>(`Building with id ${buildingId} doesn't have any elevator!`);
       }
-      const floorDTOList = floorListOrError.getValue();
-      const elevatorsForFloorsList = await this.elevatorRepo.findByFloorIds(floorDTOList.map(floorDTO => floorDTO.id));
-      if (elevatorsForFloorsList === null) {
-        return Result.ok<IFloorDTO[]>([]);
+
+      // get floors using the list in the elevator
+
+      const floorListOrError = await this.floorRepo.findFloorsByListOfIds(elevator.floorList);
+      if (floorListOrError == null || floorListOrError.length === 0) {
+        return Result.fail<IFloorDTO[]>(`Elevator with id ${elevator.id} doesn't serve any floor!`);
       }
+
       // take the list of elevators, transform it in a list of floorIDs,
       // filter the original floorDTO list by floorId
-      const floorDTOListResult = elevatorsForFloorsList
-      .flatMap(elevator => elevator.floorList) // Transforma a matriz de matrizes em uma única matriz
-      .flatMap(floorId =>
-        floorDTOList.filter(floorDTO => floorDTO.id === floorId)
-      );
+      const floorDTOListResult = floorListOrError
+        .flatMap(floor => FloorMap.toDTO(floor));
 
       return Result.ok<IFloorDTO[]>(floorDTOListResult);
 

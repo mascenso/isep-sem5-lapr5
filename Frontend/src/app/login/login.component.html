@@ -8,17 +8,20 @@
           <input type="email" name="txt" placeholder="Email" required="">
           <input type="password" name="pswd" placeholder="Password" required="">
                     <select name="role" [(ngModel)]="selectedRole">
-                        <option [ngValue]="role.name" *ngFor="let role of roles">{{ role.name }}</option>
+                        <option [ngValue]="role" *ngFor="let role of roles">{{ role }}</option>
                     </select>
           <button>Sign up</button>
         </form>
       </div>
 
       <div class="login">
-        <form (ngSubmit)="onLogin($event)">
+        <form (ngSubmit)="onLogin($event,email,password, selectedRole)">
           <label for="chk" aria-hidden="true">Login</label>
           <input type="email" name="email" placeholder="Email" required="">
           <input type="password" name="pswd" placeholder="Password" required="">
+          <select name="role" [(ngModel)]="selectedRole">
+            <option [ngValue]="role" *ngFor="let role of roles">{{ role }}</option>
+          </select>
           <button>Login</button>
         </form>
       </div>

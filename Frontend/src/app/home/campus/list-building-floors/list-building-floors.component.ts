@@ -1,10 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl} from "@angular/forms";
-import {BuildingResponseDto, BuildingService} from "../../../services/building.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {FloorDto, FloorService} from "../../../services/floor.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Observable, Subscription} from "rxjs";
+import { BuildingResponseDTO } from "../../../../dto/buildingDTO";
+import { BuildingService } from "../../../services/building.service";
+import { FloorService } from "../../../services/floor.service";
+import { FloorResponseDTO } from "../../../../dto/floorDTO";
 
 @Component({
   selector: 'app-list-building-floors',
@@ -20,16 +22,16 @@ import {Observable, Subscription} from "rxjs";
 })
 export class ListBuildingFloorsComponent implements OnInit, OnDestroy {
 
-  buildingList: BuildingResponseDto[] = [];
+  buildingList: BuildingResponseDTO[] = [];
   buildingSelectionControl =  new FormControl();
   buildingServiceSubscription$ = new Subscription();
 
   floorServiceSubscription$ = new Subscription();
 
-  dataSource: FloorDto[] = [];
+  dataSource: FloorResponseDTO[] = [];
   columnsToDisplay = ['id', 'floorNumber', 'width', 'length'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-  expandedElement: FloorDto | null | undefined;
+  expandedElement: FloorResponseDTO | null | undefined;
 
   constructor(private buildingService: BuildingService,
               private floorService: FloorService,
@@ -74,7 +76,7 @@ export class ListBuildingFloorsComponent implements OnInit, OnDestroy {
 
 }
 
-const FLOOR_DATA: FloorDto[] = [
+const FLOOR_DATA: FloorResponseDTO[] = [
   {
     id: 'floor-id-1',
     buildingId: 'building-id-1',

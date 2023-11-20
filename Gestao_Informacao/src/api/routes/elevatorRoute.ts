@@ -41,12 +41,14 @@ export default (app: Router) => {
       floorList: Joi.array().items(Joi.string()).required() 
     }),
   }),
-  
+
   (req, res, next) => ctrl.updateElevator(req, res, next) );
 
-    route.get('', 
-    (req, res, next) => { ctrl.getAllElevators(req, res, next);
-      
+  route.get('', 
+    (req, res, next) => { ctrl.getAllElevators(req, res, next); 
   });
-    
+   
+  route.get('/:id', 
+  (req, res, next) => ctrl.getBuildingElevators(req, res, next)
+);
 }

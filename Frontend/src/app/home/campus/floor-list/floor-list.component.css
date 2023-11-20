@@ -22,7 +22,7 @@ h2 {
 h4 {
   font-size: 1.6rem;
   display: block;
-  margin-bottom: 1rem;
+  margin-top: 0;
   color: var(--color-grey-dark);
 }
 
@@ -66,4 +66,9 @@ tr.floor-row:not(.floor-expanded-row):active {
 
 pre {
   font-size: 1.6rem;
+}
+
+.list-floors-card {
+  width: 100%;
+  padding: 1rem 2rem;
 }

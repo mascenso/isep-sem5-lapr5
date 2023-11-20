@@ -5,7 +5,7 @@
       <button mat-icon-button color="basic">
         <mat-icon>person</mat-icon>
       </button>
-      <button mat-icon-button color="basic">
+      <button mat-icon-button color="basic" (click)="onLogout()">
         <mat-icon>logout</mat-icon>
       </button>
     </div>
@@ -22,25 +22,12 @@
         </mat-list-item>
 
         <div class="sidenav-items">
-          <mat-list-item class="sidenav-item" routerLink="campus" [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav-item-icon" fontIcon="domain_add"></mat-icon>
-            <span *ngIf="isExpanded">Campus management</span>
-          </mat-list-item>
-
-          <mat-list-item class="sidenav-item" routerLink="fleet" [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav-item-icon" fontIcon="precision_manufacturing"></mat-icon>
-            <span *ngIf="isExpanded">Fleet management</span>
-          </mat-list-item>
-
-          <mat-list-item class="sidenav-item" routerLink="tasks" [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav-item-icon" fontIcon="list_alt"></mat-icon>
-            <span *ngIf="isExpanded">Tasks management</span>
-          </mat-list-item>
-
-          <mat-list-item class="sidenav-item" routerLink="view" [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav-item-icon" fontIcon="view_in_ar"></mat-icon>
-            <span *ngIf="isExpanded">3D visualization</span>
-          </mat-list-item>
+          <ng-container *ngFor="let menuEntry of MENU_ENTRIES">
+            <mat-list-item *ngIf="menuEntry.authorizedRoles.includes(userRole)" class="sidenav-item" routerLink="{{menuEntry.redirectTo}}" [routerLinkActive]="['is-active']">
+              <mat-icon class="sidenav-item-icon" fontIcon="{{menuEntry.icon}}"></mat-icon>
+              <span *ngIf="isExpanded">{{ menuEntry.title }}</span>
+            </mat-list-item>
+          </ng-container>
         </div>
 
       </mat-nav-list>

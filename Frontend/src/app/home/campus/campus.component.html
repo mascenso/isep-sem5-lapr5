@@ -31,6 +31,21 @@
       </mat-card-actions>
     </mat-card>
 
+    <mat-card *ngIf="canActivateBridge" class="card" routerLink="create-elevator" matRipple>
+      <mat-card-header class="card-header">
+        <mat-card-title>Create elevator</mat-card-title>
+        <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="card-content">
+        <mat-icon class="card-icon">elevator</mat-icon>
+      </mat-card-content>
+      <mat-card-actions class="card-actions">
+        <button mat-mini-fab color="primary" class="card-button">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
     <mat-card class="card" matRipple>
       <mat-card-header class="card-header">
         <mat-card-title>Edit building</mat-card-title>

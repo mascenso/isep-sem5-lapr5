@@ -1,0 +1,57 @@
+<div class="create-elevator-container">
+    <div class="create-elevator-section">
+      <h2>Create a new Elevator</h2>
+  
+      <mat-card class="form-card-container">
+        <mat-card-content>
+
+          <form class="form" [formGroup]="elevatorForm" (ngSubmit)="onSubmit()">
+            <p>
+                <mat-form-field class="form-field form-field-code">
+                  <mat-label>Code</mat-label>
+                  <input matInput [formControl]="codeSelectionControl" #inputCode maxlength="15" placeholder="Ex. E-P-123" value="E-P-123">
+                  <mat-hint align="end">{{inputCode.value.length}} / 15</mat-hint>
+                  <mat-error *ngIf="elevatorForm.controls.code.hasError('required')">Code is <strong>required</strong></mat-error>
+    
+                </mat-form-field>
+              </p>
+  
+            <div class="floor-selection-form">
+  
+              <h4>Select building:</h4>
+              <mat-form-field class="form-field building-selection-form-field">
+                <mat-select [formControl]="buildingSelectionControl" (valueChange)="onSelectionUpdateSelectionControl($event)">
+                  <mat-option></mat-option>
+                  <div *ngFor="let building of buildingList;">
+                    <mat-option  [value]="building.id">{{building.code}} - {{building.id}}</mat-option>
+                  </div>
+                </mat-select>
+              </mat-form-field>
+  
+              <h4>Select floor:</h4>
+              <mat-form-field class="form-field floor-selection-form-field">
+                <mat-select [formControl]="floorSelectionControl" multiple>
+                  <mat-option></mat-option>
+                  <div *ngFor="let floorId of floorList;">
+                    <mat-option  [value]="floorId.id">Piso {{floorId.floorNumber}}</mat-option>
+                  </div>
+                </mat-select>
+              </mat-form-field>
+  
+            </div>  
+            <div class="form-button-group">
+              <button mat-flat-button color="primary" type="submit" [disabled]="!elevatorForm.valid">Create</button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="elevator-details-section">
+      <pre>{{this.createdElevator | json}}</pre>
+    </div>
+  </div>
+  
+  
+  
+  
+  

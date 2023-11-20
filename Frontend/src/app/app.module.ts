@@ -36,6 +36,7 @@ import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
 import { CreateBridgeComponent } from "./home/campus/create-bridge/create-bridge.component";
 import { EditFloorsComponent } from "./home/campus/edit-floors/edit-floors.component";
 import { GlobalErrorHandler } from "./global-exception";
+import { CreateElevatorComponent } from './home/campus/create-elevator/create-elevator.component';
 import { ListBuildingsComponent } from './home/campus/list-buildings/list-buildings.component';
 
 @NgModule({
@@ -55,6 +56,7 @@ import { ListBuildingsComponent } from './home/campus/list-buildings/list-buildi
     ListBuildingFloorsComponent,
     RobotListComponent,
     EditFloorsComponent,
+    CreateElevatorComponent,
     ListBuildingsComponent
   ],
   imports: [

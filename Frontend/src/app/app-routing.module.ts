@@ -15,6 +15,7 @@ import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
 import { CreateBridgeComponent } from "./home/campus/create-bridge/create-bridge.component";
 import { ErrorCheckGuard } from "./error-check.guard";
 import { EditFloorsComponent } from './home/campus/edit-floors/edit-floors.component';
+import { CreateElevatorComponent } from './home/campus/create-elevator/create-elevator.component';
 import {authGuard} from "./guards/auth.guard";
 import {ListBuildingsComponent} from "./home/campus/list-buildings/list-buildings.component"
 
@@ -64,6 +65,10 @@ const routes: Routes = [
       {
         path: 'campus/list-building-floors',
         component: ListBuildingFloorsComponent,
+      },
+      {
+        path: 'campus/create-elevator',
+        component: CreateElevatorComponent,
       },
       {
         path: 'campus/list-buildings',

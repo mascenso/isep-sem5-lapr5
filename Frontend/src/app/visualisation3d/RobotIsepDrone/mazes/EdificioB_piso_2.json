@@ -1,6 +1,6 @@
 {
     "groundTextureUrl": "./textures/ground2.jpg",
-    "wallTextureUrl": "./textures/tijoloWall.jpg",
+    "wallTextureUrl": "./textures/wall4.jpeg",
     "windowTextureUrl":"./textures/tijoloWallWindow.jpg",
     "doorTextureUrl":"./textures/door1.jpg",
     "size": { "width": 22, "height": 10 },

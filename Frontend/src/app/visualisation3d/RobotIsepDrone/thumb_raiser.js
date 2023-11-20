@@ -643,12 +643,19 @@ export default class ThumbRaiser {
         // Set single-view mode
         this.setViewMode(false);
         // Set the final action
-        this.animations.fadeToAction("Dance", 0.2);
-    }
+        //this.animations.fadeToAction("Dance", 0.2);
+        this.animations.fadeToAction("None", 0.2);
 
+    }
+/*
     collision(position) {
         return this.maze.distanceToWestWall(position) < this.player.radius || this.maze.distanceToEastWall(position) < this.player.radius || this.maze.distanceToNorthWall(position) < this.player.radius || this.maze.distanceToSouthWall(position) < this.player.radius;
     }
+*/
+    collision(position) {
+        return this.maze.distanceToWestWall(position) < this.player.radius/4 || this.maze.distanceToEastWall(position) < this.player.radius/4 || this.maze.distanceToNorthWall(position) < this.player.radius/4|| this.maze.distanceToSouthWall(position) < this.player.radius/4;
+    }
+
 
     update() {
         if (!this.gameRunning) {
@@ -677,6 +684,7 @@ export default class ThumbRaiser {
         }
         else {
             // Update the model animations
+            
             const deltaT = this.clock.getDelta();
             this.animations.update(deltaT);
 
@@ -746,7 +754,7 @@ export default class ThumbRaiser {
                         this.animations.fadeToAction("ThumbsUp", 0.2);
                     } */
                     else {
-                        this.animations.fadeToAction("idle", this.animations.activeName != "run" ? 0.2 : 0.6);
+                        this.animations.fadeToAction("idle", this.animations.activeName != "None" ? 0.2 : 0.6);
                         //this.animations.fadeToAction("Idle", this.animations.activeName != "Death" ? 0.2 : 0.6);
                     }
                     this.player.object.position.set(this.player.position.x, this.player.position.y, this.player.position.z);

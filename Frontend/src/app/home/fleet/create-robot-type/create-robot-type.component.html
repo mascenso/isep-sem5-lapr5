@@ -11,16 +11,16 @@
                 <mat-hint align="end">{{inputCode.value.length}} / 5</mat-hint>
                 <mat-error *ngIf="robotTypeForm.controls.designacao.hasError('required')">Designação is <strong>required</strong></mat-error>
                 <mat-error *ngIf="robotTypeForm.controls.designacao.hasError('pattern')">Designação must be in <strong>format A1234</strong></mat-error>
-  
+
               </mat-form-field>
             </p>
             <p>
                 <mat-form-field class="form-field form-field-task-type">
                     <mat-label>Task Types</mat-label>
-                    <mat-select matInput [formControl]="robotTypeForm.controls.tipoTarefas" formControlName="tipoTarefas" multiple>
-                      <mat-option *ngFor="let type of taskTypes" [value]="type">{{ type }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>   
+                  <mat-select matInput [formControl]="robotTypeForm.controls.tipoTarefas" multiple>
+                    <mat-option *ngFor="let type of taskTypes" [value]="type">{{ type }}</mat-option>
+                  </mat-select>
+                  </mat-form-field>
             </p>
             <div class="form-button-group">
               <button mat-flat-button color="primary" type="submit" [disabled]="!robotTypeForm.valid">Create</button>
@@ -33,8 +33,7 @@
       <pre>{{this.createdRobotType | json}}</pre>
     </div>
   </div>
-  
-  
-  
-  
-  
+
+
+
+

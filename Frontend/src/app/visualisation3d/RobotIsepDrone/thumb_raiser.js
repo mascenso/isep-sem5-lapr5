@@ -708,23 +708,25 @@ export default class ThumbRaiser {
                     if (this.player.keyStates.backward) {
                         const newPosition = new THREE.Vector3(-coveredDistance * Math.sin(direction), 0.0, -coveredDistance * Math.cos(direction)).add(this.player.position);
                         if (this.collision(newPosition)) {
-                            this.animations.fadeToAction("Death", 0.2);
+                           // this.animations.fadeToAction("Death", 0.2);
+                            this.animations.fadeToAction("None", 0.2);
                         }
                         else {
-                            this.animations.fadeToAction(this.player.keyStates.run ? "Running" : "Walking", 0.2);
+                            this.animations.fadeToAction(this.player.keyStates.run ? "run" : "walk", 0.2);
                             this.player.position = newPosition;
                         }
                     }
                     else if (this.player.keyStates.forward) {
                         const newPosition = new THREE.Vector3(coveredDistance * Math.sin(direction), 0.0, coveredDistance * Math.cos(direction)).add(this.player.position);
                         if (this.collision(newPosition)) {
-                            this.animations.fadeToAction("Death", 0.2);
+                           // this.animations.fadeToAction("Death", 0.2);
+                            this.animations.fadeToAction("None", 0.2);
                         }
                         else {
-                            this.animations.fadeToAction(this.player.keyStates.run ? "Running" : "Walking", 0.2);
+                            this.animations.fadeToAction(this.player.keyStates.run ? "run" : "walk", 0.2);
                             this.player.position = newPosition;
                         }
-                    }
+                    }/*
                     else if (this.player.keyStates.jump) {
                         this.animations.fadeToAction("Jump", 0.2);
                     }
@@ -742,9 +744,10 @@ export default class ThumbRaiser {
                     }
                     else if (this.player.keyStates.thumbsUp) {
                         this.animations.fadeToAction("ThumbsUp", 0.2);
-                    }
+                    } */
                     else {
-                        this.animations.fadeToAction("Idle", this.animations.activeName != "Death" ? 0.2 : 0.6);
+                        this.animations.fadeToAction("idle", this.animations.activeName != "run" ? 0.2 : 0.6);
+                        //this.animations.fadeToAction("Idle", this.animations.activeName != "Death" ? 0.2 : 0.6);
                     }
                     this.player.object.position.set(this.player.position.x, this.player.position.y, this.player.position.z);
                     this.player.object.rotation.y = direction - this.player.initialDirection;

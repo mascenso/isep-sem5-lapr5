@@ -14,7 +14,7 @@ export const playerData = {
     url: "./models/gltf/RobotExpressive/Xbot.glb",
     credits: "Model and related code snippets created by <a href='https://www.patreon.com/quaternius' target='_blank' rel='noopener'>Tomás Laulhé</a>. CC0 1.0. Modified by <a href='https://donmccurdy.com/' target='_blank' rel='noopener'>Don McCurdy</a>.",
     eyeHeight: 0.8, // fraction of character height
-    scale: new THREE.Vector3(0.3, 0.3, 0.3),
+    scale: new THREE.Vector3(0.25, 0.25, 0.25),
     walkingSpeed: 0.75,
     initialDirection: 0.0, // Expressed in degrees
     turningSpeed: 75.0, // Expressed in degrees / second

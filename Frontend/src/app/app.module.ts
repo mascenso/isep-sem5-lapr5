@@ -71,6 +71,7 @@ import { ListBuildingsComponent } from './home/campus/list-buildings/list-buildi
     MatIconModule,
     MatInputModule,
     MatCardModule,
+    MatSelectModule,
     MatPaginatorModule,
     MatTableModule,
     MatSortModule,

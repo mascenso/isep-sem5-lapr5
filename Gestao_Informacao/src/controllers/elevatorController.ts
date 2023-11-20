@@ -6,6 +6,8 @@ import { Result } from "../core/logic/Result";
 import IElevatorController from "./IControllers/IElevatorController";
 import IElevatorService from "../services/IServices/IElevatorService";
 import {IElevatorDTO} from "../dto/IElevatorDTO";
+import { IBuildingDTO } from '../dto/IBuildingDTO';
+import { StringNullableChain } from 'lodash';
 
 @Service()
 export default class ElevatorController implements IElevatorController /* TODO: extends ../core/infra/BaseController */ {
@@ -73,5 +75,27 @@ export default class ElevatorController implements IElevatorController /* TODO: 
     catch (e) {
       return next(e);
     }
-  }    
+  }  
+
+  public async getBuildingElevators(req: Request, res: Response, next: NextFunction) {
+
+    try {
+      const buildingId = req.params.id; // O ID do edifício do URL
+      console.log("building ",{buildingId});
+
+      const elevatorOrError = await this.elevatorServiceInstance.getBuildingElevators(buildingId);
+  
+
+      if (elevatorOrError.isFailure) {
+        return res.status(402).json('There is no elevators for that building!').send();
+      }
+
+      const elevatorDTO = elevatorOrError.getValue();
+      return res.json( elevatorDTO ).status(201);
+    }
+    catch (e) {
+      return next(e);
+    }
+  } 
+  
 }

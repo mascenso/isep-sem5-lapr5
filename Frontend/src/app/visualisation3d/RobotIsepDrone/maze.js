@@ -118,7 +118,9 @@ export default class Maze {
                         case 5:
                             this.bridges(this.object,this.ground,i,j,description);
                             break;
-     
+                        case 4.1:
+                            this.elevatorNorth(this.object,this.elevator,this.wall,i,j,description);
+                            break;
                     }
                     
                 }
@@ -402,6 +404,26 @@ export default class Maze {
             // You may need to adjust the position and scale of the model
             elevatorModel.position.set(i - description.size.width  / 2.0 -0.5 , 1, j - description.size.height / 2.0+1);
             elevatorModel.scale.set(0.0051, 0.005, 0.005);
+            this.object.add(elevatorModel);
+            });
+        object.add(wallObject);   
+    }
+
+    /**
+     * Create a rotated 180 elevator
+     */
+    elevatorNorth(object,elevator,wall,i,j,description){
+        // Load and add the elevator model to the scene
+        const loader = new GLTFLoader();
+        let wallObject = wall.object.clone();
+        wallObject.position.set(i - (description.size.width-0.5)  / 2.0 + 0.25, 0.5, j - description.size.height / 2.0);
+        wallObject.scale.set(1,1,1)
+        loader.load("./models/gltf/RobotExpressive/basic_elevator.glb", (gltf) => {
+            const elevatorModel = gltf.scene;
+            // You may need to adjust the position and scale of the model
+            elevatorModel.position.set(i - description.size.width  / 2.0 -0.5 , 1, j - description.size.height / 2.0 - 1);
+            elevatorModel.scale.set(0.0051, 0.005, 0.005);
+            elevatorModel.rotateY(Math.PI);
             this.object.add(elevatorModel);
             });
         object.add(wallObject);   

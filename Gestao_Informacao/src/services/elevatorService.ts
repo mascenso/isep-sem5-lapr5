@@ -8,6 +8,7 @@ import {ElevatorMap} from "../mappers/ElevatorMap";
 import {Elevator} from "../domain/elevator-agg/elevator";
 import IBuildingRepo from './IRepos/IBuildingRepo';
 import IFloorRepo from './IRepos/IFloorRepo';
+import { IBuildingDTO } from '../dto/IBuildingDTO';
 
 
 @Service()
@@ -85,6 +86,7 @@ export default class ElevatorService implements IElevatorService {
 
       const elevators = await this.elevatorRepo.getAllElevators();
 
+
       const elevatorDTOs = elevators.map((elevator) => ElevatorMap.toDTO(elevator) as IElevatorDTO);
 
       return Result.ok<IElevatorDTO[]>(elevatorDTOs);
@@ -94,4 +96,23 @@ export default class ElevatorService implements IElevatorService {
       throw e;
     }
   }
+
+  
+  public async getBuildingElevators(buildingId: string): Promise<Result<IElevatorDTO>> {
+    try {
+
+      const elevator = await this.elevatorRepo.findByBuildingId(buildingId);
+
+      if (elevator == null) {
+        return Result.fail<IElevatorDTO>(`Building with id ${buildingId} doesn't have any elevator!`);
+      }
+
+      const elevatorDTOs=ElevatorMap.toDTO(elevator);
+
+      return Result.ok<IElevatorDTO>(elevatorDTOs);
+    } catch (e) {
+      throw e;
+    }
+  }
+  
 }

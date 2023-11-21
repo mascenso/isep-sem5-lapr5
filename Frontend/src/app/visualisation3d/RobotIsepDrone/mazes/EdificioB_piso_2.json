@@ -1,8 +1,8 @@
 {
     "groundTextureUrl": "./textures/ground2.jpg",
-    "wallTextureUrl": "./textures/tijoloWall.jpg",
+    "wallTextureUrl": "./textures/wall5.jpeg",
     "windowTextureUrl":"./textures/tijoloWallWindow.jpg",
-    "doorTextureUrl":"./textures/doorTexture.jpg",
+    "doorTextureUrl":"./textures/door1.jpg",
     "size": { "width": 22, "height": 10 },
     "map": [
         [3  ,  2,  3,  2,  2,  2,  3,  2,  2,  2,  2,  2,  2,  2,  3,  2,  2,  2,  3,  2,  2,  2,  1],

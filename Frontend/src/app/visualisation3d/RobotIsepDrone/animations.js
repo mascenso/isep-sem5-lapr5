@@ -2,8 +2,10 @@ import * as THREE from "three";
 
 export default class Animations {
     constructor(object, animations) {
-        this.states = ["Idle", "Walking", "Running", "Dance", "Death", "Sitting", "Standing"];
-        this.emotes = ["Jump", "Yes", "No", "Wave", "Punch", "ThumbsUp"];
+        //this.states = ["Idle", "Walking", "Running", "Dance", "Death", "Sitting", "Standing"];
+        //this.emotes = ["Jump", "Yes", "No", "Wave", "Punch", "ThumbsUp"];
+        this.states = ["idle", "run","walk"];
+        this.emotes = ["None"];
 
         this.mixer = new THREE.AnimationMixer(object);
         this.actionInProgress = false;
@@ -13,12 +15,12 @@ export default class Animations {
             const clip = animations[i];
             const action = this.mixer.clipAction(clip);
             this.actions[clip.name] = action;
-            if (this.states.indexOf(clip.name) >= 4 || this.emotes.indexOf(clip.name) >= 0) {
+           if (this.states.indexOf(clip.name) >= 0 || this.emotes.indexOf(clip.name) >= 0) {
                 action.clampWhenFinished = true;
-                action.loop = THREE.LoopOnce;
+                action.loop = THREE.LoopRepeat;
             }
         }
-        this.activeName = "Idle";
+        this.activeName = "idle";
         this.actions[this.activeName].play();
     }
 
@@ -34,7 +36,7 @@ export default class Animations {
                 .fadeIn(duration)
                 .play();
             // Some actions must not be interrupted
-            if (this.activeName != "Idle" && this.activeName != "Walking" && this.activeName != "Running") {
+            if (this.activeName != "idle" && this.activeName != "walk" && this.activeName != "run") {
                 this.mixer.addEventListener("finished", event => this.actionFinished(event));
                 this.actionInProgress = true;
             }

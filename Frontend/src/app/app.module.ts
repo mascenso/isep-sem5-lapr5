@@ -38,6 +38,7 @@ import { EditFloorsComponent } from "./home/campus/edit-floors/edit-floors.compo
 import { GlobalErrorHandler } from "./global-exception";
 import { CreateElevatorComponent } from './home/campus/create-elevator/create-elevator.component';
 import { ListBuildingsComponent } from './home/campus/list-buildings/list-buildings.component';
+import { ListElevatorsComponent } from './home/campus/list-elevators/list-elevators.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { ListBuildingsComponent } from './home/campus/list-buildings/list-buildi
     RobotListComponent,
     EditFloorsComponent,
     CreateElevatorComponent,
-    ListBuildingsComponent
+    ListBuildingsComponent,
+    ListElevatorsComponent
   ],
   imports: [
     BrowserModule,

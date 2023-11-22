@@ -80,7 +80,7 @@ export default class ElevatorController implements IElevatorController /* TODO: 
   public async getBuildingElevators(req: Request, res: Response, next: NextFunction) {
 
     try {
-      const buildingId = req.params.id; // O ID do edifício do URL
+      const buildingId = req.params.buildingId; // O ID do edifício do URL
       console.log("building ",{buildingId});
 
       const elevatorOrError = await this.elevatorServiceInstance.getBuildingElevators(buildingId);

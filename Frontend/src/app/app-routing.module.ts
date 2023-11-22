@@ -18,6 +18,7 @@ import { EditFloorsComponent } from './home/campus/edit-floors/edit-floors.compo
 import { CreateElevatorComponent } from './home/campus/create-elevator/create-elevator.component';
 import {authGuard} from "./guards/auth.guard";
 import {ListBuildingsComponent} from "./home/campus/list-buildings/list-buildings.component"
+import { ListElevatorsComponent } from './home/campus/list-elevators/list-elevators.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -73,6 +74,10 @@ const routes: Routes = [
       {
         path: 'campus/list-buildings',
         component: ListBuildingsComponent,
+      },
+      {
+        path: 'campus/list-elevators',
+        component: ListElevatorsComponent,
       },
       {
         path: 'fleet/create-robot-type',

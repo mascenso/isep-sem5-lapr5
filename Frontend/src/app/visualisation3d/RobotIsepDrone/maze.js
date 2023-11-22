@@ -275,7 +275,7 @@ export default class Maze {
         let doorObject = door.object.clone();
         let wallObject = wall.object.clone();
         //description.size.width+0.5 isto é para encostar a porta a parede e nao ocupar toda a celula
-        doorObject.position.set(i - (description.size.width+1.5)  / 2.0 + 0.5, 0.5, j - description.size.height / 2.0);
+        doorObject.position.set(i - (description.size.width+0.5)  / 2.0 + 0.5, 0.5, j - description.size.height / 2.0);
         wallObject.position.set(i - (description.size.width+1)  / 2.0 + 0.5, 0.5, j - description.size.height / 2.0+0.75);
         wallObject.scale.set(0.5,1,1)
         doorObject.scale.set(0.5,1,1)

@@ -20,7 +20,7 @@ export default {
    * That long string from mlab
    */
   //databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/test",
-  
+
   //Base de dados do DEI
   databaseURL: process.env.MONGODB_URI || "mongodb://***REMOVED***@vs199.dei.isep.ipp.pt:27017/admin",
 
@@ -42,6 +42,8 @@ export default {
   api: {
     prefix: '/api',
   },
+
+  corsOrigin: process.env.CORS_ORIGIN || "https://isep-sem5pi-079.vercel.app",
 
   controllers: {
     role: {

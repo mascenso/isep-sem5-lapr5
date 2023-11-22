@@ -53,3 +53,20 @@ export const cameraData = {
     near: 0.01, // Front clipping plane
     far: 100.0 // Back clipping plane
 }
+
+export const cubeTextureData = {
+  skyboxes: [
+    {
+      name: "Stormy days",
+      texturePath: "./cube_textures/envmap_stormydays/",
+      texturePositiveXUrl: "stormydays_ft.jpg",
+      textureNegativeXUrl: "stormydays_bk.jpg",
+      texturePositiveYUrl: "stormydays_up.jpg",
+      textureNegativeYUrl: "stormydays_dn.jpg",
+      texturePositiveZUrl: "stormydays_rt.jpg",
+      textureNegativeZUrl: "stormydays_lf.jpg",
+      credits: "Skybox created by <a href='https://opengameart.org/content/stormy-days-skybox' target='_blank' rel='noopener'>Jockum Skoglund (hipshot)</a>."
+    }
+  ],
+  selected: 0
+}

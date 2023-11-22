@@ -13,7 +13,7 @@
 import * as THREE from "three";
 import Stats from "three/addons/libs/stats.module.js";
 import Orientation from "./orientation.js";
-import { generalData, mazeData, playerData, lightsData, fogData, cameraData } from "./default_data.js";
+import { generalData, mazeData, playerData, lightsData, fogData, cameraData, cubeTextureData } from "./default_data.js";
 import { merge } from "./merge.js";
 import Maze from "./maze.js";
 import Player from "./player.js";
@@ -21,6 +21,8 @@ import Lights from "./lights.js";
 import Fog from "./fog.js";
 import Camera from "./camera.js";
 import Animations from "./animations.js";
+import CubeTexture from "./cubetexture.js";
+
 import UserInterface from "./user_interface.js";
 
 /*
@@ -32,6 +34,21 @@ import UserInterface from "./user_interface.js";
  *  url: String,
  *  credits: String,
  *  scale: Vector3
+ * }
+ *
+ *  * cubeTexturesParameters = {
+ *  skyboxes: [{
+ *   name: String,
+ *   texturePath: String,
+ *   texturePositiveXUrl: String,
+ *   textureNegativeXUrl: String,
+ *   texturePositiveYUrl: String,
+ *   textureNegativeYUrl: String,
+ *   texturePositiveZUrl: String,
+ *   textureNegativeZUrl: String,
+ *   credits: String
+ *  }],
+ *  selected: Integer
  * }
  *
  * playerParameters = {
@@ -150,7 +167,7 @@ import UserInterface from "./user_interface.js";
  */
 
 export default class ThumbRaiser {
-    constructor(generalParameters, mazeParameters, playerParameters, lightsParameters, fogParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters) {
+    constructor(generalParameters, mazeParameters, playerParameters, lightsParameters, fogParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters, cubeTexturesParameters) {
         this.generalParameters = merge({}, generalData, generalParameters);
         this.mazeParameters = merge({}, mazeData, mazeParameters);
         this.playerParameters = merge({}, playerData, playerParameters);
@@ -161,6 +178,8 @@ export default class ThumbRaiser {
         this.thirdPersonViewCameraParameters = merge({}, cameraData, thirdPersonViewCameraParameters);
         this.topViewCameraParameters = merge({}, cameraData, topViewCameraParameters);
         this.miniMapCameraParameters = merge({}, cameraData, miniMapCameraParameters);
+        this.cubeTexturesParameters = merge({}, cubeTextureData, cubeTexturesParameters);
+
 
         // Create a 2D scene (the viewports frames)
         this.scene2D = new THREE.Scene();
@@ -178,7 +197,15 @@ export default class ThumbRaiser {
         // Create a 3D scene (the game itself)
         this.scene3D = new THREE.Scene();
 
-        // Create the maze
+
+        // Create the cube texture
+        this.cubeTexture = new CubeTexture(this.cubeTexturesParameters.skyboxes[0]);
+
+        // Add background
+        this.scene3D.background = this.cubeTexture.textures;
+
+
+      // Create the maze
         this.maze = new Maze(this.mazeParameters);
 
         // Create the player
@@ -684,7 +711,7 @@ export default class ThumbRaiser {
         }
         else {
             // Update the model animations
-            
+
             const deltaT = this.clock.getDelta();
             this.animations.update(deltaT);
 

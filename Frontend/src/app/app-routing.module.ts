@@ -9,6 +9,7 @@ import {LoginComponent} from "./login/login.component";
 import {CreateBuildingComponent} from "./home/campus/create-building/create-building.component";
 import {CreateRobotTypeComponent} from "./home/fleet/create-robot-type/create-robot-type.component";
 import {FloorListComponent} from "./home/campus/floor-list/floor-list.component";
+import {CreateFloorComponent} from "./home/campus/create-floor/create-floor.component";
 import {BridgeListComponent} from "./home/campus/bridge-list/bridge-list.component";
 import { ListBuildingFloorsComponent } from './home/campus/list-building-floors/list-building-floors.component';
 import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
@@ -65,6 +66,10 @@ const routes: Routes = [
       {
         path: 'campus/list-building-floors',
         component: ListBuildingFloorsComponent,
+      },
+      {
+        path: 'campus/create-floor',
+        component: CreateFloorComponent,
       },
       {
         path: 'campus/create-elevator',

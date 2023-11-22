@@ -31,8 +31,8 @@ export class FloorService {
     return this.http.put<FloorResponseDTO[]>(`${this.API_URL}/api/floors`, floor);
   }
 
-
-
-
+  public createFloor(floor: FloorResponseDTO): Observable<FloorResponseDTO[]> {
+    return this.http.post<FloorResponseDTO[]>(`${this.API_URL}/api/floors`, floor);
+  }
 
 }

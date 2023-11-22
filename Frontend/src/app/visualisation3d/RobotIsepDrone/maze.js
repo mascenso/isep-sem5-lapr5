@@ -118,7 +118,9 @@ export default class Maze {
                         case 5:
                             this.bridges(this.object,this.ground,i,j,description);
                             break;
-     
+                        case 4.1:
+                            this.elevatorNorth(this.object,this.elevator,this.wall,i,j,description);
+                            break;
                     }
                     
                 }
@@ -273,7 +275,7 @@ export default class Maze {
         let doorObject = door.object.clone();
         let wallObject = wall.object.clone();
         //description.size.width+0.5 isto é para encostar a porta a parede e nao ocupar toda a celula
-        doorObject.position.set(i - (description.size.width+1.5)  / 2.0 + 0.5, 0.5, j - description.size.height / 2.0);
+        doorObject.position.set(i - (description.size.width+0.5)  / 2.0 + 0.5, 0.5, j - description.size.height / 2.0);
         wallObject.position.set(i - (description.size.width+1)  / 2.0 + 0.5, 0.5, j - description.size.height / 2.0+0.75);
         wallObject.scale.set(0.5,1,1)
         doorObject.scale.set(0.5,1,1)
@@ -402,6 +404,26 @@ export default class Maze {
             // You may need to adjust the position and scale of the model
             elevatorModel.position.set(i - description.size.width  / 2.0 -0.5 , 1, j - description.size.height / 2.0+1);
             elevatorModel.scale.set(0.0051, 0.005, 0.005);
+            this.object.add(elevatorModel);
+            });
+        object.add(wallObject);   
+    }
+
+    /**
+     * Create a rotated 180 elevator
+     */
+    elevatorNorth(object,elevator,wall,i,j,description){
+        // Load and add the elevator model to the scene
+        const loader = new GLTFLoader();
+        let wallObject = wall.object.clone();
+        wallObject.position.set(i - (description.size.width-0.5)  / 2.0 + 0.25, 0.5, j - description.size.height / 2.0);
+        wallObject.scale.set(1,1,1)
+        loader.load("./models/gltf/RobotExpressive/basic_elevator.glb", (gltf) => {
+            const elevatorModel = gltf.scene;
+            // You may need to adjust the position and scale of the model
+            elevatorModel.position.set(i - description.size.width  / 2.0 -0.5 , 1, j - description.size.height / 2.0 - 1);
+            elevatorModel.scale.set(0.0051, 0.005, 0.005);
+            elevatorModel.rotateY(Math.PI);
             this.object.add(elevatorModel);
             });
         object.add(wallObject);   

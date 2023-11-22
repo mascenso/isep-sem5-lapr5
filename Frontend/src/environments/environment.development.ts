@@ -1,3 +1,4 @@
 export const environment = {
-  API_URL: "http://10.9.10.79:4000"
+  production: true,
+  API_URL: 'https://vs621.dei.isep.ipp.pt:2222',
 };

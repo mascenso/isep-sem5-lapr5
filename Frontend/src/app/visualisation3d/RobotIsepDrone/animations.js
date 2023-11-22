@@ -15,7 +15,7 @@ export default class Animations {
             const clip = animations[i];
             const action = this.mixer.clipAction(clip);
             this.actions[clip.name] = action;
-           if (this.states.indexOf(clip.name) >= 0 || this.emotes.indexOf(clip.name) >= 0) {
+           if (this.states.indexOf(clip.name) >= 1 || this.emotes.indexOf(clip.name) != 0) {
                 action.clampWhenFinished = true;
                 action.loop = THREE.LoopRepeat;
             }

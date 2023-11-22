@@ -14,9 +14,9 @@
 <!-- Tabela de Elevadores -->
 <mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
   <!-- Colunas -->
-  <ng-container matColumnDef="buildingid">
-    <mat-header-cell *matHeaderCellDef>Building ID</mat-header-cell>
-    <mat-cell *matCellDef="let elevator">{{ elevator.buildingId }}</mat-cell>
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+    <mat-cell *matCellDef="let elevator">{{ elevator.id }}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="code">
@@ -31,9 +31,9 @@
     </mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="id">
-    <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
-    <mat-cell *matCellDef="let elevator">{{ elevator.id }}</mat-cell>
+  <ng-container matColumnDef="buildingid">
+    <mat-header-cell *matHeaderCellDef>Building ID</mat-header-cell>
+    <mat-cell *matCellDef="let elevator">{{ elevator.buildingId }}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="expand">

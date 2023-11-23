@@ -45,12 +45,8 @@
     "exitLocation": [0,0],
     "locker":[
       {
-          "position" :[0,0.4],
+          "position" :[0.5,0.4],
           "orientation":"E"
-      },
-      {
-          "position" :[2,0.4],
-          "orientation":"S"
       },
       {
           "position" :[5,0.4],
@@ -59,10 +55,6 @@
       {
           "position" :[5,5.4],
           "orientation":"S"
-      },
-      {
-          "position" :[8.5,4.4],
-          "orientation":"N"
       },
       {
           "position" :[10.5,5.4],
@@ -251,15 +243,47 @@
         "orientation":"N"
       },
       {
-        "position":[11,5],
-        "orientation":"N"
-      },
-      {
         "position":[10,3],
         "orientation":"N"
       },
       {
+        "position":[11,4],
+        "orientation":"N"
+      },
+      {
+        "position":[10,5],
+        "orientation":"N"
+      },
+      {
+        "position":[11,5],
+        "orientation":"N"
+      },
+      {
         "position":[11,3],
+        "orientation":"N"
+      },
+      {
+        "position":[13,4],
+        "orientation":"N"
+      },
+      {
+        "position":[13,3],
+        "orientation":"N"
+      },
+      {
+        "position":[12,4],
+        "orientation":"N"
+      },
+      {
+        "position":[13,5],
+        "orientation":"N"
+      },
+      {
+        "position":[12,5],
+        "orientation":"N"
+      },
+      {
+        "position":[12,3],
         "orientation":"N"
       }
 

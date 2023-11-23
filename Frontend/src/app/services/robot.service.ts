@@ -24,4 +24,8 @@ export class RobotService {
         reportProgress: showSpinner
       });
   }
+
+  public getAllRobots(): Observable<RobotDTO[]> {
+    return this.http.get<RobotDTO[]>(`${this.API_URL}/api/robots/`);
+  }
 }

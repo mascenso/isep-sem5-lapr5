@@ -35,4 +35,44 @@ export class FloorService {
     return this.http.post<FloorResponseDTO[]>(`${this.API_URL}/api/floors`, floor);
   }
 
+  public addMapFloor(floor: string, map: any): Observable<FloorResponseDTO[]> {
+    const file: File = map.target.files[0];
+    const content = {};
+  
+    if (file) {
+      const reader = new FileReader();
+  
+      // Crie um novo Observable para controlar a operação assíncrona
+      return new Observable(observer => {
+        reader.onload = () => {
+          try {
+            const content = JSON.parse(reader.result as string);
+            
+            // Use o método post e retorne o Observable resultante
+            this.http.post<FloorResponseDTO[]>(`${this.API_URL}/api/floors/${floor}/map`, {floorMap:content})
+              .subscribe(
+                (response: FloorResponseDTO[]) => {
+                  // Emite o resultado para observadores
+                  observer.next(response);
+                  observer.complete();
+                },
+                error => {
+                  console.error('Erro ao fazer a solicitação HTTP:', error);
+                  observer.error(error);
+                }
+              );
+          } catch (error) {
+            console.error('Erro ao analisar o JSON:', error);
+            observer.error(error);
+          }
+        };
+  
+        reader.readAsText(file);
+      });
+    }
+  
+    // Se nenhum arquivo foi fornecido, retorna um Observable vazio
+    return new Observable(observer => observer.complete());
+  }
+
 }

@@ -23,7 +23,7 @@
                 <mat-select [formControl]="buildingSelectionControl" (valueChange)="onSelectionUpdateSelectionControl($event)">
                   <mat-option></mat-option>
                   <div *ngFor="let building of buildingList;">
-                    <mat-option  [value]="building.id">{{building.code}} - {{building.id}}</mat-option>
+                    <mat-option  [value]="building.id">{{building.name}} - {{building.description}}</mat-option>
                   </div>
                 </mat-select>
               </mat-form-field>

@@ -1,5 +1,4 @@
 import * as THREE from "three";
-
 /*
  * parameters = {
  *  name: String,

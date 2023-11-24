@@ -6,12 +6,12 @@ export const generalData = {
 }
 
 export const mazeData = {
-    url: "./mazes/EdificioA_piso_2.json",
+    url: "./assets/EdificioA_piso_2.json",
     scale: new THREE.Vector3(1.0, 1.0, 1.0)
 }
 
 export const playerData = {
-    url: "./models/gltf/RobotExpressive/Xbot.glb",
+    url: "./assets/Xbot.glb",
     credits: "Model and related code snippets created by <a href='https://www.patreon.com/quaternius' target='_blank' rel='noopener'>Tomás Laulhé</a>. CC0 1.0. Modified by <a href='https://donmccurdy.com/' target='_blank' rel='noopener'>Don McCurdy</a>.",
     eyeHeight: 0.8, // fraction of character height
     scale: new THREE.Vector3(0.25, 0.25, 0.25),
@@ -58,7 +58,7 @@ export const cubeTextureData = {
   skyboxes: [
     {
       name: "Stormy days",
-      texturePath: "./cube_textures/envmap_stormydays/",
+      texturePath: "./assets/cube_textures/envmap_stormydays/",
       texturePositiveXUrl: "stormydays_ft.jpg",
       textureNegativeXUrl: "stormydays_bk.jpg",
       texturePositiveYUrl: "stormydays_up.jpg",

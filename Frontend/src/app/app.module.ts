@@ -39,6 +39,7 @@ import { GlobalErrorHandler } from "./global-exception";
 import { CreateElevatorComponent } from './home/campus/create-elevator/create-elevator.component';
 import { ListBuildingsComponent } from './home/campus/list-buildings/list-buildings.component';
 import { CreateFloorComponent } from './home/campus/create-floor/create-floor.component';
+import { FleetListComponent } from './home/fleet/fleet-list/fleet-list.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { CreateFloorComponent } from './home/campus/create-floor/create-floor.co
     EditFloorsComponent,
     CreateElevatorComponent,
     ListBuildingsComponent,
-    CreateFloorComponent
+    CreateFloorComponent,
+    FleetListComponent
   ],
   imports: [
     BrowserModule,

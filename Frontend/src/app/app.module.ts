@@ -40,6 +40,7 @@ import { CreateElevatorComponent } from './home/campus/create-elevator/create-el
 import { ListBuildingsComponent } from './home/campus/list-buildings/list-buildings.component';
 import { CreateFloorComponent } from './home/campus/create-floor/create-floor.component';
 import { FleetListComponent } from './home/fleet/fleet-list/fleet-list.component';
+import { AddMapFloorComponent } from './home/campus/add-map-floor/add-map-floor.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { FleetListComponent } from './home/fleet/fleet-list/fleet-list.component
     CreateElevatorComponent,
     ListBuildingsComponent,
     CreateFloorComponent,
-    FleetListComponent
+    FleetListComponent,
+    AddMapFloorComponent
   ],
   imports: [
     BrowserModule,

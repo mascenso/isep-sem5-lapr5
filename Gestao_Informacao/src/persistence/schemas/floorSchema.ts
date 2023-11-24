@@ -9,7 +9,7 @@ const FloorSchema = new mongoose.Schema(
     description: { type: String, unique: false },
     width: {type: Number, unique: false},
     length: {type: Number, unique: false},
-    floorMap: { type: [[Number]], unique: false } //array
+    floorMap: { type: Object, unique: false } //array
   },
   {
     timestamps: true

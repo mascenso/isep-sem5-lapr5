@@ -19,11 +19,11 @@ export default {
   /**
    * That long string from mlab
    */
-  databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/test",
+  //databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/test",
 
   //Base de dados do DEI
-  //databaseURL: process.env.MONGODB_URI || "mongodb://mongoadmin:9e591ec9fd4cb27b85363734@vs199.dei.isep.ipp.pt:27017/admin",
-
+  databaseURL: process.env.MONGODB_URI || "mongodb://mongoadmin:9e591ec9fd4cb27b85363734@vs199.dei.isep.ipp.pt:27017/admin",
+  
   /**
    * Your secret sauce
    */

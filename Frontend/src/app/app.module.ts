@@ -41,6 +41,7 @@ import { ListBuildingsComponent } from './home/campus/list-buildings/list-buildi
 import { CreateFloorComponent } from './home/campus/create-floor/create-floor.component';
 import { FleetListComponent } from './home/fleet/fleet-list/fleet-list.component';
 import { AddMapFloorComponent } from './home/campus/add-map-floor/add-map-floor.component';
+import { EditBuildingComponent } from './home/campus/edit-building/edit-building.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { AddMapFloorComponent } from './home/campus/add-map-floor/add-map-floor.
     ListBuildingsComponent,
     CreateFloorComponent,
     FleetListComponent,
-    AddMapFloorComponent
+    AddMapFloorComponent,
+    EditBuildingComponent
   ],
   imports: [
     BrowserModule,

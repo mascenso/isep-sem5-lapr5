@@ -22,4 +22,8 @@ export class BuildingService {
     return this.http.get<BuildingResponseDTO[]>(`${this.API_URL}/api/buildings`);
   }
 
+  public editBuilding(building:CreateBuildingRequestDTO): Observable<BuildingResponseDTO> {
+    return this.http.patch<BuildingResponseDTO>(`${this.API_URL}/api/buildings`,building);
+  }
+
 }

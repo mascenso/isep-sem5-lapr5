@@ -10,7 +10,7 @@ async function startServer() {
   const app = express();
 
   app.use(cors(
-    { origin: config.corsOrigin, }
+   //{ origin: config.corsOrigin, }
   ));
 
   await require('./loaders').default({ expressApp: app });

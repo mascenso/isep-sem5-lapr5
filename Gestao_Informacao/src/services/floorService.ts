@@ -64,6 +64,7 @@ export default class FloorService implements IFloorService {
   }
 
   public async addMapToFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
+    console.log("cheguei")
     try {
 
       const floor = await this.floorRepo.findByDomainId(floorDTO.id);

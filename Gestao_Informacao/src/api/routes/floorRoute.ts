@@ -32,9 +32,7 @@ export default (app: Router) => {
         id:Joi.string().required()
       }),
       body: Joi.object({
-          floorMap: Joi.array().items(
-            Joi.array().items(Joi.number())
-          ).required(),
+          floorMap: Joi.object().required(),
       })
     }),
     (req, res, next) => {

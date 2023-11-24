@@ -42,6 +42,7 @@ import { CreateFloorComponent } from './home/campus/create-floor/create-floor.co
 import { FleetListComponent } from './home/fleet/fleet-list/fleet-list.component';
 import { AddMapFloorComponent } from './home/campus/add-map-floor/add-map-floor.component';
 import { EditBuildingComponent } from './home/campus/edit-building/edit-building.component';
+import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
 
 @NgModule({
   declarations: [
@@ -65,7 +66,7 @@ import { EditBuildingComponent } from './home/campus/edit-building/edit-building
     CreateFloorComponent,
     FleetListComponent,
     AddMapFloorComponent,
-    EditBuildingComponent
+    EditBuildingComponent,
   ],
   imports: [
     BrowserModule,
@@ -100,7 +101,11 @@ import { EditBuildingComponent } from './home/campus/edit-building/edit-building
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
-    }
+    },
+    { provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
+    },
   ],
   bootstrap: [AppComponent]
 })

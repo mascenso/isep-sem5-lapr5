@@ -102,10 +102,8 @@ const routes: Routes = [
         path: 'fleet/list-robots',
         component: RobotListComponent,
       },
-
     ],
   },
-  { path: '**', redirectTo: 'home'}
 ];
 
 @NgModule({

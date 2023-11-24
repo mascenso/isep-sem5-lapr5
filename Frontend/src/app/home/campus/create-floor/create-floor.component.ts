@@ -28,7 +28,7 @@ export class CreateFloorComponent implements OnInit{
       length: ['', Validators.required],
       floorNumber: ['', Validators.required],
       description: [''],
-      floorMap: [[]], 
+      floorMap: {}, 
     });
   }
 

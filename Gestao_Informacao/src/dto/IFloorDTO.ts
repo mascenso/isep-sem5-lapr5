@@ -5,5 +5,5 @@ export interface IFloorDTO {
     length: number;
     floorNumber: number;
     description: string;
-    floorMap: number[][];
+    floorMap: object;
   }

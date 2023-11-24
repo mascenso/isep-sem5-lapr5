@@ -60,7 +60,7 @@ export default class FloorController implements IFloorController /* TODO: extend
   }
 
   public async addMapToFloor(req: Request, res: Response, next: NextFunction) {
-
+    console.log(3333333)
     try {
 
       const floorOrError = await this.floorServiceInstance.addMapToFloor(req.body as IFloorDTO) as Result<IFloorDTO>;

@@ -9,7 +9,7 @@ interface FloorProps {
     length: number;
     floorNumber: number;
     description?: string;
-    floorMap: number[][];
+    floorMap: object;
 }
 
 export class Floor extends AggregateRoot<FloorProps> {
@@ -74,7 +74,7 @@ export class Floor extends AggregateRoot<FloorProps> {
     return this.props.length;
   }
 
-  get floorMap(): number [][]{
+  get floorMap(): object{
     return this.props.floorMap;
   }
 
@@ -98,7 +98,7 @@ export class Floor extends AggregateRoot<FloorProps> {
     this.props.length = value;
   }
 
-  set floorMap ( value: number[][]) {
+  set floorMap ( value: object) {
     this.props.floorMap = value;
   }
 }

@@ -1,0 +1,28 @@
+<div>
+    <h2>Enviar Mapa do Andar</h2>
+
+      <!-- Dropdown para selecionar o building -->
+      <mat-form-field>
+        <mat-label>Escolha o Edificio</mat-label>
+        <mat-select [(ngModel)]="selectedBuilding" name="building" required (selectionChange)="getFloorsAtBuilding(selectedBuilding)">
+          <mat-option *ngFor="let building of buildings" [value]="building.id">{{ building.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <mat-form-field *ngIf="selectedBuilding !== ''">
+        <mat-label>Escolha o Piso</mat-label>
+        <mat-select [(ngModel)]="selectedFloor" name="floor" required (selectionChange)="getFloorsAtBuilding(selectedBuilding)">
+          <mat-option *ngFor="let floor of floors" [value]="floor.id">{{ floor.floorNumber}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div *ngIf="selectedFloor !== ''">
+        <input type="file" (change)="onFileSelected($event)" accept=".json" required>
+      </div>
+
+      <div  *ngIf="fileToUpload !== null">
+        <button mat-raised-button color="primary" (click)="submitMap()">Enviar Mapa</button>
+      </div >
+     
+
+  </div>

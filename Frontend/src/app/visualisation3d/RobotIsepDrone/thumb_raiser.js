@@ -180,7 +180,6 @@ export default class ThumbRaiser {
         this.miniMapCameraParameters = merge({}, cameraData, miniMapCameraParameters);
         this.cubeTexturesParameters = merge({}, cubeTextureData, cubeTexturesParameters);
 
-
         // Create a 2D scene (the viewports frames)
         this.scene2D = new THREE.Scene();
 
@@ -200,10 +199,10 @@ export default class ThumbRaiser {
 
         // Create the cube texture
         this.cubeTexture = new CubeTexture(this.cubeTexturesParameters.skyboxes[0]);
-
+    
         // Add background
         this.scene3D.background = this.cubeTexture.textures;
-
+        console.log(this.scene3D.background)
 
       // Create the maze
         this.maze = new Maze(this.mazeParameters);
@@ -232,15 +231,17 @@ export default class ThumbRaiser {
         document.body.appendChild(this.statistics.dom);
 
         // Create a renderer and turn on shadows in the renderer
-        this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        const canvas = document.getElementById("canvasForRender");
+        this.renderer = new THREE.WebGLRenderer({  canvas:canvas });
         if (this.generalParameters.setDevicePixelRatio) {
             this.renderer.setPixelRatio(window.devicePixelRatio);
         }
         this.renderer.autoClear = false;
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(this.renderer.domElement);
+        const height = window.innerHeight-50;
+        const width = window.innerWidth-50;
+        this.renderer.setSize(width, height);
 
         // Set the mouse move action (none)
         this.dragMiniMap = false;
@@ -685,8 +686,10 @@ export default class ThumbRaiser {
 
 
     update() {
+        
         if (!this.gameRunning) {
             if (this.maze.loaded && this.player.loaded) { // If all resources have been loaded
+                
                 // Add the maze, the player and the lights to the scene
                 this.scene3D.add(this.maze.object);
                 this.scene3D.add(this.player.object);
@@ -710,6 +713,7 @@ export default class ThumbRaiser {
             }
         }
         else {
+            
             // Update the model animations
 
             const deltaT = this.clock.getDelta();

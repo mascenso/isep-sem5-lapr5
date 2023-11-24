@@ -1,0 +1,38 @@
+<form [formGroup]="buildingForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Selecionar Edifício</mat-label>
+      <mat-select formControlName="id" (selectionChange)="onBuildingSelected($event.value)">
+        <mat-option *ngFor="let building of buildings" [value]="building.id">
+          {{ building.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div *ngIf="selectedBuilding !== undefined">
+        <mat-form-field>
+            <mat-label>Code</mat-label>
+            <input matInput formControlName="code"/>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Max Width</mat-label>
+            <input matInput formControlName="maxWidth" />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Max Length</mat-label>
+            <input matInput formControlName="maxLength" />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="description" />
+        </mat-form-field>
+        <button mat-raised-button type="submit">Salvar</button>
+    </div>
+
+  
+    <!-- Adicione campos adicionais conforme necessário -->
+  
+
+  </form>

@@ -43,7 +43,7 @@ export default {
     prefix: '/api',
   },
 
-  corsOrigin: process.env.CORS_ORIGIN || "https://isep-sem5pi-079.vercel.app",
+  corsOrigin: process.env.CORS_ORIGIN, // || "https://isep-sem5pi-079.vercel.app",
 
   controllers: {
     role: {

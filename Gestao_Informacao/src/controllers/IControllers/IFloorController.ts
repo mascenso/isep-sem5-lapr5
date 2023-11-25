@@ -8,4 +8,5 @@ export default interface IFloorController {
   getBuildingsByMinMaxFloors(req: Request, res: Response, next: NextFunction);
   getAllFloors(req: Request, res: Response, next: NextFunction);
   getFloorsWithElevatorByBuildingId(req: Request, res: Response, next: NextFunction);
+  getFloorById(req: Request, res: Response, next: NextFunction);
 }

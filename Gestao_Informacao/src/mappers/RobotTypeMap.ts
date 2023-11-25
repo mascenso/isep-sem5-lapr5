@@ -19,8 +19,10 @@ export class RobotTypeMap extends Mapper<RobotType> {
   }
 
   public static toDomain (robotType: any | Model<IRobotTypePersistence & Document> ): RobotType {
-    const robotTypeOrError = RobotType.create(
-      robotType,
+    const robotTypeOrError = RobotType.create({
+      designacao: robotType.designacao.toString(),
+      tipoTarefas: robotType.tipoTarefas
+    },
       new UniqueEntityID(robotType.domainId)
     );
 

@@ -144,4 +144,20 @@ export default class FloorController implements IFloorController /* TODO: extend
     }
   }
 
+  public async getFloorById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const floorOrError = await this.floorServiceInstance.getFloorById(req.params.floorId as string) as Result<IFloorDTO>;
+
+      if (floorOrError.isFailure) {
+        return res.status(412).send(floorOrError.error);
+      }
+      const floorDTO = floorOrError.getValue();
+
+      return res.json(floorDTO).status(200);
+
+    } catch (e) {
+      return next(e);
+    }
+  }
+
 }

@@ -41,8 +41,11 @@ import { ListBuildingsComponent } from './home/campus/list-buildings/list-buildi
 import { CreateFloorComponent } from './home/campus/create-floor/create-floor.component';
 import { FleetListComponent } from './home/fleet/fleet-list/fleet-list.component';
 import { AddMapFloorComponent } from './home/campus/add-map-floor/add-map-floor.component';
+import { CreateRobotComponent } from './home/fleet/create-robot/create-robot.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { EditBuildingComponent } from './home/campus/edit-building/edit-building.component';
 import { PlanRobotRouteComponent } from './home/tasks/plan-robot-route/plan-robot-route.component';
+import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
 
 @NgModule({
   declarations: [
@@ -67,7 +70,8 @@ import { PlanRobotRouteComponent } from './home/tasks/plan-robot-route/plan-robo
     FleetListComponent,
     AddMapFloorComponent,
     EditBuildingComponent,
-    PlanRobotRouteComponent
+    PlanRobotRouteComponent,
+    CreateRobotComponent
   ],
   imports: [
     BrowserModule,
@@ -90,7 +94,8 @@ import { PlanRobotRouteComponent } from './home/tasks/plan-robot-route/plan-robo
     ReactiveFormsModule,
     MatSnackBarModule,
     MatProgressBarModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCheckboxModule,
   ],
   providers: [
     {
@@ -102,7 +107,11 @@ import { PlanRobotRouteComponent } from './home/tasks/plan-robot-route/plan-robo
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
-    }
+    },
+    { provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
+    },
   ],
   bootstrap: [AppComponent]
 })

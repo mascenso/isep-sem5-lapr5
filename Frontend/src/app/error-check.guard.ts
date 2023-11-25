@@ -34,7 +34,6 @@ export class ErrorCheckGuard implements CanActivate {
 
       if (hasError) {
         console.log('ErrorCheckGuard: Error detected, redirecting to /home/campus/');
-        // Prevent navigation and redirect to a different page (e.g., an error page)
         this.router.navigate(['/home/campus/']);
       }
     });

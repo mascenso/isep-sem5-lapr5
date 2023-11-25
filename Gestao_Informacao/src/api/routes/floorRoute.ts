@@ -19,9 +19,7 @@ export default (app: Router) => {
             length: Joi.number().required(),
             floorNumber: Joi.number().required(),
             description: Joi.string(),
-            floorMap: Joi.array().items(
-              Joi.array().items(Joi.number())
-            ).optional(),
+            floorMap: Joi.object().optional()
         })
       }),
       (req, res, next) => ctrl.createFloor(req, res, next) );
@@ -32,7 +30,7 @@ export default (app: Router) => {
         id:Joi.string().required()
       }),
       body: Joi.object({
-          floorMap: Joi.object().required(),
+          floorMap: Joi.object().optional(),
       })
     }),
     (req, res, next) => {
@@ -49,9 +47,7 @@ export default (app: Router) => {
         length: Joi.number(),
         floorNumber: Joi.number(),
         description: Joi.string(),
-        floorMap: Joi.array().items(
-          Joi.array().items(Joi.number())
-        ).optional(),
+        floorMap: Joi.object().optional(),
       })
     }),
     (req, res, next) => ctrl.updateFloor(req, res, next) );
@@ -65,9 +61,7 @@ export default (app: Router) => {
       length: Joi.number(),
       floorNumber: Joi.number(),
       description: Joi.string(),
-      floorMap: Joi.array().items(
-        Joi.array().items(Joi.number())
-      ).optional(),
+      floorMap: Joi.object().optional(),
     })
   }),
   (req, res, next) => ctrl.updateFloor(req, res, next) );

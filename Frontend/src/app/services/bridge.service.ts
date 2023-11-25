@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { catchError, forkJoin, map, Observable, switchMap, throwError } from "rxjs";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { environment } from "../../environments/environment";
-import { BridgeDTO, BridgeFloorBuildingDTO, BridgeResponseDTO, CreateBridgeRequestDTO } from "../../dto/bridgeDTO";
+import { BridgeDTO, BridgeUpdateDTO, } from "../../dto/bridgeDTO";
 import { BuildingResponseDTO } from "../../dto/buildingDTO";
 import { FloorResponseDTO } from "../../dto/floorDTO";
 import { retry } from "rxjs/operators";
@@ -18,9 +18,9 @@ export class BridgeService {
   constructor(private http: HttpClient) {
   }
 
-  public createBridge(bridge: CreateBridgeRequestDTO, showSpinner?: boolean): Observable<BridgeResponseDTO> {
+  public createBridge(bridge: BridgeDTO, showSpinner?: boolean): Observable<BridgeDTO> {
     const url = `${this.API_URL}/api/bridges`;
-    return this.http.post<BridgeResponseDTO>(url, bridge, { reportProgress: showSpinner })
+    return this.http.post<BridgeDTO>(url, bridge, { reportProgress: showSpinner })
       .pipe(
         retry(1),
         catchError((error: HttpErrorResponse) => {
@@ -29,18 +29,23 @@ export class BridgeService {
       );
   }
 
-  getAllBridges(): Observable<BridgeFloorBuildingDTO[]> {
+  getAllBridges(): Observable<BridgeDTO[]> {
     return this.http.get<BridgeDTO[]>(`${this.API_URL}/api/bridges`).pipe(
       switchMap((bridges) =>
         forkJoin(
           bridges.map((bridge) =>
             this.fetchFloorAndBuildingData(bridge.floorAId, bridge.buildingAId, bridge.floorBId, bridge.buildingBId).pipe(
               map((data) => ({
+                id: bridge.id,
                 code: bridge.code,
                 name: bridge.name,
+                floorAId: bridge.floorAId,
                 floorNumberA: data.floorNumberA,
+                buildingAId: bridge.buildingAId,
                 buildingNameA: data.buildingNameA,
+                floorBId: bridge.floorBId,
                 floorNumberB: data.floorNumberB,
+                buildingBId: bridge.buildingBId,
                 buildingNameB: data.buildingNameB
               }))
             )
@@ -74,5 +79,10 @@ export class BridgeService {
 
   getFloorsByBuildingId($event: any, b: boolean): Observable<FloorResponseDTO[]> {
     return this.http.get<FloorResponseDTO[]>(`${this.API_URL}/api/floors/buildings?building=${$event}`, { reportProgress: b });
+  }
+
+  public editBridge(bridge:  BridgeUpdateDTO, id: string ): Observable<BridgeDTO> {
+    console.log(bridge);
+    return this.http.put<BridgeDTO>(`${this.API_URL}/api/bridges/${id}`,bridge);
   }
 }

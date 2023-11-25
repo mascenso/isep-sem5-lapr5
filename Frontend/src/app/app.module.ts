@@ -30,7 +30,7 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {ServiceInterceptor} from "./interceptors/service.interceptor";
 import { ViewComponent } from './home/view/view.component';
 import { FloorListComponent } from './home/campus/floor-list/floor-list.component';
-import { BridgeListComponent } from "./home/campus/bridge-list/bridge-list.component";
+import { BridgeListComponent } from "./home/campus/list-bridge/bridge-list.component";
 import { ListBuildingFloorsComponent } from './home/campus/list-building-floors/list-building-floors.component';
 import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
 import { CreateBridgeComponent } from "./home/campus/create-bridge/create-bridge.component";
@@ -43,8 +43,9 @@ import { FleetListComponent } from './home/fleet/fleet-list/fleet-list.component
 import { AddMapFloorComponent } from './home/campus/add-map-floor/add-map-floor.component';
 import { CreateRobotComponent } from './home/fleet/create-robot/create-robot.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { EditBuildingComponent } from './home/campus/edit-building/edit-building.component';
+import { EditBridgeComponent } from './home/campus/edit-bridge/edit-bridge.component';
 import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
+import { EditBuildingComponent } from "./home/campus/edit-building/edit-building.component";
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
     FleetListComponent,
     AddMapFloorComponent,
     CreateRobotComponent,
-    EditBuildingComponent
+    EditBuildingComponent,
+    EditBridgeComponent
   ],
   imports: [
     BrowserModule,

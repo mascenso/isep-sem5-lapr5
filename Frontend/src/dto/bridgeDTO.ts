@@ -4,6 +4,8 @@ export interface BridgeResponseDTO {
   code : string;
   floorAId : string;
   floorBId : string;
+  buildingAId: string;
+  buildingBId: string;
 }
 
 export interface CreateBridgeRequestDTO {
@@ -11,6 +13,8 @@ export interface CreateBridgeRequestDTO {
   code : string;
   floorAId : string;
   floorBId : string;
+  buildingAId: string;
+  buildingBId: string;
 }
 
 export interface BridgeDTO {
@@ -18,6 +22,18 @@ export interface BridgeDTO {
   code : string;
   floorAId : string;
   floorBId : string;
+  buildingAId: string;
+  buildingBId: string;
 }
+
+export interface BridgeFloorBuildingDTO {
+  name: string;
+  code : string;
+  floorNumberA: number;
+  buildingNameA: string;
+  floorNumberB: number;
+  buildingNameB: string;
+}
+
 
 

@@ -44,6 +44,7 @@ import { AddMapFloorComponent } from './home/campus/add-map-floor/add-map-floor.
 import { CreateRobotComponent } from './home/fleet/create-robot/create-robot.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { EditBuildingComponent } from './home/campus/edit-building/edit-building.component';
+import { PlanRobotRouteComponent } from './home/tasks/plan-robot-route/plan-robot-route.component';
 import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
 
 @NgModule({
@@ -68,8 +69,9 @@ import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
     CreateFloorComponent,
     FleetListComponent,
     AddMapFloorComponent,
-    CreateRobotComponent,
-    EditBuildingComponent
+    EditBuildingComponent,
+    PlanRobotRouteComponent,
+    CreateRobotComponent
   ],
   imports: [
     BrowserModule,

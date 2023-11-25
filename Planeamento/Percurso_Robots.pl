@@ -1,6 +1,34 @@
 :-dynamic ligacel/3.
 :-dynamic edge/2.
 
+
+
+/*Ligacoes HTTP*/
+:- use_module(library(http/thread_httpd)).
+:- use_module(library(http/http_dispatch)).
+:- use_module(library(http/http_parameters)).
+:- use_module(library(http/http_json)).
+
+% Handler para lidar com requisições HTTP
+:- http_handler('/caminho', caminho_handler, []).
+
+% Predicado para iniciar o servidor
+start_server(Port) :-
+    http_server(http_dispatch, [port(Port)]).
+
+% Handler específico para caminho
+caminho_handler(Request) :-
+    http_parameters(Request, [pisoOrigem(PisoOr, []),
+                              pisoDestino(PisoDest, [])]),
+    caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal),
+    reply_json(json([caminho=LCam, custo=CustoTotal])).
+
+
+
+
+
+
+
 :- consult('AlgoritmosGenericos.pl').
 :- consult('BC_RobDroneGo.pl').
 

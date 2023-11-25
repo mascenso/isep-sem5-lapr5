@@ -24,7 +24,7 @@ class "<<Root>> \nCampus" as Campus #03fc98{
 '/
 
 package "Agg-Building" {
-  
+
   class "<<Root>>\nBuilding" as Building #03fc98{
     - id: BuildingId
     - code: string
@@ -314,11 +314,11 @@ package "Agg-Elevator" {
   Floor "1" <-- "1" FloorId
   Floor "1" --> "*" Room
   Floor "1" --> "1" FloorMap
-  Floor "1" --> "0/1" Elevator
+  Floor "*" --> "0/1" Elevator
 
   'Floor "1" *-- "*" Porta : Contem
 
-  Bridge "*" -- "2" Floor : Connects
+  Bridge "*" --> "2" Floor : Connects
   Bridge "1" <-- "1" BridgeId
   'Bridge "1"--> "1"Coordenadas
 
@@ -339,7 +339,7 @@ package "Agg-Elevator" {
 
   'RegularUser --> Autorizacao : Tem
 
-  RobotType "*" --> "1" Robot
+  RobotType "*" <-- "1" Robot
   RobotType "*" --> "1" Drone
   RobotType "1" <-- "1" RobotTypeId
   RobotType -- TaskType

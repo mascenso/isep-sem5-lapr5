@@ -46,7 +46,7 @@ export default class BridgeRepo implements IBridgeRepo {
         return BridgeMap.toDomain(bridgeCreated);
       } else {
 
-        const updateFields = ['code', 'name'];
+        const updateFields = ['code', 'name', 'floorAId', 'floorBId'];
 
         for (const field of updateFields) {
           if (bridge[field] !== undefined) {
@@ -79,7 +79,7 @@ export default class BridgeRepo implements IBridgeRepo {
 
       const bridgeRecords = await this.bridgeSchema.find(query);
 
-      return bridgeRecords;
+      return bridgeRecords.map(bridge => BridgeMap.toDomain(bridge));
     } catch (err) {
       throw err;
     }

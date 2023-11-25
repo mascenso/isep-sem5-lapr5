@@ -87,9 +87,10 @@ export default class BridgeService implements IBridgeService {
     }
   }
 
-  public async updateBridge(bridgeDTO: IBridgeDTO, id:string): Promise<Result<IBridgeDTO>> {
+  public async updateBridge(bridgeDTO: IBridgeDTO, bridgeId:string): Promise<Result<IBridgeDTO>> {
     try {
-      bridgeDTO.id  = id;
+
+      bridgeDTO.id = bridgeId;
       const bridge = await this.bridgeRepo.findByDomainId(bridgeDTO.id);
 
       if (bridge === null) {
@@ -124,20 +125,22 @@ export default class BridgeService implements IBridgeService {
       else {
 
         /* update bridge */
-        const bridgeOrError = await Bridge.create(bridgeDTO);
 
-        if (bridgeOrError.isFailure) {
-          return Result.fail<IBridgeDTO>(bridgeOrError.errorValue());
+        const fieldsToUpdate = ['name', 'code', 'floorAId', 'floorBId'];
+
+        for (const field of fieldsToUpdate) {
+          if (bridgeDTO[field]) {
+            bridge[field] = bridgeDTO[field];
+          }
         }
 
-        const bridgeResult = bridgeOrError.getValue();
-        bridgeResult.buildingBId = buildingBId;
-        bridgeResult.buildingAId = buildingAId;
+        bridge.buildingBId = buildingBId;
+        bridge.buildingAId = buildingAId;
 
         /* Salva a bridge com os ids dos buildings correspondentes */
-        await this.bridgeRepo.save(bridgeResult);
+        await this.bridgeRepo.save(bridge);
 
-        const bridgeDTOResult = BridgeMap.toDTO(bridgeResult) as IBridgeDTO;
+        const bridgeDTOResult = BridgeMap.toDTO(bridge) as IBridgeDTO;
         return Result.ok<IBridgeDTO>(bridgeDTOResult);
       }
     } catch (e) {

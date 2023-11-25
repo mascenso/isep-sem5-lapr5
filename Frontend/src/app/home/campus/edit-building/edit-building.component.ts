@@ -19,7 +19,16 @@ export class EditBuildingComponent {
     private formBuilder: FormBuilder,
     private buildingService: BuildingService,
     private _snackBar: MatSnackBar
-  ) {}
+  ) {
+    this.buildingForm = this.formBuilder.group({
+      id: ['', Validators.required],
+      code: ['', Validators.required],
+      maxWidth: [null],
+      maxLength: [null],
+      name: [''],
+      description: ['']
+    });
+  }
 
   ngOnInit(): void {
 
@@ -31,7 +40,7 @@ export class EditBuildingComponent {
     this.selectedBuilding = this.buildings.find(building => building.id === buildingId)
     //atualiza o form que esta a preencher os inputs no frontend
     this.updateBuildingForm()
-    
+
   }
 
   updateBuildingForm(){
@@ -59,7 +68,7 @@ export class EditBuildingComponent {
         this.selectedBuilding = building;
         this.updateBuildingForm();
         this.getBuildings();
-        
+
         this._snackBar.open("Building updated!", "close", {
           duration: 5000,
           panelClass: ['snackbar-success']

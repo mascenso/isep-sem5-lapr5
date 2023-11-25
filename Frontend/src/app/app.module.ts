@@ -44,6 +44,7 @@ import { AddMapFloorComponent } from './home/campus/add-map-floor/add-map-floor.
 import { CreateRobotComponent } from './home/fleet/create-robot/create-robot.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { EditBuildingComponent } from './home/campus/edit-building/edit-building.component';
+import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
 
 @NgModule({
   declarations: [
@@ -104,7 +105,11 @@ import { EditBuildingComponent } from './home/campus/edit-building/edit-building
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
-    }
+    },
+    { provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
+    },
   ],
   bootstrap: [AppComponent]
 })

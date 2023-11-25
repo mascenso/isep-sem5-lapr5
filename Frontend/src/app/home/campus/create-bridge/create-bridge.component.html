@@ -13,7 +13,7 @@
               <mat-select [formControl]="buildingSelectionControl" (valueChange)="onSelectionUpdateSelectionControlA($event)">
                 <mat-option></mat-option>
                 <div *ngFor="let building of buildingList;">
-                  <mat-option  [value]="building.id">{{building.code}} - {{building.id}}</mat-option>
+                  <mat-option  [value]="building.id">{{building.code}}</mat-option>
                 </div>
               </mat-select>
             </mat-form-field>
@@ -36,7 +36,7 @@
               <mat-select [formControl]="buildingBSelectionControl" (valueChange)="onSelectionUpdateSelectionControlB($event)">
                 <mat-option></mat-option>
                 <div *ngFor="let buildingB of buildingBList;">
-                  <mat-option  [value]="buildingB.id">{{buildingB.code}} - {{buildingB.id}}</mat-option>
+                  <mat-option  [value]="buildingB.id">{{buildingB.code}}</mat-option>
                 </div>
               </mat-select>
             </mat-form-field>

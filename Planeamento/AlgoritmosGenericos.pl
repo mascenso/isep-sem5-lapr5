@@ -236,9 +236,9 @@ aStar2(Dest,[(_,Ca,LA)|Outros],Cam,Custo):-
 	estimativa(X,Dest,EstX),
 	CEX is CaX +EstX),Novos),
 	append(Outros,Novos,Todos),
-	write('Novos='),write(Novos),nl,
+	/*write('Novos='),write(Novos),nl,*/
 	sort(Todos,TodosOrd),
-	write('TodosOrd='),write(TodosOrd),nl,
+	/*write('TodosOrd='),write(TodosOrd),nl,*/
 	aStar2(Dest,TodosOrd,Cam,Custo).
 
 /* calcula o custo para de ir do ponto A ao B.*/

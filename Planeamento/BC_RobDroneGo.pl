@@ -30,7 +30,7 @@ liga(c,d).
 
 
 %ligaçoes entre pisos
-pisos(a,[a1]).
+pisos(a,[a1,a2]).
 pisos(b,[b1,b2,b3]).
 pisos(c,[c1,c2,c3,c4]).
 pisos(d,[d1,d2,d3]).
@@ -70,34 +70,34 @@ passagem(N):-member(N,[4]).
 
 floor_map(a1, [
     [1, 1, 1, 1, 1],
-    [1, 0, 0, 0, 3],
+    [1, 0, 0, 0, 0],
     [1, 0, 0, 0, 1],
-    [1, 1, 2, 1, 1],
+    [1, 1, 0, 1, 1],
     [1, 1, 1, 1, 1]
 ]).
 
 floor_map(a2, [
     [1, 1, 1, 1, 1],
     [1, 0, 0, 0, 1],
-    [1, 0, 0, 0, 3],
-    [1, 2, 1, 0, 1],
-    [1, 1, 1, 4, 1]
+    [1, 0, 0, 0, 0],
+    [1, 0, 1, 0, 1],
+    [1, 1, 1, 0, 1]
 ]).
 
 
 floor_map(b2, [
-    [1, 1, 1, 4, 1],
+    [1, 1, 1, 0, 1],
     [1, 0, 0, 0, 1],
-    [1, 0, 0, 0, 4],
-    [3, 0, 1, 1, 1],
+    [1, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1],
     [1, 1, 1, 1, 1]
 ]).
 
 floor_map(c3, [
-    [1, 1, 4, 3, 1],
+    [1, 1, 0, 0, 1],
     [1, 0, 0, 0, 1],
     [1, 0, 0, 0, 1],
-    [1, 1, 2, 1, 1],
+    [1, 1, 0, 1, 1],
     [1, 1, 1, 1, 1]
 ]).
 
@@ -110,17 +110,17 @@ corredor_mtx(b2, c3,[[1, 1],
                      [1, 1]]).                    
 
 %posiçao dos elevadores no map do respetivo floor (F1, cel(COL, LIN))
-elev_pos(a1,cel(5,2)).
-elev_pos(a2,cel(5,3)).
-elev_pos(b2,cel(1,4)).
-elev_pos(c3,cel(4,1)).
+elev_pos(a1,cel(2,5)).
+elev_pos(a2,cel(3,5)).
+elev_pos(b2,cel(4,1)).
+elev_pos(c3,cel(1,4)).
 
 %posiçao das passagens no map do respetivo floor (E1, E2, cel(COL, LIN))
-passag_pos(a2,b2,cel(5,3)).
-passag_pos(b2,c3,cel(5,3)).
+passag_pos(a2,b2,cel(3,5)).
+passag_pos(b2,c3,cel(3,5)).
 
 %posição incial no primeiro floor. Susbtituir depois pela posição inicial do robot aquando a integração com o JSON.
-pos_init(a1,cel(3,3)).
-pos_init(a2,cel(4,2)).
-pos_init(b2,cel(3,2)).
-pos_init(c3,cel(4,3)).
+pos_init(a1,cel(2,3)).
+pos_init(a2,cel(2,4)).
+pos_init(b2,cel(2,3)).
+pos_init(c3,cel(3,4)).

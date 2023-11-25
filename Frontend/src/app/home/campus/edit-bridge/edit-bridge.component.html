@@ -1,0 +1,63 @@
+<form [formGroup]="bridgeForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Selecionar Passagem</mat-label>
+      <mat-select formControlName="code" (selectionChange)="onBridgeSelected($event.value)">
+        <mat-option *ngFor="let bridge of bridges" [value]="bridge.code">
+          {{ bridge.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div *ngIf="selectedBridge !== undefined">
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" />
+        </mat-form-field>
+
+
+      <mat-form-field class="form-field buildingB-selection-form-field">
+        <mat-label>Building A</mat-label>
+        <mat-select [formControl]="buildingSelectionControl" (valueChange)="onSelectionUpdateSelectionControlA($event)">
+          <mat-option></mat-option>
+          <div *ngFor="let building of buildingList;">
+            <mat-option  [value]="building.id">{{building.code}}</mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="form-field floorA-selection-form-field">
+        <mat-label>Floor A</mat-label>
+        <mat-select [formControl]="floorASelectionControl" (valueChange)="onSelectionIdentifyFloorIdA($event)">
+          <mat-option></mat-option>
+          <div *ngFor="let floorAId of floorAList;">
+            <mat-option  [value]="floorAId.id">{{floorAId.floorNumber}}</mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+
+
+      <mat-form-field class="form-field buildingB-selection-form-field">
+        <mat-label>Building B</mat-label>
+        <mat-select [formControl]="buildingBSelectionControl" (valueChange)="onSelectionUpdateSelectionControlB($event)">
+          <mat-option></mat-option>
+          <div *ngFor="let buildingB of buildingBList;">
+            <mat-option  [value]="buildingB.id">{{buildingB.code}}</mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+
+
+      <mat-form-field class="form-field floorB-selection-form-field">
+        <mat-label>Floor B</mat-label>
+        <mat-select [formControl]="floorBSelectionControl" (valueChange)="onSelectionIdentifyFloorIdB($event)">
+          <mat-option></mat-option>
+          <div *ngFor="let floorBId of floorBList;">
+            <mat-option  [value]="floorBId.id">{{floorBId.floorNumber}}</mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+
+
+        <button mat-raised-button type="submit">Salvar</button>
+    </div>
+
+  </form>

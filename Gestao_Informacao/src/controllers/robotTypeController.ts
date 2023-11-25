@@ -70,5 +70,24 @@ export default class RobotTypeController implements IRobotTypeController /* TODO
     catch (e) {
       return next(e);
     }
-  }
+  };
+
+  public async getAllRobotTypes(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const robotTypeOrError = await this.robotTypeServiceInstance.getAllRobotTypes() as Result<IRobotTypeDTO[]>;
+
+      if (robotTypeOrError.isFailure) {
+        return res.status(402).json('There are no robots Types saved in the database.').send();
+      }
+
+      const robotDTO = robotTypeOrError.getValue();
+      return res.json( robotDTO ).status(201);
+    }
+    catch (e) {
+      return next(e);
+    }
+  };
+
 }

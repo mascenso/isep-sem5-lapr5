@@ -50,6 +50,7 @@ export class CreateElevatorComponent {
     }
 
     onSelectionUpdateSelectionControl($event: any) {
+      console.log($event);
       if (!$event) {
         this.floorList = [];
         return;

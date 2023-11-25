@@ -69,6 +69,10 @@ export class CreateBridgeComponent {
           panelClass: ['snackbar-success']
         });
       },
+      (error) => {
+        //Throwing error to global error handler
+        throw error;
+      }
 
     );
   }

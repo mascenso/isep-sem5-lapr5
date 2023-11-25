@@ -82,4 +82,5 @@ export default (app: Router) => {
 
   route.get('/buildings/:buildingId/with-elevator',  (req, res, next) => { ctrl.getFloorsWithElevatorByBuildingId(req, res, next); }  );
 
+  route.get('/:floorId',  (req, res, next) => { ctrl.getFloorById(req, res, next); }  );
 };

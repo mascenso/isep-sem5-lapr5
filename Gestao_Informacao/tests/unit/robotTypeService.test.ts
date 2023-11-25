@@ -52,7 +52,6 @@ describe('robot Type service', function () {
         let robotTypeRepoInstance = Container.get("RobotTypeRepo");
         const robotTypeRepoStub = sinon.stub(robotTypeRepoInstance, "save").returns(new Promise<RobotType>((resolve, reject) => {
             resolve(RobotType.create({
-                "id": req.body.id,
                 "designacao": req.body.designcao,
                 "tipoTarefas": req.body.tipoTarefas
             }).getValue())

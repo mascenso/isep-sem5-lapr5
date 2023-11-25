@@ -43,6 +43,7 @@ import { FleetListComponent } from './home/fleet/fleet-list/fleet-list.component
 import { AddMapFloorComponent } from './home/campus/add-map-floor/add-map-floor.component';
 import { CreateRobotComponent } from './home/fleet/create-robot/create-robot.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { EditBuildingComponent } from './home/campus/edit-building/edit-building.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     CreateFloorComponent,
     FleetListComponent,
     AddMapFloorComponent,
-    CreateRobotComponent
+    CreateRobotComponent,
+    EditBuildingComponent
   ],
   imports: [
     BrowserModule,

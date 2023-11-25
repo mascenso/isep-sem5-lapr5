@@ -86,28 +86,52 @@ caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal):-
     member(PisoDest, LPisosDest), 
     caminho_edificios(EdOr, EdDest, LCam),
     segue_pisos(PisoOr,PisoDest,LCam,LLig),
-    percorre_primeiro_lista(LLig, PisoOr, CustoTotal). 
+    calcular_custo_total(LLig, PisoOr, CustoTotal). 
     %write('CustoTotal= '),write(CustoTotal),nl.
 
-%este algoritmo é para calcular a distancia entre a posiçao inicial do robot com a de destino na primeira interaçao. Se a lista estiver vazia, não avança.
-percorre_primeiro_lista([], _, _,0).
+/*Calculo custo total da viagem usando aStar em cada piso*/
+calcular_custo_total([], _, 0).
 
-percorre_primeiro_lista([elev(PisoOr, _) | Resto], PisoOr, CustoTotal):-
+/* Predicado para somar todos os custos*/
+calcular_custo_total([Acao | RestoAcoes], PisoAtual, CustoTotal) :-
+    calcular_custo_unico(Acao, PisoAtual, CustoParcial),
+    novo_piso_destino(Acao, PisoDestino),
+    calcular_custo_total(RestoAcoes, PisoDestino, CustoResto),
+    CustoTotal is CustoParcial + CustoResto.
+
+/*Calcula distancia desde posicao inicial ate elevador do piso*/
+calcular_custo_unico(elev(PisoOr, _), PisoAtual, Custo) :-
+    pos_init(PisoAtual, Orig),
+    elev_pos(PisoOr, CDestino),
+    aStar(Orig, CDestino, _, Custo).
+
+/*Calcula distancia desde posicao inicia ate passagem*/
+calcular_custo_unico(cor(PisoOr, PisoDest), PisoOr, Custo) :-
+    pos_init(PisoOr,Orig),
+    (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
+    aStar(Orig, CDestino, _, Custo).
+
+novo_piso_destino(elev(_, PisoDest), PisoDest).
+novo_piso_destino(cor(_, PisoDest), PisoDest).
+
+
+/*
+%este algoritmo é para calcular a distancia entre a posiçao inicial do robot com a de destino na primeira interaçao. Se a lista estiver vazia, não avança.
+percorre_primeiro_lista([], _,0).
+
+percorre_primeiro_lista([elev(PisoOr, _) | _], PisoOr, CustoTotal):-
         pos_init(PisoOr,Orig),
         elev_pos(PisoOr, CDestino),
-        aStar(Orig, CDestino, _, Custo),
-        write('Custo = '),write(Custo),nl,
-        NovoCustoTotal is CustoTotal + Custo,
-        percorre_lista(Resto, CDestino, NovoCustoTotal).
+        aStar(Orig, CDestino, _, CustoTotal),
+        write('Custo1 = '),write(CustoTotal),nl.
 
 
-percorre_primeiro_lista([cor(PisoOr, PisoDest) | Resto], PisoOr, CustoTotal):-
+percorre_primeiro_lista([cor(PisoOr, PisoDest) | _], PisoOr, CustoTotal):-
         pos_init(PisoOr,Orig),
         (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
-        aStar(Orig, CDestino, _, Custo),
-        write('Custo = '),write(Custo),nl,
-        NovoCustoTotal is CustoTotal + Custo,
-        percorre_lista(Resto, CDestino ,NovoCustoTotal).
+        aStar(Orig, CDestino, _, CustoTotal),
+        write('Custosss = '),write(CustoTotal),nl,
+        percorre_lista(Resto, CDestino ,CustoTotal).
 
 %este algoritmo é para calcular a distancia entre a posiçao anterior do robot com a proxima. Se chegou ao destino, para.
 percorre_lista([], _,0).
@@ -115,9 +139,8 @@ percorre_lista([], _,0).
 percorre_lista([elev(_, _) | Resto], Destino, CustoTotal):-
     percorre_lista(Resto, Destino, CustoTotal).
 
-percorre_lista([cor(PisoOr, PisoDest) | Resto], COrig,CustoTotal):-
+percorre_lista([cor(PisoOr, PisoDest) | _], COrig,CustoTotal):-
     (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
-    aStar(COrig, CDestino, _, Custo),
-    write('Custo = '),write(Custo),nl,
-    NovoCustoTotal is CustoTotal + Custo,
-    percorre_lista(Resto, CDestino, NovoCustoTotal).
+    aStar(COrig, CDestino, _, CustoTotal),
+    write('Custotttt = '),write(CustoTotal),nl.
+    percorre_lista(Resto, CDestino, CustoTotal).*/

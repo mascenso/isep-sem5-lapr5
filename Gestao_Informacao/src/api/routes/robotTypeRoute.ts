@@ -35,6 +35,11 @@ export default (app: Router) => {
   route.get('/search',
     (req, res, next) => {
       ctrl.findByDesignationOrTaskType(req, res, next);
-    });
+  });
+
+  route.get('',
+    (req, res, next) => {
+      ctrl.getAllRobotTypes(req, res, next);
+  });  
 
 }

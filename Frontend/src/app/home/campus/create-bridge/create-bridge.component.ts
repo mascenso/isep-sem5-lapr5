@@ -42,6 +42,7 @@ export class CreateBridgeComponent {
     this.buildingServiceSubscription$ = this.bridgeService.getAllBuildings().subscribe(
       response => {
         this.buildingList = response;
+        console.log(this.buildingList = response);
         this.buildingBList = response;
       },
 

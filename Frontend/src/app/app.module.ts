@@ -41,6 +41,8 @@ import { ListBuildingsComponent } from './home/campus/list-buildings/list-buildi
 import { CreateFloorComponent } from './home/campus/create-floor/create-floor.component';
 import { FleetListComponent } from './home/fleet/fleet-list/fleet-list.component';
 import { AddMapFloorComponent } from './home/campus/add-map-floor/add-map-floor.component';
+import { CreateRobotComponent } from './home/fleet/create-robot/create-robot.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { EditBuildingComponent } from './home/campus/edit-building/edit-building.component';
 import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
 
@@ -66,7 +68,8 @@ import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
     CreateFloorComponent,
     FleetListComponent,
     AddMapFloorComponent,
-    EditBuildingComponent,
+    CreateRobotComponent,
+    EditBuildingComponent
   ],
   imports: [
     BrowserModule,
@@ -89,7 +92,8 @@ import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
     ReactiveFormsModule,
     MatSnackBarModule,
     MatProgressBarModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCheckboxModule,
   ],
   providers: [
     {

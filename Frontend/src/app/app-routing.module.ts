@@ -22,6 +22,7 @@ import {authGuard} from "./guards/auth.guard";
 import {ListBuildingsComponent} from "./home/campus/list-buildings/list-buildings.component"
 import { FleetListComponent } from './home/fleet/fleet-list/fleet-list.component';
 import { CreateRobotComponent } from './home/fleet/create-robot/create-robot.component';
+import {EditBuildingComponent} from './home/campus/edit-building/edit-building.component'
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -61,6 +62,10 @@ const routes: Routes = [
       {
         path: 'campus/list-bridges',
         component: BridgeListComponent,
+      },
+      {
+        path: 'campus/edit-building',
+        component: EditBuildingComponent,
       },
       {
         path: 'campus/edit-floors',

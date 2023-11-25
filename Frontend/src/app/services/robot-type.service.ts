@@ -17,4 +17,9 @@ export class RobotTypeService {
   public createRobotType(robotType: CreateRobotTypeRequestDTO): Observable<RobotTypeResponseDTO> {
     return this.http.post<RobotTypeResponseDTO>(`${this.API_URL}/api/robots/types`, robotType);
   }
+
+  public getAllRobotTypes(): Observable<RobotTypeResponseDTO[]> {
+    return this.http.get<RobotTypeResponseDTO[]>(`${this.API_URL}/api/robots/types`);
+  }
+
 }

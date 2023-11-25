@@ -5,5 +5,6 @@ import TaskType from "../../enums/taskType";
 export default interface IRobotTypeService  {
   createRobotType(robotDTO: IRobotTypeDTO): Promise<Result<IRobotTypeDTO>>;
   updateRobotType(robotDTO: IRobotTypeDTO): Promise<Result<IRobotTypeDTO>>;
+  getAllRobotTypes(): Promise<Result<IRobotTypeDTO[]>>;
   findByDesignationOrTaskType(designation: string, taskType: TaskType[]): Promise<Result<IRobotTypeDTO[]>>;
 }

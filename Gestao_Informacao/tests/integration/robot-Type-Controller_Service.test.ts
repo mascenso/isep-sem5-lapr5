@@ -48,7 +48,6 @@ describe('Integration test robot type controller -> service ', function () {
 		let robotTypeRepoInstance = Container.get("RobotTypeRepo");
 		sinon.stub(robotTypeRepoInstance, "save").returns(new Promise<RobotType>((resolve, reject) => {
 			resolve(RobotType.create({
-				"id": req.body.id,
 				"designacao": req.body.designacao,
 				"tipoTarefas": req.body.tipoTarefas
 			}).getValue())

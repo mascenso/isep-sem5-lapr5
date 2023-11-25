@@ -167,4 +167,18 @@ export default class FloorService implements IFloorService {
     }
   }
 
+  getFloorById(floorId: string): Promise<Result<IFloorDTO>> {
+    try {
+      return this.floorRepo.findByDomainId(floorId)
+        .then(floor => {
+          if (floor === null) {
+            return Result.fail<IFloorDTO>(`Floor with id ${floorId} doesn't exist!`);
+          }
+          return Result.ok<IFloorDTO>(FloorMap.toDTO(floor));
+        })
+    } catch (e) {
+      throw e;
+    }
+    }
+
 }

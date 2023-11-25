@@ -85,4 +85,19 @@ export default class RobotTypeService implements IRobotTypeService {
     }
   }
 
+  public async getAllRobotTypes(): Promise<Result<IRobotTypeDTO[]>> {
+    try {
+
+      const robotTypes = await this.robotTypeRepo.getAllRobotTypes();
+
+      const robotTypesDTOs = robotTypes.map((robotTypes) => RobotTypeMap.toDTO(robotTypes) as IRobotTypeDTO);
+
+      return Result.ok<IRobotTypeDTO[]>(robotTypesDTOs);
+
+
+    } catch (e) {
+      throw e;
+    }
+  }
+  
 }

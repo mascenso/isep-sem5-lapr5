@@ -29,14 +29,14 @@ export class ListElevatorsComponent implements OnInit, OnDestroy{
   elevatorServiceSubscription$ = new Subscription();
 
   dataSource: ElevatorResponseDTO[] = [];
-  columnsToDisplay = ['buildingid', 'code', 'floorList', 'id'];
+  columnsToDisplay = ['buildingId', 'code', 'floorList'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: ElevatorResponseDTO | null | undefined;
 
   constructor(private buildingService: BuildingService,
               private elevatorService: ElevatorService,
               private _snackBar: MatSnackBar) {}
-      
+
 
   ngOnInit(): void {
     // fetch building list from service
@@ -58,7 +58,7 @@ export class ListElevatorsComponent implements OnInit, OnDestroy{
     if (selection) {
       this.elevatorServiceSubscription$ = this.elevatorService.getBuildingElevators(selection, true ).subscribe(
         elevatorData => {
-          this.dataSource = elevatorData;
+          this.dataSource = [elevatorData];
           console.log(this.dataSource);
         },
         error => {

@@ -2,53 +2,60 @@
 <div class="list-elevator-container">
     <div class="list-elevator-section">
       <h2>List building elevators</h2>
-      <div class="building-selection-form">
-<mat-form-field>
-  <mat-label>Select Building:</mat-label>
-  <mat-select [formControl]="buildingSelectionControl" (selectionChange)="onSelectionUpdateTable($event.value)">
-    <mat-option *ngFor="let building of buildingList" [value]="building.id"> {{building.name}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+    <div class="building-selection-form">
+    <mat-form-field>
+      <mat-label>Select Building:</mat-label>
+      <mat-select [formControl]="buildingSelectionControl" (valueChange)="onSelectionUpdateTable($event)">
+        <mat-option *ngFor="let building of buildingList" [value]="building.id"> {{building.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 </div>
 <!-- Tabela de Elevadores -->
-<mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
-  <!-- Colunas -->
-  <ng-container matColumnDef="id">
-    <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
-    <mat-cell *matCellDef="let elevator">{{ elevator.id }}</mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="code">
-    <mat-header-cell *matHeaderCellDef>Code</mat-header-cell>
-    <mat-cell *matCellDef="let elevator">{{ elevator.code }}</mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="floorList">
-    <mat-header-cell *matHeaderCellDef>Floor List</mat-header-cell>
-    <mat-cell *matCellDef="let elevator">
-      <span *ngFor="let floor of elevator.floorList">{{ floor }}, </span>
-    </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="buildingid">
-    <mat-header-cell *matHeaderCellDef>Building ID</mat-header-cell>
-    <mat-cell *matCellDef="let elevator">{{ elevator.buildingId }}</mat-cell>
-  </ng-container>
-
+<table mat-table
+       [dataSource]="dataSource" multiTemplateDataRows
+       class="mat-elevation-z8">
+  <div *ngFor="let column of columnsToDisplay;">
+    <ng-container matColumnDef="{{column}}">
+      <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+      <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+    </ng-container>
+  </div>
   <ng-container matColumnDef="expand">
-    <mat-header-cell *matHeaderCellDef></mat-header-cell>
-    <mat-cell *matCellDef="let elevator">
-      <div class="expand-row" *ngIf="expandedElement === elevator">
-        <!-- Conteúdo expandido aqui, se necessário -->
-      </div>
-    </mat-cell>
+    <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+        <ng-container *ngIf="expandedElement === element; else arrowDown;">
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        </ng-container>
+        <ng-template #arrowDown>
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </ng-template>
+      </button>
+    </td>
   </ng-container>
 
-  <!-- Definição das colunas -->
-  <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: columnsToDisplay" (click)="expandedElement = expandedElement === row ? null : row"></mat-row>
-</mat-table>
-</div>
+  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+      <div class="elevator-detail"
+           [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+        <pre>{{element | json}}</pre>
+      </div>
+    </td>
+  </ng-container>
 
+  <ng-container matColumnDef="disclaimer">
+    <td mat-footer-cell *matFooterCellDef [attr.colspan]="columnsToDisplayWithExpand.length">
+      No data to display
+    </td>
+  </ng-container>
 
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+  <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+      class="elevator-row"
+      [class.example-expanded-row]="expandedElement === element"
+      (click)="expandedElement = expandedElement === element ? null : element">
+  </tr>
+  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="elevator-detail-row"></tr>
+</table>

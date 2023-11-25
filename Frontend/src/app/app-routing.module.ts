@@ -21,6 +21,7 @@ import { CreateElevatorComponent } from './home/campus/create-elevator/create-el
 import {authGuard} from "./guards/auth.guard";
 import {ListBuildingsComponent} from "./home/campus/list-buildings/list-buildings.component"
 import { FleetListComponent } from './home/fleet/fleet-list/fleet-list.component';
+import { CreateRobotComponent } from './home/fleet/create-robot/create-robot.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -96,6 +97,10 @@ const routes: Routes = [
       {
         path: 'fleet/list-robots',
         component: RobotListComponent,
+      },
+      {
+        path: 'fleet/create-robot',
+        component: CreateRobotComponent,
       },
 
     ],

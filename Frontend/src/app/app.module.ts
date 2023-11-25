@@ -41,6 +41,8 @@ import { ListBuildingsComponent } from './home/campus/list-buildings/list-buildi
 import { CreateFloorComponent } from './home/campus/create-floor/create-floor.component';
 import { FleetListComponent } from './home/fleet/fleet-list/fleet-list.component';
 import { AddMapFloorComponent } from './home/campus/add-map-floor/add-map-floor.component';
+import { CreateRobotComponent } from './home/fleet/create-robot/create-robot.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,8 @@ import { AddMapFloorComponent } from './home/campus/add-map-floor/add-map-floor.
     ListBuildingsComponent,
     CreateFloorComponent,
     FleetListComponent,
-    AddMapFloorComponent
+    AddMapFloorComponent,
+    CreateRobotComponent
   ],
   imports: [
     BrowserModule,
@@ -86,7 +89,8 @@ import { AddMapFloorComponent } from './home/campus/add-map-floor/add-map-floor.
     ReactiveFormsModule,
     MatSnackBarModule,
     MatProgressBarModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCheckboxModule,
   ],
   providers: [
     {

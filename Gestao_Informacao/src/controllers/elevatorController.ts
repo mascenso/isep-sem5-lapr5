@@ -38,7 +38,6 @@ export default class ElevatorController implements IElevatorController /* TODO: 
   }
 
   public async updateElevator(req: Request, res: Response, next: NextFunction) {
-
     try {
  
       const elevatorOrError = await this.elevatorServiceInstance.updateElevator(req.body as IElevatorDTO) as Result<IElevatorDTO>;
@@ -81,7 +80,6 @@ export default class ElevatorController implements IElevatorController /* TODO: 
 
     try {
       const buildingId = req.params.buildingId; // O ID do edifício do URL
-      console.log("building ",{buildingId});
 
       const elevatorOrError = await this.elevatorServiceInstance.getBuildingElevators(buildingId);
   

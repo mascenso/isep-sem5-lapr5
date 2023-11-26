@@ -81,7 +81,7 @@ export default class ElevatorRepo implements IElevatorRepo {
 
       const elevatorRecords = await this.elevatorSchema.find(query);
 
-      return elevatorRecords;
+      return elevatorRecords.map(elevator => ElevatorMap.toDomain(elevator));
     } catch (err) {
       throw err;
     }

@@ -21,4 +21,12 @@ export class ElevatorService {
     return this.http.get<ElevatorResponseDTO>(`${this.API_URL}/api/elevators/${buildingId}`, { reportProgress: showSpinner });
   }
 
+  public getAllElevators(): Observable<ElevatorResponseDTO[]> {
+    return this.http.get<ElevatorResponseDTO[]>(`${this.API_URL}/api/elevators`);
+  }
+
+  public editElevator(elevator:CreateElevatorDTO): Observable<ElevatorResponseDTO> {
+    return this.http.patch<ElevatorResponseDTO>(`${this.API_URL}/api/elevators`,elevator);
+  }
+
 }

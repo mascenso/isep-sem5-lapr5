@@ -55,9 +55,8 @@ export default class ElevatorService implements IElevatorService {
 
   public async updateElevator(elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO>> {
     try {
-
+   
       let elevator = await this.elevatorRepo.findByDomainId(elevatorDTO.id);
-
       if (elevator === null) {
         return Result.fail<IElevatorDTO>('Elevator with that ID does not exist.');
       }
@@ -85,7 +84,6 @@ export default class ElevatorService implements IElevatorService {
     try {
 
       const elevators = await this.elevatorRepo.getAllElevators();
-
 
       const elevatorDTOs = elevators.map((elevator) => ElevatorMap.toDTO(elevator) as IElevatorDTO);
 

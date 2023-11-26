@@ -48,6 +48,7 @@ import { EditBridgeComponent } from './home/campus/edit-bridge/edit-bridge.compo
 import { EditBuildingComponent } from './home/campus/edit-building/edit-building.component';
 import { PlanRobotRouteComponent } from './home/tasks/plan-robot-route/plan-robot-route.component';
 import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
+import { EditElevatorsComponent } from './home/campus/edit-elevators/edit-elevators.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
     EditBuildingComponent,
     EditBridgeComponent,
     PlanRobotRouteComponent,
-    CreateRobotComponent
+    CreateRobotComponent,
+    EditElevatorsComponent
   ],
   imports: [
     BrowserModule,

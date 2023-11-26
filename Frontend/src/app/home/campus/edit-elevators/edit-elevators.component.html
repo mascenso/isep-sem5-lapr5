@@ -1,0 +1,27 @@
+  <form [formGroup]="elevatorForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Selecionar Elevador</mat-label>
+      <mat-select formControlName="id" (selectionChange)="onElevatorSelected($event.value)">
+        <mat-option *ngFor="let elevator of elevators" [value]="elevator.id">
+          {{ elevator.code }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div *ngIf="selectedElevator !== undefined">
+        <mat-form-field>
+            <mat-label>Code</mat-label>
+            <input matInput formControlName="code"/>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Floor list</mat-label>
+            <input matInput formControlName="floorList" />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Building ID</mat-label>
+            <input matInput formControlName="buildingId" />
+        </mat-form-field>
+        <div>
+        <button mat-raised-button color="primary" type="submit">Salvar</button>
+        </div>
+    </div>
+  </form>

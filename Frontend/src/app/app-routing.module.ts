@@ -26,6 +26,7 @@ import { CreateRobotComponent } from './home/fleet/create-robot/create-robot.com
 import {EditBridgeComponent} from './home/campus/edit-bridge/edit-bridge.component'
 import {EditBuildingComponent} from './home/campus/edit-building/edit-building.component'
 import {PlanRobotRouteComponent} from './home/tasks/plan-robot-route/plan-robot-route.component'
+import { EditElevatorsComponent } from './home/campus/edit-elevators/edit-elevators.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -105,6 +106,10 @@ const routes: Routes = [
       {
         path: 'campus/list-elevators',
         component: ListElevatorsComponent,
+      },
+      {
+        path: 'campus/edit-elevators',
+        component: EditElevatorsComponent,
       },
       {
         path: 'fleet/create-robot-type',

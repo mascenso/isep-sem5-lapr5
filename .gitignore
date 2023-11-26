@@ -4,6 +4,7 @@
 /Frontend/node_modules
 /Frontend/.angular
 /Frontend/dist
+/Frontend/cypress/screenshots
 
 /Gestao_Informacao/node_modules
 

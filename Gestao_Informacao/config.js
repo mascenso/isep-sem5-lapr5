@@ -21,8 +21,11 @@ export default {
    */
   //databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/test",
 
-  //Base de dados do DEI
-  databaseURL: process.env.MONGODB_URI || "mongodb://***REMOVED***@vs199.dei.isep.ipp.pt:27017/admin",
+  //Base de dados do DEI para demo
+  //databaseURL: process.env.MONGODB_URI || "mongodb://***REMOVED***@vs199.dei.isep.ipp.pt:27017/admin",
+
+  //Base de dados do DEI para testes (trash)
+  databaseURL: process.env.MONGODB_URI || "mongodb://***REMOVED***@vs199.dei.isep.ipp.pt:27017/dummyDB",
   
   /**
    * Your secret sauce

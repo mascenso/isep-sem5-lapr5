@@ -37,25 +37,25 @@ const MENU_ENTRIES: MenuEntry[] = [
   {
     title: "Campus management",
     icon: "domain_add",
-    authorizedRoles: ['Administrador', 'Gestor de Campus'],
+    authorizedRoles: ['','Administrador', 'Gestor de Campus'],
     redirectTo: 'campus'
   },
   {
     title: "Fleet management",
     icon: "precision_manufacturing",
-    authorizedRoles: ['Administrador', 'Gestor de Frota'],
+    authorizedRoles: ['','Administrador', 'Gestor de Frota'],
     redirectTo: 'fleet'
   },
   {
     title: "Tasks management",
     icon: "list_alt",
-    authorizedRoles: ['Administrador', 'Gestor de Tarefas'],
+    authorizedRoles: ['','Administrador', 'Gestor de Tarefas'],
     redirectTo: 'tasks'
   },
   {
     title: "3D visualization",
     icon: "view_in_ar",
-    authorizedRoles: ['Administrador', 'Gestor de Campus', 'Gestor de Frota', 'Gestor de Tarefas'],
+    authorizedRoles: ['','Administrador', 'Gestor de Campus', 'Gestor de Frota', 'Gestor de Tarefas'],
     redirectTo: 'view'
   }
 ]

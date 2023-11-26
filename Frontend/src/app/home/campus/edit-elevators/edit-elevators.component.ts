@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { BuildingService } from 'src/app/services/building.service';
 import { ElevatorService } from 'src/app/services/elevator.service';
+import { BuildingResponseDTO } from 'src/dto/buildingDTO';
 import { ElevatorResponseDTO } from 'src/dto/elevatorDTO';
 
 @Component({
@@ -10,13 +12,14 @@ import { ElevatorResponseDTO } from 'src/dto/elevatorDTO';
   styleUrls: ['./edit-elevators.component.css']
 })
 export class EditElevatorsComponent {
-
   elevatorForm!: FormGroup;
-  elevators: ElevatorResponseDTO[] = [];
-  selectedElevator: any ;
+  buildings: BuildingResponseDTO[] = [];
+  selectedBuilding: any;
+  selectedElevator: ElevatorResponseDTO | null = null; // Ajustado para um único objeto de elevador
 
   constructor(
     private formBuilder: FormBuilder,
+    private buildingService: BuildingService,
     private elevatorService: ElevatorService,
     private _snackBar: MatSnackBar
   ) {
@@ -29,18 +32,28 @@ export class EditElevatorsComponent {
   }
 
   ngOnInit(): void {
-    this.getElevators();
+    this.getBuildings();
   }
 
-  onElevatorSelected(elevatorId: string): void {
-    //filtra no grupo dos elevadores aquele que foi selecionado
-    this.selectedElevator = this.elevators.find(elevator => elevator.id === elevatorId)
-    //atualiza o form que esta a preencher os inputs no frontend
-    this.updatElevatorForm()
-
+  onBuildingSelected(buildingId: string): void {
+    this.selectedBuilding = this.buildings.find(building => building.id === buildingId);
+    this.getBuildingElevator(buildingId); // Chama o método para buscar um único elevador
   }
 
-  updatElevatorForm(){
+  getBuildings() {
+    this.buildingService.getAllBuildings().subscribe((buildings) => {
+      this.buildings = buildings;
+    });
+  }
+
+  getBuildingElevator(buildingId: string) {
+    this.elevatorService.getBuildingElevators(buildingId).subscribe((elevator) => {
+      this.selectedElevator = elevator; // Atribui o elevador retornado
+      this.updateElevatorForm(); // Atualiza o formulário com os detalhes do elevador
+    });
+  }
+
+  updateElevatorForm(){
     this.elevatorForm = this.formBuilder.group({
       id: [this.selectedElevator?.id || '', Validators.required],
       code: [this.selectedElevator?.code || ''],
@@ -49,34 +62,20 @@ export class EditElevatorsComponent {
     });
   }
 
-
-  getElevators(){
-    this.elevatorService.getAllElevators().subscribe((elevators) => {
-      this.elevators = elevators;
-    });
-  }
-
   onSubmit(): void {
-    //Envia para o backend o patch do eleavtor
     this.elevatorService.editElevator(this.elevatorForm.value).subscribe(
-      (elevator) => {
-        this.selectedElevator = elevator;
-        this.updatElevatorForm();
-        this.getElevators();
-
+      () => {
+        this.getBuildingElevator(this.selectedBuilding.id); // Requisita o elevador após a edição
         this._snackBar.open("Elevator updated!", "close", {
           duration: 5000,
           panelClass: ['snackbar-success']
         });
-    },
-    (error) => {
-
-      this._snackBar.open("Error in elevator update!", "close", {
-        duration: 5000,
-        panelClass: ['snackbar-error']
+      },
+      (error) => {
+        this._snackBar.open("Error in elevator update!", "close", {
+          duration: 5000,
+          panelClass: ['snackbar-error']
+        });
       });
-    });
-
   }
-
 }

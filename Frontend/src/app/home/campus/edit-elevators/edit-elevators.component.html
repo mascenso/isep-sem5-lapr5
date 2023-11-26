@@ -1,27 +1,35 @@
-  <form [formGroup]="elevatorForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="elevatorForm" (ngSubmit)="onSubmit()">
     <mat-form-field>
-      <mat-label>Selecionar Elevador</mat-label>
-      <mat-select formControlName="id" (selectionChange)="onElevatorSelected($event.value)">
-        <mat-option *ngFor="let elevator of elevators" [value]="elevator.id">
-          {{ elevator.code }}
+      <mat-label>Selecionar Edifício</mat-label>
+      <mat-select formControlName="buildingId" (selectionChange)="onBuildingSelected($event.value)">
+        <mat-option *ngFor="let building of buildings" [value]="building.id">
+          {{ building.name }}
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <div *ngIf="selectedElevator !== undefined">
-        <mat-form-field>
+  
+    <div *ngIf="selectedElevator !== null">
+      <mat-card>
+        <mat-card-content>
+          <mat-form-field>
             <mat-label>Code</mat-label>
-            <input matInput formControlName="code"/>
-        </mat-form-field>
-        <mat-form-field>
+            <input matInput placeholder="Code" formControlName="code" />
+          </mat-form-field>
+  
+          <mat-form-field>
             <mat-label>Floor list</mat-label>
-            <input matInput formControlName="floorList" />
-        </mat-form-field>
-        <mat-form-field>
+              <input matInput formControlName="floorList" />
+            </mat-form-field>
+  
+          <mat-form-field>
             <mat-label>Building ID</mat-label>
-            <input matInput formControlName="buildingId" />
-        </mat-form-field>
-        <div>
-        <button mat-raised-button color="primary" type="submit">Salvar</button>
-        </div>
+            <input matInput placeholder="Building ID" formControlName="buildingId" />
+          </mat-form-field>
+        </mat-card-content>
+  
+        <mat-card-actions>
+          <button mat-raised-button color="primary" type="submit">Salvar</button>
+        </mat-card-actions>
+      </mat-card>
     </div>
   </form>

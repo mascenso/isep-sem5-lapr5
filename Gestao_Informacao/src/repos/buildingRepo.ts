@@ -6,8 +6,7 @@ import {IBuildingPersistence} from "../dataschema/IBuildingPersistence";
 import {BuildingId} from "../domain/building-agg/buildingId";
 import {BuildingMap} from "../mappers/BuildingMap";
 import {Building} from "../domain/building-agg/building";
-import { min } from 'lodash';
-import { ObjectId } from 'mongodb';
+
 
 @Service()
 export default class BuildingRepo implements IBuildingRepo {

@@ -16,21 +16,6 @@
       </mat-card-actions>
     </mat-card>
 
-    <mat-card class="card" routerLink="create-floor" matRipple>
-      <mat-card-header class="card-header">
-        <mat-card-title>Create Floor</mat-card-title>
-        <mat-card-subtitle>&nbsp;</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content class="card-content">
-        <mat-icon class="card-icon">add</mat-icon>
-      </mat-card-content>
-      <mat-card-actions class="card-actions">
-        <button mat-mini-fab color="primary" class="card-button">
-          <mat-icon>add</mat-icon>
-        </button>
-      </mat-card-actions>
-    </mat-card>
-
     <mat-card *ngIf="canActivateBridge" class="card" routerLink="create-bridge" matRipple>
       <mat-card-header class="card-header">
         <mat-card-title>Create bridge</mat-card-title>
@@ -61,21 +46,6 @@
       </mat-card-actions>
     </mat-card>
 
-    <mat-card class="card" routerLink="add-floor-map" matRipple>
-      <mat-card-header class="card-header">
-        <mat-card-title>Add Floor Map</mat-card-title>
-        <mat-card-subtitle>&nbsp;</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content class="card-content">
-        <mat-icon class="card-icon">add</mat-icon>
-      </mat-card-content>
-      <mat-card-actions class="card-actions">
-        <button mat-mini-fab color="primary" class="card-button">
-          <mat-icon>add</mat-icon>
-        </button>
-      </mat-card-actions>
-    </mat-card>
-
     <mat-card class="card" routerLink="edit-building"matRipple>
       <mat-card-header class="card-header">
         <mat-card-title>Edit building</mat-card-title>
@@ -86,7 +56,7 @@
       </mat-card-content>
       <mat-card-actions class="card-actions">
         <button mat-mini-fab color="primary" class="card-button">
-          <mat-icon>edit</mat-icon>
+          <mat-icon>add</mat-icon>
         </button>
       </mat-card-actions>
     </mat-card>
@@ -127,11 +97,11 @@
         <mat-card-subtitle>with access to elevator</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content class="card-content">
-        <mat-icon class="card-icon">list</mat-icon>
+        <mat-icon class="card-icon">search</mat-icon>
       </mat-card-content>
       <mat-card-actions class="card-actions">
         <button mat-mini-fab color="primary" class="card-button">
-          <mat-icon>search</mat-icon>
+          <mat-icon>add</mat-icon>
         </button>
       </mat-card-actions>
     </mat-card>
@@ -143,7 +113,7 @@
         <mat-card-subtitle>between buildings</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content class="card-content">
-        <mat-icon class="card-icon">list</mat-icon>
+        <mat-icon class="card-icon">search</mat-icon>
       </mat-card-content>
       <mat-card-actions class="card-actions">
         <button mat-mini-fab color="primary" class="card-button">
@@ -162,12 +132,41 @@
       </mat-card-content>
       <mat-card-actions class="card-actions">
         <button mat-mini-fab color="primary" class="card-button">
-          <mat-icon>search</mat-icon>
+          <mat-icon>list</mat-icon>
         </button>
       </mat-card-actions>
-    </mat-card> 
+    </mat-card>
+
+    <mat-card class="card" routerLink="create-floor" matRipple>
+      <mat-card-header class="card-header">
+        <mat-card-title>Create Floor</mat-card-title>
+        <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="card-content">
+        <mat-icon class="card-icon">add</mat-icon>
+      </mat-card-content>
+      <mat-card-actions class="card-actions">
+        <button mat-mini-fab color="primary" class="card-button">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="card" routerLink="add-floor-map" matRipple>
+      <mat-card-header class="card-header">
+        <mat-card-title>Add Floor Map</mat-card-title>
+        <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="card-content">
+        <mat-icon class="card-icon">add</mat-icon>
+      </mat-card-content>
+      <mat-card-actions class="card-actions">
+        <button mat-mini-fab color="primary" class="card-button">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
 
   </div>
 
 </div>
-

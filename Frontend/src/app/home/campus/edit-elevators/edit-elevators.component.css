@@ -1,0 +1,26 @@
+/* Ajusta a largura do mat-select */
+mat-form-field {
+    width: calc(65%); /* 2/3 da largura total */
+    margin-bottom: 15px; /* Espaçamento entre os campos */
+  }
+  
+  mat-card {
+    width: calc(65%); /* 2/3 da largura total */
+  }
+  
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  mat-card-actions {
+    justify-content: flex-start; /* Alinha os elementos no início */
+    display: flex;
+  }
+  
+  /* Estilização opcional para o botão de salvar */
+  button[type="submit"] {
+    margin-top: 15px; /* Espaçamento acima do botão */
+  }
+
+  

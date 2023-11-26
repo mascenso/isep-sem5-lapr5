@@ -7,3 +7,4 @@ export default interface IBridgeDTO {
         buildingAId: string;
         buildingBId: string;
 }
+

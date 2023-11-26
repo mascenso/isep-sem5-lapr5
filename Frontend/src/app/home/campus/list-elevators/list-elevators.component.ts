@@ -62,7 +62,7 @@ export class ListElevatorsComponent implements OnInit, OnDestroy{
           console.log(this.dataSource);
         },
         error => {
-          this._snackBar.open("Unable to get elevators!", "close", {
+          this._snackBar.open("That building doesn't have an elevator!", "close", {
             duration: 5000,
             panelClass: ['snackbar-error']
           });

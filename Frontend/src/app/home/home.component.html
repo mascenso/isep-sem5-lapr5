@@ -23,7 +23,7 @@
 
         <div class="sidenav-items">
           <ng-container *ngFor="let menuEntry of MENU_ENTRIES">
-            <mat-list-item *ngIf="menuEntry.authorizedRoles.includes(userRole)" class="sidenav-item" routerLink="{{menuEntry.redirectTo}}" [routerLinkActive]="['is-active']">
+            <mat-list-item *ngIf="menuEntry.authorizedRoles.includes(userRole)" id="{{menuEntry.title}}" class="sidenav-item" routerLink="{{menuEntry.redirectTo}}" [routerLinkActive]="['is-active']">
               <mat-icon class="sidenav-item-icon" fontIcon="{{menuEntry.icon}}"></mat-icon>
               <span *ngIf="isExpanded">{{ menuEntry.title }}</span>
             </mat-list-item>

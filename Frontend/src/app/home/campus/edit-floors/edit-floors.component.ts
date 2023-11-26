@@ -104,15 +104,6 @@ export class EditFloorsComponent {
     }
   }
 
-  onModify() {
-    console.log('Edit button clicked');
-    if(this.showForm == false) {
-      this.showForm = true;
-    } else {
-      this.showForm = false;
-    }
-  }
-
   onFloorSelected(selectedFloorId: any): void {
     this.selectedFloor = this.dataSource.find(floor => floor.id === selectedFloorId);
   }
@@ -128,7 +119,6 @@ export class EditFloorsComponent {
         length: this.selectedFloor.length ? this.floorForm.value.Length : this.selectedFloor.length,
         floorNumber: this.floorForm.value.FloorNumber,
         description: this.floorForm.value.description,
-        floorMap: this.selectedFloor.floorMap
       };
 
       console.log(this.floorForm.value.FloorNumber);
@@ -154,41 +144,6 @@ export class EditFloorsComponent {
     }
   }
 
-  onChange() {
-    if (this.selectedFloor) {
-      const updatedFloorData = {
-        id: this.selectedFloor.id,
-        buildingId: this.selectedFloor.buildingId,
-        width: this.floorForm.value.Width,
-        length: this.floorForm.value.Length,
-        floorNumber: this.floorForm.value.FloorNumber,
-        description: this.floorForm.value.description,
-        floorMap: this.selectedFloor.floorMap
-      };
-
-      console.log(this.floorForm.value.FloorNumber);
-      console.log(updatedFloorData);
-
-      this.floorService.editFloor(updatedFloorData as FloorDTO).subscribe(
-        response => {
-          this.dataSource = response;
-          this._snackBar.open("floor updated!", "close", {
-            duration: 5000,
-            panelClass: ['snackbar-success']
-          });
-        },
-        error => {
-          console.log('Error editing floor: ', error);
-          this._snackBar.open(error.message, "close", {
-            duration: 5000,
-            panelClass: ['snackbar-error']
-          });
-        }
-      );
-    }
-  }
-  
-  
   onCancel() {
     return this.router.navigate(['../home/campus']);
   }

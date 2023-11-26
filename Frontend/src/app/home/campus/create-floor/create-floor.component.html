@@ -1,6 +1,6 @@
 <mat-form-field>
     <mat-label>Escolha um edifício</mat-label>
-    <mat-select [(ngModel)]="selectedBuilding">
+    <mat-select id="dropdownCreateFloor" [(ngModel)]="selectedBuilding">
       <mat-option *ngFor="let building of buildings" [value]="building.id">
         {{ building.name }}
       </mat-option>
@@ -26,5 +26,5 @@
   
     <!-- Adicione outros campos conforme necessário -->
   
-    <button mat-raised-button color="primary" type="submit">Criar Piso</button>
+    <button id="saveNewFloor" mat-raised-button color="primary" type="submit">Criar Piso</button>
   </form>

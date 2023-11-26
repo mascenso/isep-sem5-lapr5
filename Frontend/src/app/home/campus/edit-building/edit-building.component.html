@@ -1,7 +1,7 @@
 <form [formGroup]="buildingForm" (ngSubmit)="onSubmit()">
     <mat-form-field>
       <mat-label>Selecionar Edifício</mat-label>
-      <mat-select formControlName="id" (selectionChange)="onBuildingSelected($event.value)">
+      <mat-select id="buildingSelector" formControlName="id" (selectionChange)="onBuildingSelected($event.value)">
         <mat-option *ngFor="let building of buildings" [value]="building.id">
           {{ building.name }}
         </mat-option>
@@ -28,7 +28,7 @@
             <mat-label>Description</mat-label>
             <input matInput formControlName="description" />
         </mat-form-field>
-        <button mat-raised-button type="submit">Salvar</button>
+        <button id="saveBuilding" mat-raised-button type="submit">Salvar</button>
     </div>
 
   

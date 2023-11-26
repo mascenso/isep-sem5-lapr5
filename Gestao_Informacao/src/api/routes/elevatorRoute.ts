@@ -48,7 +48,7 @@ export default (app: Router) => {
     (req, res, next) => { ctrl.getAllElevators(req, res, next); 
   });
    
-  route.get('/:id', 
+  route.get('/:buildingId', 
   (req, res, next) => ctrl.getBuildingElevators(req, res, next)
 );
 }

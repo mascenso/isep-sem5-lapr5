@@ -1,30 +1,33 @@
-import { ErrorHandler, Injectable, NgZone } from "@angular/core";
+import { ErrorHandler, Inject, Injectable, Injector } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
-import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { ErrorsConstant } from "./errors-const";
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
 
-  constructor(private ngZone: NgZone, private router: Router, private _snackBar: MatSnackBar) { }
+  errorMsg = '';
+  constructor(@Inject(Injector) private injector: Injector) {
+  }
 
-  handleError(error: any): void {
+  private get snackBarError(): MatSnackBar {
+    return this.injector.get(MatSnackBar);
+  }
 
-    if (error instanceof HttpErrorResponse) {
-        if (!navigator.onLine) {
-          alert('No Internet Connection');
-        } else {
-          //snack bar
-          this._snackBar.open("Http error", "close", {
-            duration: 5000,
-            panelClass: ['snackbar-warning']
-          });
-          this.ngZone.run(() => this.router.navigateByUrl('/home/campus'));
-        }
-      }
-
+  // Handle API errors
+  handleError(error: HttpErrorResponse): void {
+    console.log(
+      `Error code ${error.status}, ` +
+      `body was: ${error.error}`);
+    if (!navigator.onLine) {
+      this.errorMsg = ErrorsConstant.NetworkIssue;
+    } else if (error.status >= 400 && error.status <= 499) {
+      this.errorMsg = ErrorsConstant.ClientSide;
+    } else {
+      this.errorMsg = ErrorsConstant.ServerSide;
     }
+    console.log(this.errorMsg);
 
-
-
+    this.snackBarError.open(this.errorMsg, "Fechar", { duration: 3000, panelClass:['snackbar-error'] });
+  }
 }

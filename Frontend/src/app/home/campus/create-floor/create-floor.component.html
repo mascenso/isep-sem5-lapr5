@@ -1,0 +1,30 @@
+<mat-form-field>
+    <mat-label>Escolha um edifício</mat-label>
+    <mat-select [(ngModel)]="selectedBuilding">
+      <mat-option *ngFor="let building of buildings" [value]="building.id">
+        {{ building.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+  <form [formGroup]="floorForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <input matInput formControlName="width" placeholder="Largura">
+    </mat-form-field>
+  
+    <mat-form-field>
+      <input matInput formControlName="length" placeholder="Comprimento">
+    </mat-form-field>
+  
+    <mat-form-field>
+      <input matInput formControlName="floorNumber" placeholder="Número do Piso">
+    </mat-form-field>
+  
+    <mat-form-field>
+      <input matInput formControlName="description" placeholder="Descrição">
+    </mat-form-field>
+  
+    <!-- Adicione outros campos conforme necessário -->
+  
+    <button mat-raised-button color="primary" type="submit">Criar Piso</button>
+  </form>

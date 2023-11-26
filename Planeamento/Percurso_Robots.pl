@@ -1,11 +1,50 @@
-/* ## ALGORITMOS PARA O CALCULO DOS CAMINHOS/TRAJECTOS DO ROBDRONEGO NUM PISO. GRANULARIDADE PEQUENA ## */
-
 :-dynamic ligacel/3.
 :-dynamic edge/2.
 
-:- consult('BC_trajectos.pl').
 
-/* Cria grafo conforme possiveis caminhos (0, 4, 5, 1.4, 1.3, 0.2, 0.3, 0.4, 0.5). Ver circular(N) em BC_trajectos.
+
+/*Ligacoes HTTP*/
+:- use_module(library(http/thread_httpd)).
+:- use_module(library(http/http_dispatch)).
+:- use_module(library(http/http_parameters)).
+:- use_module(library(http/http_json)).
+
+% Handler para lidar com requisições HTTP
+:- http_handler('/caminho', caminho_handler, []).
+
+% Predicado para iniciar o servidor
+start_server(Port) :-
+    http_server(http_dispatch, [port(Port)]).
+
+% Handler específico para caminho
+caminho_handler(Request) :-
+    http_parameters(Request, [pisoOrigem(PisoOr, []),
+                              pisoDestino(PisoDest, [])]),
+    caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal),
+    reply_json(json([caminho=LCam, custo=CustoTotal])).
+
+
+
+
+
+
+
+:- consult('AlgoritmosGenericos.pl').
+:- consult('BC_RobDroneGo.pl').
+
+
+/* Cria grafo para o piso indicado tendo em considelaraçao o mapa do piso. */
+cria_grafo_piso(Piso):-
+    floor_map(Piso, Map),
+    cria_grafo_mapa(Map).
+
+cria_grafo_mapa(Map):-
+    length(Map, NumLinhas),
+    length(Map, NumColunas),
+    cria_grafo(NumLinhas, NumColunas,Map).
+
+
+/* Cria grafo conforme possiveis caminhos especializado para receber uma matriz dos pisos.
 ColS- Coluna Adjacente Seguinte;
 ColA- Coluna Adjacente Anterior;
 Col- Coluna Atual;
@@ -13,26 +52,38 @@ LinS- Linha Adjacente Seguinte;
 LinA- Linha Adjacente Anterior;
 Lin- Linha Atual;
 O Assertz são as conexões das entre as celulas (ligacel), TRUE para continuar sem gerar erro caso nao possa transitar para aquela celula. */
-cria_grafo(_,0):-!.
-cria_grafo(Col,Lin):-cria_grafo_lin(Col,Lin),Lin1 is Lin-1,cria_grafo(Col,Lin1).
+cria_grafo(_,0,_):-!.
+cria_grafo(Col,Lin,Map):-
+	cria_grafo_lin(Col,Lin,Map),
+	Lin1 is Lin-1,
+	cria_grafo(Col,Lin1,Map).
 
-cria_grafo_lin(0,_):-!.
-cria_grafo_lin(Col,Lin):-
-	m(Col,Lin,V),
+
+cria_grafo_lin(0,_,_):-!.
+
+
+cria_grafo_lin(Col,Lin, Map):-
+	map_value(Col,Lin,Map,V),
+    write('v='),write(V),nl,
 	not(parede(V)),!,
 	ColS is Col+1, ColA is Col-1, LinS is Lin+1,LinA is Lin-1,
-	((m(ColS,Lin,V),circular(V),(cria_conexoes(Col,Lin,ColS,Lin,1));true)), %M. Horizontal
-	((m(ColA,Lin,V),circular(V),(cria_conexoes(Col,Lin,ColA,Lin,1));true)), %M. Horizontal
-	((m(Col,LinS,V),circular(V),(cria_conexoes(Col,Lin,Col,LinS,1));true)), %M. Vertical
-	((m(Col,LinA,V),circular(V),(cria_conexoes(Col,Lin,Col,LinA,1));true)), %M. Vertical
-	((m(ColS,LinS,V),circular(V),(cria_conexoes(Col,Lin,ColS,LinS,sqrt(2)));true)), %M. Diagonal
-	((m(ColA,LinS,V),circular(V),(cria_conexoes(Col,Lin,ColA,LinS,sqrt(2)));true)), %M. Diagonal
-	((m(ColS,LinA,V),circular(V),(cria_conexoes(Col,Lin,ColS,LinA,sqrt(2)));true)), %M. Diagonal
-	((m(ColA,LinA,V),circular(V),(cria_conexoes(Col,Lin,ColA,LinA,sqrt(2)));true)), %M. Diagonal
+	((map_value(ColS,Lin,Map,V),circular(V),(cria_conexoes(Col,Lin,ColS,Lin,1));true)), %M. Horizontal
+	((map_value(ColA,Lin,Map,V),circular(V),(cria_conexoes(Col,Lin,ColA,Lin,1));true)), %M. Horizontal
+	((map_value(Col,LinS,Map,V),circular(V),(cria_conexoes(Col,Lin,Col,LinS,1));true)), %M. Vertical
+	((map_value(Col,LinA,Map,V),circular(V),(cria_conexoes(Col,Lin,Col,LinA,1));true)), %M. Vertical
+	((map_value(ColS,LinS,Map,V),circular(V),(cria_conexoes(Col,Lin,ColS,LinS,sqrt(2)));true)), %M. Diagonal
+	((map_value(ColA,LinS,Map,V),circular(V),(cria_conexoes(Col,Lin,ColA,LinS,sqrt(2)));true)), %M. Diagonal
+	((map_value(ColS,LinA,Map,V),circular(V),(cria_conexoes(Col,Lin,ColS,LinA,sqrt(2)));true)), %M. Diagonal
+	((map_value(ColA,LinA,Map,V),circular(V),(cria_conexoes(Col,Lin,ColA,LinA,sqrt(2)));true)), %M. Diagonal
 	Col1 is Col-1,
-	cria_grafo_lin(Col1,Lin).
+	cria_grafo_lin(Col1,Lin,Map).
 
-cria_grafo_lin(Col,Lin):-Col1 is Col-1,cria_grafo_lin(Col1,Lin).
+
+cria_grafo_lin(Col,Lin,Map):-Col1 is Col-1,cria_grafo_lin(Col1,Lin,Map).
+
+map_value(Col,Lin,Map,V):- 
+    nth1(Col, Map, Coluna),
+    nth1(Lin, Coluna, V).
 
 /*Predicado auxiliar para adicionar conexões com pesos */
 cria_conexoes(Col1,Lin1,Col2,Lin2,Peso) :-
@@ -40,114 +91,84 @@ cria_conexoes(Col1,Lin1,Col2,Lin2,Peso) :-
 	assertz(edge(cel(Col1,Lin1),cel(Col2,Lin2))).
 
 /* Predicado para mostrar as conexões criadas -> testar grafo */
-mostra_conexoes :-
+mostra_conexoes2 :-
     ligacel(Cel1, Cel2, Peso),
     write('Conexão de '), write(Cel1), write(' para '), write(Cel2), write(' com peso '), write(Peso), nl,
     fail.
 mostra_conexoes.
 
-/* DFS - Pesquisa em profundidade. Pesquisa a partir do nó inicial e segue o caminho até o fim, depois retrocede. */
-dfs(Orig,Dest,Cam):-
-	dfs2(Orig,Dest,[Orig],Cam).
 
-dfs2(Dest,Dest,LA,Cam):-reverse(LA,Cam).
-
-dfs2(Act,Dest,LA,Cam):-
-	edge(Act,X),
-    \+ member(X,LA),
-	dfs2(X,Dest,[X|LA],Cam).
-
-
-/* Algoritmo para encontrar todos os caminhos entre dois pontos.
-Devolve uma lista com todos os caminhos possiveis */
-all_dfs(Orig,Dest,LCam):-findall(Cam,dfs(Orig,Dest,Cam),LCam).
-
-
-/* Algoritmo para encontrar o melhor o caminho entre dois pontos. */
-better_dfs(Orig,Dest,Cam):-all_dfs(Orig,Dest,LCam), shortlist(LCam,Cam,_).
-
-shortlist([L],L,N):-!,length(L,N).
-shortlist([L|LL],Lm,Nm):-
-	shortlist(LL,Lm1,Nm1),
-	length(L,NL),
-	((NL<Nm1,!,Lm=L,Nm is NL);(Lm=Lm1,Nm is Nm1)).
-
-
-/* BFS - Pesquisa em largura. Primeiro pesquisa os nós adajacentes ao nó inicial antes de ir ver os nós vizinhos do nó vizinho.
-A decisão sobre qual ramo seguir ser feita com base num critério de decisão local. Em caso de indecisão
-vamos pelo caminho mais promissor, tendo em conta o custo/ganho do caminho.*/
-bfs(Orig, Dest, Cam):- bfs2(Dest, [[Orig]], Cam).
-
-bfs2(Dest, [[Dest|T]|_], Cam):-reverse([Dest|T], Cam).
-
-bfs2(Dest, [LA|Outros], Cam):-
-    LA = [Act|_],
-    findall([X|LA], (Dest \== Act, edge(Act, X), \+ member(X, LA)),Novos),
-    append(Outros, Novos, Todos),
-    bfs2(Dest, Todos, Cam).
-
-
-/* BFS - Best First Search sem custo */
-
-bestfs(Orig,Dest,Cam):- bestfs2(Dest,[Orig],Cam).
-
-%condicao final: destino = nó à cabeça do caminho actual
-bestfs2(Dest,[Dest|T],Cam):-!,
-    %caminho está invertido
-    reverse([Dest|T],Cam). 
-
-bestfs2(Dest,LA,Cam):- LA=[Act|_], % substituir por member(Act,LA), caso haja cortes nos caminhos
-    %calcular todos os nós adjacentes não visitados e guarda um tuplo com a estimativa e novo caminho
-    findall((EstX,[X|LA]), ((edge(Act,X);edge(X,Act)), \+ member(X,LA), estimativa(X,Dest,EstX)), Novos),
-    %ordena pela estimativa
-    sort(Novos,NovosOrd),
-    %extrai o melhor (header)
-    NovosOrd = [(_,Melhor)|_],
-    %chama-se recursivamente
-    bestfs2(Dest,Melhor,Cam).
-
-
-/* BFS - Best First Search com Custo */
-/*
-bestfs(Orig,Dest,Cam,Custo):- bestfs2(Dest,[Orig],Cam,Custo).
-
-bestfs2(Dest,(Custo,[Dest|T]),Cam,Custo):-!,
-    reverse([Dest|T],Cam). 
-
-bestfs2(Dest,(Ca,LA),Cam,Custo):- member(Act,LA),
-    findall((EstX,CaX,[X|LA]), ((ligacel(Act,CX);ligacel(X,Act,CX)), \+ member(X,LA), estimativa(X,Dest,EstX)),CaX is Ca+CX, Novos),
-    sort(Novos,NovosOrd),
-    NovosOrd = [(_,CM,Melhor)|_],
-    bestfs2(Dest,(CM,Melhor),Cam,Custo).
+/* Algoritmo para encontrar todos os caminhos entre dois pisos,PisoOr e PisoDest.
+Devolve uma lista de edificios percorridos e uma lista das ligaçoes (elevadores e|ou corredores)
+PisoOr - Piso de origem;
+PisoDest - Piso de destino;
+LCam - Lista de caminhos percorrido;
+LLig - Lista de ligaçoes percorridas;
+Custo - Custo associado ao percuros;
 */
 
-/* Algoritmo para encontrar o caminho mais curto entre dois pontos
-Orig - Origem
-Dest - Destino
-Cam - Caminho
-Custo - Custo do trajecto.
-Devolve uma lista com o caminho percorrido e o repetivo custo associado.*/
-aStar(Orig,Dest,Cam,Custo):- 
-	aStar2(Dest,[(_,0,[Orig])],Cam,Custo).
+caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal):-
+    pisos(EdOr, LPisosOr),
+    member(PisoOr, LPisosOr),
+    pisos(EdDest, LPisosDest),
+    member(PisoDest, LPisosDest), 
+    caminho_edificios(EdOr, EdDest, LCam),
+    segue_pisos(PisoOr,PisoDest,LCam,LLig),
+    calcular_custo_total(LLig, PisoOr, CustoTotal). 
+    %write('CustoTotal= '),write(CustoTotal),nl.
 
-%quando cheagado ao destino, inverte a lista para apresentar o caminho direito.
-aStar2(Dest,[(_,Custo,[Dest|T])|_],Cam,Custo):- 
-	reverse([Dest|T],Cam).
+/*Calculo custo total da viagem usando aStar em cada piso*/
+calcular_custo_total([], _, 0).
 
-aStar2(Dest,[(_,Ca,LA)|Outros],Cam,Custo):- 
-	LA=[Act|_],
-	findall((CEX,CaX,[X|LA]), 
-	(Dest\==Act,ligacel(Act,X,CustoX),
-	\+ member(X,LA),
-	CaX is CustoX + Ca,
-	estimativa(X,Dest,EstX),
-	CEX is CaX +EstX),Novos),
-	append(Outros,Novos,Todos),
-	write('Novos='),write(Novos),nl,
-	sort(Todos,TodosOrd),
-	write('TodosOrd='),write(TodosOrd),nl,
-	aStar2(Dest,TodosOrd,Cam,Custo).
+/* Predicado para somar todos os custos*/
+calcular_custo_total([Acao | RestoAcoes], PisoAtual, CustoTotal) :-
+    calcular_custo_unico(Acao, PisoAtual, CustoParcial),
+    novo_piso_destino(Acao, PisoDestino),
+    calcular_custo_total(RestoAcoes, PisoDestino, CustoResto),
+    CustoTotal is CustoParcial + CustoResto.
 
-/* calcula o custo para de ir do ponto A ao B.*/
-estimativa(cel(X1,Y1),cel(X2,Y2),Estimativa):-
-	Estimativa is sqrt((X1-X2)^2+(Y1-Y2)^2).
+/*Calcula distancia desde posicao inicial ate elevador do piso*/
+calcular_custo_unico(elev(PisoOr, _), PisoAtual, Custo) :-
+    pos_init(PisoAtual, Orig),
+    elev_pos(PisoOr, CDestino),
+    aStar(Orig, CDestino, _, Custo).
+
+/*Calcula distancia desde posicao inicia ate passagem*/
+calcular_custo_unico(cor(PisoOr, PisoDest), PisoOr, Custo) :-
+    pos_init(PisoOr,Orig),
+    (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
+    aStar(Orig, CDestino, _, Custo).
+
+novo_piso_destino(elev(_, PisoDest), PisoDest).
+novo_piso_destino(cor(_, PisoDest), PisoDest).
+
+
+/*
+%este algoritmo é para calcular a distancia entre a posiçao inicial do robot com a de destino na primeira interaçao. Se a lista estiver vazia, não avança.
+percorre_primeiro_lista([], _,0).
+
+percorre_primeiro_lista([elev(PisoOr, _) | _], PisoOr, CustoTotal):-
+        pos_init(PisoOr,Orig),
+        elev_pos(PisoOr, CDestino),
+        aStar(Orig, CDestino, _, CustoTotal),
+        write('Custo1 = '),write(CustoTotal),nl.
+
+
+percorre_primeiro_lista([cor(PisoOr, PisoDest) | _], PisoOr, CustoTotal):-
+        pos_init(PisoOr,Orig),
+        (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
+        aStar(Orig, CDestino, _, CustoTotal),
+        write('Custosss = '),write(CustoTotal),nl,
+        percorre_lista(Resto, CDestino ,CustoTotal).
+
+%este algoritmo é para calcular a distancia entre a posiçao anterior do robot com a proxima. Se chegou ao destino, para.
+percorre_lista([], _,0).
+
+percorre_lista([elev(_, _) | Resto], Destino, CustoTotal):-
+    percorre_lista(Resto, Destino, CustoTotal).
+
+percorre_lista([cor(PisoOr, PisoDest) | _], COrig,CustoTotal):-
+    (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
+    aStar(COrig, CDestino, _, CustoTotal),
+    write('Custotttt = '),write(CustoTotal),nl.
+    percorre_lista(Resto, CDestino, CustoTotal).*/

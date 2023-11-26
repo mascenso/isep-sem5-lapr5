@@ -1,9 +1,9 @@
 import { AggregateRoot } from "../../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../../core/domain/UniqueEntityID";
 import { Result } from "../../core/logic/Result";
-import { RobotTypeId } from "./robotTypeId";
 import IRobotTypeDTO from "../../dto/IRobotTypeDTO";
 import TaskType from '../../enums/taskType';
+import {Guard} from "../../core/logic/Guard";
 
 interface RobotTypeProps {
   designacao: string;
@@ -22,12 +22,33 @@ modelo: obrigatório, máximo 100 caracteres
 "o \"tipo de robot\" é um código identificativo desse tipo de robots."
 
 export class RobotType extends AggregateRoot<RobotTypeProps> {
-  get id (): UniqueEntityID {
-    return this._id;
+
+  private constructor (props: RobotTypeProps, id?: UniqueEntityID) {
+    super(props, id);
   }
 
-  get robotTypeId (): RobotTypeId {
-    return new RobotTypeId(this.robotTypeId.toValue());
+  public static create (props: RobotTypeProps, id?: UniqueEntityID): Result<RobotType> {
+    const guardedProps = [
+      { argument: props.designacao, argumentName: 'designacao' },
+      { argument: props.tipoTarefas, argumentName: 'tipoTarefas' }
+    ];
+
+    const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
+
+    if (!guardResult.succeeded) {
+      return Result.fail<RobotType>(guardResult.message)
+    }
+    else {
+      const robotType = new RobotType({
+        ...props
+      }, id);
+
+      return Result.ok<RobotType>( robotType );
+    }
+  }
+
+  get id (): UniqueEntityID {
+    return this._id;
   }
 
   get designacao (): string {
@@ -46,19 +67,4 @@ export class RobotType extends AggregateRoot<RobotTypeProps> {
     this.props.tipoTarefas = value;
   }
 
-  private constructor (props: RobotTypeProps, id?: UniqueEntityID) {
-    super(props, id);
-  }
-
-  public static create (robotTypeDTO: IRobotTypeDTO, id?: UniqueEntityID): Result<RobotType> {
-    const designacao = robotTypeDTO.designacao;
-    const tipoTarefas = robotTypeDTO.tipoTarefas;
-
-    if (!!designacao === false || designacao.length === 0) {
-      return Result.fail<RobotType>('Must provide a robot type designation.')
-    } else {
-      const robotType = new RobotType({ designacao: designacao, tipoTarefas: tipoTarefas }, id);
-      return Result.ok<RobotType>( robotType )
-    }
-  }
 }

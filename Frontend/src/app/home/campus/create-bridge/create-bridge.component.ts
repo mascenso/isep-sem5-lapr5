@@ -5,7 +5,7 @@ import { Subscription } from "rxjs";
 import { BridgeService } from "../../../services/bridge.service";
 import { BuildingResponseDTO } from "../../../../dto/buildingDTO";
 import { FloorResponseDTO } from "../../../../dto/floorDTO";
-import { BridgeResponseDTO, CreateBridgeRequestDTO } from "../../../../dto/bridgeDTO";
+import { BridgeDTO } from "../../../../dto/bridgeDTO";
 
 @Component({
   selector: 'app-create-bridge',
@@ -42,13 +42,14 @@ export class CreateBridgeComponent {
     this.buildingServiceSubscription$ = this.bridgeService.getAllBuildings().subscribe(
       response => {
         this.buildingList = response;
+        console.log(this.buildingList = response);
         this.buildingBList = response;
       },
 
     )
   }
 
-  createdBridge: BridgeResponseDTO | undefined;
+  createdBridge: BridgeDTO | undefined;
 
   constructor(private bridgeService: BridgeService,
               private _snackBar: MatSnackBar) {
@@ -60,7 +61,7 @@ export class CreateBridgeComponent {
       floorBId: this.floorBSelectionControl.value
     });
 
-    this.bridgeService.createBridge(this.bridgeForm.value as CreateBridgeRequestDTO, true).subscribe(
+    this.bridgeService.createBridge(this.bridgeForm.value as BridgeDTO, true).subscribe(
       response => {
         this.createdBridge = response;
         this._snackBar.open("Bridge created!", "close", {
@@ -68,6 +69,10 @@ export class CreateBridgeComponent {
           panelClass: ['snackbar-success']
         });
       },
+      (error) => {
+        //Throwing error to global error handler
+        throw error;
+      }
 
     );
   }

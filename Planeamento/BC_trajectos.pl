@@ -1,7 +1,7 @@
 /* Este ficheiro contém a base de conhecimento sobre as ligaçoes e entre edificios, pisos e elevadores.
 Contém também conhecimento sobre o mapa de um dado piso ou seção deste para o percurso dos ROBOTS. */
 
-%ligaçoes entre edificios 
+%ligaçoes entre edificios  (a,b,g,h,i,j)
 liga(a,h).
 liga(b,g).
 liga(b,i).

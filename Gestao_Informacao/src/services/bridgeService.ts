@@ -11,6 +11,7 @@ import IBuildingBridgeDTO from '../dto/IBuildingBridgeDTO';
 import IBuildingRepo from './IRepos/IBuildingRepo';
 import { IFloorDTO } from "../dto/IFloorDTO";
 import { FloorMap } from "../mappers/FloorMap";
+import IBridgeResponseDTO from "../dto/IBridgeResponseDTO";
 
 @Service()
 export default class BridgeService implements IBridgeService {
@@ -149,18 +150,49 @@ export default class BridgeService implements IBridgeService {
   }
 
 
-  public async getAllBridges(): Promise<Result<IBridgeDTO[]>> {
+  public async getAllBridges(): Promise<Result<IBridgeResponseDTO[]>> {
     try {
 
+      //bridges ainda sem info de numeros de floors
       const bridges = await this.bridgeRepo.getAllBridges();
 
       if (bridges === null) {
-        return Result.fail<IBridgeDTO[]>("No bridges found");
+        return Result.fail<IBridgeResponseDTO[]>("No bridges found");
       }
       else {
         const bridgeDTOs = bridges.map((bridges) => BridgeMap.toDTO(bridges) as IBridgeDTO);
-        return Result.ok<IBridgeDTO[]>(bridgeDTOs)
+
+        const bridgeResponseDTOs = [];
+        for (const bridgeDTO of bridgeDTOs) {
+          const bridgeResponseDTO = await this.addBuildingAndFloorInfoToBridgeDTO(bridgeDTO);
+          bridgeResponseDTOs.push(bridgeResponseDTO.getValue());
+        }
+
+        return Result.ok<IBridgeResponseDTO[]>(bridgeResponseDTOs)
       }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  public async addBuildingAndFloorInfoToBridgeDTO(bridgeDTO: IBridgeDTO): Promise<Result<IBridgeResponseDTO>> {
+    try {
+      const floorA = await this.floorRepo.findByDomainId(bridgeDTO.floorAId);
+      const floorB = await this.floorRepo.findByDomainId(bridgeDTO.floorBId);
+      const buildingA = await this.buildingRepo.findByDomainId(floorA.buildingId);
+      const buildingB = await this.buildingRepo.findByDomainId(floorB.buildingId);
+
+      const bridgeResponse = {
+        id:  bridgeDTO.id,
+        code:  bridgeDTO.code,
+        name:  bridgeDTO.name,
+        floorAId:  bridgeDTO.floorAId,
+        floorBId:  bridgeDTO.floorBId,
+        buildingAId:  bridgeDTO.buildingAId,
+        buildingBId:  bridgeDTO.buildingBId,
+        buildingAName: buildingA.name, buildingBName: buildingB.name, floorANumber: floorA.floorNumber, floorBNumber: floorB.floorNumber}
+      return Result.ok<IBridgeResponseDTO>(bridgeResponse);
+
     } catch (e) {
       throw e;
     }

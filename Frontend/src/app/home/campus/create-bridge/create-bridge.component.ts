@@ -5,7 +5,7 @@ import { Subscription } from "rxjs";
 import { BridgeService } from "../../../services/bridge.service";
 import { BuildingResponseDTO } from "../../../../dto/buildingDTO";
 import { FloorResponseDTO } from "../../../../dto/floorDTO";
-import { BridgeDTO } from "../../../../dto/bridgeDTO";
+import { BridgeRequestDTO } from "../../../../dto/bridgeDTO";
 
 @Component({
   selector: 'app-create-bridge',
@@ -49,7 +49,7 @@ export class CreateBridgeComponent {
     )
   }
 
-  createdBridge: BridgeDTO | undefined;
+  createdBridge: BridgeRequestDTO | undefined;
 
   constructor(private bridgeService: BridgeService,
               private _snackBar: MatSnackBar) {
@@ -61,7 +61,7 @@ export class CreateBridgeComponent {
       floorBId: this.floorBSelectionControl.value
     });
 
-    this.bridgeService.createBridge(this.bridgeForm.value as BridgeDTO, true).subscribe(
+    this.bridgeService.createBridge(this.bridgeForm.value as BridgeRequestDTO, true).subscribe(
       response => {
         this.createdBridge = response;
         this._snackBar.open("Bridge created!", "close", {

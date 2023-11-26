@@ -1,4 +1,4 @@
-export interface BridgeResponseDTO {
+export default interface IBridgeResponseDTO {
   id: string;
   code: string;
   name: string;
@@ -11,13 +11,3 @@ export interface BridgeResponseDTO {
   buildingBId: string;
   buildingBName: string;
 }
-
-export interface BridgeRequestDTO {
-  name?: string;
-  code? : string;
-  floorAId? : string;
-  floorBId? : string;
-}
-
-
-

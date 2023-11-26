@@ -1,18 +1,18 @@
-export interface BridgeDTO {
+export interface BridgeResponseDTO {
   id: string;
+  code: string;
   name: string;
-  code : string;
-  floorAId : string;
-  floorBId : string;
+  floorAId: string;
+  floorANumber: number;
+  floorBId: string;
+  floorBNumber: number;
   buildingAId: string;
+  buildingAName: string;
   buildingBId: string;
-  floorNumberA?: number;
-  buildingNameA?: string;
-  floorNumberB?: number;
-  buildingNameB?: string;
+  buildingBName: string;
 }
 
-export interface BridgeUpdateDTO {
+export interface BridgeRequestDTO {
   name?: string;
   code? : string;
   floorAId? : string;

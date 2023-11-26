@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { BridgeService } from '../../../services/bridge.service';
 import {MatSnackBar} from "@angular/material/snack-bar";
-import { BridgeDTO, BridgeUpdateDTO } from "../../../../dto/bridgeDTO";
 import { FloorDTO, FloorResponseDTO } from "../../../../dto/floorDTO";
 import { BuildingResponseDTO } from "../../../../dto/buildingDTO";
 import { Subscription } from "rxjs";
+import { BridgeRequestDTO, BridgeResponseDTO } from "../../../../dto/bridgeDTO";
 
 @Component({
   selector: 'app-edit-bridge',
@@ -31,7 +31,7 @@ export class EditBridgeComponent {
 
 
   bridgeForm!: FormGroup;
-  bridges: BridgeDTO[] = [];
+  bridges: BridgeResponseDTO[] = [];
 
   floors: FloorDTO[] = [];
   buildings: BuildingResponseDTO[] = [];
@@ -97,7 +97,7 @@ export class EditBridgeComponent {
       floorBId: this.floorBId
     };
 
-    this.bridgeService.editBridge(updates as BridgeUpdateDTO, this.selectedBridge.id ).subscribe(
+    this.bridgeService.editBridge(updates as BridgeRequestDTO, this.selectedBridge.id ).subscribe(
       (bridge) => {
 
           this.selectedBridge = bridge;

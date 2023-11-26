@@ -5,7 +5,7 @@ export interface FloorResponseDTO {
   length: number;
   floorNumber: number;
   description: string;
-  floorMap: number[][];
+  floorMap: object;
 }
 
 export interface FloorDTO {
@@ -15,6 +15,6 @@ export interface FloorDTO {
   length: number;
   floorNumber: number;
   description: string;
-  floorMap: number[][];
+  floorMap: object;
 }
 

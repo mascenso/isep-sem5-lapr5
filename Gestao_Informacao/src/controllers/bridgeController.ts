@@ -41,8 +41,8 @@ export default class BridgeController implements IBridgeController /* TODO: exte
         return res.status(402).json(bridgeOrError.error).send();
       }
 
-      const robotDTO = bridgeOrError.getValue();
-      return res.status(200).json( robotDTO );
+      const bridgeDTO = bridgeOrError.getValue();
+      return res.status(200).json( bridgeDTO );
     }
     catch (e) {
       return next(e);

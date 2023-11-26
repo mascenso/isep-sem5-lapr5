@@ -1,0 +1,64 @@
+<div class="create-robot-container">
+    <div class="create-robot-section">
+      <h2>Create a new Robot</h2>
+      <mat-card class="form-card-container">
+        <mat-card-content>
+          <form class="form" [formGroup]="robotForm" (ngSubmit)="onSubmit()">
+            <p>
+              <mat-form-field class="form-field form-field-code">
+                <mat-label>nickname</mat-label>
+                <input matInput [formControl]="robotForm.controls.nickName" #inputCode maxlength="10" placeholder="Ex. Robert" value="Robert">
+                <mat-hint align="end">{{inputCode.value.length}} / 10</mat-hint>
+                <mat-error *ngIf="robotForm.controls.nickName.hasError('required')">Nickname is <strong>required</strong></mat-error>
+              </mat-form-field>
+            </p>
+  
+            <table class="table">
+                <div class="robot-type-selection-form">
+                    <h4>Select Robot Type:</h4>
+                    <mat-form-field class="form-field robot-type-selection-form-field">
+                      <mat-select [formControl]="robotTypeSelectionControl" (valueChange)="onRobotTypeSelectionChange($event)">
+                        <mat-option></mat-option>
+                        <div *ngFor="let robotType of robotTypeList;">
+                          <mat-option [value]="robotType.id">{{robotType.designacao}} - {{robotType.tipoTarefas}}</mat-option>
+                        </div>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+              <tr>
+                <td>
+                  <mat-form-field class="form-field form-field-number">
+                    <mat-label>Serial Number</mat-label>
+                    <input matInput [formControl]="robotForm.controls.serialNumber" #inputLength maxlength="10" placeholder="Ex. 12365489" value="124245896">
+                    <mat-hint align="end">{{inputLength.value.length}} / 10</mat-hint>
+                    <mat-error *ngIf="robotForm.controls.serialNumber.hasError('required')">Serial Number is <strong>required</strong></mat-error>
+                    <mat-error *ngIf="robotForm.controls.serialNumber.hasError('pattern')">Please enter a <strong>valid integer</strong></mat-error>
+                  </mat-form-field>
+                </td>
+              </tr>
+            </table>
+            <p>
+              <mat-form-field class="form-field form-field-description">
+                <mat-label>Description</mat-label>
+                <textarea matInput [formControl]="robotForm.controls.description"></textarea>
+              </mat-form-field>
+            </p>
+            <p>
+                <mat-checkbox [formControl]="robotForm.controls.inhibited">Inhibited</mat-checkbox>
+            </p>
+            <div class="form-button-group">
+              <button mat-flat-button color="primary" type="submit" [disabled]="!robotForm.valid">Create</button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="robot-details-section">
+      <pre>{{this.createdRobot | json}}</pre>
+    </div>
+  </div>
+  
+  
+  
+  
+  

@@ -118,7 +118,9 @@ export default class Maze {
                         case 5:
                             this.bridges(this.object,this.ground,i,j,description);
                             break;
-     
+                        case 4.1:
+                            this.elevatorNorth(this.object,this.elevator,this.wall,i,j,description);
+                            break;
                     }
                     
                 }
@@ -130,7 +132,7 @@ export default class Maze {
             if (description.locker){
                 for(let i = 0 ; i< description.locker.length ; i++){
                     const loader = new GLTFLoader();
-                    loader.load("./models/gltf/RobotExpressive/colared_school_lockers__game_ready__4k.glb", (gltf) => {
+                    loader.load("./assets/colared_school_lockers__game_ready__4k.glb", (gltf) => {
                         const lockerModel = gltf.scene;
                         // You may need to adjust the position and scale of the model
                         lockerModel.position.set(description.locker[i].position[0] - description.size.width  / 2.0 +0.5 ,0, description.locker[i].position[1] - description.size.height / 2.0-0.25);
@@ -146,7 +148,7 @@ export default class Maze {
             if (description.tables){
                 for(let i = 0 ; i< description.tables.length ; i++){
                     const loader = new GLTFLoader();
-                    loader.load("./models/gltf/RobotExpressive/school_desk.glb", (gltf) => {
+                    loader.load("./assets/school_desk.glb", (gltf) => {
                         const tableModel = gltf.scene;
                         // You may need to adjust the position and scale of the model
                         tableModel.position.set(description.tables[i].position[0] - description.size.width  / 2.0 +0.5 ,0, description.tables[i].position[1] - description.size.height / 2.0-0.25);
@@ -159,7 +161,7 @@ export default class Maze {
             }
             
             this.object.scale.set(this.scale.x, this.scale.y, this.scale.z);
-
+            
             this.loaded = true;
 
         }
@@ -182,10 +184,10 @@ export default class Maze {
 
         // Create a resource file loader
         const loader = new THREE.FileLoader();
-
+        
         // Set the response type: the resource file will be parsed with JSON.parse()
         loader.setResponseType("json");
-
+        
         // Load a maze description resource file
         loader.load(
             //Resource URL
@@ -200,6 +202,7 @@ export default class Maze {
             // onError callback
             error => this.onError(this.url, error)
         );
+
     }
 
     rotation(orientation){
@@ -233,6 +236,7 @@ export default class Maze {
         doorObject.rotateY(Math.PI / 2.0);
         object.add(doorObject);
         object.add(wallObject);
+        console.log(object)
     }
     /**
      * Create a ceel with door open to South
@@ -273,7 +277,7 @@ export default class Maze {
         let doorObject = door.object.clone();
         let wallObject = wall.object.clone();
         //description.size.width+0.5 isto é para encostar a porta a parede e nao ocupar toda a celula
-        doorObject.position.set(i - (description.size.width+1.5)  / 2.0 + 0.5, 0.5, j - description.size.height / 2.0);
+        doorObject.position.set(i - (description.size.width+0.5)  / 2.0 + 0.5, 0.5, j - description.size.height / 2.0);
         wallObject.position.set(i - (description.size.width+1)  / 2.0 + 0.5, 0.5, j - description.size.height / 2.0+0.75);
         wallObject.scale.set(0.5,1,1)
         doorObject.scale.set(0.5,1,1)
@@ -397,11 +401,31 @@ export default class Maze {
         let wallObject = wall.object.clone();
         wallObject.position.set(i - (description.size.width-0.5)  / 2.0 + 0.25, 0.5, j - description.size.height / 2.0+1);
         wallObject.scale.set(1,1,1)
-        loader.load("./models/gltf/RobotExpressive/basic_elevator.glb", (gltf) => {
+        loader.load("./assets/basic_elevator.glb", (gltf) => {
             const elevatorModel = gltf.scene;
             // You may need to adjust the position and scale of the model
             elevatorModel.position.set(i - description.size.width  / 2.0 -0.5 , 1, j - description.size.height / 2.0+1);
             elevatorModel.scale.set(0.0051, 0.005, 0.005);
+            this.object.add(elevatorModel);
+            });
+        object.add(wallObject);   
+    }
+
+    /**
+     * Create a rotated 180 elevator
+     */
+    elevatorNorth(object,elevator,wall,i,j,description){
+        // Load and add the elevator model to the scene
+        const loader = new GLTFLoader();
+        let wallObject = wall.object.clone();
+        wallObject.position.set(i - (description.size.width-0.5)  / 2.0 + 0.25, 0.5, j - description.size.height / 2.0);
+        wallObject.scale.set(1,1,1)
+        loader.load("./models/gltf/RobotExpressive/basic_elevator.glb", (gltf) => {
+            const elevatorModel = gltf.scene;
+            // You may need to adjust the position and scale of the model
+            elevatorModel.position.set(i - description.size.width  / 2.0 -0.5 , 1, j - description.size.height / 2.0 - 1);
+            elevatorModel.scale.set(0.0051, 0.005, 0.005);
+            elevatorModel.rotateY(Math.PI);
             this.object.add(elevatorModel);
             });
         object.add(wallObject);   

@@ -11,7 +11,7 @@ import IBuildingBridgeDTO from '../dto/IBuildingBridgeDTO';
 import IBuildingRepo from './IRepos/IBuildingRepo';
 import { IFloorDTO } from "../dto/IFloorDTO";
 import { FloorMap } from "../mappers/FloorMap";
-import IBridgeResponseDTO from "../dto/IBridgeDTO";
+import IBridgeResponseDTO from "../dto/IBridgeResponseDTO";
 
 @Service()
 export default class BridgeService implements IBridgeService {
@@ -157,7 +157,7 @@ export default class BridgeService implements IBridgeService {
       const bridges = await this.bridgeRepo.getAllBridges();
 
       if (bridges === null) {
-        return Result.fail<IBridgeDTO[]>("No bridges found");
+        return Result.fail<IBridgeResponseDTO[]>("No bridges found");
       }
       else {
         const bridgeDTOs = bridges.map((bridges) => BridgeMap.toDTO(bridges) as IBridgeDTO);
@@ -182,13 +182,17 @@ export default class BridgeService implements IBridgeService {
       const buildingA = await this.buildingRepo.findByDomainId(floorA.buildingId);
       const buildingB = await this.buildingRepo.findByDomainId(floorB.buildingId);
 
-      bridgeDTO.buildingAName = buildingA.name;
-      bridgeDTO.buildingBName = buildingB.name;
+      const bridgeResponse = {
+        id:  bridgeDTO.id,
+        code:  bridgeDTO.code,
+        name:  bridgeDTO.name,
+        floorAId:  bridgeDTO.floorAId,
+        floorBId:  bridgeDTO.floorBId,
+        buildingAId:  bridgeDTO.buildingAId,
+        buildingBId:  bridgeDTO.buildingBId,
+        buildingAName: buildingA.name, buildingBName: buildingB.name, floorANumber: floorA.floorNumber, floorBNumber: floorB.floorNumber}
+      return Result.ok<IBridgeResponseDTO>(bridgeResponse);
 
-      bridgeDTO.floorANumber = floorA.floorNumber;
-      bridgeDTO.floorBNumber = floorB.floorNumber;
-
-      return Result.ok<IBridgeResponseDTO>(bridgeDTO as IBridgeResponseDTO);
     } catch (e) {
       throw e;
     }

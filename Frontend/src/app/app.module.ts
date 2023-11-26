@@ -38,6 +38,7 @@ import { EditFloorsComponent } from "./home/campus/edit-floors/edit-floors.compo
 import { GlobalErrorHandler } from "./global-exception";
 import { CreateElevatorComponent } from './home/campus/create-elevator/create-elevator.component';
 import { ListBuildingsComponent } from './home/campus/list-buildings/list-buildings.component';
+import { ListElevatorsComponent } from './home/campus/list-elevators/list-elevators.component';
 import { CreateFloorComponent } from './home/campus/create-floor/create-floor.component';
 import { FleetListComponent } from './home/fleet/fleet-list/fleet-list.component';
 import { AddMapFloorComponent } from './home/campus/add-map-floor/add-map-floor.component';
@@ -67,6 +68,7 @@ import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
     EditFloorsComponent,
     CreateElevatorComponent,
     ListBuildingsComponent,
+    ListElevatorsComponent,
     CreateFloorComponent,
     FleetListComponent,
     AddMapFloorComponent,

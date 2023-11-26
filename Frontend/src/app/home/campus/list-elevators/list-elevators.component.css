@@ -1,0 +1,86 @@
+/* Estilos para o container da tabela */
+.list-elevator-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 3rem 4rem;
+  }
+  
+  /* Estilos para a seção da tabela */
+  .list-elevator-section {
+    display: flex;
+    align-content: space-between;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  /* Estilos para a tabela */
+  table {
+    width: 100%;
+    border-collapse: collapse; /* Junta as bordas das células */
+  }
+  
+  /* Estilos para as linhas da tabela */
+  tr.elevator-detail-row {
+    height: 0;
+  }
+  
+  tr.elevator-row:not(.elevator-expanded-row):hover {
+    background: whitesmoke;
+  }
+  
+  tr.elevator-row:not(.elevator-expanded-row):active {
+    background: #efefef;
+  }
+  
+  /* Estilos para as células */
+  .elevator-row td {
+    border-bottom-width: 0;
+  }
+  
+  /* Estilos para os detalhes do elevador */
+  .elevator-detail {
+    overflow: hidden;
+    display: flex;
+  }
+  
+  /* Estilos para o diagrama do elevador */
+  .elevator-diagram {
+    min-width: 8rem;
+    border: 2px solid black;
+    padding: 8px;
+    font-weight: lighter;
+    margin: 8px 0;
+    height: 10.4rem;
+  }
+  
+  .elevator-symbol {
+    font-weight: bold;
+    font-size: 4rem;
+    line-height: normal;
+  }
+  
+  /* Estilos para a descrição do elevador */
+  .elevator-description {
+    padding: 1.6rem;
+  }
+  
+  /* Estilos para a atribuição da descrição do elevador */
+  .elevator-description-attribution {
+    opacity: 0.5;
+  }
+  
+  /* Estilos para as células do rodapé */
+  .footer-row td {
+    font-style: italic;
+  }
+  
+  /* Estilos para o campo de seleção de edifício */
+  .building-selection-form-field {
+    min-width: 50rem;
+  }
+  
+  /* Estilos para elementos <pre> */
+  pre {
+    font-size: 1.6rem;
+  }
+  

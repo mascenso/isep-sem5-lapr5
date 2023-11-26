@@ -2,11 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Observable, Subscription } from "rxjs";
 import { BridgeService } from "../../../services/bridge.service";
-import { BridgeDTO, BridgeFloorBuildingDTO } from "../../../../dto/bridgeDTO";
-import { FloorService } from "../../../services/floor.service";
-import { FloorResponseDTO } from "../../../../dto/floorDTO";
-import { BuildingService } from "../../../services/building.service";
-import { BuildingResponseDTO } from "../../../../dto/buildingDTO";
+import { BridgeDTO } from "../../../../dto/bridgeDTO";
 
 @Component({
   selector: 'app-bridge-list',
@@ -16,7 +12,7 @@ import { BuildingResponseDTO } from "../../../../dto/buildingDTO";
 export class BridgeListComponent implements OnInit, OnDestroy {
 
   bridgeServiceSubscription$ = new Subscription();
-  dataSource: BridgeFloorBuildingDTO[] = [];
+  dataSource: BridgeDTO[] = [];
 
 
   columnsToDisplay = ['code', 'name', 'floorNumberA', 'buildingNameA', 'floorNumberB', 'buildingNameB'];
@@ -32,7 +28,7 @@ export class BridgeListComponent implements OnInit, OnDestroy {
       bridgeData => {
         this.dataSource = bridgeData;
       },
-    )
+    );
   }
 
   ngOnDestroy(): void {

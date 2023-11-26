@@ -4,7 +4,7 @@ import IBuildingBridgeDTO from "../../dto/IBuildingBridgeDTO";
 
 export default interface IBridgeService  {
   createBridge(bridgeDTO: IBridgeDTO): Promise<Result<IBridgeDTO>>;
-  updateBridge(roleDTO: IBridgeDTO, roleId: string): Promise<Result<IBridgeDTO>>;
+  updateBridge(bridgeDTO: IBridgeDTO, bridgeId: string): Promise<Result<IBridgeDTO>>;
 
   getBridge (roleId: string): Promise<Result<IBridgeDTO>>;
   getAllBridges(): Promise<Result<IBridgeDTO[]>>;

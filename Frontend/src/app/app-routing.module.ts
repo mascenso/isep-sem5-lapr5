@@ -11,7 +11,7 @@ import {CreateRobotTypeComponent} from "./home/fleet/create-robot-type/create-ro
 import {FloorListComponent} from "./home/campus/floor-list/floor-list.component";
 import {CreateFloorComponent} from "./home/campus/create-floor/create-floor.component";
 import {AddMapFloorComponent} from "./home/campus/add-map-floor/add-map-floor.component"
-import {BridgeListComponent} from "./home/campus/bridge-list/bridge-list.component";
+import {BridgeListComponent} from "./home/campus/list-bridge/bridge-list.component";
 import { ListBuildingFloorsComponent } from './home/campus/list-building-floors/list-building-floors.component';
 import {RobotListComponent} from "./home/fleet/robot-list/robot-list.component";
 import { CreateBridgeComponent } from "./home/campus/create-bridge/create-bridge.component";
@@ -20,9 +20,13 @@ import { EditFloorsComponent } from './home/campus/edit-floors/edit-floors.compo
 import { CreateElevatorComponent } from './home/campus/create-elevator/create-elevator.component';
 import {authGuard} from "./guards/auth.guard";
 import {ListBuildingsComponent} from "./home/campus/list-buildings/list-buildings.component"
+import { ListElevatorsComponent } from './home/campus/list-elevators/list-elevators.component';
 import { FleetListComponent } from './home/fleet/fleet-list/fleet-list.component';
 import { CreateRobotComponent } from './home/fleet/create-robot/create-robot.component';
+import {EditBridgeComponent} from './home/campus/edit-bridge/edit-bridge.component'
 import {EditBuildingComponent} from './home/campus/edit-building/edit-building.component'
+import {PlanRobotRouteComponent} from './home/tasks/plan-robot-route/plan-robot-route.component'
+import { EditElevatorsComponent } from './home/campus/edit-elevators/edit-elevators.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -41,6 +45,10 @@ const routes: Routes = [
       {
         path: 'tasks',
         component: TasksComponent,
+      },
+      {
+        path: 'tasks/plan-route',
+        component: PlanRobotRouteComponent,
       },
       {
         path: 'view',
@@ -68,6 +76,10 @@ const routes: Routes = [
         component: EditBuildingComponent,
       },
       {
+        path: 'campus/edit-bridge',
+        component: EditBridgeComponent,
+      },
+      {
         path: 'campus/edit-floors',
         component: EditFloorsComponent,
       },
@@ -90,6 +102,14 @@ const routes: Routes = [
       {
         path: 'campus/list-buildings',
         component: ListBuildingsComponent,
+      },
+      {
+        path: 'campus/list-elevators',
+        component: ListElevatorsComponent,
+      },
+      {
+        path: 'campus/edit-elevators',
+        component: EditElevatorsComponent,
       },
       {
         path: 'fleet/create-robot-type',

@@ -14,8 +14,7 @@ export class BridgeListComponent implements OnInit, OnDestroy {
   bridgeServiceSubscription$ = new Subscription();
   dataSource: BridgeResponseDTO[] = [];
 
-
-  columnsToDisplay = ['code', 'name', 'floorNumberA', 'buildingNameA', 'floorNumberB', 'buildingNameB'];
+  columnsToDisplay = ['code', 'name', 'floorANumber', 'buildingAName', 'floorBNumber', 'buildingBName'];
 
   constructor(
               private bridgeService: BridgeService,

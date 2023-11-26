@@ -106,7 +106,6 @@ export default class ElevatorRepo implements IElevatorRepo {
   public async findByBuildingId(buildingId: BuildingId | string): Promise<Elevator> {
     const query = {buildingId: buildingId};
     const elevatorRecord = await this.elevatorSchema.findOne( query as FilterQuery<IElevatorPersistence & Document> );
-    console.log("elevatorRecord  ",elevatorRecord)
     if (elevatorRecord != null) {
       return ElevatorMap.toDomain(elevatorRecord);
     }

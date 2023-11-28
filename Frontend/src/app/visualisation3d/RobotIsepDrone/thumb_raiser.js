@@ -724,11 +724,13 @@ export default class ThumbRaiser {
                 // Check if the player found the exit
                 if (this.maze.foundBridge(this.player.position)) {
 
-                    this.mazeParameters.url = "./mazes/EdificioA piso 1.json"
+                  //  this.mazeParameters.url = "./mazes/EdificioB piso 2.json"
 
-                    this.maze = new Maze(this.mazeParameters);
+                    this.maze = new Maze(changeMap("./mazes/EdificioB piso 2.json"));
+                   // changeMap("./mazes/EdificioB piso 2.json");
 
-                    console.log("colocar aqui novo edificio")
+
+                    //console.log("colocar aqui novo edificio")
                 }
                 else {
                     let coveredDistance = this.player.walkingSpeed * deltaT;

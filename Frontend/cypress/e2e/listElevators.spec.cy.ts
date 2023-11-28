@@ -5,6 +5,8 @@ describe('Teste para lista de Elevadores', () => {
       cy.get('#role').select('Administrador');
       cy.get('#signUp').click();
       cy.get('[id^="Campus"]').click();
+
+      //crio um building para garantir que tenho pelo menos um na dropdown do floor e do elevator
       cy.get('[routerlink="create-building"]').click();
       const numeroAleatorio = Math.floor(1000 + Math.random() * 9000);
       cy.get('#mat-input-0').type('A'+numeroAleatorio.toString());
@@ -13,13 +15,38 @@ describe('Teste para lista de Elevadores', () => {
       cy.get('#mat-input-3').type('Edificio A');
       cy.get('#mat-input-4').type('Edificio A - Administracao');
       cy.get('.mdc-button__label').click();
-      //ir para a pagina correta do teste
-      cy.get('[id^="Campus"]').click();
-      cy.get('[routerlink="list-buildings"]').click();
 
-/*
+      //crio um floor no primeiro building da dropdown
       cy.get('[id^="Campus"]').click();
       cy.get('[routerlink="create-floor"]').click();
+      cy.intercept('POST', 'http://localhost:4000/api/floors').as('rotaFloor');
+
+      cy.get('#dropdownCreateFloor').click().get('#mat-option-0').click();
+
+      cy.get('#mat-input-5').type("10");
+      cy.get('#mat-input-6').type('10');
+      cy.get('#mat-input-7').type('4');
+      cy.get('#mat-input-8').type('Mais um floor de teste');
+      cy.get('#saveNewFloor').click();
+
+
+      cy.get('[id^="Campus"]').click();
+      cy.get('[routerlink="create-elevator"]').click();
+      cy.intercept('POST', 'http://localhost:4000/api/elevators').as('rotaElevator');
+
+      cy.get('#mat-input-9').type('ELEV'+numeroAleatorio.toString());
+      cy.get('#mat-select-value-3').click().get('#mat-option-3').click();
+      cy.get('#mat-select-value-5').click().get('#mat-option-2').get('.mat-pseudo-checkbox').click();
+      cy.get('.mdc-button__label').click();
+/*
+      cy.get('#dropdownCreateFloor').click().get('#mat-option-0').click();
+
+      cy.get('#mat-input-9').type("");
+      cy.get('#mat-input-6').type('10');
+      cy.get('#mat-input-7').type('4');
+      cy.get('#mat-input-8').type('Mais um floor de teste');
+      cy.get('#saveNewFloor').click();
+
 
       cy.get('#mat-input-0').click().then(() => {
         cy.get('mat-option').last().click();
@@ -33,22 +60,19 @@ describe('Teste para lista de Elevadores', () => {
       cy.get('[id^="Campus"]').click();
       cy.get('[routerlink="list-floors"]').click();
 
+  
 
 
-      cy.get('[id^="Campus"]').click();
-      cy.get('[routerlink="create-elevator"]').click();
-      cy.get('#mat-input-0').type('ELEV'+numeroAleatorio.toString());
-      cy.get('#mat-input-1').click().then(() => {
-        cy.get('mat-option').last().click();
-      });
-      cy.get('#mat-input-2').click().then(() => {
-        cy.get('mat-option').first().click();
-      });
+
+  
+      cy.get('.mat-mdc-form-field-infix').click();
+      cy.get('#mat-option-0').first().click();
+
       cy.get('.mdc-button__label').click();
       //ir para a pagina correta do teste
       cy.get('[id^="Campus"]').click();
       cy.get('[routerlink="list-elevators"]').click();
-       */
+ */
     });
 
     it('should display a list of buildings', () => {

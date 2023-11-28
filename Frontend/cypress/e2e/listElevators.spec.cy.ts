@@ -36,7 +36,7 @@ describe('Teste para lista de Elevadores', () => {
 
       cy.get('#mat-input-9').type('ELEV'+numeroAleatorio.toString());
       cy.get('#mat-select-value-3').click().get('#mat-option-3').click();
-      cy.get('#mat-select-value-5').click().get('#mat-option-0').click();
+      cy.get('#mat-select-value-5').click().get('#mat-option-2').get('.mat-pseudo-checkbox').click();
       cy.get('.mdc-button__label').click();
 /*
       cy.get('#dropdownCreateFloor').click().get('#mat-option-0').click();

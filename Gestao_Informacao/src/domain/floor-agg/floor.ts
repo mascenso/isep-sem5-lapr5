@@ -26,7 +26,6 @@ export class Floor extends AggregateRoot<FloorProps> {
       { argument: props.length, argumentName: 'length' },
       { argument: props.floorNumber, argumentName: 'floorNumber' },
       { argument: props.description, argumentName: 'description' },
-      { argument: props.floorMap, argumentName: 'floorMap' }
     ];
 
 

@@ -17,7 +17,7 @@
             <p>
                 <mat-form-field class="form-field form-field-task-type">
                     <mat-label>Task Types</mat-label>
-                  <mat-select matInput [formControl]="robotTypeForm.controls.tipoTarefas" multiple>
+                  <mat-select matInput [formControl]="robotTypeForm.controls.tipoTarefas" multiple data-testid="taskTypeSelect">
                     <mat-option *ngFor="let type of taskTypes" [value]="type">{{ type }}</mat-option>
                   </mat-select>
                   </mat-form-field>

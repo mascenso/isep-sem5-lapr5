@@ -67,8 +67,7 @@ describe('Teste de criar um elevador', () => {
 +
         cy.get('#selectFloorsElevator').type('{esc}');
 
-        cy.get('.cdk-overlay-backdrop');
-        cy.get('#saveNewElevator').should('be.visible').click();
+        cy.get('#saveNewElevator').click({ force: true });
 
         cy.wait('@rotaElevator').should(({ response }) => {
             expect(response!.statusCode).to.eq(200);

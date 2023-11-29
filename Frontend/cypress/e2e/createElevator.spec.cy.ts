@@ -30,6 +30,7 @@ describe('Teste de criar um elevador', () => {
         //crio um building para garantir que tenho pelo menos um na dropdown do floor e do elevator
         cy.get('[id^="Campus"]').click();
         cy.get('[routerlink="create-building"]').click();
+
         const numeroAleatorio = Math.floor(1000 + Math.random() * 9000);
         cy.get('#mat-input-1').type('A' + numeroAleatorio.toString());
         cy.get('#mat-input-2').type('10');
@@ -61,6 +62,7 @@ describe('Teste de criar um elevador', () => {
         cy.get('#mat-input-10').type('ELEV' + numeroAleatorio.toString());
 
         cy.get('#dropdownCreateElevator').click();
+
         cy.contains('Edificio Z - TESTE').click();
 
         cy.get('#selectFloorsElevator').click();

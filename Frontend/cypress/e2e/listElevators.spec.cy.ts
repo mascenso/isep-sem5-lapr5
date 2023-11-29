@@ -62,6 +62,8 @@ describe('Teste para lista de Elevadores', () => {
 
     //compara com o ultimo da tabela pois é esse que criamos
     cy.get('#dropdownCreateElevator').click();
+    cy.get('.mat-mdc-select-placeholder').click({force: true });
+
     cy.contains('Edificio Z').click();
 
     cy.get('table.mat-elevation-z8').should('exist');

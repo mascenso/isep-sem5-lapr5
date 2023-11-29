@@ -29,7 +29,7 @@
   
               <h4>Select floor:</h4>
               <mat-form-field class="form-field floor-selection-form-field">
-                <mat-select id="selectFloorsElevator" [formControl]="floorSelectionControl" >
+                <mat-select id="selectFloorsElevator" [formControl]="floorSelectionControl" multiple>
                   <div *ngFor="let floorId of floorList;">
                     <mat-option  [value]="floorId.id">Piso {{floorId.floorNumber}}</mat-option>
                   </div>

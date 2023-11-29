@@ -723,10 +723,11 @@ export default class ThumbRaiser {
             if (!this.animations.actionInProgress) {
                 // Check if the player found the exit
                 if (this.maze.foundBridge(this.player.position)) {
+                    this.changeMap("./mazes/EdificioB piso 2.json");
 
                   //  this.mazeParameters.url = "./mazes/EdificioB piso 2.json"
 
-                    this.maze = new Maze(changeMap("./mazes/EdificioB piso 2.json"));
+                    //this.maze = new Maze(changeMap("./mazes/EdificioB piso 2.json"));
                    // changeMap("./mazes/EdificioB piso 2.json");
 
 

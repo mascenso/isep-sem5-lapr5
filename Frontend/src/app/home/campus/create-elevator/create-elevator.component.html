@@ -20,18 +20,16 @@
   
               <h4>Select building:</h4>
               <mat-form-field class="form-field building-selection-form-field">
-                <mat-select [formControl]="buildingSelectionControl" (valueChange)="onSelectionUpdateSelectionControl($event)">
-                  <mat-option></mat-option>
+                <mat-select id="dropdownCreateElevator" [formControl]="buildingSelectionControl" (valueChange)="onSelectionUpdateSelectionControl($event)">
                   <div *ngFor="let building of buildingList;">
-                    <mat-option  [value]="building.id">{{building.name}} - {{building.description}}</mat-option>
+                    <mat-option [value]="building.id">{{building.name}} - {{building.description}}</mat-option>
                   </div>
                 </mat-select>
               </mat-form-field>
   
               <h4>Select floor:</h4>
               <mat-form-field class="form-field floor-selection-form-field">
-                <mat-select [formControl]="floorSelectionControl" multiple>
-                  <mat-option></mat-option>
+                <mat-select id="selectFloorsElevator" [formControl]="floorSelectionControl" multiple>
                   <div *ngFor="let floorId of floorList;">
                     <mat-option  [value]="floorId.id">Piso {{floorId.floorNumber}}</mat-option>
                   </div>

@@ -6,7 +6,7 @@ describe('Teste de criar um elevador', () => {
         cy.get('#role').select('Administrador');
         cy.get('#signUp').click();
         cy.get('[id^="Campus"]').click();
-    
+
         cy.get('[routerlink="create-elevator"]').click();
     });
 
@@ -34,8 +34,8 @@ describe('Teste de criar um elevador', () => {
         cy.get('#mat-input-1').type('A' + numeroAleatorio.toString());
         cy.get('#mat-input-2').type('10');
         cy.get('#mat-input-3').type('50');
-        cy.get('#mat-input-4').type('Edificio A');
-        cy.get('#mat-input-5').type('Edificio A - Administracao');
+        cy.get('#mat-input-4').type('Edificio E');
+        cy.get('#mat-input-5').type('TESTE');
         cy.get('.mdc-button__label').click();
 
         //crio um floor no primeiro building da dropdown
@@ -43,11 +43,12 @@ describe('Teste de criar um elevador', () => {
         cy.get('[routerlink="create-floor"]').click();
         cy.intercept('POST', 'http://localhost:4000/api/floors').as('rotaFloor');
 
-        cy.get('#dropdownCreateFloor').click().get('#mat-option-2').click();
+        cy.get('#dropdownCreateFloor').click();
+        cy.contains('Edificio E').click();
 
         cy.get('#mat-input-6').type("10");
         cy.get('#mat-input-7').type('10');
-        cy.get('#mat-input-8').type('4');
+        cy.get('#mat-input-8').type('1');
         cy.get('#mat-input-9').type('Mais um floor de teste');
         cy.get('#saveNewFloor').click();
 
@@ -57,14 +58,17 @@ describe('Teste de criar um elevador', () => {
         cy.intercept('POST', 'http://localhost:4000/api/elevators').as('rotaElevator');
 
         cy.get('#mat-input-10').type('ELEV' + numeroAleatorio.toString());
-        cy.get('#mat-select-value-7').click().get('#mat-option-5').click();
-        cy.get('#mat-select-value-9').click().get('#mat-option-4').get('.mat-pseudo-checkbox').click({ force: true });
-        //cy.get('#mat-option-4', { timeout: 10000 }).should('not.be.visible');
-        cy.get('.cdk-overlay-backdrop').click();
-        cy.get('#saveNewElevator').click();
 
+        cy.get('#dropdownCreateElevator').click();
+        cy.contains('Edificio E - TESTE').should('be.visible').click();
 
+        cy.get('#selectFloorsElevator').click();
+        cy.contains('Piso 1').click();
++
+        cy.get('#selectFloorsElevator').type('{esc}');
 
+        cy.get('.cdk-overlay-backdrop');
+        cy.get('#saveNewElevator').should('be.visible').click();
 
         cy.wait('@rotaElevator').should(({ response }) => {
             expect(response!.statusCode).to.eq(200);

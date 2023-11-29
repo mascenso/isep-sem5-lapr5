@@ -12,7 +12,7 @@ describe('Teste para lista de Elevadores', () => {
     cy.get('#mat-input-0').type('A' + numeroAleatorio.toString());
     cy.get('#mat-input-1').type('10');
     cy.get('#mat-input-2').type('50');
-    cy.get('#mat-input-3').type('Edificio E');
+    cy.get('#mat-input-3').type('Edificio Z');
     cy.get('#mat-input-4').type('TESTE');
     cy.get('.mdc-button__label').click();
 
@@ -22,7 +22,9 @@ describe('Teste para lista de Elevadores', () => {
     cy.intercept('POST', 'http://localhost:4000/api/floors').as('rotaFloor');
 
     cy.get('#dropdownCreateFloor').click();
-    cy.contains('Edificio E').click();
+    cy.get('.mat-mdc-select-placeholder').click({force: true });
+
+    cy.contains('Edificio Z').click();
 
     cy.get('#mat-input-5').type("10");
     cy.get('#mat-input-6').type('10');
@@ -38,7 +40,9 @@ describe('Teste para lista de Elevadores', () => {
     cy.get('#mat-input-9').type('ELEV' + numeroAleatorio.toString());
 
     cy.get('#dropdownCreateElevator').click();
-    cy.contains('Edificio E').should('be.visible').click();
+    //cy.get('.mat-mdc-select-placeholder').click({force: true });
+
+    cy.contains('Edificio Z').click();
 
     cy.get('#selectFloorsElevator').click();
     cy.contains('Piso 1').click();
@@ -58,7 +62,7 @@ describe('Teste para lista de Elevadores', () => {
 
     //compara com o ultimo da tabela pois é esse que criamos
     cy.get('#dropdownCreateElevator').click();
-    cy.contains('Edificio E').click();
+    cy.contains('Edificio Z').click();
 
     cy.get('table.mat-elevation-z8').should('exist');
     cy.get('.mat-mdc-header-row > .cdk-column-buildingId').should('exist');

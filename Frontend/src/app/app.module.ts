@@ -28,7 +28,7 @@ import { CreateRobotTypeComponent } from './home/fleet/create-robot-type/create-
 import { MatSelectModule } from '@angular/material/select';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {ServiceInterceptor} from "./interceptors/service.interceptor";
-import { ViewComponent } from './home/view/view.component';
+
 import { FloorListComponent } from './home/campus/floor-list/floor-list.component';
 import { BridgeListComponent } from "./home/campus/list-bridge/bridge-list.component";
 import { ListBuildingFloorsComponent } from './home/campus/list-building-floors/list-building-floors.component';
@@ -49,6 +49,7 @@ import { EditBuildingComponent } from './home/campus/edit-building/edit-building
 import { PlanRobotRouteComponent } from './home/tasks/plan-robot-route/plan-robot-route.component';
 import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
 import { EditElevatorsComponent } from './home/campus/edit-elevators/edit-elevators.component';
+import { ViewComponent } from "./home/view/view.component";
 
 @NgModule({
   declarations: [

@@ -54,19 +54,10 @@
             </mat-form-field>
           </div>
 
-          <p>
-            <mat-form-field class="form-field form-field-code">
-              <mat-label>Code</mat-label>
-              <input matInput [formControl]="bridgeForm.controls.code" #inputCode maxlength="5" placeholder="Ex. A1-B1" value="A1-B1">
-              <mat-hint align="end">{{inputCode.value.length}} / 5</mat-hint>
-              <mat-error *ngIf="bridgeForm.controls.code.hasError('required')">Code is <strong>required</strong></mat-error>
-
-            </mat-form-field>
-          </p>
 
           <p>
             <mat-form-field class="form-field form-field-name">
-              <mat-label>Name</mat-label>
+              <mat-label>Description</mat-label>
               <input matInput [formControl]="bridgeForm.controls.name">
             </mat-form-field>
           </p>
@@ -78,9 +69,7 @@
       </mat-card-content>
     </mat-card>
   </div>
-  <div class="bridge-details-section">
-    <pre>{{this.createdBridge | json}}</pre>
-  </div>
+
 </div>
 
 

@@ -17,7 +17,7 @@ export default (app: Router) => {
     celebrate({
       body: Joi.object(
         {
-        code: Joi.string().required(),
+        //code: Joi.string().required(),
         name: Joi.string().required(),
         floorAId: Joi.string().required(),
         floorBId: Joi.string().required(),
@@ -28,7 +28,7 @@ export default (app: Router) => {
   route.put('/:id',
     celebrate({
       body: Joi.object({
-        code: Joi.string().required(),
+        //code: Joi.string().required(),
         name: Joi.string().required(),
         floorAId: Joi.string().required(),
         floorBId: Joi.string().required(),

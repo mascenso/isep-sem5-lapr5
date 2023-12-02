@@ -182,26 +182,34 @@ export default class Maze {
         // The cache must be enabled; additional information available at https://threejs.org/docs/api/en/loaders/FileLoader.html
         THREE.Cache.enabled = true;
 
-        // Create a resource file loader
-        const loader = new THREE.FileLoader();
-        
-        // Set the response type: the resource file will be parsed with JSON.parse()
-        loader.setResponseType("json");
-        
-        // Load a maze description resource file
-        loader.load(
-            //Resource URL
-            this.url,
+        //Esta validação é para ser retrocompativel com a forma que usavamos antes para enviar o mapa
+        if(typeof this.url == "string"){
+            // Create a resource file loader
+            const loader = new THREE.FileLoader();
+            
+            // Set the response type: the resource file will be parsed with JSON.parse()
+            loader.setResponseType("json");
+            
+            // Load a maze description resource file
+            loader.load(
+                //Resource URL
+                this.url,
 
-            // onLoad callback
-            description => this.onLoad(description),
+                // onLoad callback
+                description => this.onLoad(description),
 
-            // onProgress callback
-            xhr => this.onProgress(this.url, xhr),
+                // onProgress callback
+                xhr => this.onProgress(this.url, xhr),
 
-            // onError callback
-            error => this.onError(this.url, error)
-        );
+                // onError callback
+                error => this.onError(this.url, error)
+            );
+        }else if(typeof this.url == "object"){
+            //como o json é enviado por parametro pode ser feito diretamente o load
+            this.onLoad(this.url)
+
+        }
+
 
     }
 

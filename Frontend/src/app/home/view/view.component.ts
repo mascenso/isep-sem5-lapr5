@@ -8,6 +8,11 @@ import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import * as THREE from 'three';
 import Orientation from "../../visualisation3d/RobotIsepDrone/orientation.js"
 import ThumbRaiser from "../../visualisation3d/RobotIsepDrone/thumb_raiser.js";
+import { BuildingService } from '../../services/building.service.ts';
+import { FloorService } from '../../services/floor.service.ts';
+import { BuildingResponseDTO } from "../../../../dto/buildingDTO";
+import { FloorResponseDTO } from "../../../dto/floorDTO"
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-view',
@@ -15,24 +20,25 @@ import ThumbRaiser from "../../visualisation3d/RobotIsepDrone/thumb_raiser.js";
   styleUrls: ['./view.component.css']
 })
 
-export class ViewComponent implements OnInit, AfterViewInit,OnDestroy {
+export class ViewComponent implements OnInit {
 
   static thumbRaiser: any;
-  static mapToRender = "./assets/buildings/EdificioA_piso_2.json";
+  buildings: BuildingResponseDTO[] = [];
+
+  //apenas mostra andares que tem mapa de piso
+  floors: FloorResponseDTO[] = []; 
+  buildingSelected = "";
+  floorSelected = "";
+  floorMap:any;
+  mapToRender = "";
   static canvas = document.getElementById("canvasForRender");
 
-  ngOnDestroy(): void {
-    //throw new Error('Method not implemented.');
-  }
-
-  ngAfterViewInit(): void {
-    this.namesToDropDown();
-    this.initialize();
-    ViewComponent.animate();
-  }
+  constructor(private buildingService: BuildingService,private floorService: FloorService, private _snackBar: MatSnackBar ) {}
 
   ngOnInit(): void {
-    // throw new Error('Method not implemented.');
+    this.buildingsToDropDown();
+    this.initialize();
+    ViewComponent.animate();
   }
 
 
@@ -40,7 +46,7 @@ export class ViewComponent implements OnInit, AfterViewInit,OnDestroy {
     // Create the game
     ViewComponent.thumbRaiser = new ThumbRaiser(
       {}, // General Parameters
-      { url:ViewComponent.mapToRender ,scale: new THREE.Vector3(1.0, 0.5, 1.0),  }, // Maze parameters
+      { url:this.mapToRender ,scale: new THREE.Vector3(1.0, 0.5, 1.0),  }, // Maze parameters
       {}, // Player parameters
       { ambientLight: { intensity: 0.1 }, pointLight1: { intensity: 50.0, distance: 20.0, position: new THREE.Vector3(-3.5, 10.0, 2.5) }, pointLight2: { intensity: 50.0, distance: 20.0, position: new THREE.Vector3(3.5, 10.0, -2.5) } }, // Lights parameters
       {}, // Fog parameters
@@ -76,33 +82,48 @@ export class ViewComponent implements OnInit, AfterViewInit,OnDestroy {
     ViewComponent.thumbRaiser.update()
   }
 
-  namesToDropDown() {
-    const names = [
-      {name: "Edificio A piso 2", fileName:'./assets/buildings/EdificioA_piso_2.json'},
-      {name: "Edificio B piso 1", fileName:'./assets/buildings/EdificioB_piso_1.json'},
-      {name: "Edificio B piso 2", fileName:'./assets/buildings/EdificioB_piso_2.json'},
-      {name: "Edificio C piso 2", fileName:'./assets/buildings/EdificioC_piso_2.json'}
-    ]
-    const dropdown = document.getElementById('floor-selector');
+  buildingsToDropDown(){
+    this.buildingService.getAllBuildings().subscribe(
+      buildings => {
+        this.buildings = buildings;
+      },
+      error => {
+        this._snackBar.open(error.error, "close", {
+          duration: 5000,
+          panelClass: ['snackbar-error']
+        });
+      }
+    );
+  }
 
-    try {
-      names.forEach(fileName => {
-        const option = document.createElement('option');
-        option.value = fileName.fileName;
-        option.text = fileName.name;
-        dropdown!.add(option);
-      });
-    } catch (error) {
-      console.error('Erro ao carregar nomes de arquivos JSON:', error);
-    }
+  floorsToDropdown(){
+    this.floorService.getFloorsAtBuildings(this.buildingSelected ).subscribe(
+      floorData => {
+        this.floors = floorData.filter(objeto => objeto.floorMap != undefined && objeto.floorMap.initialPosition != undefined);
+
+        if(this.floors.length == 0){
+          this._snackBar.open("There is no map on any floor of this building", "close", {
+            duration: 5000,
+            panelClass: ['snackbar-error']
+          });
+        }
+      },
+      error => {
+        this._snackBar.open(error.error, "close", {
+          duration: 5000,
+          panelClass: ['snackbar-error']
+        });
+      }
+    )
+
   }
 
   //coloca a funcao global para ser ouvida no on change
-  changeFloor(path: any){
-    ViewComponent.thumbRaiser.maze.url = path.target.value;
-    ViewComponent.thumbRaiser.changeMap(path.target.value);
+  changeFloor(){
+    this.mapToRender = this.floors.find(objeto => objeto.id === this.floorSelected)?.floorMap;
+  
+    ViewComponent.thumbRaiser.maze.url = this.mapToRender;
+    ViewComponent.thumbRaiser.changeMap(this.mapToRender);
   }
-
-
 
 }

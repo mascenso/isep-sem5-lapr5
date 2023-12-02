@@ -208,7 +208,14 @@ export default class BridgeService implements IBridgeService {
       }
       else {
         const bridgeDTOs = bridges.map((bridges) => BridgeMap.toDTO(bridges) as IBridgeDTO);
-        return Result.ok<IBridgeDTO[]>(bridgeDTOs)
+
+        const bridgeResponseDTOs = [];
+        for (const bridgeDTO of bridgeDTOs) {
+          const bridgeResponseDTO = await this.addBuildingAndFloorInfoToBridgeDTO(bridgeDTO);
+          bridgeResponseDTOs.push(bridgeResponseDTO.getValue());
+        }
+
+        return Result.ok<IBridgeResponseDTO[]>(bridgeResponseDTOs)
       }
     } catch (e) {
       throw e;

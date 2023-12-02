@@ -46,4 +46,9 @@ export class BridgeService {
     console.log(bridge);
     return this.http.put<BridgeResponseDTO>(`${this.API_URL}/api/bridges/${id}`,bridge);
   }
+
+  getBridgesBetweenBuildings(value: any, value2: any) {
+    // /api/bridges/building?building1={{building-id-A}}&building2={{building-id-B}}
+    return this.http.get<BridgeResponseDTO[]>(`${this.API_URL}/api/bridges/building?building1=${value}&building2=${value2}`);
+  }
 }

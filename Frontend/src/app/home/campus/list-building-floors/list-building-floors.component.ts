@@ -29,7 +29,7 @@ export class ListBuildingFloorsComponent implements OnInit, OnDestroy {
   floorServiceSubscription$ = new Subscription();
 
   dataSource: FloorResponseDTO[] = [];
-  columnsToDisplay = ['id', 'floorNumber', 'width', 'length'];
+  columnsToDisplay = [ 'floorNumber', 'width', 'length'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: FloorResponseDTO | null | undefined;
 

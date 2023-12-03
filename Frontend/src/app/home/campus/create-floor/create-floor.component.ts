@@ -2,7 +2,8 @@ import { Component,OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {BuildingService} from '../../../services/building.service'
 import { BuildingResponseDTO } from "../../../../dto/buildingDTO";
-import {FloorService} from "../../../services/floor.service"
+import {FloorService} from "../../../services/floor.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-create-floor',
@@ -15,7 +16,7 @@ export class CreateFloorComponent implements OnInit{
   selectedBuilding: string = "";
   floorForm!: FormGroup;
 
-  constructor(private buildingService: BuildingService, private fb: FormBuilder, private floorService: FloorService) {}
+  constructor(private buildingService: BuildingService, private fb: FormBuilder, private floorService: FloorService, private _snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.buildingService.getAllBuildings().subscribe((buildings) => {
@@ -38,12 +39,16 @@ export class CreateFloorComponent implements OnInit{
 
     this.floorService.createFloor(floorData).subscribe(
       (response) => {
-        
-        console.log('Piso criado com sucesso', response);
+        this._snackBar.open("Piso criado com sucesso!", "close", {
+          duration: 5000,
+          panelClass: ['snackbar-success']
+        });
       },
       (error) => {
-        
-        console.error('Erro ao criar piso', error);
+        this._snackBar.open("Erro a criar piso!", "close", {
+          duration: 5000,
+          panelClass: ['snackbar-error']
+        });
       }
     );
     

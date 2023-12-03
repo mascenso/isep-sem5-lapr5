@@ -5,34 +5,38 @@ import { environment } from "../../environments/environment";
 import { BuildingResponseDTO } from "../../dto/buildingDTO";
 import { FloorResponseDTO } from "../../dto/floorDTO";
 import { retry } from "rxjs/operators";
-import { BridgeRequestDTO, BridgeResponseDTO } from "../../dto/bridgeDTO";
+import { RoomRequestDTO, RoomResponseDTO } from "../../dto/roomDTO";
 
 
 @Injectable({
   providedIn: "root"
 })
-export class BridgeService {
+export class RoomService {
 
   private API_URL = environment.API_URL;
 
   constructor(private http: HttpClient) {
   }
 
-  public createBridge(bridge: BridgeRequestDTO, showSpinner?: boolean): Observable<BridgeRequestDTO> {
-    const url = `${this.API_URL}/api/bridges`;
-    return this.http.post<BridgeRequestDTO>(url, bridge, { reportProgress: showSpinner })
+    //{{baseUrl}}/api/buildings/:buildingId/floors/:floorId/rooms
+  public createRoom(room: RoomRequestDTO, showSpinner?: boolean): Observable<RoomResponseDTO> {
+    const url = `${this.API_URL}/api/buildings/${room.buildingId}/floors/${room.floorId}/rooms`;
+
+    let roomRequest = {
+      name : room.name,
+      description: room.description,
+      roomType: room.roomType
+    };
+
+    return this.http.post<RoomResponseDTO>(url, roomRequest as RoomResponseDTO, { reportProgress: showSpinner })
       .pipe(
         retry(1),
         catchError((error: HttpErrorResponse) => {
+          console.log(roomRequest);
           return throwError(error);
         })
       );
   }
-
-  getAllBridges() : Observable<BridgeResponseDTO[]> {
-    return this.http.get<BridgeResponseDTO[]>(`${this.API_URL}/api/bridges`);
-  }
-
 
   getAllBuildings(): Observable<BuildingResponseDTO[]> {
     return this.http.get<BuildingResponseDTO[]>(`${this.API_URL}/api/buildings`);
@@ -42,13 +46,5 @@ export class BridgeService {
     return this.http.get<FloorResponseDTO[]>(`${this.API_URL}/api/floors/buildings?building=${$event}`, { reportProgress: b });
   }
 
-  public editBridge(bridge:  BridgeRequestDTO, id: string ): Observable<BridgeResponseDTO> {
-    console.log(bridge);
-    return this.http.put<BridgeResponseDTO>(`${this.API_URL}/api/bridges/${id}`,bridge);
-  }
 
-  getBridgesBetweenBuildings(value: any, value2: any) {
-    // /api/bridges/building?building1={{building-id-A}}&building2={{building-id-B}}
-    return this.http.get<BridgeResponseDTO[]>(`${this.API_URL}/api/bridges/building?building1=${value}&building2=${value2}`);
-  }
 }

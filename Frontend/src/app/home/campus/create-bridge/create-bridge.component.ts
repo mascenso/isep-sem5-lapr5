@@ -31,7 +31,7 @@ export class CreateBridgeComponent {
 
 
   bridgeForm = new FormGroup({
-    code: new FormControl('', [Validators.required]),
+    //code: new FormControl('', [Validators.required]),
     name: new FormControl(''),
     floorAId: new FormControl(''),
     floorBId: new FormControl('')

@@ -50,6 +50,7 @@ import { PlanRobotRouteComponent } from './home/tasks/plan-robot-route/plan-robo
 import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
 import { EditElevatorsComponent } from './home/campus/edit-elevators/edit-elevators.component';
 import { ViewComponent } from "./home/view/view.component";
+import { CreateRoomComponent } from './home/campus/create-room/create-room.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { ViewComponent } from "./home/view/view.component";
     EditBridgeComponent,
     PlanRobotRouteComponent,
     CreateRobotComponent,
-    EditElevatorsComponent
+    EditElevatorsComponent,
+    CreateRoomComponent
   ],
   imports: [
     BrowserModule,

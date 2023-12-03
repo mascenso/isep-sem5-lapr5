@@ -1,0 +1,67 @@
+<div class="create-room-container">
+  <div class="create-room-section">
+    <h2>Create a new Room</h2>
+
+    <mat-card class="form-card-container">
+      <mat-card-content>
+        <form class="form" [formGroup]="roomForm" (ngSubmit)="onSubmit()">
+
+          <div class="floorA-selection-form">
+
+            <h4>Select building A:</h4>
+            <mat-form-field class="form-field building-selection-form-field">
+              <mat-select [formControl]="buildingSelectionControl" (valueChange)="onSelectionUpdateSelectionControlA($event)">
+                <mat-option></mat-option>
+                <div *ngFor="let building of buildingList;">
+                  <mat-option  [value]="building.id">{{building.code}}</mat-option>
+                </div>
+              </mat-select>
+            </mat-form-field>
+
+            <h4>Select floor A:</h4>
+            <mat-form-field class="form-field floorA-selection-form-field">
+              <mat-select [formControl]="floorASelectionControl">
+                <mat-option></mat-option>
+                <div *ngFor="let floorAId of floorAList;">
+                  <mat-option  [value]="floorAId.id">{{floorAId.floorNumber}}</mat-option>
+                </div>
+              </mat-select>
+            </mat-form-field>
+
+          </div>
+
+          <p>
+            <mat-form-field class="form-field form-field-name">
+              <mat-label>Name</mat-label>
+              <input  id="nameRoom" matInput [formControl]="roomForm.controls.name">
+            </mat-form-field>
+          </p>
+
+
+          <p>
+            <mat-form-field class="form-field form-field-description">
+              <mat-label>Description</mat-label>
+              <input  id="descriptionRoom" matInput [formControl]="roomForm.controls.description">
+            </mat-form-field>
+          </p>
+
+          <p>
+            <mat-form-field class="form-field form-field-type">
+              <mat-label>Room Type</mat-label>
+              <input  id="typeRoom" matInput [formControl]="roomForm.controls.roomType">
+            </mat-form-field>
+          </p>
+
+          <div class="form-button-group">
+            <button id="createRoom" mat-flat-button color="primary" type="submit" [disabled]="!roomForm.valid">Create</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>
+
+
+
+

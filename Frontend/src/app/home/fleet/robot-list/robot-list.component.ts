@@ -21,7 +21,7 @@ import { RobotService } from "../../../services/robot.service";
 export class RobotListComponent {
 
   dataSource: RobotDTO[] = [];
-  columnsToDisplay = ['id', 'nickName', 'robotType', 'serialNumber', 'inhibited'];
+  columnsToDisplay = [ 'nickName', 'robotType', 'serialNumber', 'inhibited'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: RobotDTO | null | undefined;
 

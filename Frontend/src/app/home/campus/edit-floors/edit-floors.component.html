@@ -8,7 +8,7 @@
           <mat-select [formControl]="buildingSelectionControl" (valueChange)="onSelectionUpdateForm($event)">
             <mat-option></mat-option>
             <div *ngFor="let building of buildingList;">
-              <mat-option  [value]="building.id">{{building.code}} - {{building.id}}</mat-option>
+              <mat-option  [value]="building.id">{{building.name}}</mat-option>
             </div>
           </mat-select>
         </mat-form-field>
@@ -21,7 +21,7 @@
           <mat-select [formControl]="floorSelectionControl" (valueChange)="onFloorSelected($event)">
             <mat-option></mat-option>
             <div *ngFor="let floor of dataSource;">
-              <mat-option  [value]="floor.id"> {{floor.floorNumber}}º Piso - {{floor.id}}</mat-option>
+              <mat-option  [value]="floor.id"> Piso - {{floor.floorNumber}}</mat-option>
             </div>
             
           </mat-select>

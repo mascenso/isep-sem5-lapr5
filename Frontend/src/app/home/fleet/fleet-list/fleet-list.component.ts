@@ -10,7 +10,7 @@ import { RobotDTO } from 'src/dto/robotDTO';
 export class FleetListComponent implements OnInit{
 
   robot: RobotDTO[] = [];
-  displayedColumns: string[] = ['id', 'nickName', 'robotType', 'serialNumber', 'inhibited'];
+  displayedColumns: string[] = [ 'nickName', 'robotType', 'serialNumber', 'inhibited'];
 
   constructor(private robotService: RobotService) { }
 

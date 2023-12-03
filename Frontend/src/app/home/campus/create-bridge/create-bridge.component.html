@@ -58,12 +58,12 @@
           <p>
             <mat-form-field class="form-field form-field-name">
               <mat-label>Description</mat-label>
-              <input matInput [formControl]="bridgeForm.controls.name">
+              <input  id="descriptionBridge" matInput [formControl]="bridgeForm.controls.name">
             </mat-form-field>
           </p>
 
           <div class="form-button-group">
-            <button mat-flat-button color="primary" type="submit" [disabled]="!bridgeForm.valid">Create</button>
+            <button id="createBridge" mat-flat-button color="primary" type="submit" [disabled]="!bridgeForm.valid">Create</button>
           </div>
         </form>
       </mat-card-content>

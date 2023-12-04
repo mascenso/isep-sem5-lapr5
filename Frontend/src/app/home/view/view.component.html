@@ -1,11 +1,18 @@
 <!--<iframe src="http://127.0.0.1:5500/Thumb_Raiser.html" width="100%" height="100%"></iframe>-->
+
 <body>
     <div id="parent">
         <canvas id="canvasForRender" height="100%" width="100%"></canvas>
         <div id="views-panel">
             <div>
+                <label>Choose Building:</label>
+                <select id="building-selector" [(ngModel)]="buildingSelected" (change)="floorsToDropdown()" >
+                    <option *ngFor="let building of buildings" [value]="building.id"> {{ building.name }}</option>
+                </select>
                 <label>Choose Floor:</label>
-                <select id="floor-selector" (change)="changeFloor($event)" ></select>
+                <select id="floor-selector" [(ngModel)]="floorSelected" (change)="changeFloor()" >
+                    <option *ngFor="let floor of floors" [value]="floor.id"> {{ floor.floorNumber }}</option>
+                </select>
             </div>
             <table class="views">
                 <tr>

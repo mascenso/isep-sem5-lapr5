@@ -5,7 +5,7 @@ import { BridgeId } from "./bridgeId";
 import IBridgeDTO from "../../dto/IBridgeDTO";
 
 interface BridgeProps {
-  code: string;
+  code?: string;
   name: string;
   floorAId: string;
   floorBId: string;

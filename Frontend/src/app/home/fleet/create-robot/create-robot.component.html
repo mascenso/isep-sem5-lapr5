@@ -7,8 +7,8 @@
             <p>
               <mat-form-field class="form-field form-field-code">
                 <mat-label>nickname</mat-label>
-                <input matInput [formControl]="robotForm.controls.nickName" #inputCode maxlength="10" placeholder="Ex. Robert" value="Robert">
-                <mat-hint align="end">{{inputCode.value.length}} / 10</mat-hint>
+                <input matInput [formControl]="robotForm.controls.nickName" #inputCode maxlength="50" placeholder="Ex. Robert" value="Robert">
+                <mat-hint align="end">{{inputCode.value.length}} / 50</mat-hint>
                 <mat-error *ngIf="robotForm.controls.nickName.hasError('required')">Nickname is <strong>required</strong></mat-error>
               </mat-form-field>
             </p>
@@ -17,7 +17,7 @@
                 <div class="robot-type-selection-form">
                     <h4>Select Robot Type:</h4>
                     <mat-form-field class="form-field robot-type-selection-form-field">
-                      <mat-select [formControl]="robotTypeSelectionControl" (valueChange)="onRobotTypeSelectionChange($event)">
+                      <mat-select id="dropdownSelectRobotType" [formControl]="robotTypeSelectionControl" (valueChange)="onRobotTypeSelectionChange($event)">
                         <mat-option></mat-option>
                         <div *ngFor="let robotType of robotTypeList;">
                           <mat-option [value]="robotType.id">{{robotType.designacao}} - {{robotType.tipoTarefas}}</mat-option>
@@ -47,7 +47,7 @@
                 <mat-checkbox [formControl]="robotForm.controls.inhibited">Inhibited</mat-checkbox>
             </p>
             <div class="form-button-group">
-              <button mat-flat-button color="primary" type="submit" [disabled]="!robotForm.valid">Create</button>
+              <button id="saveNewRobot" mat-flat-button color="primary" type="submit" [disabled]="!robotForm.valid">Create</button>
             </div>
           </form>
         </mat-card-content>

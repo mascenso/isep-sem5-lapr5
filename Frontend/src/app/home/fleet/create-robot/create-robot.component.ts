@@ -14,7 +14,7 @@ import { RobotTypeService } from 'src/app/services/robot-type.service';
 })
 export class CreateRobotComponent {
   robotForm = new FormGroup({
-    nickName: new FormControl('', [Validators.required, Validators.pattern("^[A-Z][0-9]{9}$")]),
+    nickName: new FormControl('', [Validators.required]),
     robotType: new FormControl(''),
     serialNumber: new FormControl('', [Validators.required, Validators.pattern("^[0-9]*$")]),
     description: new FormControl(''),

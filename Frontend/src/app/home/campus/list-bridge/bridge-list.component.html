@@ -2,6 +2,33 @@
   <div class="list-bridges-section">
     <h2>List bridges</h2>
 
+    <div class="building-selection-form">
+      <h4>Select building:</h4>
+      <mat-form-field class="building-selection-form-field">
+        <mat-label>Building</mat-label>
+        <mat-select [formControl]="buildingSelectionControl" (valueChange)="onSelectionAUpdateTable($event)">
+          <mat-option></mat-option>
+          <div *ngFor="let building of buildingList;">
+            <mat-option  [value]="building.id">{{building.code}}</mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="building-selection-form">
+      <h4>Select building:</h4>
+      <mat-form-field class="building-selection-form-field">
+        <mat-label>Building</mat-label>
+        <mat-select [formControl]="buildingBSelectionControl" (valueChange)="onSelectionBUpdateTable($event)">
+          <mat-option></mat-option>
+          <div *ngFor="let building of buildingBList;">
+            <mat-option  [value]="building.id">{{building.code}}</mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
       <ng-container *ngFor="let column of columnsToDisplay" [matColumnDef]="column">
         <th mat-header-cell *matHeaderCellDef> {{ column }} </th>

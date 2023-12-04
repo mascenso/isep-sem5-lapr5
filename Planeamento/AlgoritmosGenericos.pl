@@ -147,14 +147,9 @@ cria_conexoes(Col1,Lin1,Col2,Lin2,Peso) :-
     assertz(ligacel(cel(Col1,Lin1),cel(Col2,Lin2),Peso)),
 	assertz(edge(cel(Col1,Lin1),cel(Col2,Lin2))).
 */
-/* Predicado para mostrar as conexões criadas -> testar grafo */
-mostra_conexoes :-
-    ligacel(Cel1, Cel2, Peso),
-    write('Conexão de '), write(Cel1), write(' para '), write(Cel2), write(' com peso '), write(Peso), nl,
-    fail.
-mostra_conexoes.
 
-/* DFS - Pesquisa em profundidade. Pesquisa a partir do nó inicial e segue o caminho até o fim, depois retrocede. */
+/* DFS - Pesquisa em profundidade. Pesquisa a partir do nó inicial e segue o caminho até o fim, depois retrocede. 
+Deep First Search SEM custo */
 dfs(Orig,Dest,Cam):-
 	dfs2(Orig,Dest,[Orig],Cam).
 
@@ -164,6 +159,20 @@ dfs2(Act,Dest,LA,Cam):-
 	edge(Act,X),
     \+ member(X,LA),
 	dfs2(X,Dest,[X|LA],Cam).
+
+
+/* DFS - Deep First Search COM custo */
+dfs_com_custo(Orig,Dest,Cam,Custo):-
+	dfs2_com_custo(Orig,Dest,[Orig],Cam,Custo),
+    length(Cam,Custo).
+
+dfs2_com_custo(Dest,Dest,LA,Cam,_):-reverse(LA,Cam).
+
+dfs2_com_custo(Act,Dest,LA,Cam,Custo):-   
+	edge(Act,X),
+    \+ member(X,LA),
+	dfs2_com_custo(X,Dest,[X|LA],Cam,Custo).
+        %findall((EstX,CaX,[X|LA]), ((ligacel(Act,X,CX); ligacel(X,Act,CX)), \+member(X,LA), estimativa(X,Dest,EstX), CaX is Ca+CX),Novos),
 
 
 /* Algoritmo para encontrar todos os caminhos entre dois pontos.
@@ -183,7 +192,8 @@ shortlist([L|LL],Lm,Nm):-
 
 /* BFS - Pesquisa em largura. Primeiro pesquisa os nós adajacentes ao nó inicial antes de ir ver os nós vizinhos do nó vizinho.
 A decisão sobre qual ramo seguir ser feita com base num critério de decisão local. Em caso de indecisão
-vamos pelo caminho mais promissor, tendo em conta o custo/ganho do caminho. */
+vamos pelo caminho mais promissor, tendo em conta o custo/ganho do caminho. 
+Breath First Search SEM custo */
 bfs(Orig, Dest, Cam):- bfs2(Dest, [[Orig]], Cam).
 
 bfs2(Dest, [[Dest|T]|_], Cam):-reverse([Dest|T], Cam).
@@ -195,7 +205,25 @@ bfs2(Dest, [LA|Outros], Cam):-
     bfs2(Dest, Todos, Cam).
 
 
-/* BFS - Best First Search sem custo */
+/* BFS - Breath First Search COM custo */
+bfs_com_custo(Orig, Dest, Cam, Custo):- bfs2_custo(Dest, [[Orig]], Cam,Custo),
+    length(Cam,Custo).
+
+bfs2_custo(Dest,(Custo, [[Dest|T]|_]), Cam, Custo):-reverse([Dest|T], Cam).
+
+bfs2_custo(Dest, [LA|Outros], Cam, Custo):-
+    LA = [Act|_],
+    findall([X|LA], (Dest \== Act, edge(Act, X), \+ member(X, LA)),Novos),
+    append(Outros, Novos, Todos),
+    bfs2_custo(Dest, Todos, Cam,Custo).
+
+    %findall((EstX,CaX,[X|LA]), ((ligacel(Act,X,CX); ligacel(X,Act,CX)), \+member(X,LA), estimativa(X,Dest,EstX), CaX is Ca+CX),Novos),
+    %findall(EstX,([X|LA]), (Dest \== Act, edge(Act, X), \+ member(X, LA)),estimativa(X,Dest,EstX),Novos),
+    %append(Outros, Novos, Todos),
+    %bfs2_custo(Dest, Todos, Cam,Custo).
+
+
+/* BEST BFS - Best Breath First Search SEM custo */
 bestfs(Orig,Dest,Cam):- bestfs2(Dest,[Orig],Cam).
 
 %condicao final: destino = nó à cabeça do caminho actual
@@ -212,6 +240,21 @@ bestfs2(Dest,LA,Cam):- LA=[Act|_], % substituir por member(Act,LA), caso haja co
     NovosOrd = [(_,Melhor)|_],
     /* chama-se recursivamente */
     bestfs2(Dest,Melhor,Cam).
+
+
+/* BEST BFS - Best Breath First Search COM custo */
+bestfs(Orig,Dest,Cam,Custo):-
+    bestfs2(Dest,(0,[Orig]),Cam,Custo).
+
+bestfs2(Dest,(Custo,[Dest|T]),Cam,Custo):- !,
+    reverse([Dest|T],Cam).
+
+bestfs2(Dest,(Ca,LA),Cam,Custo):-
+    LA=[Act|_],
+    findall((EstX,CaX,[X|LA]), ((ligacel(Act,X,CX); ligacel(X,Act,CX)), \+member(X,LA), estimativa(X,Dest,EstX), CaX is Ca+CX),Novos),
+    sort(Novos,NovosOrd),
+    NovosOrd = [(_,CM,Melhor)|_],
+    bestfs2(Dest,(CM,Melhor),Cam,Custo).
 
 
 /* Algoritmo para encontrar o caminho mais curto entre dois pontos

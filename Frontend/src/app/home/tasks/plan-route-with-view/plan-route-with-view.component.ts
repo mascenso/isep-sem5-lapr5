@@ -15,8 +15,8 @@ export class PlanRouteWithViewComponent {
   cellsToMove:number[][]=[];
 
   posicaoInicial = [5,5];
-  movimentacaoRobotExemplo=[[5,6],[5,7],[6,7],[6,8],[5,8],[5,9],[5,10],[5,11],[5,12],[5,13],[5,14],[5,15],[5,16],[5,17],[5,18],[5,19],[5,20],[5,21],
-                            [5,22],[5,23],[5,24],[5,25]];
+  //popular isto com o array de movimentacoes que queremos
+  movimentacaoRobotExemplo=[[6,6],[5,7],[6,8],[5,9],[6,10],[6,11],[6,12],[6,13],[6,14],[5,14],[5,13],[6,12],[5,11],[6,10]];
 
 
   buildingsInit: any[] = [

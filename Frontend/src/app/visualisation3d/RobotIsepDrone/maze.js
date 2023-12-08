@@ -32,6 +32,11 @@ export default class Maze {
             for (let i = 0; i < description.bridges.length; i++) {
                 this.bridgesList.push(this.cellToCartesian(description.bridges[i].locationBridge)) 
             }
+            //Store the location of elevators
+            this.elevatorsList = [];
+            for (let i = 0; i < description.elevators.length; i++) {
+                this.elevatorsList.push(this.cellToCartesian(description.elevators[i].position)) 
+            }
             
             this.bridgesBuilding = description.bridges;
 
@@ -156,6 +161,23 @@ export default class Maze {
                         tableModel.rotation.y += Math.PI / 1.3
                         tableModel.rotation.y += this.rotation(description.tables[i].orientation)
                         this.object.add(tableModel);
+                    });
+                }
+            }
+
+            if(description.elevators){
+                for(let i = 0 ; i< description.elevators.length ; i++){
+                    const loader = new GLTFLoader();
+                    loader.load("./assets/basic_elevator.glb", (gltf) => {
+                        const elevatorModel = gltf.scene;
+                        // You may need to adjust the position and scale of the model
+                        elevatorModel.position.set(description.elevators[i].position[1] - description.size.width  / 2.0 +0.5 ,1.1, description.elevators[i].position[0] - description.size.height / 2.0 );
+                        elevatorModel.scale.set(0.005, 0.005, 0.005);
+                        //elevatorModel.rotation.y += Math.PI / 1.3
+                        elevatorModel.rotation.y += this.rotation(description.elevators[i].orientation)
+                        console.log(elevatorModel)
+                        this.object.add(elevatorModel);
+                        
                     });
                 }
             }
@@ -495,6 +517,14 @@ export default class Maze {
     foundBridge(position){
         for (let i = 0; i < this.bridgesList.length; i++) {
             if(Math.abs(position.x - this.bridgesList[i].x) < 0.5 * this.scale.x && Math.abs(position.z - this.bridgesList[i].z) < 0.5 * this.scale.z){
+               return true 
+            }  
+        }
+        return false;
+    }
+    findElevator(position){
+        for (let i = 0; i < this.elevatorsList.length; i++) {
+            if(Math.abs(position.x - this.elevatorsList[i].x) < 0.5 * this.scale.x && Math.abs(position.z+1.5 - this.elevatorsList[i].z) < 0.5 * this.scale.z){
                return true 
             }  
         }

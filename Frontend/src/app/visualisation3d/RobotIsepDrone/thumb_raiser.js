@@ -328,6 +328,8 @@ export default class ThumbRaiser {
         this.resetAll.addEventListener("click", event => this.buttonClick(event));
 
         this.activeElement = document.activeElement;
+
+        this.listFloors = [];
     }
 
     buildHelpPanel() {
@@ -353,6 +355,7 @@ export default class ThumbRaiser {
 
     // Set active view camera
     setActiveViewCamera(camera) {
+        console.log(camera)
         this.activeViewCamera = camera;
         this.horizontal.min = this.activeViewCamera.orientationMin.h.toFixed(0);
         this.horizontal.max = this.activeViewCamera.orientationMax.h.toFixed(0);
@@ -712,10 +715,7 @@ export default class ThumbRaiser {
             }
         }
         else {
-            //console.log(this.player.position)
-            //console.log(this.player.direction)
-            //this.performAutomaticMovements()
-            // Update the model animations
+
 
             const deltaT = this.clock.getDelta();
             this.animations.update(deltaT);
@@ -733,8 +733,10 @@ export default class ThumbRaiser {
 
 
                     //console.log("colocar aqui novo edificio")
-                }
-                else {
+                }else if(this.maze.findElevator(this.player.position)){
+                    console.log("encontrei um elevador")
+                    this.selectNewFloorFromBuilding();
+                }else {
                     let coveredDistance = this.player.walkingSpeed * deltaT;
                     let directionIncrement = this.player.turningSpeed * deltaT;
                     if (this.player.keyStates.run) {
@@ -955,5 +957,13 @@ export default class ThumbRaiser {
         }
       
         return movements;
-      }
+    }
+    listFloorThisBuilding(floors){
+        this.listFloors = floors;
+    }
+    selectNewFloorFromBuilding(){
+        this.setActiveViewCamera(this.firstPersonViewCamera);
+        this.player.direction = -90;
+
+    }
 }

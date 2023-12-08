@@ -28,6 +28,7 @@ import {EditBuildingComponent} from './home/campus/edit-building/edit-building.c
 import {PlanRobotRouteComponent} from './home/tasks/plan-robot-route/plan-robot-route.component'
 import { EditElevatorsComponent } from './home/campus/edit-elevators/edit-elevators.component';
 import { CreateRoomComponent } from "./home/campus/create-room/create-room.component";
+import {PlanRouteWithViewComponent} from "./home/tasks/plan-route-with-view/plan-route-with-view.component"
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -50,6 +51,10 @@ const routes: Routes = [
       {
         path: 'tasks/plan-route',
         component: PlanRobotRouteComponent,
+      },
+      {
+        path: 'tasks/plan-route-with-view',
+        component: PlanRouteWithViewComponent,
       },
       {
         path: 'view',

@@ -87,6 +87,8 @@ export class ViewComponent implements OnInit {
     requestAnimationFrame(this.animate.bind(this));
     // Update the game
     //console.log(this.thumbRaiser.player.position)
+    if()
+    this.nextMapByBridge();
     this.thumbRaiser.update()
   }
 
@@ -149,5 +151,26 @@ export class ViewComponent implements OnInit {
     this.thumbRaiser.changeMap(this.mapToRender);
 
     this.thumbRaiser.performAutomaticMovements(cellsToMove,this.mapToRender.initialPosition);
+  }
+
+  nextMapByBridge(){
+    //this.changeMap("./assets/buildings/EdificioB_piso_2.json");
+
+    console.log("Iremos trocar de mapa de acordo com a ligação da bridge!");
+    console.log(this.mapToRender);
+/*
+    this.buildingService.getAllBuildings().subscribe(
+      data => {
+          console.log("data",data);
+          // Verifica se há dados e filtra pelo edifício com o código correto                        
+          let connectedBuilding = data.find(building => building.code.includes(connectedBuildingCode));
+          console.log("connectedBuilding",connectedBuilding);
+         
+      }).catch(error => {
+          console.error('Erro ao buscar os edifícios:', error);
+      });
+
+      this.changeMap("./assets/buildings/EdificioB_piso_2.json");
+*/
   }
 }

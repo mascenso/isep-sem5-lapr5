@@ -98,7 +98,7 @@ mostra_conexoes2 :-
 mostra_conexoes.
 
 
-/* Algoritmo para encontrar todos os caminhos entre dois pisos,PisoOr e PisoDest.
+/* Algoritmo para encontrar todos os caminhos entre dois pisos,PisoOr e PisoDest, através do A*.
 Devolve uma lista de edificios percorridos e uma lista das ligaçoes (elevadores e|ou corredores)
 PisoOr - Piso de origem;
 PisoDest - Piso de destino;
@@ -142,6 +142,125 @@ calcular_custo_unico(cor(PisoOr, PisoDest), PisoOr, Custo) :-
 novo_piso_destino(elev(_, PisoDest), PisoDest).
 novo_piso_destino(cor(_, PisoDest), PisoDest).
 
+
+/* Algoritmo para encontrar todos os caminhos entre dois pisos,PisoOr e PisoDest, através do better BFS.
+Devolve uma lista de edificios percorridos e uma lista das ligaçoes (elevadores e|ou corredores)
+PisoOr - Piso de origem;
+PisoDest - Piso de destino;
+LCam - Lista de caminhos percorrido;
+LLig - Lista de ligaçoes percorridas;
+Custo - Custo associado ao percuros;
+*/
+caminho_pisos_com_custo_bbfs(PisoOr, PisoDest, LCam, LLig, CustoTotal):-
+    pisos(EdOr, LPisosOr),
+    member(PisoOr, LPisosOr),
+    pisos(EdDest, LPisosDest),
+    member(PisoDest, LPisosDest), 
+    caminho_edificios(EdOr, EdDest, LCam),
+    segue_pisos(PisoOr,PisoDest,LCam,LLig),
+    calcular_custo_total_bbfs(LLig, PisoOr, CustoTotal). 
+
+/*Calculo custo total da viagem usando aStar em cada piso*/
+calcular_custo_total_bbfs([], _, 0).
+
+/* Predicado para somar todos os custos*/
+calcular_custo_total_bbfs([Acao | RestoAcoes], PisoAtual, CustoTotal) :-
+    calcular_custo_unico_bbfs(Acao, PisoAtual, CustoParcial),
+    novo_piso_destino(Acao, PisoDestino),
+    calcular_custo_total_bbfs(RestoAcoes, PisoDestino, CustoResto),
+    CustoTotal is CustoParcial + CustoResto.
+
+/*Calcula distancia desde posicao inicial ate elevador do piso*/
+calcular_custo_unico_bbfs(elev(PisoOr, _), PisoAtual, Custo) :-
+    pos_init(PisoAtual, Orig),
+    elev_pos(PisoOr, CDestino),
+    bestfs(Orig, CDestino, _, Custo).
+
+/*Calcula distancia desde posicao inicia ate passagem*/
+calcular_custo_unico_bbfs(cor(PisoOr, PisoDest), PisoOr, Custo) :-
+    pos_init(PisoOr,Orig),
+    (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
+    bestfs(Orig, CDestino, _, Custo).
+
+
+/* Algoritmo para encontrar todos os caminhos entre dois pisos,PisoOr e PisoDest, através do BFS.
+Devolve uma lista de edificios percorridos e uma lista das ligaçoes (elevadores e|ou corredores)
+PisoOr - Piso de origem;
+PisoDest - Piso de destino;
+LCam - Lista de caminhos percorrido;
+LLig - Lista de ligaçoes percorridas;
+Custo - Custo associado ao percuros;
+*/
+caminho_pisos_com_custo_bfs(PisoOr, PisoDest, LCam, LLig, CustoTotal):-
+    pisos(EdOr, LPisosOr),
+    member(PisoOr, LPisosOr),
+    pisos(EdDest, LPisosDest),
+    member(PisoDest, LPisosDest), 
+    caminho_edificios(EdOr, EdDest, LCam),
+    segue_pisos(PisoOr,PisoDest,LCam,LLig),
+    calcular_custo_total_bfs(LLig, PisoOr, CustoTotal). 
+
+/*Calculo custo total da viagem usando aStar em cada piso*/
+calcular_custo_total_bfs([], _, 0).
+
+/* Predicado para somar todos os custos*/
+calcular_custo_total_bfs([Acao | RestoAcoes], PisoAtual, CustoTotal) :-
+    calcular_custo_unico_bfs(Acao, PisoAtual, CustoParcial),
+    novo_piso_destino(Acao, PisoDestino),
+    calcular_custo_total_bfs(RestoAcoes, PisoDestino, CustoResto),
+    CustoTotal is CustoParcial + CustoResto.
+
+/*Calcula distancia desde posicao inicial ate elevador do piso*/
+calcular_custo_unico_bfs(elev(PisoOr, _), PisoAtual, Custo) :-
+    pos_init(PisoAtual, Orig),
+    elev_pos(PisoOr, CDestino),
+    bfs_com_custo(Orig, CDestino, _, Custo).
+
+/*Calcula distancia desde posicao inicia ate passagem*/
+calcular_custo_unico_bfs(cor(PisoOr, PisoDest), PisoOr, Custo) :-
+    pos_init(PisoOr,Orig),
+    (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
+    bfs_com_custo(Orig, CDestino, _, Custo).
+
+
+/* Algoritmo para encontrar todos os caminhos entre dois pisos,PisoOr e PisoDest, através do DFS.
+Devolve uma lista de edificios percorridos e uma lista das ligaçoes (elevadores e|ou corredores)
+PisoOr - Piso de origem;
+PisoDest - Piso de destino;
+LCam - Lista de caminhos percorrido;
+LLig - Lista de ligaçoes percorridas;
+Custo - Custo associado ao percursos;
+*/
+caminho_pisos_com_custo_dfs(PisoOr, PisoDest, LCam, LLig, CustoTotal):-
+    pisos(EdOr, LPisosOr),
+    member(PisoOr, LPisosOr),
+    pisos(EdDest, LPisosDest),
+    member(PisoDest, LPisosDest), 
+    caminho_edificios(EdOr, EdDest, LCam),
+    segue_pisos(PisoOr,PisoDest,LCam,LLig),
+    calcular_custo_total_dfs(LLig, PisoOr, CustoTotal). 
+
+/*Calculo custo total da viagem usando aStar em cada piso*/
+calcular_custo_total_dfs([], _, 0).
+
+/* Predicado para somar todos os custos*/
+calcular_custo_total_dfs([Acao | RestoAcoes], PisoAtual, CustoTotal) :-
+    calcular_custo_unico_dfs(Acao, PisoAtual, CustoParcial),
+    novo_piso_destino(Acao, PisoDestino),
+    calcular_custo_total_dfs(RestoAcoes, PisoDestino, CustoResto),
+    CustoTotal is CustoParcial + CustoResto.
+
+/*Calcula distancia desde posicao inicial ate elevador do piso*/
+calcular_custo_unico_dfs(elev(PisoOr, _), PisoAtual, Custo) :-
+    pos_init(PisoAtual, Orig),
+    elev_pos(PisoOr, CDestino),
+    dfs_com_custo(Orig, CDestino, _, Custo).
+
+/*Calcula distancia desde posicao inicia ate passagem*/
+calcular_custo_unico_dfs(cor(PisoOr, PisoDest), PisoOr, Custo) :-
+    pos_init(PisoOr,Orig),
+    (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
+    dfs_com_custo(Orig, CDestino, _, Custo).
 
 /*
 %este algoritmo é para calcular a distancia entre a posiçao inicial do robot com a de destino na primeira interaçao. Se a lista estiver vazia, não avança.

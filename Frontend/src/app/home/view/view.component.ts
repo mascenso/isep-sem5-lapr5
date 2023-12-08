@@ -148,6 +148,6 @@ export class ViewComponent implements OnInit {
     this.thumbRaiser.maze.url = this.mapToRender;
     this.thumbRaiser.changeMap(this.mapToRender);
 
-    this.thumbRaiser.performAutomaticMovements(cellsToMove,this.mapToRender.initialPosition, this.mapToRender.initialDirection);
+    this.thumbRaiser.performAutomaticMovements(cellsToMove,this.mapToRender.initialPosition);
   }
 }

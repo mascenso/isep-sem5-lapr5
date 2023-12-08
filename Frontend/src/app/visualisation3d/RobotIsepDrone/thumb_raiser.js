@@ -712,6 +712,8 @@ export default class ThumbRaiser {
             }
         }
         else {
+            //console.log(this.player.position)
+            //console.log(this.player.direction)
             //this.performAutomaticMovements()
             // Update the model animations
 
@@ -850,83 +852,102 @@ export default class ThumbRaiser {
         this.maze = new Maze(this.mazeParameters);
     }
 
-    async performAutomaticMovements(movementsRobot, inicialPosition, initialDirection) {
+    async performAutomaticMovements(movementsRobot, inicialPosition) {
 
         const movements = this.calculateMovements(inicialPosition, movementsRobot);
         await new Promise(resolve => setTimeout(resolve, 2000));
-        console.log(this.player.position.x+1)
-        // Loop through the movements
+        
         for (const movement of movements) {
-            console.log(this.player.position)
-            if (movement.forward) {
-            } else if (movement.backward) {
-                this.player.keyStates.backward = true;
-            } else if (movement.turnLeft) {
-                this.player.keyStates.left = true;
-            } else if (movement.turnRight) {
-                this.player.keyStates.right = true;
-            } else if(movement.Up){
-                this.player.direction = 180;
-                const finalPositive = this.player.position.z+1;
-                const finalNegative = this.player.position.z-1;
-                do{
-                    this.player.keyStates.forward = true;
-                    await new Promise(resolve => setTimeout(resolve, 10));
-                }while(this.player.position.z > finalNegative && this.player.position.z < finalPositive)
+
+            const finalPositiveZ = this.player.position.z+1;
+            const finalNegativeZ = this.player.position.z-1;
+            const finalPositiveX = this.player.position.x+1;
+            const finalNegativeX = this.player.position.x-1;
+
+            if(movement.Up){
+                await this.movement(180,finalNegativeZ,finalPositiveZ)
             } else if (movement.Down){
-                this.player.direction = 0;
-                const finalPositive = this.player.position.z+1;
-                const finalNegative = this.player.position.z-1;
-                do{
-                    this.player.keyStates.forward = true;
-                    await new Promise(resolve => setTimeout(resolve, 10));
-                }while(this.player.position.z > finalNegative && this.player.position.z < finalPositive)
+                await this.movement(0,finalNegativeZ,finalPositiveZ)
             } else if(movement.Left){
-                this.player.direction = 270;
-                const finalPositive = this.player.position.x+1;
-                const finalNegative = this.player.position.x-1;
-                do{
-                    this.player.keyStates.forward = true;
-                    await new Promise(resolve => setTimeout(resolve, 10));
-                }while(this.player.position.x > finalNegative && this.player.position.x < finalPositive)
-                
+                await this.movement(270,finalNegativeX,finalPositiveX)
             } else if(movement.Rigth){
-                this.player.direction = 90;
-                const finalPositive = this.player.position.x+1;
-                const finalNegative = this.player.position.x-1;
-                do{
-                    this.player.keyStates.forward = true;
-                    await new Promise(resolve => setTimeout(resolve, 10));
-                }while(this.player.position.x > finalNegative && this.player.position.x < finalPositive)
-
+                await this.movement(90,finalNegativeX,finalPositiveX)
+            } else if(movement.UpRigth){
+                await this.movementDiagonal(135,finalNegativeX,finalPositiveX, finalNegativeZ, finalPositiveZ)
+            } else if(movement.UpLeft){
+                await this.movementDiagonal(225,finalNegativeX,finalPositiveX, finalNegativeZ, finalPositiveZ)
+            } else if(movement.DownRight){
+                await this.movementDiagonal(45,finalNegativeX,finalPositiveX, finalNegativeZ, finalPositiveZ)
+            } else if(movement.DownLeft){
+                await this.movementDiagonal(315,finalNegativeX,finalPositiveX, finalNegativeZ, finalPositiveZ)
             }
-            // Wait for a short duration (adjust as needed)
-            //await new Promise(resolve => setTimeout(resolve, 1000)); // 1000 milliseconds = 1 second
-
-            // Release the keys
-            this.player.keyStates.forward = false;
-            this.player.keyStates.backward = false;
-            this.player.keyStates.left = false;
-            this.player.keyStates.right = false;
-
-            // Wait for another short duration before the next movement
-            await new Promise(resolve => setTimeout(resolve, 500));
         }
     }
+    async movement(direction, finalNegative,finalPositive){
+        this.player.direction = direction;
+        let reachedFinalX = false;
+        let reachedFinalZ = false;
+        this.player.keyStates.forward = true;
 
+        do{
+
+            await new Promise(resolve => setTimeout(resolve, 100));
+            if(direction ==180 || direction == 0){
+                reachedFinalZ = this.player.position.z >= finalPositive ||  this.player.position.z <= finalNegative;
+            }else{
+                reachedFinalX = this.player.position.x >= finalPositive ||  this.player.position.x <= finalNegative;
+            }
+
+
+        }while(!reachedFinalX && !reachedFinalZ)
+
+        this.player.keyStates.forward = false; // para de movimentar robot para a frente
+    }
+    async movementDiagonal(direction, finalNegativeX,finalPositiveX, finalNegativeZ,finalPositiveZ){
+        this.player.direction = direction;
+        let reachedFinalX = false;
+        let reachedFinalZ = false;
+        this.player.keyStates.forward = true;
+
+        do{
+            await new Promise(resolve => setTimeout(resolve, 5));
+            reachedFinalX = this.player.position.x >= finalPositiveX ||  this.player.position.x <= finalNegativeX;
+            reachedFinalZ = this.player.position.z >= finalPositiveZ || this.player.position.z <= finalNegativeZ;
+
+        } while (!reachedFinalX && !reachedFinalZ);
+
+        this.player.keyStates.forward = false; //para de movimentar robot para a frente
+    }
+
+    /**
+     * Preenche array com movimentacoes do robot
+     * @param {*} initialCell 
+     * @param {*} destinyCells 
+     * @returns 
+     */
     calculateMovements(initialCell, destinyCells) {
         const movements = [];
       
         for (const destinyCell of destinyCells) {
             if(destinyCell[0]>initialCell[0]){
-                movements.push({Up:true})
+                if(destinyCell[1]>initialCell[1]){      //diagonal cima / direita
+                    movements.push({UpRigth:true});
+                }else if(destinyCell[1]<initialCell[1]){//diagonal cima / esquerda
+                    movements.push({UpLeft:true})
+                }else{                                  //cima
+                    movements.push({Up:true})
+                }
             } else if(destinyCell[0]<initialCell[0]){
-                movements.push({Down:true})
-            }
-
-            if(destinyCell[1]>initialCell[1]){
+                if(destinyCell[1]>initialCell[1]){      //diagonal baxo / direita
+                    movements.push({DownRight:true})
+                }else if(destinyCell[1]<initialCell[1]){//diagonal vaixo / esquerda
+                    movements.push({DownLeft:true})
+                }else{                                  //baixo
+                    movements.push({Down:true})
+                }   
+            } else if(destinyCell[1]>initialCell[1]){
                 movements.push({Rigth:true})
-            } else if(destinyCell[1]<initialCell[1]){
+            }else if(destinyCell[1]<initialCell[1]){
                 movements.push({Left:true})
             }
       

@@ -1,0 +1,13 @@
+.arrow {
+    font-size: 20px;
+    margin: 20px; /* Ajuste a margem conforme necessário */
+}
+
+.dropdowns-plan-view{
+    margin-bottom: 20px;
+}
+
+.container-view{
+    width: 100%; 
+    border: 1px solid #ccc; 
+}

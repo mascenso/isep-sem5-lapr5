@@ -1,204 +1,205 @@
-<!--<iframe src="http://127.0.0.1:5500/Thumb_Raiser.html" width="100%" height="100%"></iframe>-->
 
 <body>
     <div id="parent">
         <canvas id="canvasForRender" height="100%" width="100%"></canvas>
-        <div id="views-panel">
-            <div>
-                <label>Choose Building:</label>
-                <select id="building-selector" [(ngModel)]="buildingSelected" (change)="floorsToDropdown()" >
-                    <option *ngFor="let building of buildings" [value]="building.id"> {{ building.name }}</option>
-                </select>
-                <label>Choose Floor:</label>
-                <select id="floor-selector" [(ngModel)]="floorSelected" (change)="changeFloor()" >
-                    <option *ngFor="let floor of floors" [value]="floor.id"> {{ floor.floorNumber }}</option>
-                </select>
+        <div [hidden]="!showMenus">
+            <div id="views-panel">
+                <div>
+                    <label>Choose Building:</label>
+                    <select id="building-selector" [(ngModel)]="buildingSelected" (change)="floorsToDropdown()" >
+                        <option *ngFor="let building of buildings" [value]="building.id"> {{ building.name }}</option>
+                    </select>
+                    <label>Choose Floor:</label>
+                    <select id="floor-selector" [(ngModel)]="floorSelected" (change)="changeFloor()" >
+                        <option *ngFor="let floor of floors" [value]="floor.id"> {{ floor.floorNumber }}</option>
+                    </select>
+                </div>
+                <table class="views">
+                    <tr>
+                        <td>
+                            <label>View:</label>
+                            <select id="view">
+                                <option value="fixed">Fixed</option>
+                                <option value="first">First-person</option>
+                                <option value="third">Third-person</option>
+                                <option value="top">Top</option>
+                            </select>
+                        </td>
+                        <td>
+                            <label>Orientation (h):</label>
+                            <input type="number" id="horizontal" required>
+                        </td>
+                        <td>
+                            <label>Orientation (v):</label>
+                            <input type="number" id="vertical" required>
+                        </td>
+                        <td>
+                            <input type="button" id="reset" value="Reset view">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Projection:</label>
+                            <select id="projection">
+                                <option value="perspective">Perspective</option>
+                                <option value="orthographic">Orthographic</option>
+                            </select>
+                        </td>
+                        <td>
+                            <label>Distance:</label>
+                            <input type="number" id="distance" required>
+                        </td>
+                        <td>
+                            <label>Zoom:</label>
+                            <input type="number" id="zoom" required>
+                        </td>
+                        <td>
+                            <input type="button" id="reset-all" value="Reset all views">
+                        </td>
+                    </tr>
+                </table>
             </div>
-            <table class="views">
-                <tr>
-                    <td>
-                        <label>View:</label>
-                        <select id="view">
-                            <option value="fixed">Fixed</option>
-                            <option value="first">First-person</option>
-                            <option value="third">Third-person</option>
-                            <option value="top">Top</option>
-                        </select>
-                    </td>
-                    <td>
-                        <label>Orientation (h):</label>
-                        <input type="number" id="horizontal" required>
-                    </td>
-                    <td>
-                        <label>Orientation (v):</label>
-                        <input type="number" id="vertical" required>
-                    </td>
-                    <td>
-                        <input type="button" id="reset" value="Reset view">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>Projection:</label>
-                        <select id="projection">
-                            <option value="perspective">Perspective</option>
-                            <option value="orthographic">Orthographic</option>
-                        </select>
-                    </td>
-                    <td>
-                        <label>Distance:</label>
-                        <input type="number" id="distance" required>
-                    </td>
-                    <td>
-                        <label>Zoom:</label>
-                        <input type="number" id="zoom" required>
-                    </td>
-                    <td>
-                        <input type="button" id="reset-all" value="Reset all views">
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div id="help-panel">
-            <table class="help" id="help-table">
-                <tr>
-                    <th colspan="2" style="font-size: 3.0vmin">
-                        Help
-                    </th>
-                </tr>
-                <tr>
-                    <th colspan="2" style="text-align: left">Select active view</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Fixed view</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>First-person view</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Third-person view</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Top view</td>
-                </tr>
-                <tr>
-                    <th colspan="2" style="text-align: left">Toggle view mode</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Single-view mode / multiple-views mode</td>
-                </tr>
-                <tr>
-                    <th colspan="2" style="text-align: left">Display / hide subwindows</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>User interface</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Mini-map</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Help</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Statistics</td>
-                </tr>
-                <tr>
-                    <th colspan="2" style="text-align: left">Move character</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Walk / run (modifier key)</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Turn left slowly / quickly</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Turn right slowly / quickly</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Walk / run backward</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Walk / run forward</td>
-                </tr>
-                <tr>
-                    <th colspan="2" style="text-align: left">Emote character</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Jump</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Yes</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Wave</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Punch</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Thumbs up</td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="text-align: right"></td>
-                </tr>
-            </table>
-        </div>
-        <div id="subwindows-panel">
-            <table class="subwindows">
-                <tr>
-                    <td>
-                        <label>Multiple views:</label>
-                        <input type="checkbox" id="multiple-views">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>User interface:</label>
-                        <input type="checkbox" id="user-interface">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>Mini-map:</label>
-                        <input type="checkbox" id="mini-map">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>Help:</label>
-                        <input type="checkbox" id="help">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>Statistics:</label>
-                        <input type="checkbox" id="statistics">
-                    </td>
-                </tr>
-            </table>
+            <div id="help-panel">
+                <table class="help" id="help-table">
+                    <tr>
+                        <th colspan="2" style="font-size: 3.0vmin">
+                            Help
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="2" style="text-align: left">Select active view</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Fixed view</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>First-person view</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Third-person view</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Top view</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" style="text-align: left">Toggle view mode</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Single-view mode / multiple-views mode</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" style="text-align: left">Display / hide subwindows</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>User interface</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Mini-map</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Help</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Statistics</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" style="text-align: left">Move character</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Walk / run (modifier key)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Turn left slowly / quickly</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Turn right slowly / quickly</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Walk / run backward</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Walk / run forward</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" style="text-align: left">Emote character</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Jump</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Wave</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Punch</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Thumbs up</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: right"></td>
+                    </tr>
+                </table>
+            </div>
+            <div id="subwindows-panel">
+                <table class="subwindows">
+                    <tr>
+                        <td>
+                            <label>Multiple views:</label>
+                            <input type="checkbox" id="multiple-views">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>User interface:</label>
+                            <input type="checkbox" id="user-interface">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Mini-map:</label>
+                            <input type="checkbox" id="mini-map">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Help:</label>
+                            <input type="checkbox" id="help">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Statistics:</label>
+                            <input type="checkbox" id="statistics">
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </body>

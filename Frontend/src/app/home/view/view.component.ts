@@ -4,7 +4,7 @@
 // @ts-expect-error
 // @ts-ignore
 // @ts-expect-error
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, Input } from '@angular/core';
 import * as THREE from 'three';
 import Orientation from "../../visualisation3d/RobotIsepDrone/orientation.js"
 import ThumbRaiser from "../../visualisation3d/RobotIsepDrone/thumb_raiser.js";
@@ -21,8 +21,12 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 
 export class ViewComponent implements OnInit {
+  @Input() showMenus = true;
+  @Input() automaticPlaning:any = {};
+  @Input() cellsToMove:number[][] =[];
 
-  static thumbRaiser: any;
+  //@Input() mapToRender: any = "";
+  thumbRaiser: any;
   buildings: BuildingResponseDTO[] = [];
 
   //apenas mostra andares que tem mapa de piso
@@ -31,20 +35,22 @@ export class ViewComponent implements OnInit {
   floorSelected = "";
   floorMap:any;
   mapToRender = "";
-  static canvas = document.getElementById("canvasForRender");
+  //static canvas = document.getElementById("canvasForRender");
 
   constructor(private buildingService: BuildingService,private floorService: FloorService, private _snackBar: MatSnackBar ) {}
 
   ngOnInit(): void {
-    this.buildingsToDropDown();
-    this.initialize();
-    ViewComponent.animate();
+      this.buildingsToDropDown();
+      this.initialize();
+      this.animate();
   }
-
+  ngAfterViewInit(){
+    this.haveMap();
+  }
 
    initialize() {
     // Create the game
-    ViewComponent.thumbRaiser = new ThumbRaiser(
+    this.thumbRaiser = new ThumbRaiser(
       {}, // General Parameters
       { url:this.mapToRender ,scale: new THREE.Vector3(1.0, 0.5, 1.0),  }, // Maze parameters
       {}, // Player parameters
@@ -74,12 +80,14 @@ export class ViewComponent implements OnInit {
 
     );
 
+
   }
 
-  static animate() {
-    requestAnimationFrame(ViewComponent.animate);
+  animate() {
+    requestAnimationFrame(this.animate.bind(this));
     // Update the game
-    ViewComponent.thumbRaiser.update()
+    //console.log(this.thumbRaiser.player.position)
+    this.thumbRaiser.update()
   }
 
   buildingsToDropDown(){
@@ -120,10 +128,26 @@ export class ViewComponent implements OnInit {
 
   //coloca a funcao global para ser ouvida no on change
   changeFloor(){
-    this.mapToRender = this.floors.find(objeto => objeto.id === this.floorSelected)?.floorMap;
-  
-    ViewComponent.thumbRaiser.maze.url = this.mapToRender;
-    ViewComponent.thumbRaiser.changeMap(this.mapToRender);
+    if(this.floorSelected){
+      this.mapToRender = this.floors.find(objeto => objeto.id === this.floorSelected)?.floorMap;
+    }
+
+    this.thumbRaiser.maze.url = this.mapToRender;
+    this.thumbRaiser.changeMap(this.mapToRender);
+  }
+  async haveMap(){
+    if(this.automaticPlaning.data != undefined && this.cellsToMove.length >0){
+      this.makeAutomaticAnimation(this.cellsToMove)
+    }
   }
 
+  makeAutomaticAnimation(cellsToMove:number[][]){
+    //mapa (JSON) passado por parametro no componente
+    this.mapToRender = this.automaticPlaning.data;
+
+    this.thumbRaiser.maze.url = this.mapToRender;
+    this.thumbRaiser.changeMap(this.mapToRender);
+
+    this.thumbRaiser.performAutomaticMovements(cellsToMove,this.mapToRender.initialPosition, this.mapToRender.initialDirection);
+  }
 }

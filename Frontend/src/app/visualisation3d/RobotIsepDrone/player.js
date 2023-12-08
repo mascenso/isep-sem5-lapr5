@@ -60,7 +60,6 @@ export default class Player {
 
         // Create a resource .gltf or .glb file loader
         const loader = new GLTFLoader();
-        console.log(this.url)
         // Load a model description resource file
         loader.load(
             //Resource URL

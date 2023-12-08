@@ -495,10 +495,10 @@ export default class Maze {
     foundBridge(position){
         for (let i = 0; i < this.bridgesList.length; i++) {
             if(Math.abs(position.x - this.bridgesList[i].x) < 0.5 * this.scale.x && Math.abs(position.z - this.bridgesList[i].z) < 0.5 * this.scale.z){
-               return true 
+               return i 
             }  
         }
-        return false;
+        return -1;
     }
 
     buildingToRender(position){

@@ -199,11 +199,11 @@ export default class ThumbRaiser {
 
         // Create the cube texture
         this.cubeTexture = new CubeTexture(this.cubeTexturesParameters.skyboxes[0]);
-    
+
         // Add background
         this.scene3D.background = this.cubeTexture.textures;
 
-      // Create the maze
+        // Create the maze
         this.maze = new Maze(this.mazeParameters);
 
         // Create the player
@@ -231,15 +231,15 @@ export default class ThumbRaiser {
 
         // Create a renderer and turn on shadows in the renderer
         let canvas = document.getElementById("canvasForRender");
-        this.renderer = new THREE.WebGLRenderer({  canvas:canvas });
+        this.renderer = new THREE.WebGLRenderer({ canvas: canvas });
         if (this.generalParameters.setDevicePixelRatio) {
             this.renderer.setPixelRatio(window.devicePixelRatio);
         }
         this.renderer.autoClear = false;
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        const height = window.innerHeight-50;
-        const width = window.innerWidth-50;
+        const height = window.innerHeight - 50;
+        const width = window.innerWidth - 50;
         this.renderer.setSize(width, height);
 
         // Set the mouse move action (none)
@@ -328,6 +328,10 @@ export default class ThumbRaiser {
         this.resetAll.addEventListener("click", event => this.buttonClick(event));
 
         this.activeElement = document.activeElement;
+
+        // para ativar a função no component quando chegar a uma passagem
+        this.existBridge = -1;
+
     }
 
     buildHelpPanel() {
@@ -674,21 +678,21 @@ export default class ThumbRaiser {
         this.animations.fadeToAction("None", 0.2);
 
     }
-/*
+    /*
+        collision(position) {
+            return this.maze.distanceToWestWall(position) < this.player.radius || this.maze.distanceToEastWall(position) < this.player.radius || this.maze.distanceToNorthWall(position) < this.player.radius || this.maze.distanceToSouthWall(position) < this.player.radius;
+        }
+    */
     collision(position) {
-        return this.maze.distanceToWestWall(position) < this.player.radius || this.maze.distanceToEastWall(position) < this.player.radius || this.maze.distanceToNorthWall(position) < this.player.radius || this.maze.distanceToSouthWall(position) < this.player.radius;
-    }
-*/
-    collision(position) {
-        return this.maze.distanceToWestWall(position) < this.player.radius/4 || this.maze.distanceToEastWall(position) < this.player.radius/4 || this.maze.distanceToNorthWall(position) < this.player.radius/4|| this.maze.distanceToSouthWall(position) < this.player.radius/4;
+        return this.maze.distanceToWestWall(position) < this.player.radius / 4 || this.maze.distanceToEastWall(position) < this.player.radius / 4 || this.maze.distanceToNorthWall(position) < this.player.radius / 4 || this.maze.distanceToSouthWall(position) < this.player.radius / 4;
     }
 
 
     update() {
-        
+
         if (!this.gameRunning) {
             if (this.maze.loaded && this.player.loaded) { // If all resources have been loaded
-                
+
                 // Add the maze, the player and the lights to the scene
                 this.scene3D.add(this.maze.object);
                 this.scene3D.add(this.player.object);
@@ -723,13 +727,14 @@ export default class ThumbRaiser {
             // Update the player
             if (!this.animations.actionInProgress) {
                 // Check if the player found the exit
-                if (this.maze.foundBridge(this.player.position)) {
-                    this.changeMap("./mazes/EdificioB piso 2.json");
+                this.existBridge = this.maze.foundBridge(this.player.position);
 
-                  //  this.mazeParameters.url = "./mazes/EdificioB piso 2.json"
+
+                if (false) {
+                    //  this.mazeParameters.url = "./mazes/EdificioB piso 2.json"
 
                     //this.maze = new Maze(changeMap("./mazes/EdificioB piso 2.json"));
-                   // changeMap("./mazes/EdificioB piso 2.json");
+                    // changeMap("./mazes/EdificioB piso 2.json");
 
 
                     //console.log("colocar aqui novo edificio")
@@ -751,7 +756,7 @@ export default class ThumbRaiser {
                     if (this.player.keyStates.backward) {
                         const newPosition = new THREE.Vector3(-coveredDistance * Math.sin(direction), 0.0, -coveredDistance * Math.cos(direction)).add(this.player.position);
                         if (this.collision(newPosition)) {
-                           // this.animations.fadeToAction("Death", 0.2);
+                            // this.animations.fadeToAction("Death", 0.2);
                             this.animations.fadeToAction("None", 0.2);
                         }
                         else {
@@ -762,7 +767,7 @@ export default class ThumbRaiser {
                     else if (this.player.keyStates.forward) {
                         const newPosition = new THREE.Vector3(coveredDistance * Math.sin(direction), 0.0, coveredDistance * Math.cos(direction)).add(this.player.position);
                         if (this.collision(newPosition)) {
-                           // this.animations.fadeToAction("Death", 0.2);
+                            // this.animations.fadeToAction("Death", 0.2);
                             this.animations.fadeToAction("None", 0.2);
                         }
                         else {
@@ -845,10 +850,13 @@ export default class ThumbRaiser {
             }
         }
     }
-    async changeMap(path){
+    async changeMap(path) {
+        console.log("Entrou aqui");
         this.gameRunning = false
         this.scene3D.remove(this.maze.object)
         this.mazeParameters.url = path;
+        console.log("antes do new maze");
+
         this.maze = new Maze(this.mazeParameters);
     }
 
@@ -856,62 +864,62 @@ export default class ThumbRaiser {
 
         const movements = this.calculateMovements(inicialPosition, movementsRobot);
         await new Promise(resolve => setTimeout(resolve, 2000));
-        
+
         for (const movement of movements) {
 
-            const finalPositiveZ = this.player.position.z+1;
-            const finalNegativeZ = this.player.position.z-1;
-            const finalPositiveX = this.player.position.x+1;
-            const finalNegativeX = this.player.position.x-1;
+            const finalPositiveZ = this.player.position.z + 1;
+            const finalNegativeZ = this.player.position.z - 1;
+            const finalPositiveX = this.player.position.x + 1;
+            const finalNegativeX = this.player.position.x - 1;
 
-            if(movement.Up){
-                await this.movement(180,finalNegativeZ,finalPositiveZ)
-            } else if (movement.Down){
-                await this.movement(0,finalNegativeZ,finalPositiveZ)
-            } else if(movement.Left){
-                await this.movement(270,finalNegativeX,finalPositiveX)
-            } else if(movement.Rigth){
-                await this.movement(90,finalNegativeX,finalPositiveX)
-            } else if(movement.UpRigth){
-                await this.movementDiagonal(135,finalNegativeX,finalPositiveX, finalNegativeZ, finalPositiveZ)
-            } else if(movement.UpLeft){
-                await this.movementDiagonal(225,finalNegativeX,finalPositiveX, finalNegativeZ, finalPositiveZ)
-            } else if(movement.DownRight){
-                await this.movementDiagonal(45,finalNegativeX,finalPositiveX, finalNegativeZ, finalPositiveZ)
-            } else if(movement.DownLeft){
-                await this.movementDiagonal(315,finalNegativeX,finalPositiveX, finalNegativeZ, finalPositiveZ)
+            if (movement.Up) {
+                await this.movement(180, finalNegativeZ, finalPositiveZ)
+            } else if (movement.Down) {
+                await this.movement(0, finalNegativeZ, finalPositiveZ)
+            } else if (movement.Left) {
+                await this.movement(270, finalNegativeX, finalPositiveX)
+            } else if (movement.Rigth) {
+                await this.movement(90, finalNegativeX, finalPositiveX)
+            } else if (movement.UpRigth) {
+                await this.movementDiagonal(135, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
+            } else if (movement.UpLeft) {
+                await this.movementDiagonal(225, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
+            } else if (movement.DownRight) {
+                await this.movementDiagonal(45, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
+            } else if (movement.DownLeft) {
+                await this.movementDiagonal(315, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
             }
         }
     }
-    async movement(direction, finalNegative,finalPositive){
+    async movement(direction, finalNegative, finalPositive) {
         this.player.direction = direction;
         let reachedFinalX = false;
         let reachedFinalZ = false;
         this.player.keyStates.forward = true;
 
-        do{
+        do {
 
             await new Promise(resolve => setTimeout(resolve, 100));
-            if(direction ==180 || direction == 0){
-                reachedFinalZ = this.player.position.z >= finalPositive ||  this.player.position.z <= finalNegative;
-            }else{
-                reachedFinalX = this.player.position.x >= finalPositive ||  this.player.position.x <= finalNegative;
+            if (direction == 180 || direction == 0) {
+                reachedFinalZ = this.player.position.z >= finalPositive || this.player.position.z <= finalNegative;
+            } else {
+                reachedFinalX = this.player.position.x >= finalPositive || this.player.position.x <= finalNegative;
             }
 
 
-        }while(!reachedFinalX && !reachedFinalZ)
+        } while (!reachedFinalX && !reachedFinalZ)
 
         this.player.keyStates.forward = false; // para de movimentar robot para a frente
     }
-    async movementDiagonal(direction, finalNegativeX,finalPositiveX, finalNegativeZ,finalPositiveZ){
+    async movementDiagonal(direction, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ) {
         this.player.direction = direction;
         let reachedFinalX = false;
         let reachedFinalZ = false;
         this.player.keyStates.forward = true;
 
-        do{
+        do {
             await new Promise(resolve => setTimeout(resolve, 5));
-            reachedFinalX = this.player.position.x >= finalPositiveX ||  this.player.position.x <= finalNegativeX;
+            reachedFinalX = this.player.position.x >= finalPositiveX || this.player.position.x <= finalNegativeX;
             reachedFinalZ = this.player.position.z >= finalPositiveZ || this.player.position.z <= finalNegativeZ;
 
         } while (!reachedFinalX && !reachedFinalZ);
@@ -927,33 +935,38 @@ export default class ThumbRaiser {
      */
     calculateMovements(initialCell, destinyCells) {
         const movements = [];
-      
+
         for (const destinyCell of destinyCells) {
-            if(destinyCell[0]>initialCell[0]){
-                if(destinyCell[1]>initialCell[1]){      //diagonal cima / direita
-                    movements.push({UpRigth:true});
-                }else if(destinyCell[1]<initialCell[1]){//diagonal cima / esquerda
-                    movements.push({UpLeft:true})
-                }else{                                  //cima
-                    movements.push({Up:true})
+            if (destinyCell[0] > initialCell[0]) {
+                if (destinyCell[1] > initialCell[1]) {      //diagonal cima / direita
+                    movements.push({ UpRigth: true });
+                } else if (destinyCell[1] < initialCell[1]) {//diagonal cima / esquerda
+                    movements.push({ UpLeft: true })
+                } else {                                  //cima
+                    movements.push({ Up: true })
                 }
-            } else if(destinyCell[0]<initialCell[0]){
-                if(destinyCell[1]>initialCell[1]){      //diagonal baxo / direita
-                    movements.push({DownRight:true})
-                }else if(destinyCell[1]<initialCell[1]){//diagonal vaixo / esquerda
-                    movements.push({DownLeft:true})
-                }else{                                  //baixo
-                    movements.push({Down:true})
-                }   
-            } else if(destinyCell[1]>initialCell[1]){
-                movements.push({Rigth:true})
-            }else if(destinyCell[1]<initialCell[1]){
-                movements.push({Left:true})
+            } else if (destinyCell[0] < initialCell[0]) {
+                if (destinyCell[1] > initialCell[1]) {      //diagonal baxo / direita
+                    movements.push({ DownRight: true })
+                } else if (destinyCell[1] < initialCell[1]) {//diagonal vaixo / esquerda
+                    movements.push({ DownLeft: true })
+                } else {                                  //baixo
+                    movements.push({ Down: true })
+                }
+            } else if (destinyCell[1] > initialCell[1]) {
+                movements.push({ Rigth: true })
+            } else if (destinyCell[1] < initialCell[1]) {
+                movements.push({ Left: true })
             }
-      
-          initialCell = destinyCell; // Atualiza a posição inicial para a célula atual
+
+            initialCell = destinyCell; // Atualiza a posição inicial para a célula atual
         }
-      
+
         return movements;
-      }
+    }
+
+
+    isABridge() {
+        return this.existBridge;
+    }
 }

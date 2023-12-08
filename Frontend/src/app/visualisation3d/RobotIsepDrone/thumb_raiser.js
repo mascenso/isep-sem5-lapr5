@@ -202,7 +202,6 @@ export default class ThumbRaiser {
     
         // Add background
         this.scene3D.background = this.cubeTexture.textures;
-        console.log(this.scene3D.background)
 
       // Create the maze
         this.maze = new Maze(this.mazeParameters);
@@ -231,7 +230,7 @@ export default class ThumbRaiser {
         document.body.appendChild(this.statistics.dom);
 
         // Create a renderer and turn on shadows in the renderer
-        const canvas = document.getElementById("canvasForRender");
+        let canvas = document.getElementById("canvasForRender");
         this.renderer = new THREE.WebGLRenderer({  canvas:canvas });
         if (this.generalParameters.setDevicePixelRatio) {
             this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -713,7 +712,7 @@ export default class ThumbRaiser {
             }
         }
         else {
-            
+            //this.performAutomaticMovements()
             // Update the model animations
 
             const deltaT = this.clock.getDelta();
@@ -850,4 +849,90 @@ export default class ThumbRaiser {
         this.mazeParameters.url = path;
         this.maze = new Maze(this.mazeParameters);
     }
+
+    async performAutomaticMovements(movementsRobot, inicialPosition, initialDirection) {
+
+        const movements = this.calculateMovements(inicialPosition, movementsRobot);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        console.log(this.player.position.x+1)
+        // Loop through the movements
+        for (const movement of movements) {
+            console.log(this.player.position)
+            if (movement.forward) {
+            } else if (movement.backward) {
+                this.player.keyStates.backward = true;
+            } else if (movement.turnLeft) {
+                this.player.keyStates.left = true;
+            } else if (movement.turnRight) {
+                this.player.keyStates.right = true;
+            } else if(movement.Up){
+                this.player.direction = 180;
+                const finalPositive = this.player.position.z+1;
+                const finalNegative = this.player.position.z-1;
+                do{
+                    this.player.keyStates.forward = true;
+                    await new Promise(resolve => setTimeout(resolve, 10));
+                }while(this.player.position.z > finalNegative && this.player.position.z < finalPositive)
+            } else if (movement.Down){
+                this.player.direction = 0;
+                const finalPositive = this.player.position.z+1;
+                const finalNegative = this.player.position.z-1;
+                do{
+                    this.player.keyStates.forward = true;
+                    await new Promise(resolve => setTimeout(resolve, 10));
+                }while(this.player.position.z > finalNegative && this.player.position.z < finalPositive)
+            } else if(movement.Left){
+                this.player.direction = 270;
+                const finalPositive = this.player.position.x+1;
+                const finalNegative = this.player.position.x-1;
+                do{
+                    this.player.keyStates.forward = true;
+                    await new Promise(resolve => setTimeout(resolve, 10));
+                }while(this.player.position.x > finalNegative && this.player.position.x < finalPositive)
+                
+            } else if(movement.Rigth){
+                this.player.direction = 90;
+                const finalPositive = this.player.position.x+1;
+                const finalNegative = this.player.position.x-1;
+                do{
+                    this.player.keyStates.forward = true;
+                    await new Promise(resolve => setTimeout(resolve, 10));
+                }while(this.player.position.x > finalNegative && this.player.position.x < finalPositive)
+
+            }
+            // Wait for a short duration (adjust as needed)
+            //await new Promise(resolve => setTimeout(resolve, 1000)); // 1000 milliseconds = 1 second
+
+            // Release the keys
+            this.player.keyStates.forward = false;
+            this.player.keyStates.backward = false;
+            this.player.keyStates.left = false;
+            this.player.keyStates.right = false;
+
+            // Wait for another short duration before the next movement
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+    }
+
+    calculateMovements(initialCell, destinyCells) {
+        const movements = [];
+      
+        for (const destinyCell of destinyCells) {
+            if(destinyCell[0]>initialCell[0]){
+                movements.push({Up:true})
+            } else if(destinyCell[0]<initialCell[0]){
+                movements.push({Down:true})
+            }
+
+            if(destinyCell[1]>initialCell[1]){
+                movements.push({Rigth:true})
+            } else if(destinyCell[1]<initialCell[1]){
+                movements.push({Left:true})
+            }
+      
+          initialCell = destinyCell; // Atualiza a posição inicial para a célula atual
+        }
+      
+        return movements;
+      }
 }

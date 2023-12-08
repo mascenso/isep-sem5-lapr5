@@ -1,0 +1,42 @@
+<div class="dropdowns-plan-view">
+    <mat-form-field>
+        <mat-label>Escolha um edifício de inicio:</mat-label>
+        <mat-select id="dropdownBuildingInitPlan" [(ngModel)]="selectedBuildingInit">
+        <mat-option *ngFor="let building of buildingsInit" [value]="building.id">
+            {{ building.name }}
+        </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="selectedBuildingInit">
+        <mat-label>Escolha um floor de inicio:</mat-label>
+        <mat-select id="dropdownFloorInitPlan" [(ngModel)]="selectedFloorInit">
+        <mat-option *ngFor="let floor of floorsInit" [value]="floor.id">
+            {{ floor.floorNumber }}
+        </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <span *ngIf="selectedFloorInit" class="arrow">&#8594;</span>
+
+    <mat-form-field *ngIf="selectedFloorInit">
+        <mat-label>Escolha um edifício de destino:</mat-label>
+        <mat-select id="dropdownBuildingEndPlan" [(ngModel)]="selectedBuildingEnd">
+        <mat-option *ngFor="let building of buildingsEnd" [value]="building.id">
+            {{ building.name }}
+        </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="selectedBuildingEnd">
+        <mat-label>Escolha um floor de destino:</mat-label>
+        <mat-select id="dropdownFloorEndPlan" [(ngModel)]="selectedFloorEnd" (valueChange)="loadMapAndRoute()">
+        <mat-option *ngFor="let floor of floorsEnd" [value]="floor.id">
+            {{ floor.floorNumber }}
+        </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<div class="container-view" *ngIf="mapToLoad.data.map != undefined">
+    <app-view [showMenus]="false" [automaticPlaning]="mapToLoad" [cellsToMove]="cellsToMove"></app-view>
+</div>
+

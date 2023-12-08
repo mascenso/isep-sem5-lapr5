@@ -33,7 +33,7 @@ export default class Player {
 
             // Adjust the object's oversized dimensions (hard-coded; see previous comments)
             size.x = 3.0;
-            size.y = 4.4;
+            size.y = 2.2;
             size.z = 2.6;
 
             // Set the object's radius and eye height

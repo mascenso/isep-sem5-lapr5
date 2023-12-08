@@ -244,7 +244,6 @@ export default class Maze {
         doorObject.rotateY(Math.PI / 2.0);
         object.add(doorObject);
         object.add(wallObject);
-        console.log(object)
     }
     /**
      * Create a ceel with door open to South

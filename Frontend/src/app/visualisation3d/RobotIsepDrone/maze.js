@@ -28,14 +28,19 @@ export default class Maze {
             this.exitLocation = this.cellToCartesian(description.exitLocation);
 
             //Store the localion of bridges
-            this.bridgesList = [];
-            for (let i = 0; i < description.bridges.length; i++) {
-                this.bridgesList.push(this.cellToCartesian(description.bridges[i].locationBridge)) 
+            if(description.bridges){
+                this.bridgesList = [];
+                for (let i = 0; i < description.bridges.length; i++) {
+                    this.bridgesList.push(this.cellToCartesian(description.bridges[i].locationBridge)) 
+                }
             }
+
             //Store the location of elevators
-            this.elevatorsList = [];
-            for (let i = 0; i < description.elevators.length; i++) {
-                this.elevatorsList.push(this.cellToCartesian(description.elevators[i].position)) 
+            if(description.elevators){
+                this.elevatorsList = [];
+                for (let i = 0; i < description.elevators.length; i++) {
+                    this.elevatorsList.push(this.cellToCartesian(description.elevators[i].position)) 
+                }
             }
             
             this.bridgesBuilding = description.bridges;
@@ -515,20 +520,31 @@ export default class Maze {
 
     //For trigger the new map
     foundBridge(position){
-        for (let i = 0; i < this.bridgesList.length; i++) {
-            if(Math.abs(position.x - this.bridgesList[i].x) < 0.5 * this.scale.x && Math.abs(position.z - this.bridgesList[i].z) < 0.5 * this.scale.z){
-               return true 
-            }  
+        if(this.bridgesList){
+            for (let i = 0; i < this.bridgesList.length; i++) {
+                if(Math.abs(position.x - this.bridgesList[i].x) < 0.5 * this.scale.x && Math.abs(position.z - this.bridgesList[i].z) < 0.5 * this.scale.z){
+                   return true 
+                }  
+            }
+            return false;
+        }else{
+            return false
         }
-        return false;
+
     }
+
     findElevator(position){
-        for (let i = 0; i < this.elevatorsList.length; i++) {
-            if(Math.abs(position.x - this.elevatorsList[i].x) < 0.5 * this.scale.x && Math.abs(position.z+1.5 - this.elevatorsList[i].z) < 0.5 * this.scale.z){
-               return true 
-            }  
+        if(this.elevatorsList){
+            for (let i = 0; i < this.elevatorsList.length; i++) {
+                if(Math.abs(position.x - this.elevatorsList[i].x) < 0.5 * this.scale.x && Math.abs(position.z+1.5 - this.elevatorsList[i].z) < 0.5 * this.scale.z){
+                   return true 
+                }  
+            }
+            return false;
+        }else{
+            return false;
         }
-        return false;
+
     }
 
     buildingToRender(position){

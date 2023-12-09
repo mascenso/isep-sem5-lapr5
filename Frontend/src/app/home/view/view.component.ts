@@ -78,7 +78,8 @@ export class ViewComponent implements OnInit {
         ],
         selected: 0
       }, // Cube texture parameters
-
+      this.buildingService,
+      this.floorService
     );
 
 
@@ -88,12 +89,12 @@ export class ViewComponent implements OnInit {
     requestAnimationFrame(this.animate.bind(this));
     // Update the game
     //console.log(this.thumbRaiser.player.position)
-    let idx = this.thumbRaiser.isABridge();
+  /*  let idx = this.thumbRaiser.isABridge();
     if (idx != -1) {
       this.nextMapByBridge(idx);
       console.log("APOS nextMapByBridge");
     }
-
+*/
     // Update the game
     this.thumbRaiser.update()
 
@@ -163,8 +164,8 @@ export class ViewComponent implements OnInit {
 
   nextMapByBridge(index: number) {
     //this.changeMap("./assets/buildings/EdificioB_piso_2.json");
-
-    console.log("Iremos trocar de mapa de acordo com a ligação da bridge!");
+/*
+    console.log("Iremos trocar de mapa de acordo com a ligação da bridge!", index);
    // console.log("MAPA ATUAL", this.mapToRender);
 
    let connectedBuildingCode = this.mapToRender.bridges[index].buildind.code;
@@ -172,16 +173,19 @@ export class ViewComponent implements OnInit {
    let nextMapStartPosition = this.mapToRender.bridges[index].buildind.inicialPosition;
 
 
-
+   console.log("BuildingCode",connectedBuildingCode);
+   
     this.buildingService.getAllBuildings().subscribe(
       data => {
         // Verifica se há dados e filtra pelo edifício com o código correto                        
         let connectedBuilding = data.find(building => building.code.includes(connectedBuildingCode));
+        console.log("connectedBuilding #### ",connectedBuilding);
 
         this.floorService.getFloorsAtBuildings(connectedBuilding?.id).subscribe(
           floorData => {
 
             let connectedFloor = floorData.find(objeto => objeto.floorNumber === connectedFloorNumber);
+            console.log("connectedFloor #### ",connectedFloor);
 
             if (connectedFloor) {
               this.mapToRender = this.floors.find(objeto => objeto.id === connectedFloor?.id)?.floorMap;
@@ -190,9 +194,10 @@ export class ViewComponent implements OnInit {
               this.mapToRender.inicialPosition = nextMapStartPosition;
               this.thumbRaiser.maze.url = this.mapToRender;
 
-              console.log("#### MAPA ####");
-              this.thumbRaiser.changeMap(this.mapToRender);
-              console.log("#### GAME OVER ####");
+              console.log("#### MAPA ####",this.thumbRaiser.maze.url);
+              //this.thumbRaiser.changeMap(this.mapToRender);
+              //console.log("#### GAME OVER ####", this.thumbRaiser.changeMap(this.mapToRender));
+                  this.changeMap("./assets/buildings/EdificioB_piso_2.json");
 
             }else{ 
               if (connectedFloor.length == 0) {
@@ -214,7 +219,7 @@ export class ViewComponent implements OnInit {
       });
 
 
-
+*/
 
     //this.changeMap("./assets/buildings/EdificioB_piso_2.json");
 

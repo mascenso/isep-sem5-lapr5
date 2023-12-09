@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <OutputType>Exe</OutputType>
-    <RootNamespace>YourNamespace</RootNamespace>
+    <RootNamespace>UserManagement</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

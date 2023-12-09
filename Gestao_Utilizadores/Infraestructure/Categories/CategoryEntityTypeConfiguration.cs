@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using DDDSample1.Domain.Categories;
+using UserManagement.Domain.Categories;
 
-namespace DDDSample1.Infrastructure.Categories
+namespace UserManagement.Infrastructure.Categories
 {
     internal class CategoryEntityTypeConfiguration : IEntityTypeConfiguration<Category>
     {

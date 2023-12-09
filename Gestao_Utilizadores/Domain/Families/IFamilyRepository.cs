@@ -1,7 +1,7 @@
-using DDDSample1.Domain.Shared;
+using UserManagement.Domain.Shared;
 
 
-namespace DDDSample1.Domain.Families
+namespace UserManagement.Domain.Families
 {
     public interface IFamilyRepository:IRepository<Family,FamilyId>
     {

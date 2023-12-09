@@ -1,8 +1,8 @@
 using System;
-using DDDSample1.Domain.Shared;
+using UserManagement.Domain.Shared;
 using Newtonsoft.Json;
 
-namespace DDDSample1.Domain.Products
+namespace UserManagement.Domain.Products
 {
     public class ProductId : EntityId
     {

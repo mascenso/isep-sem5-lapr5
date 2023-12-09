@@ -1,7 +1,7 @@
 using System;
-using DDDSample1.Domain.Shared;
+using UserManagement.Domain.Shared;
 
-namespace DDDSample1.Domain.Categories
+namespace UserManagement.Domain.Categories
 {
     public class Category : Entity<CategoryId>, IAggregateRoot
     {

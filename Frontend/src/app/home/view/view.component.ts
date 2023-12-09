@@ -142,6 +142,7 @@ export class ViewComponent implements OnInit {
     }
 
     this.thumbRaiser.maze.url = this.mapToRender;
+    //this.thumbRaiser.listFloorThisBuilding(this.floors) ;
     this.thumbRaiser.changeMap(this.mapToRender);
   }
   async haveMap() {

@@ -167,7 +167,7 @@ import UserInterface from "./user_interface.js";
  */
 
 export default class ThumbRaiser {
-    constructor(generalParameters, mazeParameters, playerParameters, lightsParameters, fogParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters, cubeTexturesParameters) {
+    constructor(generalParameters, mazeParameters, playerParameters, lightsParameters, fogParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters, cubeTexturesParameters, buildingService, floorService) {
         this.generalParameters = merge({}, generalData, generalParameters);
         this.mazeParameters = merge({}, mazeData, mazeParameters);
         this.playerParameters = merge({}, playerData, playerParameters);
@@ -331,8 +331,13 @@ export default class ThumbRaiser {
 
         this.listFloors = [];
 
-        // para ativar a função no component quando chegar a uma passagem
-        this.existBridge = -1;
+        //injeção dos serviços (não é a melhor pratica)
+        this.buildingService = buildingService;
+        this.floorService = floorService;
+
+        // para guardar a informação da passagem referente ao proximo mapa a carregar
+        this.bridgeInfo = "";
+        //this.connectedBuilding = "";
 
     }
 
@@ -726,22 +731,72 @@ export default class ThumbRaiser {
 
             // Update the player
             if (!this.animations.actionInProgress) {
+                console.log("AQUI!");
                 // Check if the player found the exit
-                this.existBridge = this.maze.foundBridge(this.player.position);
+                this.bridgeInfo = this.maze.foundBridge(this.player.position);
+                // console.log("bridgeInfo",bridgeInfo);
+                //console.log("csvd", this.existBridge);
+                if (this.bridgeInfo) {
 
+                    console.log("Iremos trocar de mapa de acordo com a ligação da bridge!");
+                    // console.log("MAPA ATUAL", this.mapToRender);
 
-                if (false) {
-                    //  this.mazeParameters.url = "./mazes/EdificioB piso 2.json"
+                    let connectedBuildingCode = this.bridgeInfo.code;
+                    let connectedFloorNumber = this.bridgeInfo.floor;
+                    let nextMapStartPosition = this.bridgeInfo.inicialPosition;
 
-                    //this.maze = new Maze(changeMap("./mazes/EdificioB piso 2.json"));
-                    // changeMap("./mazes/EdificioB piso 2.json");
+                    // this.changeMap("./assets/buildings/EdificioB_piso_2.json");
 
+                    this.buildingService.getAllBuildings().subscribe(
+                        data => {
+                            // Verifica se há dados e filtra pelo edifício com o código correto                        
+                            let connectedBuilding = data.find(building => building.code.includes(connectedBuildingCode));
+                            console.log("connectedBuilding #### ", connectedBuilding);
 
-                    //console.log("colocar aqui novo edificio")
-                }else if(this.maze.findElevator(this.player.position)){
+                            this.floorService.getFloorsAtBuildings(connectedBuilding?.id).subscribe(
+                                floorData => {
+
+                                    let connectedFloor = floorData.find(objeto => objeto.floorNumber === connectedFloorNumber);
+                                    console.log("connectedFloor #### ", connectedFloor);
+
+                                    if (connectedFloor) {
+                                        this.mapToRender = this.floors.find(objeto => objeto.id === connectedFloor?.id)?.floorMap;
+                                        console.log("NOVO MAPA", this.mapToRender);
+
+                                        this.mapToRender.inicialPosition = nextMapStartPosition;
+                                        this.thumbRaiser.maze.url = this.mapToRender;
+
+                                        console.log("#### MAPA ####", this.thumbRaiser.maze.url);
+                                        //this.thumbRaiser.changeMap(this.mapToRender);
+                                        //console.log("#### GAME OVER ####", this.thumbRaiser.changeMap(this.mapToRender));
+                                        this.thumbRaiser.changeMap(this.mapToRender);
+                                        //this.changeMap("./assets/buildings/EdificioB_piso_2.json");
+
+                                    } else {
+                                        if (connectedFloor.length == 0) {
+                                            this._snackBar.open("There is no map on any floor of this building", "close", {
+                                                duration: 5000,
+                                                panelClass: ['snackbar-error']
+                                            })
+                                        }
+                                    };
+                                },
+                                error => {
+                                    this._snackBar.open(error.error, "close", {
+                                        duration: 5000,
+                                        panelClass: ['snackbar-error']
+                                    });
+                                }
+                            )
+                        }).catch(error => {
+                            console.error('Error getting building:', error);
+                        });
+                
+
+                } else if (this.maze.findElevator(this.player.position)) {
                     console.log("encontrei um elevador")
                     this.selectNewFloorFromBuilding();
-                }else {
+                } else {
                     let coveredDistance = this.player.walkingSpeed * deltaT;
                     let directionIncrement = this.player.turningSpeed * deltaT;
                     if (this.player.keyStates.run) {
@@ -768,7 +823,7 @@ export default class ThumbRaiser {
                     }
                     else if (this.player.keyStates.forward) {
                         const newPosition = new THREE.Vector3(coveredDistance * Math.sin(direction), 0.0, coveredDistance * Math.cos(direction)).add(this.player.position);
-                        if (this.collision(newPosition)) {
+                        if (this.collision(newPosition) ) {
                             // this.animations.fadeToAction("Death", 0.2);
                             this.animations.fadeToAction("None", 0.2);
                         }
@@ -853,13 +908,21 @@ export default class ThumbRaiser {
         }
     }
     async changeMap(path) {
-        console.log("Entrou aqui");
-        this.gameRunning = false
-        this.scene3D.remove(this.maze.object)
-        this.mazeParameters.url = path;
-        console.log("antes do new maze");
+        try {
+            console.log("Entrou aqui");
+            this.gameRunning = false
+            this.scene3D.remove(this.maze.object)
+            this.mazeParameters.url = path;
+            console.log("antes do new maze", path);
 
-        this.maze = new Maze(this.mazeParameters);
+            console.log("mazeParameters", this.mazeParameters);
+
+            this.maze = new Maze(this.mazeParameters);
+
+
+        } catch (error) {
+            console.error('Error changing map:', error);
+        }
     }
 
     async performAutomaticMovements(movementsRobot, inicialPosition) {
@@ -967,15 +1030,17 @@ export default class ThumbRaiser {
         return movements;
     }
 
+    /*
+        isABridge() {
+            return this.existBridge;
+        }
+        */
 
-    isABridge() {
-        return this.existBridge;
-    }
-    
-    listFloorThisBuilding(floors){
+
+    listFloorThisBuilding(floors) {
         this.listFloors = floors;
     }
-    selectNewFloorFromBuilding(){
+    selectNewFloorFromBuilding() {
         this.setActiveViewCamera(this.firstPersonViewCamera);
         this.player.direction = -90;
 

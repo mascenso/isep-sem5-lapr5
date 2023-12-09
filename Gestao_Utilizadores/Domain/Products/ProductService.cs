@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using DDDSample1.Domain.Shared;
-using DDDSample1.Domain.Categories;
+using UserManagement.Domain.Shared;
+using UserManagement.Domain.Categories;
 
-namespace DDDSample1.Domain.Products
+namespace UserManagement.Domain.Products
 {
     public class ProductService
     {

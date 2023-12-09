@@ -1,8 +1,8 @@
 using System;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using DDDSample1.Domain.Shared;
+using UserManagement.Domain.Shared;
 
-namespace DDDSample1.Infrastructure.Shared
+namespace UserManagement.Infrastructure.Shared
 {
     public class EntityIdValueConverter<TTypedIdValue> : ValueConverter<TTypedIdValue, String>
         where TTypedIdValue : EntityId

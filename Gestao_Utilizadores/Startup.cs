@@ -1,21 +1,22 @@
-﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using DDDSample1.Infrastructure;
-using DDDSample1.Infrastructure.Categories;
-using DDDSample1.Infrastructure.Products;
-using DDDSample1.Infrastructure.Families;
-using DDDSample1.Infrastructure.Shared;
-using DDDSample1.Domain.Shared;
-using DDDSample1.Domain.Categories;
-using DDDSample1.Domain.Products;
-using DDDSample1.Domain.Families;
+using UserManagement.Infrastructure;
+using UserManagement.Infrastructure.Categories;
+using UserManagement.Infrastructure.Products;
+using UserManagement.Infrastructure.Families;
+using UserManagement.Infrastructure.Shared;
+using UserManagement.Domain.Shared;
+using UserManagement.Domain.Categories;
+using UserManagement.Domain.Products;
+using UserManagement.Domain.Families;
+using UserManagement.Domain.Users;
 
-namespace DDDSample1
+namespace UserManagement
 {
     public class Startup
     {
@@ -29,8 +30,8 @@ namespace DDDSample1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DDDSample1DbContext>(opt =>
-                opt.UseInMemoryDatabase("DDDSample1DB")
+            services.AddDbContext<UserManagementDbContext>(opt =>
+                opt.UseInMemoryDatabase("UserManagementDB")
                 .ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>());
 
             ConfigureMyServices(services);

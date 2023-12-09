@@ -29,7 +29,7 @@ caminho_handler(Request) :-
 
 
 
-:- consult('AlgoritmosGenericos.pl').
+:- consult('Algoritmos.pl').
 :- consult('BC_RobDroneGo.pl').
 
 
@@ -87,8 +87,8 @@ map_value(Col,Lin,Map,V):-
 
 /*Predicado auxiliar para adicionar conexões com pesos */
 cria_conexoes(Col1,Lin1,Col2,Lin2,Peso) :-
-    assertz(ligacel(cel(Col1,Lin1),cel(Col2,Lin2),Peso)),
-	assertz(edge(cel(Col1,Lin1),cel(Col2,Lin2))).
+    assertz(ligacel([Col1,Lin1],[Col2,Lin2],Peso)),
+	assertz(edge([Col1,Lin1],[Col2,Lin2])).
 
 /* Predicado para mostrar as conexões criadas -> testar grafo */
 mostra_conexoes2 :-

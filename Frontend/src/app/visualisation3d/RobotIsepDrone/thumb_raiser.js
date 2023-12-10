@@ -337,7 +337,6 @@ export default class ThumbRaiser {
 
         // para guardar a informação da passagem referente ao proximo mapa a carregar
         this.bridgeInfo = "";
-        //this.connectedBuilding = "";
 
     }
 
@@ -731,15 +730,13 @@ export default class ThumbRaiser {
 
             // Update the player
             if (!this.animations.actionInProgress) {
-                console.log("AQUI!");
-                // Check if the player found the exit
+
+                // Check if the player found a bridge
                 this.bridgeInfo = this.maze.foundBridge(this.player.position);
-                // console.log("bridgeInfo",bridgeInfo);
-                //console.log("csvd", this.existBridge);
+
                 if (this.bridgeInfo) {
 
-                    console.log("Iremos trocar de mapa de acordo com a ligação da bridge!");
-                    // console.log("MAPA ATUAL", this.mapToRender);
+                    console.log("We will change maps according to the bridge connection!");
 
                     let connectedBuildingCode = this.bridgeInfo.code;
                     let connectedFloorNumber = this.bridgeInfo.floor;
@@ -749,28 +746,26 @@ export default class ThumbRaiser {
 
                     this.buildingService.getAllBuildings().subscribe(
                         data => {
-                            // Verifica se há dados e filtra pelo edifício com o código correto                        
+                            // Verifica se há dados e faz o find pelo edifício com o código correto                        
                             let connectedBuilding = data.find(building => building.code.includes(connectedBuildingCode));
-                            console.log("connectedBuilding #### ", connectedBuilding);
 
                             this.floorService.getFloorsAtBuildings(connectedBuilding?.id).subscribe(
                                 floorData => {
 
                                     let connectedFloor = floorData.find(objeto => objeto.floorNumber === connectedFloorNumber);
-                                    console.log("connectedFloor #### ", connectedFloor);
 
                                     if (connectedFloor) {
-                                        this.mapToRender = this.floors.find(objeto => objeto.id === connectedFloor?.id)?.floorMap;
-                                        console.log("NOVO MAPA", this.mapToRender);
 
-                                        this.mapToRender.inicialPosition = nextMapStartPosition;
-                                        this.thumbRaiser.maze.url = this.mapToRender;
+                                        connectedFloor.floorMap.initialPosition = nextMapStartPosition;
 
-                                        console.log("#### MAPA ####", this.thumbRaiser.maze.url);
-                                        //this.thumbRaiser.changeMap(this.mapToRender);
-                                        //console.log("#### GAME OVER ####", this.thumbRaiser.changeMap(this.mapToRender));
-                                        this.thumbRaiser.changeMap(this.mapToRender);
-                                        //this.changeMap("./assets/buildings/EdificioB_piso_2.json");
+                                        this.changeMap(connectedFloor.floorMap);
+
+                                        this.setActiveViewCamera(this.firstPersonViewCamera);
+
+                                        //this.animations.fadeToAction("run", 0.2);
+                                        //this.playerAnimations.fadeToAction("run", 0.2); 
+
+
 
                                     } else {
                                         if (connectedFloor.length == 0) {
@@ -791,7 +786,7 @@ export default class ThumbRaiser {
                         }).catch(error => {
                             console.error('Error getting building:', error);
                         });
-                
+
 
                 } else if (this.maze.findElevator(this.player.position)) {
                     console.log("encontrei um elevador")
@@ -823,7 +818,7 @@ export default class ThumbRaiser {
                     }
                     else if (this.player.keyStates.forward) {
                         const newPosition = new THREE.Vector3(coveredDistance * Math.sin(direction), 0.0, coveredDistance * Math.cos(direction)).add(this.player.position);
-                        if (this.collision(newPosition) ) {
+                        if (this.collision(newPosition)) {
                             // this.animations.fadeToAction("Death", 0.2);
                             this.animations.fadeToAction("None", 0.2);
                         }
@@ -909,16 +904,11 @@ export default class ThumbRaiser {
     }
     async changeMap(path) {
         try {
-            console.log("Entrou aqui");
+
             this.gameRunning = false
             this.scene3D.remove(this.maze.object)
             this.mazeParameters.url = path;
-            console.log("antes do new maze", path);
-
-            console.log("mazeParameters", this.mazeParameters);
-
             this.maze = new Maze(this.mazeParameters);
-
 
         } catch (error) {
             console.error('Error changing map:', error);

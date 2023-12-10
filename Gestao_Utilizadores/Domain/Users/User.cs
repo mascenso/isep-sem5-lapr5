@@ -1,38 +1,38 @@
-using Microsoft.AspNetCore.Identity;
 using System;
 using UserManagement.Domain.Shared;
-using UserManagement.Domain.Users;
 
 namespace UserManagement.Domain.Users
 {
   public class User : Entity<UserId>, IAggregateRoot
   {
-    public UserEmail Email { get; private set; }
+    private UserId _id;
 
-    public UserPassword Password { get; private set; }
+    private UserEmail _email;
 
-    public string FirstName { get; private set; }
+    public UserPassword _password;
 
-    public string LastName { get; private set; }
+    private string _firstName;
 
-    public string Role { get; private set; }
+    private string _lastName;
 
-    public bool Active { get; private set; }
+    private string _role;
+
+    private bool _active;
 
     private User()
     {
-      this.Active = true;
+      this._active = true;
     }
 
-    public User(UserEmail Email, UserPassword UserPassword, string FirstName, string LastName, string Role, bool Active)
+    public User(UserEmail email, UserPassword password, string firstName, string lastName, string role, bool active)
     {
-      this.Id = new UserId(Guid.NewGuid());
-      this.Email = Email;
-      this.Password = UserPassword;
-      this.FirstName = FirstName;
-      this.LastName = LastName;
-      this.Role = Role;
-      this.Active = Active;
+      this._id = new UserId(Guid.NewGuid());
+      this._email = email;
+      this._password = password;
+      this._firstName = firstName;
+      this._lastName = lastName;
+      this._role = role;
+      this._active = active;
     }
 
     //public void ChangeDescription(string description)

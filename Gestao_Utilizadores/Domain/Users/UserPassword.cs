@@ -9,31 +9,31 @@ namespace UserManagement.Domain.Users
 {
   public class UserPassword : IValueObject
   {
-    const int KeySize = 64;
-    const int Iterations = 350000;
-    HashAlgorithmName HashAlgorithm = HashAlgorithmName.SHA512;
+    private const int KEY_SIZE = 64;
+    private const int ITERATIONS = 350000;
+    private HashAlgorithmName HASH_ALGORITHM = HashAlgorithmName.SHA512;
 
-    public string Value { get; private set; }
-    public bool IsHashed { get; private set; }
+    public string value;
+    public bool isHashed;
 
     private UserPassword() { }
 
-    public UserPassword(string value, bool IsHashed = false)
+    public UserPassword(string value, bool isHashed = false)
     {
-      this.Value = value;
-      this.IsHashed = IsHashed;
+      this.value = value;
+      this.isHashed = isHashed;
     }
 
     public bool VerifyPassword(string password)
     {
-      byte[] Salt = RandomNumberGenerator.GetBytes(KeySize);
+      byte[] salt = RandomNumberGenerator.GetBytes(KEY_SIZE);
       byte[] hashToCompare;
-      if (this.IsHashed)
+      if (this.isHashed)
       {
-        hashToCompare = Rfc2898DeriveBytes.Pbkdf2(password, Salt, Iterations, HashAlgorithm, KeySize);
-        return CryptographicOperations.FixedTimeEquals(hashToCompare, Convert.FromHexString(this.Value));
+        hashToCompare = Rfc2898DeriveBytes.Pbkdf2(password, salt, ITERATIONS, HASH_ALGORITHM, KEY_SIZE);
+        return CryptographicOperations.FixedTimeEquals(hashToCompare, Convert.FromHexString(this.value));
       }
-      return this.Value.Equals(password);
+      return this.value.Equals(password);
     }
 
     // add validation rules (password length etc)

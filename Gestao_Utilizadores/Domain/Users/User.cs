@@ -33,6 +33,16 @@ namespace UserManagement.Domain.Users
       this._active = active;
     }
 
+    public string Email => _email.Value();
+
+    public string FirstName => _firstName;
+
+    public string LastName => _lastName;
+
+    public string Role => _role;
+
+    public bool Active => _active;
+
     //public void ChangeDescription(string description)
     //{
     //  if (!this.Active)

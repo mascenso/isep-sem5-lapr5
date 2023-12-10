@@ -109,18 +109,18 @@ corredor_mtx(b2, c3,[[1, 1],
                      [0, 0],
                      [1, 1]]).                    
 
-%posiçao dos elevadores no map do respetivo floor (F1, cel(COL, LIN))
-elev_pos(a1,cel(2,5)).
-elev_pos(a2,cel(3,5)).
-elev_pos(b2,cel(4,1)).
-elev_pos(c3,cel(1,4)).
+%posiçao dos elevadores no map do respetivo floor (F1, (COL, LIN))
+elev_pos(a1,[2,5]).
+elev_pos(a2,[3,5]).
+elev_pos(b2,[4,1]).
+elev_pos(c3,[1,4]).
 
-%posiçao das passagens no map do respetivo floor (E1, E2, cel(COL, LIN))
-passag_pos(a2,b2,cel(3,5)).
-passag_pos(b2,c3,cel(3,5)).
+%posiçao das passagens no map do respetivo floor (E1, E2, (COL, LIN))
+passag_pos(a2,b2,[3,5]).
+passag_pos(b2,c3,[3,5]).
 
 %posição incial no primeiro floor. Susbtituir depois pela posição inicial do robot aquando a integração com o JSON.
-pos_init(a1,cel(2,3)).
-pos_init(a2,cel(2,4)).
-pos_init(b2,cel(2,3)).
-pos_init(c3,cel(3,4)).
+pos_init(a1,[2,3]).
+pos_init(a2,[2,4]).
+pos_init(b2,[2,3]).
+pos_init(c3,[3,4]).

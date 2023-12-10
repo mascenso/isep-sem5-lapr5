@@ -285,5 +285,5 @@ aStar2(Dest,[(_,Ca,LA)|Outros],Cam,Custo):-
 	aStar2(Dest,TodosOrd,Cam,Custo).
 
 /* calcula o custo para de ir do ponto A ao B.*/
-estimativa(cel(X1,Y1),cel(X2,Y2),Estimativa):-
+estimativa([X1,Y1],[X2,Y2],Estimativa):-
 	Estimativa is sqrt((X1-X2)^2+(Y1-Y2)^2).

@@ -5,8 +5,6 @@ namespace UserManagement.Domain.Users
 {
   public class User : Entity<UserId>, IAggregateRoot
   {
-    private UserId _id;
-
     private UserEmail _email;
 
     public UserPassword _password;
@@ -26,7 +24,7 @@ namespace UserManagement.Domain.Users
 
     public User(UserEmail email, UserPassword password, string firstName, string lastName, string role, bool active)
     {
-      this._id = new UserId(Guid.NewGuid());
+      this.Id = new UserId(Guid.NewGuid());
       this._email = email;
       this._password = password;
       this._firstName = firstName;

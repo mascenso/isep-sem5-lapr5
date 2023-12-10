@@ -5,7 +5,7 @@
 :- use_module(library(http/http_json)).
 :- use_module(library(http/http_cors)).
 
-:- consult('Algoritmos.pl').
+:- consult('AlgoritmosGenericos.pl').
 :- consult('BC_RobDroneGo.pl').
 :- consult('Percurso_Robots.pl').
 

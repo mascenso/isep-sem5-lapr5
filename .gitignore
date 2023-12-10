@@ -7,6 +7,8 @@
 /Frontend/cypress/screenshots
 
 /Gestao_Informacao/node_modules
+/Gestao_Utilizadores/bin
+/Gestao_Utilizadores/obj
 
 # misc
 .DS_Store
@@ -23,3 +25,4 @@ build
 .gitignore
 
 .idea
+.vs

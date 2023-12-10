@@ -15,7 +15,7 @@ tarefa(t5,3,8,2).
 % tarefas(NTarefas).
 tarefas(5).
 
-% parameteriza��o
+% parameterização
 inicializa:-write('Numero de novas Geracoes: '),read(NG), 			(retract(geracoes(_));true), asserta(geracoes(NG)),
 	write('Dimensao da Populacao: '),read(DP),
 	(retract(populacao(_));true), asserta(populacao(DP)),
@@ -106,10 +106,10 @@ btroca([X|L1],[X|L2]):-btroca(L1,L2).
 
 
 gera_geracao(G,G,Pop):-!,
-	write('Gera��o '), write(G), write(':'), nl, write(Pop), nl.
+	write('Geração '), write(G), write(':'), nl, write(Pop), nl.
 
 gera_geracao(N,G,Pop):-
-	write('Gera��o '), write(N), write(':'), nl, write(Pop), nl,
+	write('Geração '), write(N), write(':'), nl, write(Pop), nl,
 	cruzamento(Pop,NPop1),
 	mutacao(NPop1,NPop),
 	avalia_populacao(NPop,NPopAv),

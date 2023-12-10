@@ -5,6 +5,7 @@ using UserManagement.Domain.Families;
 using UserManagement.Infrastructure.Categories;
 using UserManagement.Infrastructure.Products;
 using UserManagement.Domain.Users;
+using UserManagement.Infrastructure.Users;
 
 namespace UserManagement.Infrastructure
 {
@@ -16,6 +17,8 @@ namespace UserManagement.Infrastructure
 
         public DbSet<Family> Families { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
         public UserManagementDbContext(DbContextOptions options) : base(options)
         {
 
@@ -26,7 +29,7 @@ namespace UserManagement.Infrastructure
             modelBuilder.ApplyConfiguration(new CategoryEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ProductEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new FamilyEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
         }
-        public DbSet<UserManagement.Domain.Users.UserDto> UserDto { get; set; }
     }
 }

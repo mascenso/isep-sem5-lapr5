@@ -330,6 +330,7 @@ export default class ThumbRaiser {
         this.activeElement = document.activeElement;
 
         this.listFloors = [];
+        this.floorActual = {};
 
         //injeção dos serviços (não é a melhor pratica)
         this.buildingService = buildingService;
@@ -1027,12 +1028,287 @@ export default class ThumbRaiser {
         */
 
 
-    listFloorThisBuilding(floors) {
+    listFloorThisBuilding(floors,atualFloor) {
         this.listFloors = floors;
+        this.floorActual = atualFloor;
     }
+
     selectNewFloorFromBuilding() {
         this.setActiveViewCamera(this.firstPersonViewCamera);
         this.player.direction = -90;
-
+        this.animations.actionInProgress = true;
+        this.initializeElevator(this.player,this.floorActual, this.animations,this.maze);
+        //this.animations.actionInProgress = false;
     }
+
+    /**
+     * Animacao de elevador
+     * Esta a ser criado html e css atraves de javascript
+     * Nao mexer , a nao ser que sejas o Miguel Cardoso :D
+     * @param {*} player 
+     */
+    initializeElevator(player,floorActual, animations, maze) {
+        var ELEVATOR = {};
+      
+        function createElevatorElements() {
+            var elevatorPanel = document.createElement('div');
+            elevatorPanel.id = 'elevator-panel';
+            elevatorPanel.style.background = '#dddddd';
+            elevatorPanel.style.border = '5px solid #000000';
+            elevatorPanel.style.padding = '30px';
+            elevatorPanel.style.width = '30%';
+            elevatorPanel.style.height = '70%';
+            elevatorPanel.style.zIndex = '9999';
+            elevatorPanel.style.position = 'fixed';
+            elevatorPanel.style.top = '50%';
+            elevatorPanel.style.left = '50%';
+            elevatorPanel.style.transform = 'translate(-50%, -50%)';
+        
+            var displayPanel = document.createElement('div');
+            displayPanel.id = 'display-panel';
+            displayPanel.style.position = 'relative';
+            displayPanel.style.background = '#000000';
+            displayPanel.style.overflow = 'hidden';
+            displayPanel.style.height = "40%";
+        
+            var floorNumber = document.createElement('div');
+            floorNumber.id = 'floor-number';
+            floorNumber.className = 'elevator-info';
+            floorNumber.textContent = floorActual.floorNumber;
+            floorNumber.style.position = 'absolute';
+            floorNumber.style.color = '#ffffff';
+            floorNumber.style.fontSize = '20em';
+            floorNumber.style.float = 'left';
+            floorNumber.style.margin = 'auto';
+        
+            var directionInfo = document.createElement('div');
+            directionInfo.id = 'direction-info';
+            directionInfo.className = 'elevator-info';
+            directionInfo.style.float = 'right';
+            directionInfo.style.height = '100%';
+            directionInfo.style.width =  '50%';
+            directionInfo.style.display = "grid";
+            directionInfo.style.alignItems = "center";
+            directionInfo.style.justifyContent = "center";
+        
+            var upIndicator = document.createElement('div');
+            upIndicator.id = 'up-indicator';
+            upIndicator.className = 'indicator';
+            upIndicator.style.backgroundColor = '#005900';
+            upIndicator.style.height = '70px';
+            upIndicator.style.width = '70px';
+        
+            var downIndicator = document.createElement('div');
+            downIndicator.id = 'down-indicator';
+            downIndicator.className = 'indicator';
+            downIndicator.style.backgroundColor = '#990000';
+            downIndicator.style.height = '70px';
+            downIndicator.style.width = '70px';
+        
+            var floorSelection = document.createElement('div');
+            floorSelection.id = 'floor-selection';
+            floorSelection.style.padding = '30px 0';
+        
+            var navigationList = document.createElement('ul');
+            navigationList.id = 'navigation';
+            navigationList.style.position = 'relative';
+
+            var arrowElement = document.createElement('div');
+            arrowElement.id = 'arrowElementExit'
+            arrowElement.style.position = 'absolute';
+            arrowElement.style.width = '0';
+            arrowElement.style.height = '0';
+            arrowElement.style.left = '-15%';
+            arrowElement.style.borderLeft = '20px solid transparent';
+            arrowElement.style.borderRight = '20px solid transparent';
+            arrowElement.style.borderBottom = '40px solid red';
+            arrowElement.style.marginBottom = '20px';
+            arrowElement.style.transform = 'rotate(-90deg)';
+            arrowElement.style.cursor = 'pointer';
+        
+            for (var i = 1; i <= 4; i++) {
+              var listItem = document.createElement('li');
+              listItem.style.position = 'absolute';
+              listItem.style.listStyle = 'none';
+              listItem.style.width = '110px';
+              listItem.style.lineHeight = '100px';
+        
+              if (i > 2) {
+                listItem.style.top = '150px';
+              }
+        
+              if (i % 2 === 0) {
+                listItem.style.right = '0';
+              } else {
+                listItem.style.left = '0';
+              }
+              var button = document.createElement('div');
+              button.className = 'button';
+              button.textContent = i;
+              button.style.backgroundColor = '#eeeeee';
+              button.style.borderRadius = '55px';
+              button.style.border = '5px solid #000000';
+              button.style.fontSize = '5em';
+              button.style.textAlign = 'center';
+              button.style.lineHeight = '100px';
+              button.style.color = '#000000';
+              button.style.cursor = 'pointer';
+
+              listItem.appendChild(button);
+              navigationList.appendChild(listItem);
+            }
+        
+            directionInfo.appendChild(upIndicator);
+            directionInfo.appendChild(downIndicator);
+        
+            displayPanel.appendChild(floorNumber);
+            displayPanel.appendChild(directionInfo);
+        
+            elevatorPanel.appendChild(displayPanel);
+            elevatorPanel.appendChild(floorSelection);
+            elevatorPanel.appendChild(arrowElement);
+            floorSelection.appendChild(navigationList);
+        
+            document.body.appendChild(elevatorPanel);
+          }
+        
+          // Adicionar a criação de elementos antes da lógica existente
+        createElevatorElements();
+
+        ELEVATOR.selectedFloorList = [];
+        ELEVATOR.$button = document.querySelectorAll('.button');
+        ELEVATOR.$floorNumber = document.getElementById('floor-number');
+        ELEVATOR.$upIndicator = document.getElementById('up-indicator');
+        ELEVATOR.$downIndicator = document.getElementById('down-indicator');
+        ELEVATOR.$exitButton = document.getElementById('arrowElementExit');
+        ELEVATOR.speedFactor = 10000;
+      
+        ELEVATOR.initialize = function (elevatorSpeed) {
+          ELEVATOR.speedFactor = elevatorSpeed;
+            
+          ELEVATOR.$exitButton.addEventListener('click',function(){
+            document.getElementById('elevator-panel').remove();
+            player.position = maze.cellToCartesian(floorActual.floorMap.elevators[0].exit)
+            animations.actionInProgress = false;
+
+
+            
+          })
+          ELEVATOR.$button.forEach(function (button) {
+            button.addEventListener('click', function () {
+              var selectedFloor = button.textContent;
+              var currentFloor = ELEVATOR.$floorNumber.textContent;
+      
+              if (!button.classList.contains('selectedElevatorButton')) {
+                button.classList.add('selectedElevatorButton');
+      
+                if (selectedFloor === currentFloor) {
+                  setTimeout(function () {
+                    button.classList.remove('selectedElevatorButton');
+                  }, ELEVATOR.speedFactor / 4);
+                } else {
+                  ELEVATOR.selectedFloorList.push(selectedFloor);
+                  if (ELEVATOR.selectedFloorList.length === 1) {
+                    changeFloor();
+                  }
+                }
+              }
+            });
+          });
+        };
+    
+
+        async function changeFloor() {
+          var selectedFloor = ELEVATOR.selectedFloorList[0];
+          var currentFloor = ELEVATOR.$floorNumber.textContent;
+
+          //Up
+          if (selectedFloor > currentFloor) {
+            ELEVATOR.$upIndicator.style.backgroundColor = '#00cd00';
+            vibracaoCamera();
+            animateFloor(
+              selectedFloor,
+              add(currentFloor),
+              '0%',
+              '0%',
+              add
+            );
+
+          }
+          //DOWN
+          else if (selectedFloor < currentFloor) {
+            ELEVATOR.$downIndicator.style.backgroundColor = '#ff0000';
+            vibracaoCamera();
+            animateFloor(
+              selectedFloor,
+              subtract(currentFloor),
+              '0%',
+              '0%',
+              subtract
+            );
+          }
+        }
+      
+        function animateFloor(selectedFloor, nextFloor, firstMargin, secondMargin, directionOp) {
+          ELEVATOR.$floorNumber.style.marginTop = firstMargin;
+      
+          setTimeout(function () {
+            ELEVATOR.$floorNumber.textContent = nextFloor;
+            ELEVATOR.$floorNumber.style.marginTop = secondMargin;
+      
+            setTimeout(function () {
+              if (parseInt(selectedFloor) === nextFloor) {
+                // end and change
+                setTimeout(function () {
+                  ELEVATOR.selectedFloorList.splice(0, 1);
+                  resetIndicator();
+                  resetButton(selectedFloor);
+                  changeFloor();
+                }, ELEVATOR.speedFactor);
+              } else {
+                animateFloor(
+                  selectedFloor,
+                  directionOp(nextFloor),
+                  firstMargin,
+                  secondMargin,
+                  directionOp
+                );
+              }
+            }, ELEVATOR.speedFactor);
+          }, ELEVATOR.speedFactor);
+        }
+      
+        function add(value) {
+          return ++value;
+        }
+      
+        function subtract(value) {
+          return --value;
+        }
+      
+        function resetIndicator() {
+          ELEVATOR.$upIndicator.style.backgroundColor = '#005900';
+          ELEVATOR.$downIndicator.style.backgroundColor = '#990000';
+        }
+      
+        function resetButton(selectedFloor) {
+          var button = document.querySelector('#navigation li:nth-child(' + selectedFloor + ') .button');
+          button.classList.remove('selectedElevatorButton');
+        }
+
+        async function vibracaoCamera(){
+           
+            while(ELEVATOR.$upIndicator.style.backgroundColor == 'rgb(0, 205, 0)' || ELEVATOR.$downIndicator.style.backgroundColor == 'rgb(255, 0, 0)'){
+                player.direction = -90.2
+                await new Promise(resolve => setTimeout(resolve, 100));
+                player.direction = -90
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+        }
+
+
+        ELEVATOR.initialize(1000);
+      }
+    
 }

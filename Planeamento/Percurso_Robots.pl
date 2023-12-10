@@ -29,7 +29,7 @@ caminho_handler(Request) :-
 
 
 
-:- consult('Algoritmos.pl').
+:- consult('AlgoritmosGenericos.pl').
 :- consult('BC_RobDroneGo.pl').
 
 

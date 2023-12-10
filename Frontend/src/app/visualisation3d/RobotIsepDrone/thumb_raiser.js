@@ -330,6 +330,7 @@ export default class ThumbRaiser {
         this.activeElement = document.activeElement;
 
         this.listFloors = [];
+        this.floorActual = {};
 
         //injeção dos serviços (não é a melhor pratica)
         this.buildingService = buildingService;
@@ -1027,45 +1028,26 @@ export default class ThumbRaiser {
         */
 
 
-    listFloorThisBuilding(floors) {
+    listFloorThisBuilding(floors,atualFloor) {
         this.listFloors = floors;
+        this.floorActual = atualFloor;
     }
+
     selectNewFloorFromBuilding() {
         this.setActiveViewCamera(this.firstPersonViewCamera);
         this.player.direction = -90;
         this.animations.actionInProgress = true;
-
-        const overlay = document.createElement('div');
-        overlay.id = 'elevatorPanelOverlay';
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.background = 'rgba(0, 0, 0, 0.7)';
-        overlay.style.display = 'flex';
-        overlay.style.justifyContent = 'center';
-        overlay.style.alignItems = 'center';
-        //overlay.style.zIndex = '10';
-    
-        // Cria a imagem do painel do elevador
-        const image = document.createElement('img');
-        image.id = 'elevatorPanelImage';
-        image.src = 'path/to/elevator_panel_image.jpg';
-        image.alt = 'Elevator Panel';
-        image.style.maxWidth = '80%';
-        image.style.maxHeight = '80%';
-    
-        // Adiciona a imagem à sobreposição
-        overlay.appendChild(image);
-    
-        // Adiciona a sobreposição ao corpo do documento
-        document.body.appendChild(overlay);
-        this.initializeElevator(this.player);
-
+        this.initializeElevator(this.player,this.floorActual, this.animations,this.maze);
+        //this.animations.actionInProgress = false;
     }
 
-    initializeElevator(player) {
+    /**
+     * Animacao de elevador
+     * Esta a ser criado html e css atraves de javascript
+     * Nao mexer , a nao ser que sejas o Miguel Cardoso :D
+     * @param {*} player 
+     */
+    initializeElevator(player,floorActual, animations, maze) {
         var ELEVATOR = {};
       
         function createElevatorElements() {
@@ -1092,13 +1074,12 @@ export default class ThumbRaiser {
             var floorNumber = document.createElement('div');
             floorNumber.id = 'floor-number';
             floorNumber.className = 'elevator-info';
-            floorNumber.textContent = '1';
+            floorNumber.textContent = floorActual.floorNumber;
             floorNumber.style.position = 'absolute';
             floorNumber.style.color = '#ffffff';
             floorNumber.style.fontSize = '20em';
             floorNumber.style.float = 'left';
             floorNumber.style.margin = 'auto';
-            //floorNumber.style.marginTop = '0';
         
             var directionInfo = document.createElement('div');
             directionInfo.id = 'direction-info';
@@ -1131,6 +1112,19 @@ export default class ThumbRaiser {
             var navigationList = document.createElement('ul');
             navigationList.id = 'navigation';
             navigationList.style.position = 'relative';
+
+            var arrowElement = document.createElement('div');
+            arrowElement.id = 'arrowElementExit'
+            arrowElement.style.position = 'absolute';
+            arrowElement.style.width = '0';
+            arrowElement.style.height = '0';
+            arrowElement.style.left = '-15%';
+            arrowElement.style.borderLeft = '20px solid transparent';
+            arrowElement.style.borderRight = '20px solid transparent';
+            arrowElement.style.borderBottom = '40px solid red';
+            arrowElement.style.marginBottom = '20px';
+            arrowElement.style.transform = 'rotate(-90deg)';
+            arrowElement.style.cursor = 'pointer';
         
             for (var i = 1; i <= 4; i++) {
               var listItem = document.createElement('li');
@@ -1172,6 +1166,7 @@ export default class ThumbRaiser {
         
             elevatorPanel.appendChild(displayPanel);
             elevatorPanel.appendChild(floorSelection);
+            elevatorPanel.appendChild(arrowElement);
             floorSelection.appendChild(navigationList);
         
             document.body.appendChild(elevatorPanel);
@@ -1185,11 +1180,20 @@ export default class ThumbRaiser {
         ELEVATOR.$floorNumber = document.getElementById('floor-number');
         ELEVATOR.$upIndicator = document.getElementById('up-indicator');
         ELEVATOR.$downIndicator = document.getElementById('down-indicator');
+        ELEVATOR.$exitButton = document.getElementById('arrowElementExit');
         ELEVATOR.speedFactor = 10000;
       
         ELEVATOR.initialize = function (elevatorSpeed) {
           ELEVATOR.speedFactor = elevatorSpeed;
-      
+            
+          ELEVATOR.$exitButton.addEventListener('click',function(){
+            document.getElementById('elevator-panel').remove();
+            player.position = maze.cellToCartesian(floorActual.floorMap.elevators[0].exit)
+            animations.actionInProgress = false;
+
+
+            
+          })
           ELEVATOR.$button.forEach(function (button) {
             button.addEventListener('click', function () {
               var selectedFloor = button.textContent;
@@ -1229,6 +1233,7 @@ export default class ThumbRaiser {
               '0%',
               add
             );
+
           }
           //DOWN
           else if (selectedFloor < currentFloor) {

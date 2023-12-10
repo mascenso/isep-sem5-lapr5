@@ -22,7 +22,8 @@
     "elevators":[
         {
             "position":[2,20],
-            "orientation":"S"
+            "orientation":"S",
+            "exit": [3,20]
         }
     ],
     "bridges":[
@@ -30,8 +31,8 @@
             "locationBridge":[5,22],
             "buildind":
                 {
-                    "code":"A",
-                    "floor":1,
+                    "code":"B",
+                    "floor":2,
                     "inicialPosition":[2,10]
                 }
         }

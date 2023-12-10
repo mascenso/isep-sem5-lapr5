@@ -87,15 +87,6 @@ export class ViewComponent implements OnInit {
 
   animate() {
     requestAnimationFrame(this.animate.bind(this));
-    // Update the game
-    //console.log(this.thumbRaiser.player.position)
-  /*  let idx = this.thumbRaiser.isABridge();
-    if (idx != -1) {
-      this.nextMapByBridge(idx);
-      console.log("APOS nextMapByBridge");
-    }
-*/
-    // Update the game
     this.thumbRaiser.update()
 
   }
@@ -139,13 +130,14 @@ export class ViewComponent implements OnInit {
   //coloca a funcao global para ser ouvida no on change
   changeFloor() {
     if (this.floorSelected) {
-      this.mapToRender = this.floors.find(objeto => objeto.id === this.floorSelected)?.floorMap;
+      this.mapToRender = this.floors.find(objeto => objeto.id === this.floorSelected);
     }
 
-    this.thumbRaiser.maze.url = this.mapToRender;
-    //this.thumbRaiser.listFloorThisBuilding(this.floors) ;
-    this.thumbRaiser.changeMap(this.mapToRender);
+    this.thumbRaiser.maze.url = this.mapToRender.floorMap;
+    this.thumbRaiser.listFloorThisBuilding(this.floors, this.mapToRender);
+    this.thumbRaiser.changeMap(this.mapToRender.floorMap);
   }
+  
   async haveMap() {
     if (this.automaticPlaning.data != undefined && this.cellsToMove.length > 0) {
       this.makeAutomaticAnimation(this.cellsToMove)

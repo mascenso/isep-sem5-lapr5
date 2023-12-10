@@ -16,12 +16,14 @@ tarefa(t5,3,8,2).
 tarefas(5).
 
 % parameterização
-inicializa:-write('Numero de novas Geracoes: '),read(NG), 			(retract(geracoes(_));true), asserta(geracoes(NG)),
+inicializa:-write('Numero de novas Geracoes: '),read(NG), 			
+    (retract(geracoes(_));true), asserta(geracoes(NG)),
 	write('Dimensao da Populacao: '),read(DP),
 	(retract(populacao(_));true), asserta(populacao(DP)),
 	write('Probabilidade de Cruzamento (%):'), read(P1),
 	PC is P1/100, 
-	(retract(prob_cruzamento(_));true), 	asserta(prob_cruzamento(PC)),
+	(retract(prob_cruzamento(_));true), 	
+    asserta(prob_cruzamento(PC)),
 	write('Probabilidade de Mutacao (%):'), read(P2),
 	PM is P2/100, 
 	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)).
@@ -245,16 +247,3 @@ mutacao23(G1,1,[G2|Ind],G2,[G1|Ind]):-!.
 mutacao23(G1,P,[G|Ind],G2,[G|NInd]):-
 	P1 is P-1,
 	mutacao23(G1,P1,Ind,G2,NInd).
-
-
-
-
-
-
-
-
-
-
-
-
-

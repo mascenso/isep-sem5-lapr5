@@ -47,7 +47,6 @@ export class EditBridgeComponent {
     private _snackBar: MatSnackBar
   ) {
     this.bridgeForm = this.formBuilder.group({
-      code: [''],
       name: [''],
       floorAId: [null],
       floorBId: [null],
@@ -70,13 +69,13 @@ export class EditBridgeComponent {
   }
 
   onBridgeSelected(bridgeId: string): void {
-    this.selectedBridge = this.bridges.find(bridge => bridge.code === bridgeId)
+    this.selectedBridge = this.bridges.find(bridge => bridge.id === bridgeId)
     this.updateBridgeForm()
   }
 
   updateBridgeForm(){
     this.bridgeForm = this.formBuilder.group({
-      code: [this.selectedBridge?.code || ''],
+      id: [this.selectedBridge?.id || ''],
       name: [this.selectedBridge?.name || ''],
     });
   }
@@ -91,7 +90,6 @@ export class EditBridgeComponent {
   onSubmit(): void {
 
     let updates = {
-      code: this.selectedBridge.code,
       name: this.bridgeForm.value.name,
       floorAId: this.floorAId,
       floorBId: this.floorBId

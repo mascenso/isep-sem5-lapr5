@@ -8,6 +8,7 @@
 :- consult('Algoritmos.pl').
 :- consult('BC_RobDroneGo.pl').
 :- consult('Percurso_Robots.pl').
+:- consult('AlgoritmoGenetico.pl').
 
 :- set_setting(http:cors, [*]).
 

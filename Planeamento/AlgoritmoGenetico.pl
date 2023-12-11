@@ -15,6 +15,12 @@ tarefa(t5,3,8,2).
 % tarefas(NTarefas).
 tarefas(5).
 
+/* Predicado para inicializar as variaveis necessarias para o algoritmo genético.
+NG - Nº de gerações;
+DP - Dimensão da População;
+P1 - Probabilidade de cruzamento;
+P2 - Probabilidade de mutação.
+*/
 % parameterização
 inicializa:-write('Numero de novas Geracoes: '),read(NG), 			
     (retract(geracoes(_));true), asserta(geracoes(NG)),
@@ -29,6 +35,11 @@ inicializa:-write('Numero de novas Geracoes: '),read(NG),
 	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)).
 
 
+/* Predicado a ser invocado "à cabeça". Inicializa o algoritmo genético.
+Cada elemento da lista é do tipo LT*Av onde LT é uma lista de tarefas (indivíduo), por exemplo [t3,t1,t5,t2,t4], e Av a respetiva avaliação em termos de soma pesada dos atrasos, 
+um elemento de PopOrd poderia ser [t3,t1,t5,t2,t4]*16, onde o * é um mero separador.
+Nota -> PopOrd - Lista com a geração inicial.
+*/
 gera:-
 	inicializa,
 	gera_populacao(Pop),
@@ -39,6 +50,11 @@ gera:-
 	geracoes(NG),
 	gera_geracao(0,NG,PopOrd).
 
+/* Cria uma população de indivíduos. Gera a lista de individuos conforme a quantidade de tarefas e tamanho da população. 
+Cada indivíduo é representado por uma lista de tarefas de tamanho NumT e é garantido que não haverá indivíduos repetidos.
+NumT - quantidade de tarefas; 
+TamPop - dimensão da população. 
+*/
 gera_populacao(Pop):-
 	populacao(TamPop),
 	tarefas(NumT),
@@ -51,10 +67,13 @@ gera_populacao(TamPop,ListaTarefas,NumT,[Ind|Resto]):-
 	TamPop1 is TamPop-1,
 	gera_populacao(TamPop1,ListaTarefas,NumT,Resto),
 	gera_individuo(ListaTarefas,NumT,Ind),
-	not(member(Ind,Resto)).
+	not(member(Ind,Resto)). %garante que não há indivíduos repetidos. 
+
 gera_populacao(TamPop,ListaTarefas,NumT,L):-
 	gera_populacao(TamPop,ListaTarefas,NumT,L).
 
+/* Cria um indivíduo com todas as tarefas, cada tarefa é um gene e o indivíduo corresponde ao cromossoma.
+O indivíduo (lista de tarefas) é criado aleatoriamente a partir de uma lista de tarefas disponíveis/aprovadas. */
 gera_individuo([G],1,[G]):-!.
 
 gera_individuo(ListaTarefas,NumT,[G|Resto]):-
@@ -69,6 +88,9 @@ retira(N,[G1|Resto],G,[G1|Resto1]):-
 	N1 is N-1,
 	retira(N1,Resto,G,Resto1).
 
+/* Avalia todos os indivíduos da população (cada indivíduo é uma lista com todas as tarefas) de acordo com a soma pesada dos atrasos V 
+e cria uma lista (segundo argumento) com elementos com o formato indivíduo*avaliação.
+*/
 avalia_populacao([],[]).
 avalia_populacao([Ind|Resto],[Ind*V|Resto1]):-
 	avalia(Ind,V),
@@ -82,13 +104,11 @@ avalia([T|Resto],Inst,V):-
 	tarefa(T,Dur,Prazo,Pen),
 	InstFim is Inst+Dur,
 	avalia(Resto,InstFim,VResto),
-	(
-		(InstFim =< Prazo,!, VT is 0)
-  ;
-		(VT is (InstFim-Prazo)*Pen)
-	),
+	((InstFim =< Prazo,!, VT is 0) ; (VT is (InstFim-Prazo)*Pen)),
 	V is VT+VResto.
 
+/* Ordena os elementos da população por ordem crescente de avaliações pela soma pesada dos atrasos.
+Usa o bubble sort (bsort) para a ordenação. */
 ordena_populacao(PopAv,PopAvOrd):-
 	bsort(PopAv,PopAvOrd).
 
@@ -96,7 +116,6 @@ bsort([X],[X]):-!.
 bsort([X|Xs],Ys):-
 	bsort(Xs,Zs),
 	btroca([X|Zs],Ys).
-
 
 btroca([X],[X]):-!.
 
@@ -107,18 +126,25 @@ btroca([X*VX,Y*VY|L1],[Y*VY|L2]):-
 btroca([X|L1],[X|L2]):-btroca(L1,L2).
 
 
+/* Gera as próximas gerações da população. Inicia a geração das gerações seguintes, através do cruzamento, mutação e avaliação dos novos indivíduos.
+Antes do cruzamento é realizada a permutação aleátoria para minimizar a limitação do cruzamento dos individuos sucessivamente. */
 gera_geracao(G,G,Pop):-!,
 	write('Geração '), write(G), write(':'), nl, write(Pop), nl.
 
 gera_geracao(N,G,Pop):-
 	write('Geração '), write(N), write(':'), nl, write(Pop), nl,
-	cruzamento(Pop,NPop1),
+	random_permutation(Pop, PopAleatoria),nl,write('LRP='),write(PopAleatoria),nl,  % Permutação aleatória da população
+	cruzamento(PopAleatoria,NPop1),
 	mutacao(NPop1,NPop),
 	avalia_populacao(NPop,NPopAv),
 	ordena_populacao(NPopAv,NPopOrd),
 	N1 is N+1,
 	gera_geracao(N1,G,NPopOrd).
 
+
+/* Geração dos pontos de cruzamento P1 (onde começa o corte) e P2 (onde acaba o corte), 
+por exemplo se P1 for 2 e P2 for 4 os pontos de corte serão entre o 1º e 2º gene e entre o 4º e 5º gene.
+Notar que tal como está implementado não há cortes que fiquem apenas com 1 gene a meio, por causa do P11 ser diferente do P21 */
 gerar_pontos_cruzamento(P1,P2):-
 	gerar_pontos_cruzamento1(P1,P2).
 
@@ -129,12 +155,16 @@ gerar_pontos_cruzamento1(P1,P2):-
 	random(1,NTemp,P21),
 	P11\==P21,!,
 	((P11<P21,!,P1=P11,P2=P21);(P1=P21,P2=P11)).
+
 gerar_pontos_cruzamento1(P1,P2):-
 	gerar_pontos_cruzamento1(P1,P2).
 
-
+/* O cruzamento realizado sobre indivíduos sucessivos 2 a 2 da população. Para saber se se realiza o cruzamento gera-se um nº aleatório entre 0 e 1, 
+e compara-se com a probabilidade de cruzamento parametrizada, se for inferior faz-se o cruzamento */
 cruzamento([],[]).
+
 cruzamento([Ind*_],[Ind]).
+
 cruzamento([Ind1*_,Ind2*_|Resto],[NInd1,NInd2|Resto1]):-
 	gerar_pontos_cruzamento(P1,P2),
 	prob_cruzamento(Pcruz),random(0.0,1.0,Pc),
@@ -145,12 +175,13 @@ cruzamento([Ind1*_,Ind2*_|Resto],[NInd1,NInd2|Resto1]):-
 	(NInd1=Ind1,NInd2=Ind2)),
 	cruzamento(Resto,Resto1).
 
+/* Predicados auxiliares para fazer o cruzamento order crossover, que é o adequado para o sequenciamento de tarefas */
 preencheh([],[]).
 
 preencheh([_|R1],[h|R2]):-
 	preencheh(R1,R2).
 
-
+/*Predicados auxiliares para fazer o cruzamento order crossover, que é o adequado para o sequenciamento de tarefas */
 sublista(L1,I1,I2,L):-
 	I1 < I2,!,
 	sublista1(L1,I1,I2,L).
@@ -225,6 +256,9 @@ eliminah([h|R1],R2):-!,
 eliminah([X|R1],[X|R2]):-
 	eliminah(R1,R2).
 
+
+/* Tentativa de mutação sobre cada indivíduo da população. Para saber se se realiza a mutação gera-se um nº aleatório entre 0 e 1
+ e compara-se com a probabilidade de mutação parametrizada, se for inferior faz-se a mutação */
 mutacao([],[]).
 mutacao([Ind|Rest],[NInd|Rest1]):-
 	prob_mutacao(Pmut),

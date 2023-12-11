@@ -10,7 +10,9 @@ tarefa(t1,2,5,1).
 tarefa(t2,4,7,6).
 tarefa(t3,1,11,2).
 tarefa(t4,3,9,3).
-tarefa(t5,3,8,2).
+tarefa(t5,3,8,3).
+%tarefa(t6,4,5,2).
+
 
 % tarefas(NTarefas).
 tarefas(5).
@@ -22,17 +24,18 @@ P1 - Probabilidade de cruzamento;
 P2 - Probabilidade de mutação.
 */
 % parameterização
-inicializa:-write('Numero de novas Geracoes: '),read(NG), 			
+inicializa:-
+	write('Numero de novas Geracoes: '),read(NG), 			
     (retract(geracoes(_));true), asserta(geracoes(NG)),
 	write('Dimensao da Populacao: '),read(DP),
 	(retract(populacao(_));true), asserta(populacao(DP)),
 	write('Probabilidade de Cruzamento (%):'), read(P1),
 	PC is P1/100, 
-	(retract(prob_cruzamento(_));true), 	
-    asserta(prob_cruzamento(PC)),
+	(retract(prob_cruzamento(_));true), asserta(prob_cruzamento(PC)),
 	write('Probabilidade de Mutacao (%):'), read(P2),
 	PM is P2/100, 
-	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)).
+	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM))
+	.
 
 
 /* Predicado a ser invocado "à cabeça". Inicializa o algoritmo genético.
@@ -50,6 +53,8 @@ gera:-
 	geracoes(NG),
 	gera_geracao(0,NG,PopOrd).
 
+	
+
 /* Cria uma população de indivíduos. Gera a lista de individuos conforme a quantidade de tarefas e tamanho da população. 
 Cada indivíduo é representado por uma lista de tarefas de tamanho NumT e é garantido que não haverá indivíduos repetidos.
 NumT - quantidade de tarefas; 
@@ -58,7 +63,7 @@ TamPop - dimensão da população.
 gera_populacao(Pop):-
 	populacao(TamPop),
 	tarefas(NumT),
-	findall(Tarefa,tarefa(Tarefa,_,_,_),ListaTarefas),
+	findall(Tarefa,tarefa(Tarefa,_,_,_),ListaTarefas),nl,
 	gera_populacao(TamPop,ListaTarefas,NumT,Pop).
 
 gera_populacao(0,_,_,[]):-!.
@@ -88,8 +93,8 @@ retira(N,[G1|Resto],G,[G1|Resto1]):-
 	N1 is N-1,
 	retira(N1,Resto,G,Resto1).
 
-/* Avalia todos os indivíduos da população (cada indivíduo é uma lista com todas as tarefas) de acordo com a soma pesada dos atrasos V 
-e cria uma lista (segundo argumento) com elementos com o formato indivíduo*avaliação.
+/* Avalia todos os indivíduos da população (cada indivíduo é uma lista com todas as tarefas) de acordo com a soma pesada dos atrasos V  e cria 
+uma lista (segundo argumento) com elementos com o formato indivíduo*avaliação.
 */
 avalia_populacao([],[]).
 avalia_populacao([Ind|Resto],[Ind*V|Resto1]):-
@@ -126,21 +131,51 @@ btroca([X*VX,Y*VY|L1],[Y*VY|L2]):-
 btroca([X|L1],[X|L2]):-btroca(L1,L2).
 
 
-/* Gera as próximas gerações da população. Inicia a geração das gerações seguintes, através do cruzamento, mutação e avaliação dos novos indivíduos.
+/* Gera as próximas gerações da população. Inicia a craição das gerações seguintes, através do cruzamento, mutação e avaliação dos novos indivíduos.
 Antes do cruzamento é realizada a permutação aleátoria para minimizar a limitação do cruzamento dos individuos sucessivamente. */
 gera_geracao(G,G,Pop):-!,
 	write('Geração '), write(G), write(':'), nl, write(Pop), nl.
 
 gera_geracao(N,G,Pop):-
 	write('Geração '), write(N), write(':'), nl, write(Pop), nl,
-	random_permutation(Pop, PopAleatoria),nl,write('LRP='),write(PopAleatoria),nl,  % Permutação aleatória da população
+	random_permutation(Pop, PopAleatoria), %Permutação aleatória da população
 	cruzamento(PopAleatoria,NPop1),
 	mutacao(NPop1,NPop),
 	avalia_populacao(NPop,NPopAv),
 	ordena_populacao(NPopAv,NPopOrd),
-	N1 is N+1,
-	gera_geracao(N1,G,NPopOrd).
+	%Seleciona os melhores indivíduos para preservar na próxima geração
+    NumeroMelhoresPreservar = 2, % Pensar melhor na forma como passar este valor para aqui.
+    seleciona_melhores(NPopOrd, NumeroMelhoresPreservar, Melhores),nl,
+    write('Melhores indivíduos na geração '), write(N), write(': '), write(Melhores), nl,
 
+    % Inclui os melhores indivíduos na próxima geração
+    inclui_melhores(Melhores, NPopOrd, ProximaGeracao),
+
+	N1 is N+1,
+	gera_geracao(N1,G,ProximaGeracao).
+
+
+
+/* Seleciona os N melhores indivíduos da lista ordenada daquela geração.
+*/
+seleciona_melhores(_, 0, []).
+
+seleciona_melhores([Ind*V|Resto], N, [Ind*V|Melhores]) :-
+    N > 0,
+    N1 is N - 1,
+    seleciona_melhores(Resto, N1, Melhores).
+
+/* Predicado para incluir os melhores indivíduos na próxima geração */
+inclui_melhores([], Restantes, Restantes).
+
+inclui_melhores([Melhor|Melhores], PopulacaoAtual, ProximaGeracao) :-
+    not(member(Melhor, PopulacaoAtual)), %Evita incluir indivíduos repetidos
+    inclui_melhores(Melhores, PopulacaoAtual, RestoProximaGeracao),
+    append(RestoProximaGeracao, [Melhor], ProximaGeracao).
+
+% Caso haja um indivíduo repetido na população atual, o mesmo é descartado.
+inclui_melhores([_|Melhores], PopulacaoAtual, ProximaGeracao) :-
+    inclui_melhores(Melhores, PopulacaoAtual, ProximaGeracao).
 
 /* Geração dos pontos de cruzamento P1 (onde começa o corte) e P2 (onde acaba o corte), 
 por exemplo se P1 for 2 e P2 for 4 os pontos de corte serão entre o 1º e 2º gene e entre o 4º e 5º gene.
@@ -168,10 +203,7 @@ cruzamento([Ind*_],[Ind]).
 cruzamento([Ind1*_,Ind2*_|Resto],[NInd1,NInd2|Resto1]):-
 	gerar_pontos_cruzamento(P1,P2),
 	prob_cruzamento(Pcruz),random(0.0,1.0,Pc),
-	((Pc =< Pcruz,!,
-        cruzar(Ind1,Ind2,P1,P2,NInd1),
-	  cruzar(Ind2,Ind1,P1,P2,NInd2))
-	;
+	((Pc =< Pcruz,!, cruzar(Ind1,Ind2,P1,P2,NInd1), cruzar(Ind2,Ind1,P1,P2,NInd2)) ;
 	(NInd1=Ind1,NInd2=Ind2)),
 	cruzamento(Resto,Resto1).
 

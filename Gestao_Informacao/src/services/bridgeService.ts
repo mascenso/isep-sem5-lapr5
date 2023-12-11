@@ -127,7 +127,7 @@ export default class BridgeService implements IBridgeService {
 
         /* update bridge */
 
-        const fieldsToUpdate = ['name', 'code', 'floorAId', 'floorBId'];
+        const fieldsToUpdate = ['name', 'code', 'floorAId', 'floorBId']
 
         for (const field of fieldsToUpdate) {
           if (bridgeDTO[field]) {

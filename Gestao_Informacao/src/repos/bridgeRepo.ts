@@ -46,7 +46,7 @@ export default class BridgeRepo implements IBridgeRepo {
         return BridgeMap.toDomain(bridgeCreated);
       } else {
 
-        const updateFields = ['code', 'name', 'floorAId', 'floorBId'];
+        const updateFields = ['code', 'name', 'floorAId', 'floorBId', 'buildingBId', 'buildingAId']
 
         for (const field of updateFields) {
           if (bridge[field] !== undefined) {

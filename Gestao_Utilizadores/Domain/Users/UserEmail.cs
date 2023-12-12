@@ -5,23 +5,13 @@ namespace UserManagement.Domain.Users
 {
   public class UserEmail : IValueObject
   {
-    private string _value;
+    public string Value { get; private set; }
 
     private UserEmail() { }
 
     public UserEmail(string value)
     {
-      this._value = value;
-    }
-
-    public string Value()
-    {
-      return this._value;
-    }
-
-    private void SetValue(string value)
-    {
-      this._value = value;
+      this.Value = value;
     }
 
     //todo add business validations later

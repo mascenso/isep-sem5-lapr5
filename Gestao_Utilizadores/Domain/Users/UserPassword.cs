@@ -9,30 +9,36 @@ namespace UserManagement.Domain.Users
 {
   public class UserPassword : IValueObject
   {
-    private const int KEY_SIZE = 64;
-    private const int ITERATIONS = 350000;
-    private HashAlgorithmName HASH_ALGORITHM = HashAlgorithmName.SHA512;
+    private static int KEY_SIZE = 64;
+    private static int ITERATIONS = 350000;
+    private static HashAlgorithmName HASH_ALGORITHM = HashAlgorithmName.SHA512;
 
-    private readonly string _value;
-    private readonly bool _isHashed;
+    public string Value { get; private set; }
+    public bool IsHashed { get; private set; }
 
     private UserPassword() { }
 
     public UserPassword(string value, bool isHashed = false)
     {
-      this._value = value;
-      this._isHashed = isHashed;
+      this.Value = value;
+      this.IsHashed = isHashed;
     }
 
     public bool VerifyPassword(string password)
     {
       var salt = RandomNumberGenerator.GetBytes(KEY_SIZE);
-      if (!this._isHashed)
+      if (!this.IsHashed)
       {
-        return this._value.Equals(password);
+        return this.Value.Equals(password);
       }
       var hashToCompare = Rfc2898DeriveBytes.Pbkdf2(password, salt, ITERATIONS, HASH_ALGORITHM, KEY_SIZE);
-      return CryptographicOperations.FixedTimeEquals(hashToCompare, Convert.FromHexString(this._value));
+      return CryptographicOperations.FixedTimeEquals(hashToCompare, Convert.FromHexString(this.Value));
+    }
+
+    public static string HashPassword(string password)
+    {
+      var salt = RandomNumberGenerator.GetBytes(KEY_SIZE);
+      return Convert.ToHexString(Rfc2898DeriveBytes.Pbkdf2(password, salt, ITERATIONS, HASH_ALGORITHM, KEY_SIZE));
     }
 
     // add validation rules (password length etc)

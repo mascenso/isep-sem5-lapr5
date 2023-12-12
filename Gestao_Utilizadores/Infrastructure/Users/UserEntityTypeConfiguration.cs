@@ -8,7 +8,38 @@ namespace UserManagement.Infrastructure.Users
   {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-      builder.HasKey(b => b.Id);
+      builder.ToTable("Users"); // Set the table name
+
+      builder.HasKey(u => u.Id); // Set the primary key
+
+      builder.Property(u => u.Id)
+        .HasColumnName("UserId"); // Map the column name for the primary key
+
+      builder.OwnsOne(u => u.Email, email =>
+      {
+        email.Property(e => e.Value)
+          .HasColumnName("Email"); // Map the column name for the email property
+      });
+
+      builder.OwnsOne(u => u.Password, password =>
+      {
+        password.Property(p => p.Value)
+          .HasColumnName("Password"); // Map the column name for the password property
+        password.Ignore(p => p.IsHashed);
+      });
+
+      builder.Property(u => u.FirstName)
+        .HasColumnName("FirstName"); // Map the column name for the firstName property
+
+      builder.Property(u => u.LastName)
+        .HasColumnName("LastName"); // Map the column name for the lastName property
+
+      builder.Property(u => u.Role)
+        .HasColumnName("Role") // Map the column name for the role property
+        .HasConversion<string>();
+
+      builder.Property(u => u.Active)
+        .HasColumnName("Active"); // Map the column name for the active property
 
     }
   }

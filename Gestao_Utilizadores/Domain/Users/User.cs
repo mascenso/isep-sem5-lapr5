@@ -1,47 +1,71 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using UserManagement.Domain.Shared;
 
 namespace UserManagement.Domain.Users
 {
   public class User : Entity<UserId>, IAggregateRoot
   {
-    private UserEmail _email;
+    [MaxLength(100)]
+    public UserEmail Email { get; private set; }
 
-    public UserPassword _password;
+    public UserPassword Password { get; private set; }
 
-    private string _firstName;
+    [MaxLength(50)]
+    public string FirstName { get; private set; }
 
-    private string _lastName;
+    [MaxLength(50)]
+    public string LastName { get; private set; }
 
-    private UserRole _role;
+    public UserRole Role { get; private set; }
 
-    private bool _active;
+    public bool Active { get; private set; }
 
     private User()
     {
-      this._active = true;
+      this.Active = true;
     }
 
-    public User(UserEmail email, UserPassword password, string firstName, string lastName, UserRole role, bool active)
+    private User(UserEmail email, UserPassword password, string firstName, string lastName, UserRole role, bool active = true)
     {
       this.Id = new UserId(Guid.NewGuid());
-      this._email = email;
-      this._password = password;
-      this._firstName = firstName;
-      this._lastName = lastName;
-      this._role = role;
-      this._active = active;
+      this.Email = email;
+      this.Password = password;
+      this.FirstName = firstName;
+      this.LastName = lastName;
+      this.Role = role;
+      this.Active = active;
     }
 
-    public string Email => _email.Value();
+    public static User FromRequestDto(CreateUserRequestDto dto)
+    {
+      if (dto.Email == null)
+      {
+        throw new BusinessRuleValidationException("Email can not be null!");
+      }
 
-    public string FirstName => _firstName;
+      if (dto.Password == null)
+      {
+        throw new BusinessRuleValidationException("Password can not be null!");
+      }
 
-    public string LastName => _lastName;
+      if (dto.Role == null)
+      {
+        throw new BusinessRuleValidationException("Role can not be null!");
+      }
 
-    public string Role => _role.ToString();
+      if (!Enum.TryParse(dto.Role, out UserRole userRole))
+      {
+        throw new BusinessRuleValidationException("Invalid role!");
+      };
 
-    public bool Active => _active;
+      // create user password
+      return new User(
+        new UserEmail(dto.Email), new UserPassword(UserPassword.HashPassword(dto.Password), true),
+        dto.FirstName, dto.LastName, userRole,
+        true
+      );
+    }
 
     //public void ChangeDescription(string description)
     //{

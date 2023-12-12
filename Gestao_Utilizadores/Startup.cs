@@ -32,8 +32,14 @@ namespace UserManagement
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<UserManagementDbContext>(opt =>
-                opt.UseInMemoryDatabase("UserManagementDB")
+                opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))
                 .ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>());
+
+            using (var serviceScope = services.BuildServiceProvider().GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+              var dbContext = serviceScope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
+              dbContext.Database.Migrate(); // Apply pending migrations
+            }
 
             ConfigureMyServices(services);
 

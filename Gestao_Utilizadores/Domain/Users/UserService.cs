@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using UserManagement.Domain.Shared;
 
 namespace UserManagement.Domain.Users
@@ -16,6 +17,7 @@ namespace UserManagement.Domain.Users
 
     public async Task<UserDto> CreateUser(CreateUserRequestDto dto)
     {
+      // move validations to User class
       // create user email
       if (dto.Email == null)
       {
@@ -27,11 +29,22 @@ namespace UserManagement.Domain.Users
         throw new BusinessRuleValidationException("Password can not be null!");
       }
 
+      if (dto.Role == null)
+      {
+        throw new BusinessRuleValidationException("Role can not be null!");
+      }
+
+      if (!Enum.TryParse(dto.Role, out UserRole userRole))
+      {
+        throw new BusinessRuleValidationException("Invalid role!");
+      };
+
       // create user password
 
       var user = new User(
         new UserEmail(dto.Email), new UserPassword(dto.Password),
-        dto.FirstName, dto.LastName, dto.Role, true
+        dto.FirstName, dto.LastName, userRole,
+        true
       );
 
       await this._repo.AddAsync(user);

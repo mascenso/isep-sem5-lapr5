@@ -13,7 +13,7 @@ namespace UserManagement.Domain.Users
 
     private string _lastName;
 
-    private string _role;
+    private UserRole _role;
 
     private bool _active;
 
@@ -22,7 +22,7 @@ namespace UserManagement.Domain.Users
       this._active = true;
     }
 
-    public User(UserEmail email, UserPassword password, string firstName, string lastName, string role, bool active)
+    public User(UserEmail email, UserPassword password, string firstName, string lastName, UserRole role, bool active)
     {
       this.Id = new UserId(Guid.NewGuid());
       this._email = email;
@@ -39,7 +39,7 @@ namespace UserManagement.Domain.Users
 
     public string LastName => _lastName;
 
-    public string Role => _role;
+    public string Role => _role.ToString();
 
     public bool Active => _active;
 

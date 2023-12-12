@@ -138,18 +138,21 @@ gera_geracao(G,G,Pop):-!,
 
 gera_geracao(N,G,Pop):-
 	write('Geração '), write(N), write(':'), nl, write(Pop), nl,
+	ordena_populacao(Pop,PopOrdenada),
+	%Seleciona os melhores indivíduos para preservar na próxima geração
+    NumeroMelhoresPreservar = 2, % Pensar melhor na forma como passar este valor para aqui.
+    seleciona_melhores(PopOrdenada, NumeroMelhoresPreservar, Melhores),nl,
+	    write('Melhores indivíduos na geração '), write(N), write(': '), write(Melhores), nl,
+
+    % Inclui os melhores indivíduos na próxima geração
+    inclui_melhores(Melhores, NPopOrd, ProximaGeracao),
 	random_permutation(Pop, PopAleatoria), %Permutação aleatória da população
 	cruzamento(PopAleatoria,NPop1),
 	mutacao(NPop1,NPop),
 	avalia_populacao(NPop,NPopAv),
 	ordena_populacao(NPopAv,NPopOrd),
-	%Seleciona os melhores indivíduos para preservar na próxima geração
-    NumeroMelhoresPreservar = 2, % Pensar melhor na forma como passar este valor para aqui.
-    seleciona_melhores(NPopOrd, NumeroMelhoresPreservar, Melhores),nl,
-    write('Melhores indivíduos na geração '), write(N), write(': '), write(Melhores), nl,
 
-    % Inclui os melhores indivíduos na próxima geração
-    inclui_melhores(Melhores, NPopOrd, ProximaGeracao),
+
 
 	N1 is N+1,
 	gera_geracao(N1,G,ProximaGeracao).

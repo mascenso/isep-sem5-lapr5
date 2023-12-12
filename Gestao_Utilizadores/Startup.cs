@@ -15,6 +15,7 @@ using UserManagement.Domain.Categories;
 using UserManagement.Domain.Products;
 using UserManagement.Domain.Families;
 using UserManagement.Domain.Users;
+using UserManagement.Infrastructure.Users;
 
 namespace UserManagement
 {
@@ -35,7 +36,7 @@ namespace UserManagement
                 .ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>());
 
             ConfigureMyServices(services);
-            
+
 
             services.AddControllers().AddNewtonsoftJson();
         }
@@ -77,6 +78,9 @@ namespace UserManagement
 
             services.AddTransient<IFamilyRepository,FamilyRepository>();
             services.AddTransient<FamilyService>();
+
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<UserService>();
         }
     }
 }

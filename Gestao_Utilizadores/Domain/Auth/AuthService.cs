@@ -2,19 +2,41 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
+using UserManagement.Domain.Shared;
 using UserManagement.Domain.Users;
+using UserManagement.Mappers;
 
 namespace UserManagement.Domain.Auth
 {
   public class AuthService
   {
     private readonly JwtSettings _jwtSettings;
+    private readonly IUserRepository _userRepo;
+    private readonly IUserMapper _userMapper;
 
-    public AuthService(JwtSettings jwtSettings)
+    public AuthService(IUserRepository userRepo, IUserMapper userMapper, JwtSettings jwtSettings)
     {
       this._jwtSettings = jwtSettings;
+      this._userRepo = userRepo;
+      this._userMapper = userMapper;
+    }
+
+    public async Task<string> AuthenticateUser(UserLoginRequestDto loginRequestDto)
+    {
+      if (loginRequestDto.Email == null || loginRequestDto.Password == null)
+      {
+        throw new BusinessRuleValidationException("Email and/or password can not be null.");
+      }
+
+      var user = await this._userRepo.GetUserByEmailAsync(loginRequestDto.Email);
+      if (!user.VerifyPassword(loginRequestDto.Password))
+      {
+        return null;
+      }
+      var userDto = this._userMapper.ToDto(user);
+      return this.GenerateJwtToken(userDto);
     }
 
     public string GenerateJwtToken(UserDto userDto)

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
+using UserManagement.Domain.Auth;
 using UserManagement.Domain.Shared;
+using UserManagement.Mappers;
 
 namespace UserManagement.Domain.Users
 {
@@ -9,11 +11,16 @@ namespace UserManagement.Domain.Users
   {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserRepository _repo;
+    private readonly IUserMapper _userMapper;
 
-    public UserService(IUnitOfWork unitOfWork, IUserRepository repo)
+    public UserService(
+      IUnitOfWork unitOfWork,
+      IUserRepository repo,
+      IUserMapper userMapper)
     {
       this._unitOfWork = unitOfWork;
       this._repo = repo;
+      this._userMapper = userMapper;
     }
 
     public async Task<UserDto> CreateUser(CreateUserRequestDto dto)
@@ -51,8 +58,7 @@ namespace UserManagement.Domain.Users
 
       await _unitOfWork.CommitAsync();
 
-      return new UserDto(existingUser.Id.AsGuid(), existingUser.Email.Value, existingUser.FirstName,
-        existingUser.LastName, existingUser.Role.ToString(), existingUser.Active);
+      return this._userMapper.ToDto(existingUser);
     }
 
     public async Task DeleteUser(UserId userId)
@@ -67,6 +73,17 @@ namespace UserManagement.Domain.Users
       _repo.Remove(existingUser);
       await _unitOfWork.CommitAsync();
     }
+
+    public async Task<UserDto> FindUserByEmail(string email)
+    {
+      var user = await this._repo.GetUserByEmailAsync(email);
+      if (user == null)
+      {
+        throw new NotFoundException($"User with email {email} not found.");
+      }
+      return this._userMapper.ToDto(user);
+    }
+
   }
 
 }

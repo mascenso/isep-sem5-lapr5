@@ -12,12 +12,12 @@ namespace UserManagement.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-      private readonly UserService _service;
+      private readonly UserService _userService;
       private readonly AuthService _authService;
 
         public UsersController(UserService service, AuthService authService)
         {
-            _service = service;
+            _userService = service;
             _authService = authService;
         }
 
@@ -28,7 +28,7 @@ namespace UserManagement.Controllers
         {
           try
           {
-            var responseDto = await _service.CreateUser(userDto);
+            var responseDto = await _userService.CreateUser(userDto);
             var token = this._authService.GenerateJwtToken(responseDto);
             // Include token in the response headers
             Response.Headers.Append("Authorization", "Bearer " + token);
@@ -45,7 +45,7 @@ namespace UserManagement.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetUserById(Guid id)
         {
-          var user = await _service.FindUserById(new UserId(id));
+          var user = await _userService.FindUserById(new UserId(id));
           if (user == null)
           {
             return NotFound();
@@ -60,7 +60,7 @@ namespace UserManagement.Controllers
         {
           try
           {
-            await _service.DeleteUser(new UserId(id));
+            await _userService.DeleteUser(new UserId(id));
             return NoContent(); // 204 No Content
           }
           catch (NotFoundException)
@@ -75,7 +75,7 @@ namespace UserManagement.Controllers
         {
           try
           {
-            var updatedUser = await _service.UpdateUser(new UserId(id), patchDto);
+            var updatedUser = await _userService.UpdateUser(new UserId(id), patchDto);
             return Ok(updatedUser); // 200 OK
           }
           catch (NotFoundException)
@@ -85,6 +85,28 @@ namespace UserManagement.Controllers
           catch (BusinessRuleValidationException e)
           {
             return BadRequest(new { Message = e.Message }); // 400 Bad Request
+          }
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<string>> Login(UserLoginRequestDto loginDto)
+        {
+          try
+          {
+            // Validate loginDto and check if user exists
+            var token = await _authService.AuthenticateUser(loginDto);
+
+            if (token == null)
+            {
+              // Invalid credentials
+              return Unauthorized(new { Message = "Invalid email or password." });
+            }
+            // Login successful, generate JWT token
+            return Ok(new { Token = token });
+          }
+          catch (BusinessRuleValidationException e)
+          {
+            return BadRequest(new { Message = e.Message });
           }
         }
 

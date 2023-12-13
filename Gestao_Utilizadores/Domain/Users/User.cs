@@ -67,6 +67,24 @@ namespace UserManagement.Domain.Users
       );
     }
 
+    public void PatchUser(UpdateUserRequestDto updateDto)
+    {
+      if (updateDto.FirstName != null)
+      {
+        this.FirstName = updateDto.FirstName;
+      }
+
+      if (updateDto.LastName != null)
+      {
+        this.LastName = updateDto.LastName;
+      }
+
+      if (updateDto.Email != null)
+      {
+        this.Email = new UserEmail(updateDto.Email);
+      }
+    }
+
     //public void ChangeDescription(string description)
     //{
     //  if (!this.Active)

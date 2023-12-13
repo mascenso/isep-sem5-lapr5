@@ -24,7 +24,7 @@ namespace UserManagement.Domain.Users
 
       await this._unitOfWork.CommitAsync();
 
-      return new UserDto(user.Id.AsGuid(), user.Email.ToString(), user.FirstName, user.LastName, user.Role.ToString(),
+      return new UserDto(user.Id.AsGuid(), user.Email.Value, user.FirstName, user.LastName, user.Role.ToString(),
         user.Active);
     }
 
@@ -33,7 +33,7 @@ namespace UserManagement.Domain.Users
       var user = await this._repo.GetByIdAsync(userId);
       return user == null
         ? null
-        : new UserDto(user.Id.AsGuid(), user.Email.ToString(), user.FirstName, user.LastName, user.Role.ToString(),
+        : new UserDto(user.Id.AsGuid(), user.Email.Value, user.FirstName, user.LastName, user.Role.ToString(),
           user.Active);
     }
 

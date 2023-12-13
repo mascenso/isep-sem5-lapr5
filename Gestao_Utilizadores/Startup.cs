@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using UserManagement.Domain.Auth;
 using UserManagement.Infrastructure;
 using UserManagement.Infrastructure.Categories;
 using UserManagement.Infrastructure.Products;
@@ -74,6 +75,13 @@ namespace UserManagement
 
         public void ConfigureMyServices(IServiceCollection services)
         {
+            services.AddSingleton<JwtSettings>(provider =>
+            {
+              // Load JwtSettings from configuration or wherever it is configured
+              IConfiguration configuration = provider.GetRequiredService<IConfiguration>();
+              return configuration.GetSection("JwtSettings").Get<JwtSettings>();
+            });
+            services.AddTransient<AuthService>();
             services.AddTransient<IUnitOfWork,UnitOfWork>();
 
             services.AddTransient<ICategoryRepository,CategoryRepository>();

@@ -1,4 +1,3 @@
-using System;
 using UserManagement.Domain.Shared;
 
 namespace UserManagement.Domain.Users

@@ -1,7 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UserManagement.Domain.Auth;
 using UserManagement.Domain.Shared;
 using UserManagement.Domain.Users;
 
@@ -12,20 +13,26 @@ namespace UserManagement.Controllers
     public class UsersController : ControllerBase
     {
       private readonly UserService _service;
+      private readonly AuthService _authService;
 
-        public UsersController(UserService service)
+        public UsersController(UserService service, AuthService authService)
         {
             _service = service;
+            _authService = authService;
         }
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<UserDto>> CreateUser(CreateUserRequestDto userDto)
+        public async Task<ActionResult<UserDto>> RegisterUser(CreateUserRequestDto userDto)
         {
           try
           {
             var responseDto = await _service.CreateUser(userDto);
+            var token = this._authService.GenerateJwtToken(responseDto);
+            // Include token in the response headers
+            Response.Headers.Append("Authorization", "Bearer " + token);
+
             return CreatedAtAction(nameof(GetUserById), new { id = responseDto.Id }, responseDto);
           }
           catch (BusinessRuleValidationException e)

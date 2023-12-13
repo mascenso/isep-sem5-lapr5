@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using UserManagement.Domain.Shared;
 using UserManagement.Domain.Users;
@@ -44,6 +45,40 @@ namespace UserManagement.Controllers
           }
 
           return user;
+        }
+
+        // DELETE: api/Users/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteUser(Guid id)
+        {
+          try
+          {
+            await _service.DeleteUser(new UserId(id));
+            return NoContent(); // 204 No Content
+          }
+          catch (NotFoundException)
+          {
+            return NotFound(); // 404 Not Found
+          }
+        }
+
+        // PATCH: api/Users/5
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<UserDto>> UpdateUser(Guid id, [FromBody] UpdateUserRequestDto patchDto)
+        {
+          try
+          {
+            var updatedUser = await _service.UpdateUser(new UserId(id), patchDto);
+            return Ok(updatedUser); // 200 OK
+          }
+          catch (NotFoundException)
+          {
+            return NotFound(); // 404 Not Found
+          }
+          catch (BusinessRuleValidationException e)
+          {
+            return BadRequest(new { Message = e.Message }); // 400 Bad Request
+          }
         }
 
     }

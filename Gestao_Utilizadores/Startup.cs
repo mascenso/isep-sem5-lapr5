@@ -17,6 +17,7 @@ using UserManagement.Domain.Products;
 using UserManagement.Domain.Families;
 using UserManagement.Domain.Users;
 using UserManagement.Infrastructure.Users;
+using UserManagement.Mappers;
 
 namespace UserManagement
 {
@@ -81,6 +82,9 @@ namespace UserManagement
               IConfiguration configuration = provider.GetRequiredService<IConfiguration>();
               return configuration.GetSection("JwtSettings").Get<JwtSettings>();
             });
+
+            services.AddScoped<IUserMapper, UserMapperImpl>();
+
             services.AddTransient<AuthService>();
             services.AddTransient<IUnitOfWork,UnitOfWork>();
 

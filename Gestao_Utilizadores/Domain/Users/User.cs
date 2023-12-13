@@ -85,6 +85,11 @@ namespace UserManagement.Domain.Users
       }
     }
 
+    public bool VerifyPassword(string password)
+    {
+      return this.Password.VerifyPassword(password);
+    }
+
     //public void ChangeDescription(string description)
     //{
     //  if (!this.Active)

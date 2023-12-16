@@ -37,7 +37,7 @@
         "buildind":
         {
           "code":"C",
-          "floor":3,
+          "floor":2,
           "inicialPosition":[14,10]
         }
       }

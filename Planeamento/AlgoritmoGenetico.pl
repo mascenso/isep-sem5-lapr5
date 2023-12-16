@@ -1,4 +1,3 @@
-
 :-dynamic geracoes/1.
 :-dynamic populacao/1.
 :-dynamic prob_cruzamento/1.
@@ -10,7 +9,9 @@ tarefa(t1,2,5,1).
 tarefa(t2,4,7,6).
 tarefa(t3,1,11,2).
 tarefa(t4,3,9,3).
-tarefa(t5,3,8,2).
+tarefa(t5,3,8,3).
+%tarefa(t6,4,5,2).
+
 
 % tarefas(NTarefas).
 tarefas(5).
@@ -22,14 +23,14 @@ P1 - Probabilidade de cruzamento;
 P2 - Probabilidade de mutação.
 */
 % parameterização
-inicializa:-write('Numero de novas Geracoes: '),read(NG), 			
+inicializa:-
+	write('Numero de novas Geracoes: '),read(NG), 			
     (retract(geracoes(_));true), asserta(geracoes(NG)),
 	write('Dimensao da Populacao: '),read(DP),
 	(retract(populacao(_));true), asserta(populacao(DP)),
 	write('Probabilidade de Cruzamento (%):'), read(P1),
 	PC is P1/100, 
-	(retract(prob_cruzamento(_));true), 	
-    asserta(prob_cruzamento(PC)),
+	(retract(prob_cruzamento(_));true), asserta(prob_cruzamento(PC)),
 	write('Probabilidade de Mutacao (%):'), read(P2),
 	PM is P2/100, 
 	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)).
@@ -50,6 +51,8 @@ gera:-
 	geracoes(NG),
 	gera_geracao(0,NG,PopOrd).
 
+	
+
 /* Cria uma população de indivíduos. Gera a lista de individuos conforme a quantidade de tarefas e tamanho da população. 
 Cada indivíduo é representado por uma lista de tarefas de tamanho NumT e é garantido que não haverá indivíduos repetidos.
 NumT - quantidade de tarefas; 
@@ -58,7 +61,7 @@ TamPop - dimensão da população.
 gera_populacao(Pop):-
 	populacao(TamPop),
 	tarefas(NumT),
-	findall(Tarefa,tarefa(Tarefa,_,_,_),ListaTarefas),
+	findall(Tarefa,tarefa(Tarefa,_,_,_),ListaTarefas),nl,
 	gera_populacao(TamPop,ListaTarefas,NumT,Pop).
 
 gera_populacao(0,_,_,[]):-!.
@@ -71,6 +74,7 @@ gera_populacao(TamPop,ListaTarefas,NumT,[Ind|Resto]):-
 
 gera_populacao(TamPop,ListaTarefas,NumT,L):-
 	gera_populacao(TamPop,ListaTarefas,NumT,L).
+
 
 /* Cria um indivíduo com todas as tarefas, cada tarefa é um gene e o indivíduo corresponde ao cromossoma.
 O indivíduo (lista de tarefas) é criado aleatoriamente a partir de uma lista de tarefas disponíveis/aprovadas. */
@@ -88,9 +92,9 @@ retira(N,[G1|Resto],G,[G1|Resto1]):-
 	N1 is N-1,
 	retira(N1,Resto,G,Resto1).
 
-/* Avalia todos os indivíduos da população (cada indivíduo é uma lista com todas as tarefas) de acordo com a soma pesada dos atrasos V 
-e cria uma lista (segundo argumento) com elementos com o formato indivíduo*avaliação.
-*/
+
+/* Avalia todos os indivíduos da população (cada indivíduo é uma lista com todas as tarefas) de acordo com a soma pesada dos atrasos V  e cria 
+uma lista (segundo argumento) com elementos com o formato indivíduo*avaliação. */
 avalia_populacao([],[]).
 avalia_populacao([Ind|Resto],[Ind*V|Resto1]):-
 	avalia(Ind,V),
@@ -106,6 +110,7 @@ avalia([T|Resto],Inst,V):-
 	avalia(Resto,InstFim,VResto),
 	((InstFim =< Prazo,!, VT is 0) ; (VT is (InstFim-Prazo)*Pen)),
 	V is VT+VResto.
+
 
 /* Ordena os elementos da população por ordem crescente de avaliações pela soma pesada dos atrasos.
 Usa o bubble sort (bsort) para a ordenação. */
@@ -126,20 +131,59 @@ btroca([X*VX,Y*VY|L1],[Y*VY|L2]):-
 btroca([X|L1],[X|L2]):-btroca(L1,L2).
 
 
-/* Gera as próximas gerações da população. Inicia a geração das gerações seguintes, através do cruzamento, mutação e avaliação dos novos indivíduos.
+/* Gera as próximas gerações da população. Inicia a craição das gerações seguintes, através do cruzamento, mutação e avaliação dos novos indivíduos.
 Antes do cruzamento é realizada a permutação aleátoria para minimizar a limitação do cruzamento dos individuos sucessivamente. */
 gera_geracao(G,G,Pop):-!,
 	write('Geração '), write(G), write(':'), nl, write(Pop), nl.
 
 gera_geracao(N,G,Pop):-
 	write('Geração '), write(N), write(':'), nl, write(Pop), nl,
-	random_permutation(Pop, PopAleatoria),nl,write('LRP='),write(PopAleatoria),nl,  % Permutação aleatória da população
+	ordena_populacao(Pop,PopOrd),
+	random_permutation(Pop, PopAleatoria), %Permutação aleatória da população
 	cruzamento(PopAleatoria,NPop1),
 	mutacao(NPop1,NPop),
 	avalia_populacao(NPop,NPopAv),
 	ordena_populacao(NPopAv,NPopOrd),
+	union(PopOrd, NPopOrd, All), % para minimizar a presença de repetidos na lista All
+	ordena_populacao(All, AllOrd),
+
+	%Seleciona os melhores indivíduos para preservar na próxima geração
+    NumeroMelhoresPreservar = 2, % Pensar melhor na forma como passar este valor para aqui.
+    seleciona_melhores(AllOrd, NumeroMelhoresPreservar, Melhores),nl,
+	length(Pop, Size),
+	% Inclui os melhores indivíduos na próxima geração
+	inclui_melhores(Melhores, NPopOrd,Size, NovaGeracao),
 	N1 is N+1,
-	gera_geracao(N1,G,NPopOrd).
+	gera_geracao(N1,G,NovaGeracao).
+
+
+/* Seleciona os N melhores indivíduos da lista ordenada daquela geração. */
+seleciona_melhores(_, 0, []).
+
+seleciona_melhores([Ind*V|Resto], N, [Ind*V|Melhores]) :-
+    N > 0,
+    N1 is N - 1,
+    seleciona_melhores(Resto, N1, Melhores).
+
+
+/* Inclui os melhores indivíduos na próxima geração. Não permite duplicados na Próxima Geração. */
+inclui_melhores([], PopulacaoAtual, _, PopulacaoAtual).
+
+inclui_melhores([Melhor|Melhores], PopulacaoAtual, PopSize, ProximaGeracao) :-
+    not(member(Melhor, PopulacaoAtual)),
+    length(PopulacaoAtual, CurrentSize),
+    NewSize is CurrentSize + 1,
+    NewSize =< PopSize,
+    inclui_melhores(Melhores, [Melhor|PopulacaoAtual], PopSize, ProximaGeracao).
+
+inclui_melhores([Melhor|Melhores], PopulacaoAtual, PopSize, ProximaGeracao) :-
+    member(Melhor, PopulacaoAtual),
+	length(PopulacaoAtual, CurrentSize),
+    NewSize is CurrentSize + 1,
+    NewSize =< PopSize,
+    inclui_melhores(Melhores, PopulacaoAtual, PopSize, ProximaGeracao).
+
+inclui_melhores(_, PopulacaoAtual, _, PopulacaoAtual).
 
 
 /* Geração dos pontos de cruzamento P1 (onde começa o corte) e P2 (onde acaba o corte), 
@@ -159,6 +203,7 @@ gerar_pontos_cruzamento1(P1,P2):-
 gerar_pontos_cruzamento1(P1,P2):-
 	gerar_pontos_cruzamento1(P1,P2).
 
+
 /* O cruzamento realizado sobre indivíduos sucessivos 2 a 2 da população. Para saber se se realiza o cruzamento gera-se um nº aleatório entre 0 e 1, 
 e compara-se com a probabilidade de cruzamento parametrizada, se for inferior faz-se o cruzamento */
 cruzamento([],[]).
@@ -168,18 +213,17 @@ cruzamento([Ind*_],[Ind]).
 cruzamento([Ind1*_,Ind2*_|Resto],[NInd1,NInd2|Resto1]):-
 	gerar_pontos_cruzamento(P1,P2),
 	prob_cruzamento(Pcruz),random(0.0,1.0,Pc),
-	((Pc =< Pcruz,!,
-        cruzar(Ind1,Ind2,P1,P2,NInd1),
-	  cruzar(Ind2,Ind1,P1,P2,NInd2))
-	;
+	((Pc =< Pcruz,!, cruzar(Ind1,Ind2,P1,P2,NInd1), cruzar(Ind2,Ind1,P1,P2,NInd2)) ;
 	(NInd1=Ind1,NInd2=Ind2)),
 	cruzamento(Resto,Resto1).
+
 
 /* Predicados auxiliares para fazer o cruzamento order crossover, que é o adequado para o sequenciamento de tarefas */
 preencheh([],[]).
 
 preencheh([_|R1],[h|R2]):-
 	preencheh(R1,R2).
+
 
 /*Predicados auxiliares para fazer o cruzamento order crossover, que é o adequado para o sequenciamento de tarefas */
 sublista(L1,I1,I2,L):-
@@ -246,7 +290,6 @@ cruzar(Ind1,Ind2,P1,P2,NInd11):-
 	P3 is P2 + 1,
 	insere(Sub2,Sub1,P3,NInd1),
 	eliminah(NInd1,NInd11).
-
 
 eliminah([],[]).
 

@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {HomeComponent} from "./home/home.component";
+import {UsersComponent} from "./home/users/users.component";
+import {ValidateUserComponent} from "./home/users/validate-user/validate-user.component";
+import {CreateUserComponent} from "./home/users/create-user/create-user.component";
 import {CampusComponent} from "./home/campus/campus.component";
 import {FleetComponent} from "./home/fleet/fleet.component";
 import {TasksComponent} from "./home/tasks/tasks.component";
@@ -36,6 +39,20 @@ const routes: Routes = [
   {
     path: 'home', component: HomeComponent, canActivate: [authGuard],
     children: [
+      {
+        path: 'users',
+        component: UsersComponent
+      },
+      {
+        path: 'users/create-user',
+        component: CreateUserComponent,
+
+      },
+      {
+        path: 'users/validate-user',
+        component: ValidateUserComponent,
+
+      },
       {
         path: 'campus',
         component: CampusComponent

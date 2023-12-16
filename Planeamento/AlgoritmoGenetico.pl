@@ -1,4 +1,3 @@
-
 :-dynamic geracoes/1.
 :-dynamic populacao/1.
 :-dynamic prob_cruzamento/1.
@@ -34,8 +33,7 @@ inicializa:-
 	(retract(prob_cruzamento(_));true), asserta(prob_cruzamento(PC)),
 	write('Probabilidade de Mutacao (%):'), read(P2),
 	PM is P2/100, 
-	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM))
-	.
+	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)).
 
 
 /* Predicado a ser invocado "à cabeça". Inicializa o algoritmo genético.
@@ -77,6 +75,7 @@ gera_populacao(TamPop,ListaTarefas,NumT,[Ind|Resto]):-
 gera_populacao(TamPop,ListaTarefas,NumT,L):-
 	gera_populacao(TamPop,ListaTarefas,NumT,L).
 
+
 /* Cria um indivíduo com todas as tarefas, cada tarefa é um gene e o indivíduo corresponde ao cromossoma.
 O indivíduo (lista de tarefas) é criado aleatoriamente a partir de uma lista de tarefas disponíveis/aprovadas. */
 gera_individuo([G],1,[G]):-!.
@@ -93,9 +92,9 @@ retira(N,[G1|Resto],G,[G1|Resto1]):-
 	N1 is N-1,
 	retira(N1,Resto,G,Resto1).
 
+
 /* Avalia todos os indivíduos da população (cada indivíduo é uma lista com todas as tarefas) de acordo com a soma pesada dos atrasos V  e cria 
-uma lista (segundo argumento) com elementos com o formato indivíduo*avaliação.
-*/
+uma lista (segundo argumento) com elementos com o formato indivíduo*avaliação. */
 avalia_populacao([],[]).
 avalia_populacao([Ind|Resto],[Ind*V|Resto1]):-
 	avalia(Ind,V),
@@ -111,6 +110,7 @@ avalia([T|Resto],Inst,V):-
 	avalia(Resto,InstFim,VResto),
 	((InstFim =< Prazo,!, VT is 0) ; (VT is (InstFim-Prazo)*Pen)),
 	V is VT+VResto.
+
 
 /* Ordena os elementos da população por ordem crescente de avaliações pela soma pesada dos atrasos.
 Usa o bubble sort (bsort) para a ordenação. */
@@ -138,26 +138,26 @@ gera_geracao(G,G,Pop):-!,
 
 gera_geracao(N,G,Pop):-
 	write('Geração '), write(N), write(':'), nl, write(Pop), nl,
+	ordena_populacao(Pop,PopOrd),
 	random_permutation(Pop, PopAleatoria), %Permutação aleatória da população
 	cruzamento(PopAleatoria,NPop1),
 	mutacao(NPop1,NPop),
 	avalia_populacao(NPop,NPopAv),
 	ordena_populacao(NPopAv,NPopOrd),
+	union(PopOrd, NPopOrd, All), % para minimizar a presença de repetidos na lista All
+	ordena_populacao(All, AllOrd),
+
 	%Seleciona os melhores indivíduos para preservar na próxima geração
     NumeroMelhoresPreservar = 2, % Pensar melhor na forma como passar este valor para aqui.
-    seleciona_melhores(NPopOrd, NumeroMelhoresPreservar, Melhores),nl,
-    write('Melhores indivíduos na geração '), write(N), write(': '), write(Melhores), nl,
-
-    % Inclui os melhores indivíduos na próxima geração
-    inclui_melhores(Melhores, NPopOrd, ProximaGeracao),
-
+    seleciona_melhores(AllOrd, NumeroMelhoresPreservar, Melhores),nl,
+	length(Pop, Size),
+	% Inclui os melhores indivíduos na próxima geração
+	inclui_melhores(Melhores, NPopOrd,Size, NovaGeracao),
 	N1 is N+1,
-	gera_geracao(N1,G,ProximaGeracao).
+	gera_geracao(N1,G,NovaGeracao).
 
 
-
-/* Seleciona os N melhores indivíduos da lista ordenada daquela geração.
-*/
+/* Seleciona os N melhores indivíduos da lista ordenada daquela geração. */
 seleciona_melhores(_, 0, []).
 
 seleciona_melhores([Ind*V|Resto], N, [Ind*V|Melhores]) :-
@@ -165,17 +165,26 @@ seleciona_melhores([Ind*V|Resto], N, [Ind*V|Melhores]) :-
     N1 is N - 1,
     seleciona_melhores(Resto, N1, Melhores).
 
-/* Predicado para incluir os melhores indivíduos na próxima geração */
-inclui_melhores([], Restantes, Restantes).
 
-inclui_melhores([Melhor|Melhores], PopulacaoAtual, ProximaGeracao) :-
-    not(member(Melhor, PopulacaoAtual)), %Evita incluir indivíduos repetidos
-    inclui_melhores(Melhores, PopulacaoAtual, RestoProximaGeracao),
-    append(RestoProximaGeracao, [Melhor], ProximaGeracao).
+/* Inclui os melhores indivíduos na próxima geração. Não permite duplicados na Próxima Geração. */
+inclui_melhores([], PopulacaoAtual, _, PopulacaoAtual).
 
-% Caso haja um indivíduo repetido na população atual, o mesmo é descartado.
-inclui_melhores([_|Melhores], PopulacaoAtual, ProximaGeracao) :-
-    inclui_melhores(Melhores, PopulacaoAtual, ProximaGeracao).
+inclui_melhores([Melhor|Melhores], PopulacaoAtual, PopSize, ProximaGeracao) :-
+    not(member(Melhor, PopulacaoAtual)),
+    length(PopulacaoAtual, CurrentSize),
+    NewSize is CurrentSize + 1,
+    NewSize =< PopSize,
+    inclui_melhores(Melhores, [Melhor|PopulacaoAtual], PopSize, ProximaGeracao).
+
+inclui_melhores([Melhor|Melhores], PopulacaoAtual, PopSize, ProximaGeracao) :-
+    member(Melhor, PopulacaoAtual),
+	length(PopulacaoAtual, CurrentSize),
+    NewSize is CurrentSize + 1,
+    NewSize =< PopSize,
+    inclui_melhores(Melhores, PopulacaoAtual, PopSize, ProximaGeracao).
+
+inclui_melhores(_, PopulacaoAtual, _, PopulacaoAtual).
+
 
 /* Geração dos pontos de cruzamento P1 (onde começa o corte) e P2 (onde acaba o corte), 
 por exemplo se P1 for 2 e P2 for 4 os pontos de corte serão entre o 1º e 2º gene e entre o 4º e 5º gene.
@@ -194,6 +203,7 @@ gerar_pontos_cruzamento1(P1,P2):-
 gerar_pontos_cruzamento1(P1,P2):-
 	gerar_pontos_cruzamento1(P1,P2).
 
+
 /* O cruzamento realizado sobre indivíduos sucessivos 2 a 2 da população. Para saber se se realiza o cruzamento gera-se um nº aleatório entre 0 e 1, 
 e compara-se com a probabilidade de cruzamento parametrizada, se for inferior faz-se o cruzamento */
 cruzamento([],[]).
@@ -207,11 +217,13 @@ cruzamento([Ind1*_,Ind2*_|Resto],[NInd1,NInd2|Resto1]):-
 	(NInd1=Ind1,NInd2=Ind2)),
 	cruzamento(Resto,Resto1).
 
+
 /* Predicados auxiliares para fazer o cruzamento order crossover, que é o adequado para o sequenciamento de tarefas */
 preencheh([],[]).
 
 preencheh([_|R1],[h|R2]):-
 	preencheh(R1,R2).
+
 
 /*Predicados auxiliares para fazer o cruzamento order crossover, que é o adequado para o sequenciamento de tarefas */
 sublista(L1,I1,I2,L):-
@@ -278,7 +290,6 @@ cruzar(Ind1,Ind2,P1,P2,NInd11):-
 	P3 is P2 + 1,
 	insere(Sub2,Sub1,P3,NInd1),
 	eliminah(NInd1,NInd11).
-
 
 eliminah([],[]).
 

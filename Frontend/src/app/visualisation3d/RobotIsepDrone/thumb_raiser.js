@@ -364,7 +364,6 @@ export default class ThumbRaiser {
 
     // Set active view camera
     setActiveViewCamera(camera) {
-        console.log(camera)
         this.activeViewCamera = camera;
         this.horizontal.min = this.activeViewCamera.orientationMin.h.toFixed(0);
         this.horizontal.max = this.activeViewCamera.orientationMax.h.toFixed(0);
@@ -759,7 +758,7 @@ export default class ThumbRaiser {
 
                                         connectedFloor.floorMap.initialPosition = nextMapStartPosition;
 
-                                        this.changeMap(connectedFloor.floorMap);
+                                        this.changeMap(connectedFloor);
 
                                         this.setActiveViewCamera(this.firstPersonViewCamera);
 
@@ -903,13 +902,22 @@ export default class ThumbRaiser {
             }
         }
     }
-    async changeMap(path) {
+    async changeMap(path, newPosition = null) {
         try {
-
+            this.floorActual = path;
+            this.setActiveViewCamera(this.fixedViewCamera);
             this.gameRunning = false
             this.scene3D.remove(this.maze.object)
-            this.mazeParameters.url = path;
-            this.maze = new Maze(this.mazeParameters);
+            this.mazeParameters.url = path.floorMap;
+
+            if(newPosition == null){                
+                this.maze = new Maze(this.mazeParameters);
+            }else{
+                //muda a posicao inicial do robot, util para quando sai de elevador ou passagem
+                this.mazeParameters.url.initialPosition = newPosition;
+                
+                this.maze = new Maze(this.mazeParameters); 
+            }
 
         } catch (error) {
             console.error('Error changing map:', error);
@@ -1021,11 +1029,6 @@ export default class ThumbRaiser {
         return movements;
     }
 
-    /*
-        isABridge() {
-            return this.existBridge;
-        }
-        */
 
 
     listFloorThisBuilding(floors,atualFloor) {
@@ -1033,23 +1036,34 @@ export default class ThumbRaiser {
         this.floorActual = atualFloor;
     }
 
-    selectNewFloorFromBuilding() {
+    changeToFixedView(){
+        this.setActiveViewCamera(this.fixedViewCamera);
+    }
+    async selectNewFloorFromBuilding() {
         this.setActiveViewCamera(this.firstPersonViewCamera);
-        this.player.direction = -90;
         this.animations.actionInProgress = true;
-        this.initializeElevator(this.player,this.floorActual, this.animations,this.maze);
-        //this.animations.actionInProgress = false;
+
+        this.initializeElevator(
+            this.player, this.floorActual, this.animations, this.maze, this.listFloors,this.changeMap.bind(this), this.changeToFixedView.bind(this))
+
+
+        //this.setActiveViewCamera(this.fixedViewCamera);
+
     }
 
     /**
      * Animacao de elevador
      * Esta a ser criado html e css atraves de javascript
      * Nao mexer , a nao ser que sejas o Miguel Cardoso :D
-     * @param {*} player 
+     * @param {*} player instancia player
+     * @param {*} floorActual json floor
+     * @param {*} animations instancia animation
+     * @param {*} maze instancia maze
+     * @param {*} buidlingsFloors floors
+     * @param {*} changeMap instancia da funcao changeMap
      */
-    initializeElevator(player,floorActual, animations, maze) {
+    async initializeElevator(player,floorActual, animations, maze, buidlingsFloors, changeMap, changeToFixedView) {
         var ELEVATOR = {};
-      
         function createElevatorElements() {
             var elevatorPanel = document.createElement('div');
             elevatorPanel.id = 'elevator-panel';
@@ -1187,13 +1201,9 @@ export default class ThumbRaiser {
           ELEVATOR.speedFactor = elevatorSpeed;
             
           ELEVATOR.$exitButton.addEventListener('click',function(){
-            document.getElementById('elevator-panel').remove();
-            player.position = maze.cellToCartesian(floorActual.floorMap.elevators[0].exit)
-            animations.actionInProgress = false;
-
-
-            
+                exitElevator(floorActual.floorMap.elevators[0].exit == undefined ? [0,0] : floorActual.floorMap.elevators[0].exit);
           })
+
           ELEVATOR.$button.forEach(function (button) {
             button.addEventListener('click', function () {
               var selectedFloor = button.textContent;
@@ -1209,6 +1219,7 @@ export default class ThumbRaiser {
                 } else {
                   ELEVATOR.selectedFloorList.push(selectedFloor);
                   if (ELEVATOR.selectedFloorList.length === 1) {
+
                     changeFloor();
                   }
                 }
@@ -1217,15 +1228,25 @@ export default class ThumbRaiser {
           });
         };
     
+        function exitElevator( position =null){
+            //console.log(floorActual.floorMap.elevators[0].exit)
+            document.getElementById('elevator-panel').remove();
+            changeToFixedView()
+            //player.position = maze.cellToCartesian(floorActual.floorMap.elevators[0].exit == undefined ? [0,0] : floorActual.floorMap.elevators[0].exit)
+            if(position != null){
+                player.position = maze.cellToCartesian(position)
+            }
 
+            animations.actionInProgress = false;
+        }
         async function changeFloor() {
+            
           var selectedFloor = ELEVATOR.selectedFloorList[0];
           var currentFloor = ELEVATOR.$floorNumber.textContent;
 
           //Up
           if (selectedFloor > currentFloor) {
             ELEVATOR.$upIndicator.style.backgroundColor = '#00cd00';
-            vibracaoCamera();
             animateFloor(
               selectedFloor,
               add(currentFloor),
@@ -1233,12 +1254,15 @@ export default class ThumbRaiser {
               '0%',
               add
             );
+            await vibracaoCamera();
+            floorActual = buidlingsFloors.find(objecto => objecto.floorNumber == selectedFloor);
+            await changeMap(floorActual,floorActual.floorMap.elevators[0].exit);
+            exitElevator(selectedFloor);
 
           }
           //DOWN
           else if (selectedFloor < currentFloor) {
             ELEVATOR.$downIndicator.style.backgroundColor = '#ff0000';
-            vibracaoCamera();
             animateFloor(
               selectedFloor,
               subtract(currentFloor),
@@ -1246,7 +1270,11 @@ export default class ThumbRaiser {
               '0%',
               subtract
             );
-          }
+            await vibracaoCamera();
+            floorActual = buidlingsFloors.find(objecto => objecto.floorNumber == selectedFloor);
+            await changeMap(floorActual, floorActual.floorMap.elevators[0].exit);
+            exitElevator(selectedFloor);
+            }
         }
       
         function animateFloor(selectedFloor, nextFloor, firstMargin, secondMargin, directionOp) {
@@ -1299,16 +1327,15 @@ export default class ThumbRaiser {
         async function vibracaoCamera(){
            
             while(ELEVATOR.$upIndicator.style.backgroundColor == 'rgb(0, 205, 0)' || ELEVATOR.$downIndicator.style.backgroundColor == 'rgb(255, 0, 0)'){
-                player.direction = -90.2
+                player.direction += 0.2
                 await new Promise(resolve => setTimeout(resolve, 100));
-                player.direction = -90
+                player.direction -= 0.2
                 await new Promise(resolve => setTimeout(resolve, 100));
             }
-
         }
+        ELEVATOR.initialize(1000);  
+        return floor;
 
-
-        ELEVATOR.initialize(1000);
-      }
+    }      
     
 }

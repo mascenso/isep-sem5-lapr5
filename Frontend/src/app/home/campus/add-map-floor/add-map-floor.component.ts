@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BuildingService } from '../../../services/building.service';
 import { FloorService } from '../../../services/floor.service'; 
@@ -19,7 +18,6 @@ export class AddMapFloorComponent implements OnInit{
   fileToUpload: File | null = null;
 
   constructor(
-    private http: HttpClient,
     private buildingService: BuildingService,
     private floorService: FloorService,
     private snackBar: MatSnackBar
@@ -66,7 +64,7 @@ export class AddMapFloorComponent implements OnInit{
     
     this.floorService.addMapFloor(this.selectedFloor,this.fileToUpload).subscribe(
       (response) => {
-        this.snackBar.open('Mapa criado com sucesso.', 'Fechar', { duration: 3000, panelClass: ['snackbar-success'] });
+        this.snackBar.open('Mapa enviado com sucesso.', 'Fechar', { duration: 3000, panelClass: ['snackbar-success'] });
         console.log('Mapa criado com sucesso', response);
       },
       (error) => {

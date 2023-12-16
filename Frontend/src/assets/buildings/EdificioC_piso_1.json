@@ -1,0 +1,55 @@
+{
+    "groundTextureUrl": "./assets/textures/lbs-concrete-medium-grey-1-b.jpg",
+    "wallTextureUrl": "./assets/textures/wall-murals-rainbow-wood-texture.png",
+    "windowTextureUrl":"./assets/textures/tijoloWallWindow.jpg",
+    "doorTextureUrl":"./assets/textures/doorTexture.jpg",
+    "size": { "width": 20, "height":  12},
+    "map": [
+        [3 ,  2,  2,  2,  3,  2,  2,  2,  2,  2,  2,  2,  3,  2,  2,  2,  2,  2,  2,  2,  1],
+        [1 ,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  1],
+        [1 ,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  1],
+        [1 ,  0,  0,  0,  1,  0,  3,  2,  2,  2,  1,  0,0.4,  0,  0,  0,  0,  0,  0,  0,  1],
+        [1 ,  0,  0,  0,  1,  0,  1,  0,  0,  0,0.4,  0,  2,  2,  3,  2,  2,  2,  2,  2,  1],
+        [1 ,  0,  0,  0,0.4,  0,  1,  0,  0,  0,  1,  0,  0,  0,0.4,  0,  0,  0,  0,  0,  1],
+        [3 ,  2,  2,  2,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  0,  0,  1],
+        [1 ,  0,  0,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  0,  0,  1],
+        [3 ,  2,0.2,  2,  3,0.2,  2,  2,  3,  2,  2,0.2,  1,  0,  2,  2,  3,  2,  2,  2,  1],
+        [1 ,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,0.4,  0,  0,  0,  1],
+        [1 ,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1],
+        [1 ,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1],
+        [2 ,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  0]
+    ],
+    "initialPosition": [11, 11],
+    "initialDirection": 180.0,
+  "elevators":[
+    {
+      "position":[11,12],
+      "orientation":"N",
+      "exit": [10,12]
+    }
+  ],
+    "bridges":
+    [
+        {
+            "locationBridge":[8,12],
+            "buildind":
+                {
+                    "code":"C",
+                    "floor":1,
+                    "inicialPosition":[8,10]
+                }
+        },
+      {
+        "locationBridge":[14,12],
+        "buildind":
+        {
+          "code":"C",
+          "floor":3,
+          "inicialPosition":[14,10]
+        }
+      }
+    ],
+    "exitLocation": [0,0],
+    "locker":[],
+  "tables":[]
+}

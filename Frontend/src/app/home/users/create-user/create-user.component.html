@@ -1,0 +1,44 @@
+<div class="create-user-container">
+    <div class="create-user-section">
+      <h2>Create a new user by Role</h2>
+      <mat-card class="form-card-container">
+        <mat-card-content>
+          <form class="form" [formGroup]="createUserForm" (ngSubmit)="onSubmit()">
+            <p>
+              <mat-form-field class="form-field form-field-email">
+                <mat-label>email</mat-label>
+                <input matInput [formControl]="createUserForm.controls.email" #inputCode maxlength="5" placeholder="Ex. B1234" value="B1234">
+                <mat-hint align="end">{{inputCode.value.length}} / 5</mat-hint>
+                <mat-error *ngIf="createUserForm.controls.email.hasError('required')">email is <strong>required</strong></mat-error>
+                <mat-error *ngIf="createUserForm.controls.email.hasError('pattern')">email must be in <strong>format XXXXX</strong></mat-error>
+
+              </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field class="form-field form-field-password">
+                    <mat-label>Password</mat-label>
+                    <input matInput [formControl]="createUserForm.controls.password" type="password" placeholder="Ex. Password123!">
+                    <mat-error *ngIf="createUserForm.controls.password.hasError('required')">Password é <strong>obrigatória</strong></mat-error>
+                    <mat-error *ngIf="createUserForm.controls.password.hasError('invalidPassword')">Password deve ter no mínimo 10 caracteres, 1 maiúscula, 1 minúscula, 1 dígito e 1 símbolo</mat-error>
+                </mat-form-field>
+              </p>
+            <p>
+                <mat-form-field class="form-field form-field-user-role">
+                    <mat-label>User Roles</mat-label>
+                  <mat-select matInput [formControl]="createUserForm.controls.userRole" multiple data-testid="UserRoleSelect">
+                    <mat-option *ngFor="let roles of UserRoles" [value]="roles">{{ roles }}</mat-option>
+                  </mat-select>
+                  </mat-form-field>
+            </p>
+            <div class="form-button-group">
+              <button mat-flat-button color="primary" type="submit" [disabled]="!createUserForm.valid">Create</button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+
+
+

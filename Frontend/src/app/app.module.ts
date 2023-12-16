@@ -52,12 +52,16 @@ import { EditElevatorsComponent } from './home/campus/edit-elevators/edit-elevat
 import { ViewComponent } from "./home/view/view.component";
 import { CreateRoomComponent } from './home/campus/create-room/create-room.component';
 import { PlanRouteWithViewComponent } from './home/tasks/plan-route-with-view/plan-route-with-view.component';
+import { UsersComponent } from './home/users/users.component';
+import { ValidateUserComponent } from './home/users/validate-user/validate-user.component';
+import { CreateUserComponent } from './home/users/create-user/create-user.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HomeComponent,
+    UsersComponent,
     CampusComponent,
     FleetComponent,
     TasksComponent,
@@ -82,7 +86,10 @@ import { PlanRouteWithViewComponent } from './home/tasks/plan-route-with-view/pl
     CreateRobotComponent,
     EditElevatorsComponent,
     CreateRoomComponent,
-    PlanRouteWithViewComponent
+    PlanRouteWithViewComponent,
+    UsersComponent,
+    ValidateUserComponent,
+    CreateUserComponent
   ],
   imports: [
     BrowserModule,

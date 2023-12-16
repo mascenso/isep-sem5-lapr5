@@ -698,7 +698,7 @@ export default class ThumbRaiser {
     }
 
 
-    update() {
+    async update() {
 
         if (!this.gameRunning) {
             if (this.maze.loaded && this.player.loaded) { // If all resources have been loaded
@@ -760,10 +760,11 @@ export default class ThumbRaiser {
                                     if (connectedFloor) {
 
                                         connectedFloor.floorMap.initialPosition = nextMapStartPosition;
+                                        this.bridgeCross(connectedFloor);
+                                        //await new Promise(resolve => setTimeout(resolve, 5000));
+                                        //this.changeMap(connectedFloor);
 
-                                        this.changeMap(connectedFloor);
-
-                                        this.setActiveViewCamera(this.firstPersonViewCamera);
+                                        //this.setActiveViewCamera(this.firstPersonViewCamera);
 
                                     } else {
                                         if (connectedFloor.length == 0) {
@@ -1417,6 +1418,68 @@ export default class ThumbRaiser {
         ELEVATOR.initialize(1000);  
         return floor;
 
-    }      
+    }
+    
+    /**
+     * Funcao para animar com feedback visual a passagem entre edificios
+     * @param {*} connectedFloor 
+     */
+    async bridgeCross(connectedFloor){
+        this.animations.actionInProgress = true;
+
+        this.bridgeAnimation()
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        this.changeMap(connectedFloor);
+
+        //this.setActiveViewCamera(this.firstPersonViewCamera);
+    }
+
+    /**
+     * Feedback basico ao atravessar ponte
+     */
+    bridgeAnimation(){
+        var bridgePanel = document.createElement('div');
+        bridgePanel.id = 'bridge-panel';
+        bridgePanel.style.background = '#dddddd';
+        bridgePanel.style.border = '5px solid #000000';
+        bridgePanel.style.padding = '30px';
+        bridgePanel.style.width = '70%';
+        bridgePanel.style.height = '20%';
+        bridgePanel.style.zIndex = '9999';
+        bridgePanel.style.position = 'fixed';
+        bridgePanel.style.top = '50%';
+        bridgePanel.style.left = '50%';
+        bridgePanel.style.transform = 'translate(-50%, -50%)';
+        bridgePanel.style.fontSize = '40px';
+        bridgePanel.style.textAlign = 'center';
+        bridgePanel.style.borderRadius = '30px';
+
+        bridgePanel.innerHTML = "Estas a atravessar uma ponte entre pisos<br>Espera <span class='blink'>...</span>";
+
+        document.body.appendChild(bridgePanel);
+
+        //pisca pisca :)
+        var style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes blink {
+                0%, 49% {
+                    opacity: 1;
+                }
+                50%, 100% {
+                    opacity: 0;
+                }
+            }
+    
+            .blink {
+                display: inline-block;
+                animation: blink 1s step-end infinite;
+            }
+        `;
+        document.head.appendChild(style);
+
+        setTimeout(function () {
+            document.body.removeChild(bridgePanel);
+        }, 5500);
+    }
     
 }

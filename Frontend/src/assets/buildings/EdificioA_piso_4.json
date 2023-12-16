@@ -1,6 +1,6 @@
 {
     "groundTextureUrl": "./assets/textures/parquet.jpg",
-    "wallTextureUrl": "./assets/textures/wall2.jpeg",
+    "wallTextureUrl": "./assets/textures/wall4.jpeg",
     "windowTextureUrl":"./assets/textures/tijoloWallWindow.jpg",
     "doorTextureUrl":"./assets/textures/door1.jpg",
     "size": { "width": 22, "height": 10 },

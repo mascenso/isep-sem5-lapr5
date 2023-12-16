@@ -24,7 +24,7 @@ import { ConsoleReporter } from 'jasmine';
 export class ViewComponent implements OnInit {
   @Input() showMenus = true;
   @Input() automaticPlaning: any = {};
-  @Input() cellsToMove: number[][] = [];
+  @Input() cellsToMove: object[] = [];
 
   //@Input() mapToRender: any = "";
   thumbRaiser: any;
@@ -144,7 +144,7 @@ export class ViewComponent implements OnInit {
     }
   }
 
-  makeAutomaticAnimation(cellsToMove: number[][]) {
+  makeAutomaticAnimation(cellsToMove: object[]) {
     //mapa (JSON) passado por parametro no componente
     let mapToSend = {floorMap:this.automaticPlaning.data}
     this.mapToRender = mapToSend;

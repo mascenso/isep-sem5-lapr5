@@ -339,6 +339,9 @@ export default class ThumbRaiser {
         // para guardar a informação da passagem referente ao proximo mapa a carregar
         this.bridgeInfo = "";
 
+        //modo automatico
+        this.automaticMode = false;
+
     }
 
     buildHelpPanel() {
@@ -734,7 +737,7 @@ export default class ThumbRaiser {
                 // Check if the player found a bridge
                 this.bridgeInfo = this.maze.foundBridge(this.player.position);
 
-                if (this.bridgeInfo) {
+                if (this.bridgeInfo && !this.automaticMode) {
 
                     console.log("We will change maps according to the bridge connection!");
 
@@ -762,11 +765,6 @@ export default class ThumbRaiser {
 
                                         this.setActiveViewCamera(this.firstPersonViewCamera);
 
-                                        //this.animations.fadeToAction("run", 0.2);
-                                        //this.playerAnimations.fadeToAction("run", 0.2); 
-
-
-
                                     } else {
                                         if (connectedFloor.length == 0) {
                                             this._snackBar.open("There is no map on any floor of this building", "close", {
@@ -788,8 +786,7 @@ export default class ThumbRaiser {
                         });
 
 
-                } else if (this.maze.findElevator(this.player.position)) {
-                    console.log("encontrei um elevador")
+                } else if (this.maze.findElevator(this.player.position) && !this.automaticMode) {
                     this.selectNewFloorFromBuilding();
                 } else {
                     let coveredDistance = this.player.walkingSpeed * deltaT;
@@ -826,25 +823,7 @@ export default class ThumbRaiser {
                             this.animations.fadeToAction(this.player.keyStates.run ? "run" : "walk", 0.2);
                             this.player.position = newPosition;
                         }
-                    }/*
-                    else if (this.player.keyStates.jump) {
-                        this.animations.fadeToAction("Jump", 0.2);
                     }
-                    else if (this.player.keyStates.yes) {
-                        this.animations.fadeToAction("Yes", 0.2);
-                    }
-                    else if (this.player.keyStates.no) {
-                        this.animations.fadeToAction("No", 0.2);
-                    }
-                    else if (this.player.keyStates.wave) {
-                        this.animations.fadeToAction("Wave", 0.2);
-                    }
-                    else if (this.player.keyStates.punch) {
-                        this.animations.fadeToAction("Punch", 0.2);
-                    }
-                    else if (this.player.keyStates.thumbsUp) {
-                        this.animations.fadeToAction("ThumbsUp", 0.2);
-                    } */
                     else {
                         this.animations.fadeToAction("idle", this.animations.activeName != "None" ? 0.2 : 0.6);
                         //this.animations.fadeToAction("Idle", this.animations.activeName != "Death" ? 0.2 : 0.6);
@@ -904,19 +883,37 @@ export default class ThumbRaiser {
     }
     async changeMap(path, newPosition = null) {
         try {
-            this.floorActual = path;
-            this.setActiveViewCamera(this.fixedViewCamera);
-            this.gameRunning = false
-            this.scene3D.remove(this.maze.object)
-            this.mazeParameters.url = path.floorMap;
 
-            if(newPosition == null){                
-                this.maze = new Maze(this.mazeParameters);
+            if(typeof path == "object"){
+                this.floorActual = path;
+                this.setActiveViewCamera(this.fixedViewCamera);
+                this.gameRunning = false
+                this.scene3D.remove(this.maze.object)
+                this.mazeParameters.url = path.floorMap;
+    
+                if(newPosition == null){                
+                    this.maze = new Maze(this.mazeParameters);
+                }else{
+                    //muda a posicao inicial do robot, util para quando sai de elevador ou passagem
+                    this.mazeParameters.url.initialPosition = newPosition;
+                    
+                    this.maze = new Maze(this.mazeParameters); 
+                }
             }else{
-                //muda a posicao inicial do robot, util para quando sai de elevador ou passagem
-                this.mazeParameters.url.initialPosition = newPosition;
-                
-                this.maze = new Maze(this.mazeParameters); 
+                this.floorActual = path;
+                this.setActiveViewCamera(this.fixedViewCamera);
+                this.gameRunning = false
+                this.scene3D.remove(this.maze.object)
+                this.mazeParameters.url = path;
+    
+                if(newPosition == null){                
+                    this.maze = new Maze(this.mazeParameters);
+                }else{
+                    //muda a posicao inicial do robot, util para quando sai de elevador ou passagem
+                    this.mazeParameters.url.initialPosition = newPosition;
+                    
+                    this.maze = new Maze(this.mazeParameters); 
+                }
             }
 
         } catch (error) {
@@ -924,36 +921,87 @@ export default class ThumbRaiser {
         }
     }
 
+    /**
+     * Recebe um array do tipo
+     * [
+     *  {caminho:[[x,y]], elevador:boolean, map:json or string}
+     * ]
+     * @param {*} movementsRobot lista de movimentos em x,y
+     * @param {*} inicialPosition posicao para iniciar trajeto
+     */
     async performAutomaticMovements(movementsRobot, inicialPosition) {
 
-        const movements = this.calculateMovements(inicialPosition, movementsRobot);
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        for (const numberOfFloors of movementsRobot){
+            this.automaticMode = true;
+            const movements = this.calculateMovements(inicialPosition, numberOfFloors.caminho);
+            await new Promise(resolve => setTimeout(resolve, 2000));
+    
+            for (const movement of movements) {
+    
+                const finalPositiveZ = this.player.position.z + 1;
+                const finalNegativeZ = this.player.position.z - 1;
+                const finalPositiveX = this.player.position.x + 1;
+                const finalNegativeX = this.player.position.x - 1;
+    
+                if (movement.Up) {
+                    await this.movement(180, finalNegativeZ, finalPositiveZ)
+                } else if (movement.Down) {
+                    await this.movement(0, finalNegativeZ, finalPositiveZ)
+                } else if (movement.Left) {
+                    await this.movement(270, finalNegativeX, finalPositiveX)
+                } else if (movement.Rigth) {
+                    await this.movement(90, finalNegativeX, finalPositiveX)
+                } else if (movement.UpRigth) {
+                    await this.movementDiagonal(135, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
+                } else if (movement.UpLeft) {
+                    await this.movementDiagonal(225, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
+                } else if (movement.DownRight) {
+                    await this.movementDiagonal(45, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
+                } else if (movement.DownLeft) {
+                    await this.movementDiagonal(315, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
+                }
+            }
+            
+            if(numberOfFloors.elevador){
+                let light;
+                light = this.pontualLight(this.player.position)
 
-        for (const movement of movements) {
 
-            const finalPositiveZ = this.player.position.z + 1;
-            const finalNegativeZ = this.player.position.z - 1;
-            const finalPositiveX = this.player.position.x + 1;
-            const finalNegativeX = this.player.position.x - 1;
-
-            if (movement.Up) {
-                await this.movement(180, finalNegativeZ, finalPositiveZ)
-            } else if (movement.Down) {
-                await this.movement(0, finalNegativeZ, finalPositiveZ)
-            } else if (movement.Left) {
-                await this.movement(270, finalNegativeX, finalPositiveX)
-            } else if (movement.Rigth) {
-                await this.movement(90, finalNegativeX, finalPositiveX)
-            } else if (movement.UpRigth) {
-                await this.movementDiagonal(135, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
-            } else if (movement.UpLeft) {
-                await this.movementDiagonal(225, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
-            } else if (movement.DownRight) {
-                await this.movementDiagonal(45, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
-            } else if (movement.DownLeft) {
-                await this.movementDiagonal(315, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
+                this.setActiveViewCamera(this.firstPersonViewCamera);
+                let repeat = 40;
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                while(repeat>0){
+                    this.player.direction += 0.2
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    this.player.direction -= 0.2
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    repeat--;
+                }
+                //apagar luz elevador
+                this.scene3D.remove(light);
+                this.changeMap(numberOfFloors.map);
             }
         }
+
+    }
+
+    /**
+     * Adiciona luz pontual na posicao que queremos
+     * @param {} position 
+     * @returns 
+     */
+    pontualLight(position){
+        var light = new THREE.PointLight(0xffffff, 1, 10);
+        light.position.copy(position);
+        this.scene3D.add(light);
+        return light;
+    }
+    /**
+     * Remove luz pontual
+     * @param {*} light 
+     */
+    removeLight(light){
+        this.scene3D.remove(light);
     }
     async movement(direction, finalNegative, finalPositive) {
         this.player.direction = direction;
@@ -1044,10 +1092,8 @@ export default class ThumbRaiser {
         this.animations.actionInProgress = true;
 
         this.initializeElevator(
-            this.player, this.floorActual, this.animations, this.maze, this.listFloors,this.changeMap.bind(this), this.changeToFixedView.bind(this))
-
-
-        //this.setActiveViewCamera(this.fixedViewCamera);
+            this.player, this.floorActual, this.animations, this.maze, this.listFloors,this.changeMap.bind(this), this.changeToFixedView.bind(this),
+            this.pontualLight.bind(this), this.removeLight.bind(this))
 
     }
 
@@ -1062,9 +1108,13 @@ export default class ThumbRaiser {
      * @param {*} buidlingsFloors floors
      * @param {*} changeMap instancia da funcao changeMap
      */
-    async initializeElevator(player,floorActual, animations, maze, buidlingsFloors, changeMap, changeToFixedView) {
+    async initializeElevator(player,floorActual, animations, maze, buidlingsFloors, changeMap, changeToFixedView,pontualLight,removeLight) {
         var ELEVATOR = {};
+        var lightElevator = {};
+        var lightOn = true;
         function createElevatorElements() {
+            lightElevator = pontualLight(player.position)
+
             var elevatorPanel = document.createElement('div');
             elevatorPanel.id = 'elevator-panel';
             elevatorPanel.style.background = '#dddddd';
@@ -1139,6 +1189,20 @@ export default class ThumbRaiser {
             arrowElement.style.marginBottom = '20px';
             arrowElement.style.transform = 'rotate(-90deg)';
             arrowElement.style.cursor = 'pointer';
+
+            var turnOnLightElement = document.createElement('div');
+            turnOnLightElement.id = 'turnOnLight'
+            turnOnLightElement.style.position = 'absolute';
+            turnOnLightElement.style.width = '0';
+            turnOnLightElement.style.height = '0';
+            turnOnLightElement.style.left = '43%';
+            turnOnLightElement.style.top = '67%';
+            turnOnLightElement.style.cursor = 'pointer';
+
+            var image = document.createElement('img');
+            image.src = 'assets/butons/light_button.png';
+
+            turnOnLightElement.appendChild(image);
         
             for (var i = 1; i <= 4; i++) {
               var listItem = document.createElement('li');
@@ -1181,6 +1245,7 @@ export default class ThumbRaiser {
             elevatorPanel.appendChild(displayPanel);
             elevatorPanel.appendChild(floorSelection);
             elevatorPanel.appendChild(arrowElement);
+            elevatorPanel.appendChild(turnOnLightElement);
             floorSelection.appendChild(navigationList);
         
             document.body.appendChild(elevatorPanel);
@@ -1195,7 +1260,9 @@ export default class ThumbRaiser {
         ELEVATOR.$upIndicator = document.getElementById('up-indicator');
         ELEVATOR.$downIndicator = document.getElementById('down-indicator');
         ELEVATOR.$exitButton = document.getElementById('arrowElementExit');
+        ELEVATOR.$turnOnLight = document.getElementById('turnOnLight');
         ELEVATOR.speedFactor = 10000;
+
       
         ELEVATOR.initialize = function (elevatorSpeed) {
           ELEVATOR.speedFactor = elevatorSpeed;
@@ -1203,6 +1270,17 @@ export default class ThumbRaiser {
           ELEVATOR.$exitButton.addEventListener('click',function(){
                 exitElevator(floorActual.floorMap.elevators[0].exit == undefined ? [0,0] : floorActual.floorMap.elevators[0].exit);
           })
+
+          //funcao para ligar e desligar luz elevador
+          ELEVATOR.$turnOnLight.addEventListener('click',function(){
+            if(lightOn){
+                removeLight(lightElevator);
+                lightOn=false;
+            }else{
+                lightElevator = pontualLight(player.position);
+                lightOn=true
+            }
+        })
 
           ELEVATOR.$button.forEach(function (button) {
             button.addEventListener('click', function () {
@@ -1232,9 +1310,12 @@ export default class ThumbRaiser {
             //console.log(floorActual.floorMap.elevators[0].exit)
             document.getElementById('elevator-panel').remove();
             changeToFixedView()
-            //player.position = maze.cellToCartesian(floorActual.floorMap.elevators[0].exit == undefined ? [0,0] : floorActual.floorMap.elevators[0].exit)
             if(position != null){
                 player.position = maze.cellToCartesian(position)
+            }
+            //desliga a luz antes de sair do elevador
+            if(lightOn){
+                removeLight(lightElevator);
             }
 
             animations.actionInProgress = false;

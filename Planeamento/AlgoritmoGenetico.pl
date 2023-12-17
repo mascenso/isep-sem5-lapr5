@@ -138,52 +138,81 @@ gera_geracao(G,G,Pop):-!,
 
 gera_geracao(N,G,Pop):-
 	write('Geração '), write(N), write(':'), nl, write(Pop), nl,
-	ordena_populacao(Pop,PopOrd),
-	random_permutation(Pop, PopAleatoria), %Permutação aleatória da população
+
+	%Paraa assegurar mais aleatoridade ao cruzamento
+	random_permutation(Pop, PopAleatoria), 
+
 	cruzamento(PopAleatoria,NPop1),
 	mutacao(NPop1,NPop),
 	avalia_populacao(NPop,NPopAv),
 	ordena_populacao(NPopAv,NPopOrd),
-	union(PopOrd, NPopOrd, All), % para minimizar a presença de repetidos na lista All
+	ordena_populacao(Pop,PopOrd),
+	%Para minimizar a presença de repetidos na lista All (T individuos)
+	union(PopOrd, NPopOrd, All), 
 	ordena_populacao(All, AllOrd),
 
+    length(Pop, Size),
+	%Calcula o número de melhores a serem preservados, garantindo que pelo menos 30% sao preservados da população incial
+    NumeroMelhoresPreservar is round(Size * 0.3), 
+
 	%Seleciona os melhores indivíduos para preservar na próxima geração
-    NumeroMelhoresPreservar = 2, % Pensar melhor na forma como passar este valor para aqui.
-    seleciona_melhores(AllOrd, NumeroMelhoresPreservar, Melhores),nl,
-	length(Pop, Size),
-	% Inclui os melhores indivíduos na próxima geração
-	inclui_melhores(Melhores, NPopOrd,Size, NovaGeracao),
+    seleciona_melhores(AllOrd, NumeroMelhoresPreservar, Melhores,Restantes),
+
+	%Multiplica por um numero random entre 0 e 1
+    associa_random(Restantes, RestantesComProdutos),
+	ordena_populacao(RestantesComProdutos,RestantesComProdutosOrd),
+
+	%Recupera os Av dos individuos
+    recupera_avaliacoes(RestantesComProdutosOrd, AvRecuperados), 
+
+	%Vai buscar os N-P individuos da lista dos restantes (AvRecuperados)
+	seleciona_NP_restantes(AvRecuperados, Size-NumeroMelhoresPreservar, IndividuosParaProximaGeracao),
+
+	%Inclui os melhores indivíduos na próxima geração, assim como os restantes N-P individuos da lista conjunta da população atual e dos seus descendentes. 
+	append(Melhores,IndividuosParaProximaGeracao,NovaGeracao),
+
 	N1 is N+1,
 	gera_geracao(N1,G,NovaGeracao).
+	
+
+/* Predicado para muitliplicar um numero random entre 0 e 1 pela Av dos individuos. */
+associa_random([], []).
+associa_random([Ind*Av|Restantes], [Power-Ind*Av|RestantesComPotencia]):-
+    random(0.0, 1.0, Random),
+    Power is Av * Random,
+    associa_random(Restantes, RestantesComPotencia).
+
+
+/* Predicado para recuperar a Av original dos individuos . */
+recupera_avaliacoes([], []).
+recupera_avaliacoes([_-Ind*Av|RestantesComPotencia], [Ind*Av|RestantesAvaliacoes]):-
+    recupera_avaliacoes(RestantesComPotencia, RestantesAvaliacoes).
+
+
+/* Predicado para ir buscar os N - P restantes individuos da lista dos restantes resultantes 
+aquando da selecção dos melhores entre a população atual e dos seus descendentes. */
+seleciona_NP_restantes([], _, []).
+
+seleciona_NP_restantes(_, 0, []).
+
+seleciona_NP_restantes([Individuo*Av|Resto], N, [Individuo*Av|Selecionados]) :-
+    N > 0,
+    N1 is N - 1,
+    seleciona_NP_restantes(Resto, N1, Selecionados).
+
+seleciona_NP_restantes([_|Resto], N, Selecionados) :-
+    N > 0,
+    seleciona_NP_restantes(Resto, N, Selecionados).
 
 
 /* Seleciona os N melhores indivíduos da lista ordenada daquela geração. */
-seleciona_melhores(_, 0, []).
-
-seleciona_melhores([Ind*V|Resto], N, [Ind*V|Melhores]) :-
+seleciona_melhores([Ind*V|Resto], N, Melhores, Restantes) :-
     N > 0,
     N1 is N - 1,
-    seleciona_melhores(Resto, N1, Melhores).
+    seleciona_melhores(Resto, N1, MelhoresRestantes, Restantes),
+    Melhores = [Ind*V | MelhoresRestantes].
 
-
-/* Inclui os melhores indivíduos na próxima geração. Não permite duplicados na Próxima Geração. */
-inclui_melhores([], PopulacaoAtual, _, PopulacaoAtual).
-
-inclui_melhores([Melhor|Melhores], PopulacaoAtual, PopSize, ProximaGeracao) :-
-    not(member(Melhor, PopulacaoAtual)),
-    length(PopulacaoAtual, CurrentSize),
-    NewSize is CurrentSize + 1,
-    NewSize =< PopSize,
-    inclui_melhores(Melhores, [Melhor|PopulacaoAtual], PopSize, ProximaGeracao).
-
-inclui_melhores([Melhor|Melhores], PopulacaoAtual, PopSize, ProximaGeracao) :-
-    member(Melhor, PopulacaoAtual),
-	length(PopulacaoAtual, CurrentSize),
-    NewSize is CurrentSize + 1,
-    NewSize =< PopSize,
-    inclui_melhores(Melhores, PopulacaoAtual, PopSize, ProximaGeracao).
-
-inclui_melhores(_, PopulacaoAtual, _, PopulacaoAtual).
+seleciona_melhores(Resto, 0, [], Resto).  % Quando N chega a 0, a lista Melhores está completa, os restantes são os Restantes.
 
 
 /* Geração dos pontos de cruzamento P1 (onde começa o corte) e P2 (onde acaba o corte), 

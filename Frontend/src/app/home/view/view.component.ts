@@ -24,7 +24,7 @@ import { ConsoleReporter } from 'jasmine';
 export class ViewComponent implements OnInit {
   @Input() showMenus = true;
   @Input() automaticPlaning: any = {};
-  @Input() cellsToMove: number[][] = [];
+  @Input() cellsToMove: object[] = [];
 
   //@Input() mapToRender: any = "";
   thumbRaiser: any;
@@ -135,7 +135,7 @@ export class ViewComponent implements OnInit {
 
     this.thumbRaiser.maze.url = this.mapToRender.floorMap;
     this.thumbRaiser.listFloorThisBuilding(this.floors, this.mapToRender);
-    this.thumbRaiser.changeMap(this.mapToRender.floorMap);
+    this.thumbRaiser.changeMap(this.mapToRender);
   }
   
   async haveMap() {
@@ -144,14 +144,15 @@ export class ViewComponent implements OnInit {
     }
   }
 
-  makeAutomaticAnimation(cellsToMove: number[][]) {
+  makeAutomaticAnimation(cellsToMove: object[]) {
     //mapa (JSON) passado por parametro no componente
-    this.mapToRender = this.automaticPlaning.data;
+    let mapToSend = {floorMap:this.automaticPlaning.data}
+    this.mapToRender = mapToSend;
 
     this.thumbRaiser.maze.url = this.mapToRender;
     this.thumbRaiser.changeMap(this.mapToRender);
 
-    this.thumbRaiser.performAutomaticMovements(cellsToMove, this.mapToRender.initialPosition);
+    this.thumbRaiser.performAutomaticMovements(cellsToMove, this.mapToRender.floorMap.initialPosition);
   }
 
   nextMapByBridge(index: number) {

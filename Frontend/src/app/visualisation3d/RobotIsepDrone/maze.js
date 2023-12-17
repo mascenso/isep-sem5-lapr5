@@ -41,7 +41,8 @@ export default class Maze {
             if (description.elevators) {
                 this.elevatorsList = [];
                 for (let i = 0; i < description.elevators.length; i++) {
-                    this.elevatorsList.push(this.cellToCartesian(description.elevators[i].position))
+                    //this.elevatorsList.push(this.cellToCartesian(description.elevators[i].position))
+                    this.elevatorsList.push(description.elevators[i])
                 }
             }
 
@@ -538,15 +539,52 @@ export default class Maze {
     findElevator(position) {
         if (this.elevatorsList) {
             for (let i = 0; i < this.elevatorsList.length; i++) {
-                if (Math.abs(position.x - this.elevatorsList[i].x) < 0.5 * this.scale.x && Math.abs(position.z + 1.5 - this.elevatorsList[i].z) < 0.5 * this.scale.z) {
-                    return true;
+                let elevatorPosition = this.cartesianToCell(position);
+                let elevatorOrientation = this.elevatorsList[i].orientation;
+                if(elevatorOrientation == "S"){
+                    if (elevatorPosition[0]+1 == this.elevatorsList[i].position[0] && elevatorPosition[1] == this.elevatorsList[i].position[1]) {
+                        return true;
+                    }
+                }else if (elevatorOrientation == "O"){
+                    if (elevatorPosition[0] == this.elevatorsList[i].position[0] && elevatorPosition[1]-1 == this.elevatorsList[i].position[1]) {
+                        return true;
+                    }
+                }else if(elevatorOrientation == "E"){
+                    if (elevatorPosition[0] == this.elevatorsList[i].position[0] && elevatorPosition[1]+1 == this.elevatorsList[i].position[1]) {
+                        return true;
+                    }
+
+                }else if(elevatorOrientation == "N"){
+                    if (elevatorPosition[0]-1 == this.elevatorsList[i].position[0] && elevatorPosition[1] == this.elevatorsList[i].position[1]) {
+                        return true;
+                    }
                 }
+
             }
             return false;
         } else {
             return false;
         }
 
+    }
+
+    euclideanDistance(array1, array2) {
+        if (array1.length !== array2.length) {
+            throw new Error("Os arrays têm tamanhos diferentes.");
+        }
+    
+        let squaredSum = 0;
+    
+        for (let i = 0; i < array1.length; i++) {
+            squaredSum += Math.pow(array1[i] - array2[i], 2);
+        }
+    
+        return Math.sqrt(squaredSum);
+    }
+    
+    validarProximidade(arrayFixo, arrayDinamico, limiteCerteza) {
+        const distancia = this.euclideanDistance(arrayFixo, arrayDinamico);
+        return distancia <= limiteCerteza;
     }
 
     buildingToRender(position) {

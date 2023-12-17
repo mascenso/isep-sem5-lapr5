@@ -58,7 +58,9 @@ gera:-
 	av_inferior(AvEspecifica),
 	estabilizacao(NEstab),
 	get_time(Tinicial),
-	gera_geracao(0,NG,PopOrd,Tinicial,Tlimite,AvEspecifica,NEstab,0).
+	gera_geracao(0,NG,PopOrd,Tinicial,Tlimite,AvEspecifica,NEstab,0),
+	final_geracao(Ind*V), nl,
+	write('Solução Final: '), write(Ind*V), nl.
 
 
 /* Cria uma população de indivíduos. Gera a lista de individuos conforme a quantidade de tarefas e tamanho da população. 
@@ -148,9 +150,9 @@ gera_geracao(_,_,Pop,Ti,Tlim,_,_,_):-
 	write('Excedeu o tempo máximo!'),nl.
 
 
-gera_geracao(N,_,[Ind*V|T1],_,_,AvEspecifica,_,_):-
+gera_geracao(_,_,[Ind*V|T1],_,_,AvEspecifica,_,_):-
 	V =< AvEspecifica,
-	termina_geracao_Av([Ind*V|T1],N),!,
+	termina_geracao([Ind*V|T1]),!,
 	write('Atingiu a avaliação especifica!'),nl.
 
 
@@ -205,13 +207,10 @@ gera_geracao(N,G,Pop,Tinicial,Tlimite,AvEspecifica,NEstab,Count):-
 	((compare(D,NovaGeracao,Pop), D == (=), Count1 is Count + 1);Count1 is 0),
     gera_geracao(N1,G,NovaGeracao,Tinicial,Tlimite,AvEspecifica,NEstab,Count1).
 
-	
+/* Predicado para finalizar o predicado*/	
 termina_geracao([Ind*V|_]):-
     (retract(final_geracao());true), asserta(final_geracao(Ind*V)),!.
 
-termina_geracao_Av([Ind*V|L],N):-
-	write('Geração '), write(N), write(':'), nl, write([Ind*V|L]), nl,
-    (retract(final_geracao());true), asserta(final_geracao(Ind*V)),!.
 
 /* Predicado para muitliplicar um numero random entre 0 e 1 pela Av dos individuos. */
 associa_random([], []).

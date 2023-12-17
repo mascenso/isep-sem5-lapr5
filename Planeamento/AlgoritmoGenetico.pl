@@ -33,14 +33,19 @@ inicializa:-
 	(retract(prob_cruzamento(_));true), asserta(prob_cruzamento(PC)),
 	write('Probabilidade de Mutacao (%):'), read(P2),
 	PM is P2/100, 
-	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)).
+	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)),
+	write('Tempo limite de execucao (S): '), read(T),
+	(retract(tempo_limite(_));true), asserta(tempo_limite(T)),
+	write('Avaliacao Especifica: '), read(Av),
+    (retract(avaliacao_especifica());true), asserta(av_inferior(Av)),    
+	write('Numero de Geracoes ate Estabilizacao: '), read(NEstab),nl,
+    (retract(estabilizacao());true), asserta(estabilizacao(NEstab)),!.
 
 
 /* Predicado a ser invocado "à cabeça". Inicializa o algoritmo genético.
 Cada elemento da lista é do tipo LT*Av onde LT é uma lista de tarefas (indivíduo), por exemplo [t3,t1,t5,t2,t4], e Av a respetiva avaliação em termos de soma pesada dos atrasos, 
 um elemento de PopOrd poderia ser [t3,t1,t5,t2,t4]*16, onde o * é um mero separador.
-Nota -> PopOrd - Lista com a geração inicial.
-*/
+Nota -> PopOrd - Lista com a geração inicial. */
 gera:-
 	inicializa,
 	gera_populacao(Pop),
@@ -49,15 +54,17 @@ gera:-
 	write('PopAv='),write(PopAv),nl,
 	ordena_populacao(PopAv,PopOrd),
 	geracoes(NG),
-	gera_geracao(0,NG,PopOrd).
+	tempo_limite(Tlimite),
+	av_inferior(AvEspecifica),
+	estabilizacao(NEstab),
+	get_time(Tinicial),
+	gera_geracao(0,NG,PopOrd,Tinicial,Tlimite,AvEspecifica,NEstab,0).
 
-	
 
 /* Cria uma população de indivíduos. Gera a lista de individuos conforme a quantidade de tarefas e tamanho da população. 
 Cada indivíduo é representado por uma lista de tarefas de tamanho NumT e é garantido que não haverá indivíduos repetidos.
 NumT - quantidade de tarefas; 
-TamPop - dimensão da população. 
-*/
+TamPop - dimensão da população. */
 gera_populacao(Pop):-
 	populacao(TamPop),
 	tarefas(NumT),
@@ -133,13 +140,35 @@ btroca([X|L1],[X|L2]):-btroca(L1,L2).
 
 /* Gera as próximas gerações da população. Inicia a craição das gerações seguintes, através do cruzamento, mutação e avaliação dos novos indivíduos.
 Antes do cruzamento é realizada a permutação aleátoria para minimizar a limitação do cruzamento dos individuos sucessivamente. */
-gera_geracao(G,G,Pop):-!,
-	write('Geração '), write(G), write(':'), nl, write(Pop), nl.
+gera_geracao(_,_,Pop,Ti,Tlim,_,_,_):-
+	get_time(Tf), 
+	TPassado is Tf-Ti,
+	TPassado >= Tlim, 
+	termina_geracao(Pop), !,
+	write('Excedeu o tempo máximo!'),nl.
 
-gera_geracao(N,G,Pop):-
+
+gera_geracao(N,_,[Ind*V|T1],_,_,AvEspecifica,_,_):-
+	V =< AvEspecifica,
+	termina_geracao_Av([Ind*V|T1],N),!,
+	write('Atingiu a avaliação especifica!'),nl.
+
+
+gera_geracao(_,_,[Ind*V|T1],_,_,_,NEstab,Count):-
+	NEstab == Count, 
+	termina_geracao([Ind*V|T1]), !,
+	write('A população estabilizou!'),nl.
+
+
+gera_geracao(G,G,Pop,_,_,_,_,_):-
+	termina_geracao(Pop), !,
+	write('Atingiu o número máximo de novas gerações!'),nl.
+
+
+gera_geracao(N,G,Pop,Tinicial,Tlimite,AvEspecifica,NEstab,Count):-
 	write('Geração '), write(N), write(':'), nl, write(Pop), nl,
 
-	%Paraa assegurar mais aleatoridade ao cruzamento
+	%Para assegurar mais aleatoridade ao cruzamento
 	random_permutation(Pop, PopAleatoria), 
 
 	cruzamento(PopAleatoria,NPop1),
@@ -172,8 +201,17 @@ gera_geracao(N,G,Pop):-
 	append(Melhores,IndividuosParaProximaGeracao,NovaGeracao),
 
 	N1 is N+1,
-	gera_geracao(N1,G,NovaGeracao).
+
+	((compare(D,NovaGeracao,Pop), D == (=), Count1 is Count + 1);Count1 is 0),
+    gera_geracao(N1,G,NovaGeracao,Tinicial,Tlimite,AvEspecifica,NEstab,Count1).
+
 	
+termina_geracao([Ind*V|_]):-
+    (retract(final_geracao());true), asserta(final_geracao(Ind*V)),!.
+
+termina_geracao_Av([Ind*V|L],N):-
+	write('Geração '), write(N), write(':'), nl, write([Ind*V|L]), nl,
+    (retract(final_geracao());true), asserta(final_geracao(Ind*V)),!.
 
 /* Predicado para muitliplicar um numero random entre 0 e 1 pela Av dos individuos. */
 associa_random([], []).
@@ -214,6 +252,11 @@ seleciona_melhores([Ind*V|Resto], N, Melhores, Restantes) :-
 
 seleciona_melhores(Resto, 0, [], Resto).  % Quando N chega a 0, a lista Melhores está completa, os restantes são os Restantes.
 
+
+
+remove_last([_], []).
+remove_last([X|Xs], [X|WithoutLast]) :-
+    remove_last(Xs, WithoutLast).
 
 /* Geração dos pontos de cruzamento P1 (onde começa o corte) e P2 (onde acaba o corte), 
 por exemplo se P1 for 2 e P2 for 4 os pontos de corte serão entre o 1º e 2º gene e entre o 4º e 5º gene.

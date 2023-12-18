@@ -103,24 +103,19 @@ avalia_populacao([Ind|Resto],[Ind*V|Resto1]):-
 /* Função de avaliação considerando apenas os custos das deslocações entre as tarefas */
 avalia([],0).
 
-avalia([T], 0) :-  % Apenas uma tarefa na lista
-    tarefa_local(T, _, _).
+avalia([T], CustoTotal) :-  % Apenas uma tarefa na lista
+    tarefa_local(T, _,_),
+	tarefa(T, TempoProcessamento, _),
+    CustoTotal is TempoProcessamento.
 
-avalia([T|Resto],CustoTotal):-
-    select(TarefaAnterior, [T|Resto], RestoComAnterior),  
-    select(T, RestoComAnterior, _),  
-	tarefa_local(T,PisoOrig,CelulaOrig),
-	tarefa_local(TarefaAnterior,PisoDest,CelulaDest),
-	((PisoOrig==PisoDest, aStar(CelulaOrig, CelulaDest, _, Custo));(caminho_pisos_com_custo(PisoOrig, PisoDest, _,_, Custo,_))),
-	avalia(Resto, CustoRestante),
-    CustoTotal is CustoRestante + Custo.
-
-tarefa_anterior(TarefaAnterior, [TarefaAnterior, Tarefa | _], Tarefa):-
-    !.  % Encontrou a tarefa anterior
-
-tarefa_anterior(TarefaAnterior, [ _ | Resto], Tarefa):-
-    tarefa_anterior(TarefaAnterior, Resto, Tarefa).
-
+avalia([T1, T2 | Resto], CustoTotal):-
+    tarefa_local(T1, PisoOrig, CelulaOrig),
+    tarefa_local(T2, PisoDest, CelulaDest),
+    tarefa(T1, TempoProcessamento1, _),
+    ((PisoOrig == PisoDest, aStar(CelulaOrig, CelulaDest, _, Custo)); (caminho_pisos_com_custo(PisoOrig, PisoDest, _, _, Custo, _))),
+    avalia([T2 | Resto], CustoRestante),
+	CustoTotal is CustoRestante + Custo + TempoProcessamento1.
+	avalia([], 0).
 
 /* Ordena os elementos da população por ordem crescente de avaliações pela soma pesada dos atrasos.
 Usa o bubble sort (bsort) para a ordenação. */
@@ -252,11 +247,6 @@ seleciona_melhores([Ind*V|Resto], N, Melhores, Restantes) :-
 
 seleciona_melhores(Resto, 0, [], Resto).  % Quando N chega a 0, a lista Melhores está completa, os restantes são os Restantes.
 
-
-
-remove_last([_], []).
-remove_last([X|Xs], [X|WithoutLast]) :-
-    remove_last(Xs, WithoutLast).
 
 /* Geração dos pontos de cruzamento P1 (onde começa o corte) e P2 (onde acaba o corte), 
 por exemplo se P1 for 2 e P2 for 4 os pontos de corte serão entre o 1º e 2º gene e entre o 4º e 5º gene.

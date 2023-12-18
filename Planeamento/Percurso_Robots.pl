@@ -108,8 +108,6 @@ caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal,Cel):-
     caminho_edificios(EdOr, EdDest, LCam),
     segue_pisos(PisoOr,PisoDest,LCam,LLig),
     calcular_custo_total(LLig, PisoOr, CustoTotal,Cel). 
-    %write('CustoTotal= '),write(CustoTotal),nl.
-
 
 /*Calculo custo total da viagem usando aStar em cada piso*/
 calcular_custo_total([], _, 0,[]).

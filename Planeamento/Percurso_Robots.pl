@@ -125,14 +125,14 @@ calcular_custo_unico(elev(PisoOr, _), PisoAtual, Custo,Cel) :-
     pos_init(PisoAtual, Orig),
     elev_pos(PisoOr, CDestino),
     aStar(Orig, CDestino, Cel, CustoElevador),
-    Custo is CustoElevador + 5.  % Adicionando o custo do elevador.
+    Custo is CustoElevador + 50.  % 30 unidades detempo para atravessar o corredor externo (pdf)
 
 /*Calcula distancia desde posicao inicia ate passagem*/
 calcular_custo_unico(cor(PisoOr, PisoDest), PisoOr, Custo,Cel) :-
     pos_init(PisoOr,Orig),
     (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
     aStar(Orig, CDestino, Cel, CustoPassagem),
-    Custo is CustoPassagem + 2.
+    Custo is CustoPassagem + 5. %5 unidades detempo para atravessar o corredor externo (pdf)
 
 
 novo_piso_destino(elev(_, PisoDest), PisoDest).

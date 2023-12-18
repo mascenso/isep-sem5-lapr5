@@ -4,17 +4,7 @@
 :-dynamic prob_mutacao/1.
 
 
-% tarefa(Id,TempoProcessamento,TempConc,PesoPenalizacao).
-tarefa(t1,2,5,1).
-tarefa(t2,4,7,6).
-tarefa(t3,1,11,2).
-tarefa(t4,3,9,3).
-tarefa(t5,3,8,3).
-%tarefa(t6,4,5,2).
-
-
-% tarefas(NTarefas).
-tarefas(5).
+:- consult('BC_RobDroneGo.pl').
 
 /* Predicado para inicializar as variaveis necessarias para o algoritmo genético.
 NG - Nº de gerações;
@@ -103,22 +93,33 @@ retira(N,[G1|Resto],G,[G1|Resto1]):-
 
 
 /* Avalia todos os indivíduos da população (cada indivíduo é uma lista com todas as tarefas) de acordo com a soma pesada dos atrasos V  e cria 
-uma lista (segundo argumento) com elementos com o formato indivíduo*avaliação. */
+uma lista (segundo argumento) com elementos com o formato indivíduo*avaliação.  */
 avalia_populacao([],[]).
 avalia_populacao([Ind|Resto],[Ind*V|Resto1]):-
 	avalia(Ind,V),
 	avalia_populacao(Resto,Resto1).
 
-avalia(Seq,V):-
-	avalia(Seq,0,V).
 
-avalia([],_,0).
-avalia([T|Resto],Inst,V):-
-	tarefa(T,Dur,Prazo,Pen),
-	InstFim is Inst+Dur,
-	avalia(Resto,InstFim,VResto),
-	((InstFim =< Prazo,!, VT is 0) ; (VT is (InstFim-Prazo)*Pen)),
-	V is VT+VResto.
+/* Função de avaliação considerando apenas os custos das deslocações entre as tarefas */
+avalia([],0).
+
+avalia([T], 0) :-  % Apenas uma tarefa na lista
+    tarefa_local(T, _, _).
+
+avalia([T|Resto],CustoTotal):-
+    select(TarefaAnterior, [T|Resto], RestoComAnterior),  
+    select(T, RestoComAnterior, _),  
+	tarefa_local(T,PisoOrig,CelulaOrig),
+	tarefa_local(TarefaAnterior,PisoDest,CelulaDest),
+	((PisoOrig==PisoDest, aStar(CelulaOrig, CelulaDest, _, Custo));(caminho_pisos_com_custo(PisoOrig, PisoDest, _,_, Custo,_))),
+	avalia(Resto, CustoRestante),
+    CustoTotal is CustoRestante + Custo.
+
+tarefa_anterior(TarefaAnterior, [TarefaAnterior, Tarefa | _], Tarefa):-
+    !.  % Encontrou a tarefa anterior
+
+tarefa_anterior(TarefaAnterior, [ _ | Resto], Tarefa):-
+    tarefa_anterior(TarefaAnterior, Resto, Tarefa).
 
 
 /* Ordena os elementos da população por ordem crescente de avaliações pela soma pesada dos atrasos.

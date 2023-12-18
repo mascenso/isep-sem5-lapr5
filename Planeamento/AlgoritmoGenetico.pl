@@ -2,6 +2,8 @@
 :-dynamic populacao/1.
 :-dynamic prob_cruzamento/1.
 :-dynamic prob_mutacao/1.
+:- dynamic tempo_transicao/3.
+
 
 
 :- consult('BC_RobDroneGo.pl').
@@ -50,7 +52,7 @@ gera:-
 	get_time(Tinicial),
 	gera_geracao(0,NG,PopOrd,Tinicial,Tlimite,AvEspecifica,NEstab,0),
 	final_geracao(Ind*V), nl,
-	write('Solução Final: '), write(Ind*V), nl.
+	write('Melhor solução: '), write(Ind*V), nl.
 
 
 /* Cria uma população de indivíduos. Gera a lista de individuos conforme a quantidade de tarefas e tamanho da população. 
@@ -87,6 +89,7 @@ gera_individuo(ListaTarefas,NumT,[G|Resto]):-
 	gera_individuo(NovaLista,NumT1,Resto).
 
 retira(1,[G|Resto],G,Resto).
+
 retira(N,[G1|Resto],G,[G1|Resto1]):-
 	N1 is N-1,
 	retira(N1,Resto,G,Resto1).
@@ -95,6 +98,7 @@ retira(N,[G1|Resto],G,[G1|Resto1]):-
 /* Avalia todos os indivíduos da população (cada indivíduo é uma lista com todas as tarefas) de acordo com a soma pesada dos atrasos V  e cria 
 uma lista (segundo argumento) com elementos com o formato indivíduo*avaliação.  */
 avalia_populacao([],[]).
+
 avalia_populacao([Ind|Resto],[Ind*V|Resto1]):-
 	avalia(Ind,V),
 	avalia_populacao(Resto,Resto1).
@@ -103,19 +107,21 @@ avalia_populacao([Ind|Resto],[Ind*V|Resto1]):-
 /* Função de avaliação considerando apenas os custos das deslocações entre as tarefas */
 avalia([],0).
 
-avalia([T], CustoTotal) :-  % Apenas uma tarefa na lista
-    tarefa_local(T, _,_),
-	tarefa(T, TempoProcessamento, _),
-    CustoTotal is TempoProcessamento.
+avalia([T], 0) :-  % Apenas uma tarefa na lista
+    tarefa_local(T, _,_).
+	%tarefa(T, TempoProcessamento, _),
+    %CustoTotal is TempoProcessamento.
 
 avalia([T1, T2 | Resto], CustoTotal):-
     tarefa_local(T1, PisoOrig, CelulaOrig),
     tarefa_local(T2, PisoDest, CelulaDest),
-    tarefa(T1, TempoProcessamento1, _),
+    %tarefa(T1, TempoProcessamento1, _),
     ((PisoOrig == PisoDest, aStar(CelulaOrig, CelulaDest, _, Custo)); (caminho_pisos_com_custo(PisoOrig, PisoDest, _, _, Custo, _))),
-    avalia([T2 | Resto], CustoRestante),
-	CustoTotal is CustoRestante + Custo + TempoProcessamento1.
-	avalia([], 0).
+    gera_tempo_transicao(T1, T2, TempoTransicao), %para gerar um tempo de transição random entre duas tarefas e nao ficar dependentes da BC.
+	avalia([T2 | Resto], CustoRestante),
+	CustoTotal is CustoRestante + TempoTransicao + Custo.
+	%CustoTotal is CustoRestante + Custo + TempoProcessamento1.
+
 
 /* Ordena os elementos da população por ordem crescente de avaliações pela soma pesada dos atrasos.
 Usa o bubble sort (bsort) para a ordenação. */
@@ -202,6 +208,7 @@ gera_geracao(N,G,Pop,Tinicial,Tlimite,AvEspecifica,NEstab,Count):-
 
 	((compare(D,NovaGeracao,Pop), D == (=), Count1 is Count + 1);Count1 is 0),
     gera_geracao(N1,G,NovaGeracao,Tinicial,Tlimite,AvEspecifica,NEstab,Count1).
+
 
 /* Predicado para finalizar o predicado*/	
 termina_geracao([Ind*V|_]):-
@@ -386,3 +393,9 @@ mutacao23(G1,1,[G2|Ind],G2,[G1|Ind]):-!.
 mutacao23(G1,P,[G|Ind],G2,[G|NInd]):-
 	P1 is P-1,
 	mutacao23(G1,P1,Ind,G2,NInd).
+
+
+/* Gera tempos de transição aleatórios entre duas tarefas. Estes valores random estão compreendidos entre 1 e 3 */
+gera_tempo_transicao(Tarefa1, Tarefa2, Tempo) :-
+    random_between(1, 3, Tempo),
+    assertz(tempo_transicao(Tarefa1, Tarefa2, Tempo)).

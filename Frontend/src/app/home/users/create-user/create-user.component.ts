@@ -14,6 +14,8 @@ export class CreateUserComponent {
   createUserForm = new FormGroup({
     email: new FormControl(''),
     password: new FormControl('', [Validators.required]),
+    firstName: new FormControl(''),
+    lastName: new FormControl(''),
     userRole: new FormControl(''),
   });
 

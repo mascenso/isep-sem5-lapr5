@@ -74,7 +74,7 @@ namespace UserManagement
 
             app.UseRouting();
 
-            app.UseCors(); // Apply CORS before routing
+            app.UseCors(); // Apply CORS after routing and before Authorization
 
             app.UseAuthorization();
 
@@ -82,7 +82,8 @@ namespace UserManagement
             {
                 endpoints.MapControllers();
             });
-}
+        }
+
 
 
         public void ConfigureMyServices(IServiceCollection services)

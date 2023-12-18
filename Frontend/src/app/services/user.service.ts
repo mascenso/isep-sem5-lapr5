@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserResponseDTO, CreateUserRequestDTO } from '../../dto/userDTO';
 
@@ -9,20 +9,32 @@ import { UserResponseDTO, CreateUserRequestDTO } from '../../dto/userDTO';
 })
 export class UserService {
 
-  private API_URL = 'http://localhost:5000';
+  private API_URL = environment.C_SHARP;
 
   constructor(private http: HttpClient) { }
 
   public registerUser(user: CreateUserRequestDTO, showSpinner?: boolean): Observable<UserResponseDTO> {
-    return this.http.post<UserResponseDTO>(`${this.API_URL}/api/users`, user, { reportProgress: showSpinner });
-  }
+    const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        // Add any additional headers as needed
+    });
+
+    const options = {
+        headers: headers,
+        reportProgress: showSpinner
+        // Other options if needed
+    };
+
+    return this.http.post<UserResponseDTO>(`${this.API_URL}/api/users/`, user, options);
+}
+
 
   public getAllUsers(): Observable<UserResponseDTO[]> {
-    return this.http.get<UserResponseDTO[]>(`${this.API_URL}/api/users`);
+    return this.http.get<UserResponseDTO[]>(`${this.API_URL}/api/users/`);
   }
 
   public updateUser(user: CreateUserRequestDTO): Observable<UserResponseDTO> {
-    return this.http.patch<UserResponseDTO>(`${this.API_URL}/api/users`, user);
+    return this.http.patch<UserResponseDTO>(`${this.API_URL}/api/users/`, user);
   }
 
 }

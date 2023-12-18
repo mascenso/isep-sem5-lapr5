@@ -7,11 +7,9 @@
             <p>
               <mat-form-field class="form-field form-field-email">
                 <mat-label>email</mat-label>
-                <input matInput [formControl]="createUserForm.controls.email" #inputCode maxlength="5" placeholder="Ex. B1234" value="B1234">
-                <mat-hint align="end">{{inputCode.value.length}} / 5</mat-hint>
+                <input matInput [formControl]="createUserForm.controls.email" #inputCode placeholder="Ex. user@email.com" value="user@email.com">
                 <mat-error *ngIf="createUserForm.controls.email.hasError('required')">email is <strong>required</strong></mat-error>
-                <mat-error *ngIf="createUserForm.controls.email.hasError('pattern')">email must be in <strong>format XXXXX</strong></mat-error>
-
+                
               </mat-form-field>
             </p>
             <p>
@@ -21,11 +19,11 @@
                     <mat-error *ngIf="createUserForm.controls.password.hasError('required')">Password é <strong>obrigatória</strong></mat-error>
                     <mat-error *ngIf="createUserForm.controls.password.hasError('invalidPassword')">Password deve ter no mínimo 10 caracteres, 1 maiúscula, 1 minúscula, 1 dígito e 1 símbolo</mat-error>
                 </mat-form-field>
-              </p>
+            </p>
             <p>
                 <mat-form-field class="form-field form-field-user-role">
                     <mat-label>User Roles</mat-label>
-                  <mat-select matInput [formControl]="createUserForm.controls.userRole" multiple data-testid="UserRoleSelect">
+                  <mat-select matInput [formControl]="createUserForm.controls.userRole" data-testid="UserRoleSelect">
                     <mat-option *ngFor="let roles of UserRoles" [value]="roles">{{ roles }}</mat-option>
                   </mat-select>
                   </mat-form-field>

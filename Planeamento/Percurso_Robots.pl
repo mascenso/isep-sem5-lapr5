@@ -2,7 +2,6 @@
 :-dynamic edge/2.
 
 
-
 /*Ligacoes HTTP*/
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
@@ -22,11 +21,6 @@ caminho_handler(Request) :-
                               pisoDestino(PisoDest, [])]),
     caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal),
     reply_json(json([caminho=LCam, custo=CustoTotal])).
-
-
-
-
-
 
 
 :- consult('Algoritmos.pl').
@@ -116,27 +110,32 @@ caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal,Cel):-
     calcular_custo_total(LLig, PisoOr, CustoTotal,Cel). 
     %write('CustoTotal= '),write(CustoTotal),nl.
 
+
 /*Calculo custo total da viagem usando aStar em cada piso*/
-calcular_custo_total([], _, 0,_).
+calcular_custo_total([], _, 0,[]).
 
 /* Predicado para somar todos os custos*/
 calcular_custo_total([Acao | RestoAcoes], PisoAtual, CustoTotal,Cel) :-
-    calcular_custo_unico(Acao, PisoAtual, CustoParcial,Cel),
+    calcular_custo_unico(Acao, PisoAtual, CustoParcial,CelParcial),
     novo_piso_destino(Acao, PisoDestino),
-    calcular_custo_total(RestoAcoes, PisoDestino, CustoResto,Cel),
-    CustoTotal is CustoParcial + CustoResto.
+    calcular_custo_total(RestoAcoes, PisoDestino, CustoResto,RestoCel),
+    CustoTotal is CustoParcial + CustoResto,
+    append(CelParcial, RestoCel, Cel).
 
 /*Calcula distancia desde posicao inicial ate elevador do piso*/
 calcular_custo_unico(elev(PisoOr, _), PisoAtual, Custo,Cel) :-
     pos_init(PisoAtual, Orig),
     elev_pos(PisoOr, CDestino),
-    aStar(Orig, CDestino, Cel, Custo).
+    aStar(Orig, CDestino, Cel, CustoElevador),
+    Custo is CustoElevador + 5.  % Adicionando o custo do elevador.
 
 /*Calcula distancia desde posicao inicia ate passagem*/
 calcular_custo_unico(cor(PisoOr, PisoDest), PisoOr, Custo,Cel) :-
     pos_init(PisoOr,Orig),
     (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
-    aStar(Orig, CDestino, Cel, Custo).
+    aStar(Orig, CDestino, Cel, CustoPassagem),
+    Custo is CustoPassagem + 2.
+
 
 novo_piso_destino(elev(_, PisoDest), PisoDest).
 novo_piso_destino(cor(_, PisoDest), PisoDest).

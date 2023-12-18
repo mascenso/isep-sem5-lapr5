@@ -21,6 +21,21 @@
                 </mat-form-field>
             </p>
             <p>
+                <mat-form-field class="form-field form-field-firstName">
+                  <mat-label>first Name</mat-label>
+                  <input matInput [formControl]="createUserForm.controls.firstName" #inputCode placeholder="Ex. First Name" value="First Name">
+                  <mat-error *ngIf="createUserForm.controls.firstName.hasError('required')">First Name is <strong>required</strong></mat-error>
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field class="form-field form-field-lastName">
+                  <mat-label>Last Name</mat-label>
+                  <input matInput [formControl]="createUserForm.controls.lastName" #inputCode placeholder="Ex. Last Name" value="Last Name">
+                  <mat-error *ngIf="createUserForm.controls.lastName.hasError('required')">Last Name is <strong>required</strong></mat-error>
+                  
+                </mat-form-field>
+              </p>
+            <p>
                 <mat-form-field class="form-field form-field-user-role">
                     <mat-label>User Roles</mat-label>
                   <mat-select matInput [formControl]="createUserForm.controls.userRole" data-testid="UserRoleSelect">

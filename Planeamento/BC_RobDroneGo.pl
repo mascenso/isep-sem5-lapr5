@@ -128,12 +128,12 @@ pos_init(c3,[3,4]).
 % tarefas(NTarefas).
 tarefas(5).
 
-% tarefa(Id,TempoProcessamento,TempConc,PesoPenalizacao).
-tarefa(t1,2,5,1).
-tarefa(t2,4,7,6).
-tarefa(t3,1,11,2).
-tarefa(t4,3,9,3).
-tarefa(t5,3,8,3).
+% tarefa(Id,TempoProcessamento,TempConc).
+tarefa(t1,2,5).
+tarefa(t2,4,7).
+tarefa(t3,1,11).
+tarefa(t4,3,9).
+tarefa(t5,3,8).
 
 %tarefa_local(tarefa,piso,celula)
 tarefa_local(t1,a1,[2,2]).

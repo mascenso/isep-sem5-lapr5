@@ -60,7 +60,7 @@ TamPop - dimensão da população. */
 gera_populacao(Pop):-
 	populacao(TamPop),
 	tarefas(NumT),
-	findall(Tarefa,tarefa(Tarefa,_,_,_),ListaTarefas),nl,
+	findall(Tarefa,tarefa(Tarefa,_,_),ListaTarefas),nl,
 	gera_populacao(TamPop,ListaTarefas,NumT,Pop).
 
 gera_populacao(0,_,_,[]):-!.

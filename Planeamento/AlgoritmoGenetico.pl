@@ -123,7 +123,6 @@ avalia([T1, T2 | Resto], CustoTotal):-
 	%CustoTotal is CustoRestante + Custo + TempoProcessamento1.
 
 
-
 /* Ordena os elementos da população por ordem crescente de avaliações pela soma pesada dos atrasos.
 Usa o bubble sort (bsort) para a ordenação. */
 ordena_populacao(PopAv,PopAvOrd):-

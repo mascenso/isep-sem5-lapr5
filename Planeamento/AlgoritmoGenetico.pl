@@ -2,7 +2,7 @@
 :-dynamic populacao/1.
 :-dynamic prob_cruzamento/1.
 :-dynamic prob_mutacao/1.
-:- dynamic tempo_transicao/3.
+:-dynamic tempo_transicao/3.
 
 
 
@@ -109,18 +109,14 @@ avalia([],0).
 
 avalia([T], 0) :-  % Apenas uma tarefa na lista
     tarefa_local(T, _,_).
-	%tarefa(T, TempoProcessamento, _),
-    %CustoTotal is TempoProcessamento.
+
 
 avalia([T1, T2 | Resto], CustoTotal):-
     tarefa_local(T1, PisoOrig, CelulaOrig),
     tarefa_local(T2, PisoDest, CelulaDest),
-    %tarefa(T1, TempoProcessamento1, _),
     ((PisoOrig == PisoDest, aStar(CelulaOrig, CelulaDest, _, Custo)); (caminho_pisos_com_custo(PisoOrig, PisoDest, _, _, Custo, _))),
-    gera_tempo_transicao(T1, T2, TempoTransicao), %para gerar um tempo de transição random entre duas tarefas e nao ficar dependentes da BC.
 	avalia([T2 | Resto], CustoRestante),
-	CustoTotal is CustoRestante + TempoTransicao + Custo.
-	%CustoTotal is CustoRestante + Custo + TempoProcessamento1.
+	CustoTotal is CustoRestante + Custo.
 
 
 /* Ordena os elementos da população por ordem crescente de avaliações pela soma pesada dos atrasos.
@@ -395,7 +391,3 @@ mutacao23(G1,P,[G|Ind],G2,[G|NInd]):-
 	mutacao23(G1,P1,Ind,G2,NInd).
 
 
-/* Gera tempos de transição aleatórios entre duas tarefas. Estes valores random estão compreendidos entre 1 e 3 */
-gera_tempo_transicao(Tarefa1, Tarefa2, Tempo) :-
-    random_between(1, 3, Tempo),
-    assertz(tempo_transicao(Tarefa1, Tarefa2, Tempo)).

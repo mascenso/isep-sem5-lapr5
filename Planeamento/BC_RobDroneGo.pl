@@ -142,15 +142,3 @@ tarefa_local(t3,a2,[3,3]).
 tarefa_local(t4,b2,[2,2]).
 tarefa_local(t5,c3,[4,4]).
 
-
-% Tempos de transição entre o final de uma tarefa e o início da próxima
-tempo_transicao(t1, t2, 1). % Tempo de transição entre t1 e t2
-tempo_transicao(t1, t3, 2). % Tempo de transição entre t1 e t2
-tempo_transicao(t1, t4, 3). % Tempo de transição entre t1 e t2
-tempo_transicao(t1, t5, 4). % Tempo de transição entre t1 e t2
-tempo_transicao(t2, t3, 1). % Tempo de transição entre t1 e t2
-tempo_transicao(t2, t4, 2). % Tempo de transição entre t1 e t2
-tempo_transicao(t2, t5, 3). % Tempo de transição entre t1 e t2
-tempo_transicao(t3, t4, 1). % Tempo de transição entre t1 e t2
-tempo_transicao(t3, t5, 2). % Tempo de transição entre t1 e t2
-tempo_transicao(t4, t5, 1). % Tempo de transição entre t1 e t2

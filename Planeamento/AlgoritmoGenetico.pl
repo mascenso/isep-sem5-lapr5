@@ -39,10 +39,11 @@ Cada elemento da lista é do tipo LT*Av onde LT é uma lista de tarefas (indiví
 um elemento de PopOrd poderia ser [t3,t1,t5,t2,t4]*16, onde o * é um mero separador.
 Nota -> PopOrd - Lista com a geração inicial. */
 gera:-
+	inicializa_tempos_transicao,
 	inicializa,
-	gera_populacao(Pop),
+	gera_populacao(Pop),!,
 	write('Pop='),write(Pop),nl,
-	avalia_populacao(Pop,PopAv),
+	avalia_populacao(Pop,PopAv),!,
 	write('PopAv='),write(PopAv),nl,
 	ordena_populacao(PopAv,PopOrd),
 	geracoes(NG),
@@ -53,6 +54,47 @@ gera:-
 	gera_geracao(0,NG,PopOrd,Tinicial,Tlimite,AvEspecifica,NEstab,0),
 	final_geracao(Ind*V), nl,
 	write('Melhor solução: '), write(Ind*V), nl.
+
+/*
+inicializa_tempos_transicao:-
+    tarefa_local(T1, PisoOrig, CelulaOrig),
+    tarefa_local(T2, PisoDest, CelulaDest),
+    T1 \== T2,
+    ((PisoOrig == PisoDest, aStar(CelulaOrig, CelulaDest, _, Custo)); caminho_pisos_com_custo(PisoOrig, PisoDest, _, _, Custo, _)),
+    assert(tempo_transicao(T1, T2, Custo)),    
+    assert(tempo_transicao(T2, T1, Custo)),
+	write("tarefas"),nl,write(T1),write(" - "), write(T2), write(" :"),write(Custo),nl.
+*/
+% Predicado para inicializar os tempos de transição entre tarefas
+inicializa_tempos_transicao :-
+    findall(Tarefa, tarefa_local(Tarefa, _, _), ListaTarefas),
+    assert_lista_tempos(ListaTarefas, ListaTarefas).
+
+% Predicado para adicionar os tempos de transição à base de conhecimento
+assert_lista_tempos(_, []).
+
+assert_lista_tempos(Tarefa, [Tarefa1 | Resto]) :-
+    valida_tarefa_com_outras(Tarefa1, Resto),
+    assert_lista_tempos(Tarefa, Resto).
+
+% Predicado para validar uma tarefa com todas as outras
+valida_tarefa_com_outras(_, []).
+
+valida_tarefa_com_outras(Tarefa, [OutraTarefa | Resto]) :-
+    Tarefa \== OutraTarefa,
+    \+ tempo_transicao(Tarefa, OutraTarefa, _),
+    \+ tempo_transicao(OutraTarefa, Tarefa, _),
+    tarefa_local(Tarefa, PisoOrig, CelulaOrig),
+    tarefa_local(OutraTarefa, PisoDest, CelulaDest),
+    (
+        (PisoOrig == PisoDest, aStar(CelulaOrig, CelulaDest, _, Custo));
+        caminho_pisos_com_custo(PisoOrig, PisoDest, _, _, Custo, _)
+    ),
+    assert(tempo_transicao(Tarefa, OutraTarefa, Custo)),
+    assert(tempo_transicao(OutraTarefa, Tarefa, Custo)),
+    write("tarefas"),nl,write(Tarefa),write(" - "), write(OutraTarefa), write(" :"),write(Custo),nl,
+    valida_tarefa_com_outras(Tarefa, Resto).
+
 
 
 /* Cria uma população de indivíduos. Gera a lista de individuos conforme a quantidade de tarefas e tamanho da população. 
@@ -105,8 +147,7 @@ avalia_populacao([Ind|Resto],[Ind*V|Resto1]):-
 
 
 /* Função de avaliação considerando apenas os custos das deslocações entre as tarefas */
-avalia([],0).
-
+/*
 avalia([T], 0) :-  % Apenas uma tarefa na lista
     tarefa_local(T, _,_).
 
@@ -115,8 +156,23 @@ avalia([T1, T2 | Resto], CustoTotal):-
     tarefa_local(T1, PisoOrig, CelulaOrig),
     tarefa_local(T2, PisoDest, CelulaDest),
     ((PisoOrig == PisoDest, aStar(CelulaOrig, CelulaDest, _, Custo)); (caminho_pisos_com_custo(PisoOrig, PisoDest, _, _, Custo, _))),
+    gera_tempo_transicao(T1, T2, TempoTransicao), %para gerar um tempo de transição random entre duas tarefas e nao ficar dependentes da BC.
 	avalia([T2 | Resto], CustoRestante),
+	CustoTotal is CustoRestante + TempoTransicao + Custo.
 	CustoTotal is CustoRestante + Custo.
+*/
+
+avalia([], 0).
+
+avalia([_], 0).
+
+avalia([T1, T2 | Resto], CustoTotal):-
+    (tempo_transicao(T1, T2, Custo);tempo_transicao(T2,T2,Custo)),
+    avalia([T2 | Resto], CustoRestante),
+    CustoTotal is Custo + CustoRestante.
+
+avalia([T1, T2], CustoTotal):-
+    tempo_transicao(T1, T2, CustoTotal).
 
 
 /* Ordena os elementos da população por ordem crescente de avaliações pela soma pesada dos atrasos.

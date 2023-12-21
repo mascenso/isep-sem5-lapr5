@@ -137,7 +137,7 @@ tarefa(t5,3,8).
 
 %tarefa_local(tarefa,piso,celula)
 tarefa_local(t1,a1,[2,2]).
-tarefa_local(t2,a1,[2,4]).
+tarefa_local(t2,a2,[2,4]).
 tarefa_local(t3,a2,[3,3]).
 tarefa_local(t4,b2,[2,2]).
 tarefa_local(t5,c3,[4,4]).

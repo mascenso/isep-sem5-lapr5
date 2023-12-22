@@ -90,16 +90,15 @@ namespace UserManagement.Domain.Users
       return this.Password.VerifyPassword(password);
     }
 
-    //public void ChangeDescription(string description)
-    //{
-    //  if (!this.Active)
-    //    throw new BusinessRuleValidationException("It is not possible to change the description of an inactive user.");
-    //  this.Description = description;
-    //}
+    public void Deactivate()
+    {
+      this.Active = false;
+    }
 
-    //public void MarkAsInative()
-    //{
-    //  this.Active = false;
-    //}
+    public bool IsActive()
+    {
+      return this.Active;
+    }
+
   }
 }

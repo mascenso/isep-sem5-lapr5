@@ -29,6 +29,7 @@ import {PlanRobotRouteComponent} from './home/tasks/plan-robot-route/plan-robot-
 import { EditElevatorsComponent } from './home/campus/edit-elevators/edit-elevators.component';
 import { CreateRoomComponent } from "./home/campus/create-room/create-room.component";
 import {PlanRouteWithViewComponent} from "./home/tasks/plan-route-with-view/plan-route-with-view.component"
+import { CreateTaskComponent } from './home/tasks/create-task/create-task.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -55,6 +56,10 @@ const routes: Routes = [
       {
         path: 'tasks/plan-route-with-view',
         component: PlanRouteWithViewComponent,
+      },
+      {
+        path: 'tasks/create-task',
+        component: CreateTaskComponent,
       },
       {
         path: 'view',

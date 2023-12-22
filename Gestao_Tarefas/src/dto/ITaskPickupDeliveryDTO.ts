@@ -23,4 +23,5 @@ export default interface ITaskPickupDeliveryDTO {
     contactNumber:number;
   };
   approved:boolean;
+  pending:boolean;
 }

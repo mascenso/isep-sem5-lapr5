@@ -21,7 +21,8 @@ export default (app: Router) => {
         floors: Joi.array().required(),
         contactNumber: Joi.number().required(),
         user: Joi.object().required(),
-        approved: Joi.boolean().default(false)
+        approved: Joi.boolean().default(false),
+        pending: Joi.boolean().default(true)
       })
     }),
     (req, res, next) => ctrl.createVigilanceTask(req, res, next) );
@@ -50,7 +51,8 @@ export default (app: Router) => {
           name: Joi.string().required(),
           contactNumber: Joi.number().required()
         }).required(),
-        approved: Joi.boolean().default(false)
+        approved: Joi.boolean().default(false),
+        pending: Joi.boolean().default(true)
       })
     }),
     (req, res, next) => ctrl.createPickupDeliveryTask(req, res, next) );

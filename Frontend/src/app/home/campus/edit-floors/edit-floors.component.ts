@@ -68,7 +68,6 @@ export class EditFloorsComponent {
   }
 
   onSelectionUpdateForm(selection: any): void {
-    console.log(selection);
     if (selection) {
       this.floorServiceSubscription$ = this.floorService.getFloorsAtBuildings(selection, true ).subscribe(
         floorData => {

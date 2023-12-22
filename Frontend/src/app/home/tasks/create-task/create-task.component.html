@@ -26,9 +26,9 @@
         <mat-form-field>
             <input matInput placeholder="Description" formControlName="description">
         </mat-form-field>
-            <mat-form-field>
-        <input matInput placeholder="Contact Number" formControlName="contactNumber">
-            </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Contact Number" formControlName="contactNumber">
+        </mat-form-field>
         <div formGroupName="user">
             <mat-form-field>
                 <input matInput placeholder="User Name" formControlName="userName">
@@ -40,6 +40,99 @@
         <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">Criar tarefa</button>
     </form>
 </div>
-<div *ngIf="selectedTask === 'pickup'">
-cenas2
+<div *ngIf="selectedTask === 'pickup'" >
+  <form [formGroup]="pickupForm">
+    <div style="display: flex; width: 100%; margin-bottom: 20px;">
+      <div style="flex: 1; border-right: 1px solid black;">
+        <H1>Select pickup point</H1>
+        <div formGroupName="pickupLocalization">
+          <mat-form-field>
+            <mat-label>Select building</mat-label>
+            <mat-select id="dropdownBuildingPickup" formControlName="buildingId" (valueChange)="onBuildingPickupSelector($event)">
+              <mat-option *ngFor="let building of buildings" [value]="building.id">
+                {{ building.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Select floor</mat-label>
+            <mat-select id="dropdownFloorPickup" formControlName="floor">
+              <mat-option *ngFor="let floor of pickupFloors" [value]="floor">
+                {{ floor.floorNumber }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Select room</mat-label>
+            <mat-select id="dropdownRoomPickup" formControlName="room">
+              <mat-option *ngFor="let room of rooms" [value]="room.localization">
+                {{ room.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div formGroupName="pickupContact">
+          <mat-form-field>
+            <input matInput placeholder="User Name" formControlName="name">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Contact Number" formControlName="contactNumber">
+          </mat-form-field>
+        </div>
+      </div>
+      <div style="flex: 1; padding-left: 3%;">
+        <H1>Select delivery point</H1>
+        <div formGroupName="deliveryLocalization">
+          <mat-form-field>
+            <mat-label>Select building</mat-label>
+            <mat-select id="dropdownBuildingDelivery" formControlName="buildingId" (valueChange)="onBuildingDeliverySelector($event)">
+              <mat-option *ngFor="let building of buildings" [value]="building.id">
+                {{ building.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Select floor</mat-label>
+            <mat-select id="dropdownFloorDelivery" formControlName="floor">
+              <mat-option *ngFor="let floor of deliveryFloors" [value]="floor">
+                {{ floor.floorNumber }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Select room</mat-label>
+            <mat-select id="dropdownRoomDelivery" formControlName="room">
+              <mat-option *ngFor="let room of rooms" [value]="room.localization">
+                {{ room.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div formGroupName="deliveryContact">
+          <mat-form-field>
+            <input matInput placeholder="User Name" formControlName="name">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Contact Number" formControlName="contactNumber">
+          </mat-form-field>
+        </div>
+
+      </div>
+    </div>
+    <div formGroupName="user" style="width: 100%; border-top: 1px solid black; padding-top: 20px; display: flex; flex-direction: column;">
+      <mat-form-field>
+        <input matInput placeholder="Name" formControlName="userName">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Contact" formControlName="userContact">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <input matInput placeholder="Description" formControlName="description">
+      </mat-form-field>
+    </div>
+
+    <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">Criar tarefa</button>
+  </form>
 </div>

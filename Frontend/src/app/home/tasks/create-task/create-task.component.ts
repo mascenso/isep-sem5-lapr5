@@ -21,8 +21,12 @@ export class CreateTaskComponent implements OnInit{
   pickupForm!: FormGroup;
   buildings: BuildingResponseDTO[] = [];
   floors: FloorResponseDTO[] = [];
+  pickupFloors: FloorResponseDTO[] = [];
+  deliveryFloors: FloorResponseDTO[] = [];
   buildingServiceSubscription$ = new Subscription();
   floorServiceSubscription$ = new Subscription();
+
+  rooms = [{name:"room1",localization:[1,1]},{name:"room2",localization:[2,2]},{name:"room3",localization:[3,3]},{name:"room4",localization:[4,4]},{name:"room5",localization:[5,5]}]
 
   constructor(private fb: FormBuilder, private buildingService: BuildingService,
     private floorService: FloorService,
@@ -39,7 +43,8 @@ export class CreateTaskComponent implements OnInit{
       user: this.fb.group({
         userName:[null, Validators.required],
         userContact:[null,Validators.required]}),
-      approved: [false]
+      approved: [false],
+      pending:[true]
     });
 
     this.pickupForm = this.fb.group({
@@ -55,7 +60,9 @@ export class CreateTaskComponent implements OnInit{
         room: [[]]
       }),
       contactNumber: [null, Validators.required],
-      user: [null, Validators.required],
+      user: this.fb.group({
+        userName:[null, Validators.required],
+        userContact:[null,Validators.required]}),
       deliveryContact: this.fb.group({
         name: ['', Validators.required],
         contactNumber: [null, Validators.required]
@@ -64,7 +71,8 @@ export class CreateTaskComponent implements OnInit{
         name: ['', Validators.required],
         contactNumber: [null, Validators.required]
       }),
-      approved: [false]
+      approved: [false],
+      pending:[true]
     });
 
        // fetch building list from service
@@ -97,6 +105,36 @@ export class CreateTaskComponent implements OnInit{
     }
   }
 
+  onBuildingPickupSelector(building:any){
+    if (building) {
+      this.floorServiceSubscription$ = this.floorService.getFloorsAtBuildings(building, true ).subscribe(
+        floorData => {
+          this.pickupFloors = floorData;
+        },
+        error => {
+          this._snackBar.open(error.error, "close", {
+            duration: 5000,
+            panelClass: ['snackbar-error']
+          });
+        }
+      )
+    }
+  }
+  onBuildingDeliverySelector(building:any){
+    if (building) {
+      this.floorServiceSubscription$ = this.floorService.getFloorsAtBuildings(building, true ).subscribe(
+        floorData => {
+          this.deliveryFloors = floorData;
+        },
+        error => {
+          this._snackBar.open(error.error, "close", {
+            duration: 5000,
+            panelClass: ['snackbar-error']
+          });
+        }
+      )
+    }
+  }
   onSubmit() {
 
     if (this.selectedTask === 'vigilancia') {
@@ -118,6 +156,26 @@ export class CreateTaskComponent implements OnInit{
           });
         }
       );
+    }else if (this.selectedTask === 'pickup'){
+      console.log(this.pickupForm.value)
+      let taskForm = this.pickupForm.value;
+      taskForm.contactNumber = this.pickupForm.value.user.userContact;
+      this.taskService.createPickupTask(this.pickupForm.value).subscribe(
+        (response) => {
+          this._snackBar.open("Tarefa criada com sucesso!", "close", {
+            duration: 5000,
+            panelClass: ['snackbar-success']
+          });
+        },
+        (error) => {
+          this._snackBar.open("Erro a criar a Tarefa!", "close", {
+            duration: 5000,
+            panelClass: ['snackbar-error']
+          });
+        }
+      );
     }
   }
+
+
 }

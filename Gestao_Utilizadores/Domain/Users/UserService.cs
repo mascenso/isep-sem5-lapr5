@@ -25,7 +25,7 @@ namespace UserManagement.Domain.Users
       var foundUser = await this.FindUserByEmail(dto.Email);
       if (foundUser != null)
       {
-        throw new BusinessRuleValidationException($"User with Email {dto.Email} already exists.");
+        throw new UserAlreadyRegisteredException($"User with email {dto.Email} already exists.");
       }
       var user = User.FromRequestDto(dto);
 

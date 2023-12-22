@@ -43,6 +43,10 @@ namespace UserManagement.Controllers
           {
             return BadRequest(new { Message = e.Message });
           }
+          catch (UserAlreadyRegisteredException e)
+          {
+            return Conflict(new { Message = e.Message });
+          }
         }
 
         // POST: api/Users/register-system-user
@@ -115,7 +119,7 @@ namespace UserManagement.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("auth")]
+        [HttpPost("authenticate")]
         public async Task<ActionResult<TokenDto>> Authenticate([FromBody] UserLoginRequestDto loginDto)
         {
           try

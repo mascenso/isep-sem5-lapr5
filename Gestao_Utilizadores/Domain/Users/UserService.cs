@@ -25,14 +25,17 @@ namespace UserManagement.Domain.Users
 
     public async Task<UserDto> CreateUser(CreateUserRequestDto dto)
     {
+      var foundUser = await this.FindUserByEmail(dto.Email);
+      if (foundUser != null)
+      {
+        throw new BusinessRuleValidationException($"User with Email {dto.Email} already exists.");
+      }
       var user = User.FromRequestDto(dto);
 
       await this._repo.AddAsync(user);
-
       await this._unitOfWork.CommitAsync();
 
-      return new UserDto(user.Id.AsGuid(), user.Email.Value, user.FirstName, user.LastName, user.Role.ToString(),
-        user.Active);
+      return this._userMapper.ToDto(user);
     }
 
     public async Task<UserDto> FindUserById(UserId userId)

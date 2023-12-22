@@ -19,7 +19,7 @@ namespace UserManagement.Infrastructure.Users
     public async Task<User> GetUserByEmailAsync(string email)
     {
       // Ensure the email comparison is case-insensitive
-      return await this._objs.Where(u => u.Email.ToString().Equals(email, StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
+      return await this._objs.FirstOrDefaultAsync(u => EF.Functions.Like(u.Email.Value, email));
     }
   }
 

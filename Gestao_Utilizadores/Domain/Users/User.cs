@@ -61,7 +61,7 @@ namespace UserManagement.Domain.Users
 
       // create user password
       return new User(
-        new UserEmail(dto.Email), new UserPassword(UserPassword.HashPassword(dto.Password), true),
+        new UserEmail(dto.Email), new UserPassword(UserPassword.HashPassword(dto.Password)),
         dto.FirstName, dto.LastName, userRole,
         true
       );

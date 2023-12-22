@@ -89,7 +89,7 @@ namespace UserManagement.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserLoginRequestDto loginDto)
+        public async Task<ActionResult<string>> Login([FromBody] UserLoginRequestDto loginDto)
         {
           try
           {

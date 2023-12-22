@@ -17,18 +17,20 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
         buildingId: taskVigilance.buildingId,
         floors: taskVigilance.floors,
         contactNumber: taskVigilance.contactNumber,
-        user: taskVigilance.user
+        user: taskVigilance.user,
+        approved: taskVigilance.approved
       } as ITaskVigilanceDTO;
     }
   
     public static toDomain (taskVigilance: any | Model<ITaskVigilancePersistence & Document> ): TaskVigilance {
   
-      const taskOrError = taskVigilance.create({
+      const taskOrError = TaskVigilance.create({
             description: taskVigilance.description,
             buildingId: taskVigilance.buildingId,
             floors: taskVigilance.floors,
             contactNumber: taskVigilance.contactNumber,
-            user: taskVigilance.user
+            user: taskVigilance.user,
+            approved: taskVigilance.approved
         },
         new UniqueEntityID(taskVigilance.domainId)
       );
@@ -45,7 +47,8 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
         buildingId: taskVigilance.buildingId,
         floors: taskVigilance.floors,
         contactNumber: taskVigilance.contactNumber,
-        user: taskVigilance.user
+        user: taskVigilance.user,
+        approved: taskVigilance.approved
       }
       return a;
     }

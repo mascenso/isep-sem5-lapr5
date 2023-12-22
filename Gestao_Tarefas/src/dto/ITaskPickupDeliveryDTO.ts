@@ -18,8 +18,9 @@ export default interface ITaskPickupDeliveryDTO {
     name:String;
     contactNumber:number;
   };
-  pickupDelivery:{
+  pickupContact:{
     name:String;
     contactNumber:number;
-  }
+  };
+  approved:boolean;
 }

@@ -9,6 +9,7 @@ const TaskVigilanceSchema = new mongoose.Schema(
     floors: { type: [Object], unique: false },
     contactNumber: { type: Number, unique: false },
     user:{ type: Object, unique: false },
+    approved:{type:Boolean, unique:false}
   },
   {
     timestamps: true

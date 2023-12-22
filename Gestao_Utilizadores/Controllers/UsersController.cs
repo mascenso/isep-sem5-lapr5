@@ -1,4 +1,5 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -94,12 +95,13 @@ namespace UserManagement.Controllers
         }
 
         // PATCH: api/Users/5
-        [HttpPatch("{id}")]
-        public async Task<ActionResult<UserDto>> PatchUser(Guid id, [FromBody] UpdateUserRequestDto patchDto)
+        [HttpPatch("patch-user")]
+        public async Task<ActionResult<UserDto>> PatchUser([FromBody] UpdateUserRequestDto patchDto)
         {
           try
           {
-            var updatedUser = await _userService.PatchUserData(new UserId(id), patchDto);
+            var userIdFromClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            var updatedUser = await _userService.PatchUserData(new UserId(userIdFromClaim), patchDto);
             return Ok(updatedUser); // 200 OK
           }
           catch (NotFoundException)

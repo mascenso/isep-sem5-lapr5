@@ -31,6 +31,11 @@ namespace UserManagement.Domain.Auth
       }
 
       var user = await this._userRepo.GetUserByEmailAsync(loginRequestDto.Email);
+      if (user == null)
+      {
+        throw new BusinessRuleValidationException($"User is not registered in the system.");
+      }
+
       if (!user.VerifyPassword(loginRequestDto.Password))
       {
         return null;
@@ -48,7 +53,8 @@ namespace UserManagement.Domain.Auth
         new Claim(JwtRegisteredClaimNames.GivenName, userDto.FirstName),
         new Claim(JwtRegisteredClaimNames.FamilyName, userDto.LastName),
         new Claim("role", userDto.Role),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
 
       };
 

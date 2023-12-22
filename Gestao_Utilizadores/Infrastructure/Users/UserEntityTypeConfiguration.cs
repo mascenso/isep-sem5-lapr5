@@ -18,14 +18,18 @@ namespace UserManagement.Infrastructure.Users
       builder.OwnsOne(u => u.Email, email =>
       {
         email.Property(e => e.Value)
-          .HasColumnName("Email"); // Map the column name for the email property
+          .HasColumnName("Email")
+          .IsRequired();  // Map the column name for the email property
+
+        email.HasIndex(e => e.Value)
+          .IsUnique(); // Add a unique constraint to the email property
       });
 
       builder.OwnsOne(u => u.Password, password =>
       {
         password.Property(p => p.Value)
-          .HasColumnName("Password"); // Map the column name for the password property
-        password.Ignore(p => p.IsHashed);
+          .HasColumnName("Password")
+          .IsRequired(); // Map the column name for the password property
       });
 
       builder.Property(u => u.FirstName)
@@ -36,7 +40,8 @@ namespace UserManagement.Infrastructure.Users
 
       builder.Property(u => u.Role)
         .HasColumnName("Role") // Map the column name for the role property
-        .HasConversion<string>();
+        .HasConversion<string>()
+        .IsRequired();
 
       builder.Property(u => u.Active)
         .HasColumnName("Active"); // Map the column name for the active property

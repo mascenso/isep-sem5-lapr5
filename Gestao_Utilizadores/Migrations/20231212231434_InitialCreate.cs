@@ -77,9 +77,9 @@ namespace UserManagement.Migrations
               {
                 Guid.NewGuid().ToString(),          // UserId
                 "admin@admin",    // Email
-                "admin",      // Password (hashed for security)
-                "Admin",                // FirstName
-                "User",                 // LastName
+                "$2b$10$9JGYmmkpHiiFQoI63xyqyOhTtRJYK/2kDfy8nNsyA0UBeLioxRNVK",      // Password (hashed for security)
+                "Manel",                // FirstName
+                "Da Maquina",                 // LastName
                 UserRole.ADMINISTRATOR.ToString(), // Role
                 true                    // Active
               });

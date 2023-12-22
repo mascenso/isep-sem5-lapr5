@@ -10,7 +10,8 @@ const TaskPickupDeliverySchema = new mongoose.Schema(
     contactNumber:{ type: Number, unique: false },
     user:{ type: Object, unique: false },
     deliveryContact:{ type: Object, unique: false },
-    pickupDelivery:{ type: Object, unique: false },
+    pickupContact:{ type: Object, unique: false },
+    approved: {type:Boolean,unique:false}
   },
   {
     timestamps: true

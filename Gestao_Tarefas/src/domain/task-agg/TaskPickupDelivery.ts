@@ -21,10 +21,11 @@ interface TaskPickupDeliveryProps {
       name:String;
       contactNumber:number;
     };
-    pickupDelivery:{
+    pickupContact:{
       name:String;
       contactNumber:number;
-    }
+    };
+    approved:boolean;
 }
 
 export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
@@ -42,7 +43,8 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
       { argument: props.contactNumber, argumentName: 'contactNumber' },
       { argument: props.user, argumentName: 'user' },
       { argument: props.deliveryContact, argumentName: 'deliveryContact' },
-      { argument: props.pickupDelivery, argumentName: 'pickupDelivery' },
+      { argument: props.pickupContact, argumentName: 'pickupContact' },
+      { argument: props.approved, argumentName: 'approved' },
     ];
 
 
@@ -87,8 +89,11 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
     return this.props.deliveryContact;
   }
 
-  public get pickupDelivery() : object {
-    return this.props.pickupDelivery;
+  public get pickupContact() : object {
+    return this.props.pickupContact;
+  }
+  public get approved() : boolean {
+    return this.props.approved;
   }
 
 
@@ -118,7 +123,10 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
     this.props.deliveryContact = value;
   }
 
-  set pickupDelivery ( value: { name: string; contactNumber: number }) {
-    this.props.pickupDelivery = value;
+  set pickupContact ( value: { name: string; contactNumber: number }) {
+    this.props.pickupContact = value;
+  }
+  set approved ( value: boolean) {
+    this.props.approved = value;
   }
 }

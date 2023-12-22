@@ -19,20 +19,22 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
             contactNumber: taskPickupDelivery.contactNumber,
             user: taskPickupDelivery.user,
             deliveryContact: taskPickupDelivery.deliveryContact,
-            pickupDelivery: taskPickupDelivery.pickupDelivery
+            pickupContact: taskPickupDelivery.pickupContact,
+            approved: taskPickupDelivery.approved
       } as ITaskPickupDeliveryDTO;
     }
   
     public static toDomain (taskPickupDelivery: any | Model<ITaskPickupDeliveryPersistence & Document> ): TaskPickupDelivery {
   
-      const taskOrError = taskPickupDelivery.create({
+      const taskOrError = TaskPickupDelivery.create({
             description: taskPickupDelivery.description,
             pickupLocalization: taskPickupDelivery.pickupLocalization,
             deliveryLocalization: taskPickupDelivery.deliveryLocalization,
             contactNumber: taskPickupDelivery.contactNumber,
             user: taskPickupDelivery.user,
             deliveryContact: taskPickupDelivery.deliveryContact,
-            pickupDelivery: taskPickupDelivery.pickupDelivery
+            pickupContact: taskPickupDelivery.pickupContact,
+            approved: taskPickupDelivery.approved
         },
         new UniqueEntityID(taskPickupDelivery.domainId)
       );
@@ -51,7 +53,8 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
         contactNumber: taskPickupDelivery.contactNumber,
         user: taskPickupDelivery.user,
         deliveryContact: taskPickupDelivery.deliveryContact,
-        pickupDelivery: taskPickupDelivery.pickupDelivery
+        pickupContact: taskPickupDelivery.pickupContact,
+        approved: taskPickupDelivery.approved
       }
       return a;
     }

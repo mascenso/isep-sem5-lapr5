@@ -20,7 +20,8 @@ export default (app: Router) => {
         buildingId: Joi.string().required(),
         floors: Joi.array().required(),
         contactNumber: Joi.number().required(),
-        user: Joi.object().required()
+        user: Joi.object().required(),
+        approved: Joi.boolean().default(false)
       })
     }),
     (req, res, next) => ctrl.createVigilanceTask(req, res, next) );
@@ -45,10 +46,11 @@ export default (app: Router) => {
           name: Joi.string().required(),
           contactNumber: Joi.number().required()
         }).required(),
-        pickupDelivery: Joi.object({
+        pickupContact: Joi.object({
           name: Joi.string().required(),
           contactNumber: Joi.number().required()
-        }).required()
+        }).required(),
+        approved: Joi.boolean().default(false)
       })
     }),
     (req, res, next) => ctrl.createPickupDeliveryTask(req, res, next) );

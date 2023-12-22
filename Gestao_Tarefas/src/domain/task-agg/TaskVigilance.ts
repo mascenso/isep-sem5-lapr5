@@ -9,6 +9,7 @@ interface TaskVigilanceProps {
     floors:object[];
     contactNumber:number;
     user:object;
+    approved:boolean;
 }
 
 export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
@@ -25,6 +26,7 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
       { argument: props.floors, argumentName: 'floors' },
       { argument: props.contactNumber, argumentName: 'contactNumber' },
       { argument: props.user, argumentName: 'user' },
+      { argument: props.approved, argumentName: 'approved' },
     ];
 
 
@@ -64,6 +66,9 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
   public get user() : object {
     return this.props.user;
   }
+  public get approved() : boolean {
+    return this.props.approved;
+  }
 
 
   set description ( value: string) {
@@ -84,6 +89,9 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
 
   set user ( value: object) {
     this.props.user = value;
+  }
+  set approved ( value: boolean) {
+    this.props.approved = value;
   }
 
 }

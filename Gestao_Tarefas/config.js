@@ -19,7 +19,11 @@ export default {
   /**
    * That long string from mlab
    */
-  databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/tasks",
+  //databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/tasks",
+  databaseURL: process.env.MONGODB_URI || "mongodb://taskAdmin:Pinalistas2024@vs199.dei.isep.ipp.pt:27017/tasksDB",
+  /**
+   * 
+   */
 
   /**
    * Your secret sauce
@@ -51,6 +55,14 @@ export default {
     task: {
       name: "TaskRepo",
       path: "../repos/taskRepo"
+    },
+    taskVigilance: {
+      name: "TaskVigilanceRepo",
+      path: "../repos/TaskVigilanceRepo"
+    },
+    taskPickupDelivery: {
+      name: "TaskPickupDeliveryRepo",
+      path: "../repos/TaskPickupDeliveryRepo"
     },
 
   },

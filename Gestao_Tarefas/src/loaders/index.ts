@@ -13,7 +13,17 @@ export default async ({ expressApp }) => {
   const taskSchema = {
     // compare with the approach followed in repos and services
     name: 'taskSchema',
-    schema: '../persistence/schemas/taskSchema',
+    schema: '../persistence/schemas/TaskSchema',
+  };
+  const taskVigilanceSchema = {
+    // compare with the approach followed in repos and services
+    name: 'taskVigilanceSchema',
+    schema: '../persistence/schemas/taskVigilanceSchema',
+  };
+  const taskPickupDeliverySchema = {
+    // compare with the approach followed in repos and services
+    name: 'taskPickupDeliverySchema',
+    schema: '../persistence/schemas/TaskPickupDeliverySchema',
   };
 
   const taskController = {
@@ -25,6 +35,14 @@ export default async ({ expressApp }) => {
     name: config.repos.task.name,
     path: config.repos.task.path
   }
+  const taskVigilanceRepo = {
+    name: config.repos.taskVigilance.name,
+    path: config.repos.taskVigilance.path
+  }
+  const taskPickupDeliveryRepo = {
+    name: config.repos.taskPickupDelivery.name,
+    path: config.repos.taskPickupDelivery.path
+  }
 
   const taskService = {
     name: config.services.task.name,
@@ -34,13 +52,17 @@ export default async ({ expressApp }) => {
   await dependencyInjectorLoader({
     mongoConnection,
     schemas: [
-      taskSchema
+      taskSchema,
+      taskVigilanceSchema,
+      taskPickupDeliverySchema
     ],
     controllers: [
       taskController
     ],
     repos: [
-      taskRepo
+      taskRepo,
+      taskVigilanceRepo,
+      taskPickupDeliveryRepo
     ],
     services: [
       taskService

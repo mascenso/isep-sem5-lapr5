@@ -18,8 +18,10 @@ export interface ITaskPickupDeliveryPersistence {
     name:String;
     contactNumber:number;
   };
-  pickupDelivery:{
+  pickupContact:{
     name:String;
     contactNumber:number;
-  }
+  };
+  approved:boolean;
+  pending:boolean;
 }

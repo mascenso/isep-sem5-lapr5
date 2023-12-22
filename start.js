@@ -33,4 +33,7 @@ runNpmInstallAndStart('./Frontend', 'UI Module', '32');
 // Iniciar o backend com cor azul
 runNpmInstallAndStart('./Gestao_Informacao', 'Information Module', '34');
 
+// Iniciar o backend tarefas 
+runNpmInstallAndStart('./Gestao_Tarefas', 'Tasks Module', '36');
+
 

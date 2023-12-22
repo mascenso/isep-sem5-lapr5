@@ -1,11 +1,10 @@
 
-export interface ITaskVigilancePersistence {
-  domainId: string;
+export interface TaskVigilanceRequestDTO {
+  id: string;
   description: string;
   buildingId: string;
   floors: object[];
   contactNumber: number;
   user:object;
-  approved:boolean;
-  pending:boolean;
+  approved: boolean;
 }

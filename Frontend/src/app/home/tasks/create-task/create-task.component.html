@@ -1,1 +1,45 @@
-<p>create-task works!</p>
+<mat-form-field>
+    <mat-label>Escolha a tarefa</mat-label>
+    <mat-select [(value)]="selectedTask">
+      <mat-option value="vigilancia">Tarefa de Vigilância</mat-option>
+      <mat-option value="pickup">Tarefa de Pickup</mat-option>
+    </mat-select>
+</mat-form-field>
+<div *ngIf="selectedTask === 'vigilancia'">
+    <mat-form-field>
+        <mat-label>Select building</mat-label>
+        <mat-select id="dropdownBuilding" [(ngModel)]="selectedBuilding" (valueChange)="onBuildingSelector($event)">
+          <mat-option *ngFor="let building of buildings" [value]="building.id">
+            {{ building.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Select floor</mat-label>
+        <mat-select id="dropdownFloor" [(ngModel)]="selectedFloor">
+          <mat-option *ngFor="let floor of floors" [value]="floor">
+            {{ floor.floorNumber }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    <form [formGroup]="vigilanciaForm">
+        <mat-form-field>
+            <input matInput placeholder="Description" formControlName="description">
+        </mat-form-field>
+            <mat-form-field>
+        <input matInput placeholder="Contact Number" formControlName="contactNumber">
+            </mat-form-field>
+        <div formGroupName="user">
+            <mat-form-field>
+                <input matInput placeholder="User Name" formControlName="userName">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="User Contact" formControlName="userContact">
+            </mat-form-field>
+        </div>
+        <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">Criar tarefa</button>
+    </form>
+</div>
+<div *ngIf="selectedTask === 'pickup'">
+cenas2
+</div>

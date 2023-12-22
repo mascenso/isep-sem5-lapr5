@@ -7,4 +7,5 @@ export default interface ITaskVigilanceDTO {
   contactNumber: number;
   user:object;
   approved: boolean;
+  pending: boolean;
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -12,14 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.IdentityModel.Tokens;
 using UserManagement.Domain.Auth;
 using UserManagement.Infrastructure;
-using UserManagement.Infrastructure.Categories;
-using UserManagement.Infrastructure.Products;
-using UserManagement.Infrastructure.Families;
 using UserManagement.Infrastructure.Shared;
 using UserManagement.Domain.Shared;
-using UserManagement.Domain.Categories;
-using UserManagement.Domain.Products;
-using UserManagement.Domain.Families;
 using UserManagement.Domain.Users;
 using UserManagement.Infrastructure.Users;
 using UserManagement.Mappers;
@@ -117,15 +110,6 @@ namespace UserManagement
 
             services.AddTransient<AuthService>();
             services.AddTransient<IUnitOfWork,UnitOfWork>();
-
-            services.AddTransient<ICategoryRepository,CategoryRepository>();
-            services.AddTransient<CategoryService>();
-
-            services.AddTransient<IProductRepository,ProductRepository>();
-            services.AddTransient<ProductService>();
-
-            services.AddTransient<IFamilyRepository,FamilyRepository>();
-            services.AddTransient<FamilyService>();
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<UserService>();

@@ -109,10 +109,6 @@ namespace UserManagement.Domain.Users
         this.LastName = updateDto.LastName;
       }
 
-      if (updateDto.Email != null)
-      {
-        this.Email = new UserEmail(updateDto.Email);
-      }
     }
 
     public bool VerifyPassword(string password)

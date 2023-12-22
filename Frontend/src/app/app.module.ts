@@ -52,6 +52,7 @@ import { EditElevatorsComponent } from './home/campus/edit-elevators/edit-elevat
 import { ViewComponent } from "./home/view/view.component";
 import { CreateRoomComponent } from './home/campus/create-room/create-room.component';
 import { PlanRouteWithViewComponent } from './home/tasks/plan-route-with-view/plan-route-with-view.component';
+import { CreateTaskComponent } from './home/tasks/create-task/create-task.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { PlanRouteWithViewComponent } from './home/tasks/plan-route-with-view/pl
     CreateRobotComponent,
     EditElevatorsComponent,
     CreateRoomComponent,
-    PlanRouteWithViewComponent
+    PlanRouteWithViewComponent,
+    CreateTaskComponent
   ],
   imports: [
     BrowserModule,

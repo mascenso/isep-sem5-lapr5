@@ -127,6 +127,8 @@ namespace UserManagement.Controllers
               return Unauthorized(new { Message = "Invalid email or password." });
             }
             // Login successful, generate JWT token
+            // Include token in the response headers
+            Response.Headers.Append("Authorization", "Bearer " + token.AccessToken);
             return Ok(token);
           }
           catch (BusinessRuleValidationException e)

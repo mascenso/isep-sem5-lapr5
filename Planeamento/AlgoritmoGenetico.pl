@@ -2,11 +2,12 @@
 :-dynamic populacao/1.
 :-dynamic prob_cruzamento/1.
 :-dynamic prob_mutacao/1.
-:- dynamic tempo_transicao/3.
-
+:-dynamic tempo_transicao/3.
+:-dynamic lista_tarefas/1.
 
 
 :- consult('BC_RobDroneGo.pl').
+:- consult('Percurso_Robots.pl').
 
 /* Predicado para inicializar as variaveis necessarias para o algoritmo genético.
 NG - Nº de gerações;
@@ -40,6 +41,7 @@ um elemento de PopOrd poderia ser [t3,t1,t5,t2,t4]*16, onde o * é um mero separ
 Nota -> PopOrd - Lista com a geração inicial. */
 gera:-
 	inicializa,
+	inicializa_tempos_transicao,
 	gera_populacao(Pop),
 	write('Pop='),write(Pop),nl,
 	avalia_populacao(Pop,PopAv),
@@ -54,6 +56,40 @@ gera:-
 	final_geracao(Ind*V), nl,
 	write('Melhor solução: '), write(Ind*V), nl.
 
+/* Predicado para inicializar os tempos de transição entre tarefas */
+inicializa_tempos_transicao :-
+    retractall(tempo_transicao(_, _, _)),  % Remove versões anteriores do tempo de transição, se existirem
+    retractall(lista_tarefas(_)),  % Remove versões anteriores da lista de tarefas, se existirem
+    findall(Tarefa, tarefa(Tarefa, _, _), ListaTarefas),
+    asserta(lista_tarefas(ListaTarefas)),
+    assert_lista_tempos(ListaTarefas, ListaTarefas).
+
+/* Predicado para adicionar os tempos de transição à base de conhecimento */
+assert_lista_tempos(_, []).
+
+assert_lista_tempos(Tarefa, [Tarefa1 | Resto]) :-
+    valida_tarefa_com_outras(Tarefa1, Resto),
+    assert_lista_tempos(Tarefa, Resto).
+
+/* Predicado para validar uma tarefa com todas as outras */
+valida_tarefa_com_outras(_, []).
+
+valida_tarefa_com_outras(Tarefa, [OutraTarefa | Resto]) :-
+    Tarefa \== OutraTarefa,
+    \+ tempo_transicao(Tarefa, OutraTarefa, _),
+    \+ tempo_transicao(OutraTarefa, Tarefa, _),
+	tarefa(Tarefa, _, DestinoT1),
+	tarefa(OutraTarefa, OrigemT2, _),
+	%Para calcular apenas o custo entre tarefas e nao durante o processamento de tarefas
+	localizacao(DestinoT1,PisoOrig, CelulaOrig),
+	localizacao(OrigemT2,PisoDest,CelulaDest),
+    ((PisoOrig == PisoDest, aStar(CelulaOrig, CelulaDest, _, Custo));
+    caminho_pisos_com_custo(PisoOrig, PisoDest, _, _, Custo, _)),
+    assert(tempo_transicao(Tarefa, OutraTarefa, Custo)),
+    assert(tempo_transicao(OutraTarefa, Tarefa, Custo)),
+    valida_tarefa_com_outras(Tarefa, Resto).
+
+
 
 /* Cria uma população de indivíduos. Gera a lista de individuos conforme a quantidade de tarefas e tamanho da população. 
 Cada indivíduo é representado por uma lista de tarefas de tamanho NumT e é garantido que não haverá indivíduos repetidos.
@@ -61,8 +97,9 @@ NumT - quantidade de tarefas;
 TamPop - dimensão da população. */
 gera_populacao(Pop):-
 	populacao(TamPop),
-	tarefas(NumT),
-	findall(Tarefa,tarefa(Tarefa,_,_),ListaTarefas),nl,
+	lista_tarefas(LTar),
+	length(LTar,NumT),
+	findall(Tarefa,tarefa(Tarefa,_,_),ListaTarefas),
 	gera_populacao(TamPop,ListaTarefas,NumT,Pop).
 
 gera_populacao(0,_,_,[]):-!.
@@ -104,23 +141,18 @@ avalia_populacao([Ind|Resto],[Ind*V|Resto1]):-
 	avalia_populacao(Resto,Resto1).
 
 
-/* Função de avaliação considerando apenas os custos das deslocações entre as tarefas */
-avalia([],0).
+/* Predicado de avaliação considerando apenas os custos das deslocações entre as tarefas */
+avalia([], 0).
 
-avalia([T], 0) :-  % Apenas uma tarefa na lista
-    tarefa_local(T, _,_).
-	%tarefa(T, TempoProcessamento, _),
-    %CustoTotal is TempoProcessamento.
+avalia([_], 0).
 
 avalia([T1, T2 | Resto], CustoTotal):-
-    tarefa_local(T1, PisoOrig, CelulaOrig),
-    tarefa_local(T2, PisoDest, CelulaDest),
-    %tarefa(T1, TempoProcessamento1, _),
-    ((PisoOrig == PisoDest, aStar(CelulaOrig, CelulaDest, _, Custo)); (caminho_pisos_com_custo(PisoOrig, PisoDest, _, _, Custo, _))),
-    gera_tempo_transicao(T1, T2, TempoTransicao), %para gerar um tempo de transição random entre duas tarefas e nao ficar dependentes da BC.
-	avalia([T2 | Resto], CustoRestante),
-	CustoTotal is CustoRestante + TempoTransicao + Custo.
-	%CustoTotal is CustoRestante + Custo + TempoProcessamento1.
+    (tempo_transicao(T1, T2, Custo);tempo_transicao(T2,T2,Custo)),
+    avalia([T2 | Resto], CustoRestante),
+    CustoTotal is Custo + CustoRestante.
+
+avalia([T1, T2], CustoTotal):-
+    tempo_transicao(T1, T2, CustoTotal).
 
 
 /* Ordena os elementos da população por ordem crescente de avaliações pela soma pesada dos atrasos.
@@ -262,7 +294,8 @@ gerar_pontos_cruzamento(P1,P2):-
 	gerar_pontos_cruzamento1(P1,P2).
 
 gerar_pontos_cruzamento1(P1,P2):-
-	tarefas(N),
+	lista_tarefas(LTar),
+	length(LTar,N),
 	NTemp is N+1,
 	random(1,NTemp,P11),
 	random(1,NTemp,P21),
@@ -315,7 +348,8 @@ sublista1([_|R1],N1,N2,[h|R2]):-
 	sublista1(R1,N3,N4,R2).
 
 rotate_right(L,K,L1):-
-	tarefas(N),
+	lista_tarefas(LTar),
+	length(LTar,N),
 	T is N - K,
 	rr(T,L,L1).
 
@@ -338,7 +372,8 @@ elimina([_|R1],L,R2):-
 
 insere([],L,_,L):-!.
 insere([X|R],L,N,L2):-
-	tarefas(T),
+	lista_tarefas(LTar),
+	length(LTar,T),
 	((N>T,!,N1 is N mod T);N1 = N),
 	insere1(X,N1,L,L1),
 	N2 is N + 1,
@@ -352,7 +387,8 @@ insere1(X,N,[Y|L],[Y|L1]):-
 
 cruzar(Ind1,Ind2,P1,P2,NInd11):-
 	sublista(Ind1,P1,P2,Sub1),
-	tarefas(NumT),
+	lista_tarefas(LTar),
+	length(LTar,NumT),
 	R is NumT-P2,
 	rotate_right(Ind2,R,Ind21),
 	elimina(Ind21,Sub1,Sub2),
@@ -395,7 +431,3 @@ mutacao23(G1,P,[G|Ind],G2,[G|NInd]):-
 	mutacao23(G1,P1,Ind,G2,NInd).
 
 
-/* Gera tempos de transição aleatórios entre duas tarefas. Estes valores random estão compreendidos entre 1 e 3 */
-gera_tempo_transicao(Tarefa1, Tarefa2, Tempo) :-
-    random_between(1, 3, Tempo),
-    assertz(tempo_transicao(Tarefa1, Tarefa2, Tempo)).

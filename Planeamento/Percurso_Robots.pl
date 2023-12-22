@@ -125,7 +125,7 @@ calcular_custo_unico(elev(PisoOr, _), PisoAtual, Custo,Cel) :-
     pos_init(PisoAtual, Orig),
     elev_pos(PisoOr, CDestino),
     aStar(Orig, CDestino, Cel, CustoElevador),
-    Custo is CustoElevador + 50.  % 30 unidades detempo para atravessar o corredor externo (pdf)
+    Custo is CustoElevador + 30.  % 30 unidades detempo para atravessar o corredor externo (pdf)
 
 /*Calcula distancia desde posicao inicia ate passagem*/
 calcular_custo_unico(cor(PisoOr, PisoDest), PisoOr, Custo,Cel) :-
@@ -258,32 +258,4 @@ calcular_custo_unico_dfs(cor(PisoOr, PisoDest), PisoOr, Custo) :-
     (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
     dfs_com_custo(Orig, CDestino, _, Custo).
 
-/*
-%este algoritmo é para calcular a distancia entre a posiçao inicial do robot com a de destino na primeira interaçao. Se a lista estiver vazia, não avança.
-percorre_primeiro_lista([], _,0).
 
-percorre_primeiro_lista([elev(PisoOr, _) | _], PisoOr, CustoTotal):-
-        pos_init(PisoOr,Orig),
-        elev_pos(PisoOr, CDestino),
-        aStar(Orig, CDestino, _, CustoTotal),
-        write('Custo1 = '),write(CustoTotal),nl.
-
-
-percorre_primeiro_lista([cor(PisoOr, PisoDest) | _], PisoOr, CustoTotal):-
-        pos_init(PisoOr,Orig),
-        (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
-        aStar(Orig, CDestino, _, CustoTotal),
-        write('Custosss = '),write(CustoTotal),nl,
-        percorre_lista(Resto, CDestino ,CustoTotal).
-
-%este algoritmo é para calcular a distancia entre a posiçao anterior do robot com a proxima. Se chegou ao destino, para.
-percorre_lista([], _,0).
-
-percorre_lista([elev(_, _) | Resto], Destino, CustoTotal):-
-    percorre_lista(Resto, Destino, CustoTotal).
-
-percorre_lista([cor(PisoOr, PisoDest) | _], COrig,CustoTotal):-
-    (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
-    aStar(COrig, CDestino, _, CustoTotal),
-    write('Custotttt = '),write(CustoTotal),nl.
-    percorre_lista(Resto, CDestino, CustoTotal).*/

@@ -80,11 +80,7 @@ namespace UserManagement.Domain.Users
     public async Task<UserDto> FindUserByEmail(string email)
     {
       var user = await this._repo.GetUserByEmailAsync(email);
-      if (user == null)
-      {
-        throw new NotFoundException($"User with email {email} not found.");
-      }
-      return this._userMapper.ToDto(user);
+      return user == null ? null : this._userMapper.ToDto(user);
     }
 
   }

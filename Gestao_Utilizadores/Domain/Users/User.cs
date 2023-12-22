@@ -67,6 +67,36 @@ namespace UserManagement.Domain.Users
       );
     }
 
+    public static User CreateSystemUser(CreateUserRequestDto dto)
+    {
+      if (dto.Role == null || UserRole.USER.ToString().Equals(dto.Role))
+      {
+        throw new BusinessRuleValidationException("Invalid role!");
+      }
+
+      if (dto.Email == null)
+      {
+        throw new BusinessRuleValidationException("Email can not be null!");
+      }
+
+      if (dto.Password == null)
+      {
+        throw new BusinessRuleValidationException("Password can not be null!");
+      }
+
+      if (!Enum.TryParse(dto.Role, out UserRole userRole))
+      {
+        throw new BusinessRuleValidationException($"Invalid role: '{dto.Role}'");
+      };
+
+      // create user password
+      return new User(
+        new UserEmail(dto.Email), new UserPassword(UserPassword.HashPassword(dto.Password)),
+        dto.FirstName, dto.LastName, userRole,
+        true
+      );
+    }
+
     public void PatchUser(UpdateUserRequestDto updateDto)
     {
       if (updateDto.FirstName != null)

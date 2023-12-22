@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -26,9 +25,30 @@ namespace UserManagement.Controllers
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("/register")]
+        [HttpPost("register")]
         [AllowAnonymous]
         public async Task<ActionResult<UserDto>> RegisterUser(CreateUserRequestDto userDto)
+        {
+          try
+          {
+            var responseDto = await _userService.CreateUser(userDto);
+            var token = this._authService.GenerateJwtToken(responseDto);
+            // Include token in the response headers
+            Response.Headers.Append("Authorization", "Bearer " + token);
+
+            return CreatedAtAction(nameof(GetUserById), new { id = responseDto.Id }, responseDto);
+          }
+          catch (BusinessRuleValidationException e)
+          {
+            return BadRequest(new { Message = e.Message });
+          }
+        }
+
+        // POST: api/Users/register-system-user
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "ADMINISTRATOR")]
+        [HttpPost("register-system-user")]
+        public async Task<ActionResult<UserDto>> RegisterSystemUser(CreateUserRequestDto userDto)
         {
           try
           {
@@ -92,8 +112,8 @@ namespace UserManagement.Controllers
           }
         }
 
-        [HttpPost("/auth")]
         [AllowAnonymous]
+        [HttpPost("auth")]
         public async Task<ActionResult<TokenDto>> Authenticate([FromBody] UserLoginRequestDto loginDto)
         {
           try

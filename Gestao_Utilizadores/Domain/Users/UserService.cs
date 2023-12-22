@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.JsonPatch;
-using UserManagement.Domain.Auth;
+﻿using System.Threading.Tasks;
 using UserManagement.Domain.Shared;
 using UserManagement.Mappers;
 
@@ -32,6 +29,21 @@ namespace UserManagement.Domain.Users
       }
       var user = User.FromRequestDto(dto);
 
+      await this._repo.AddAsync(user);
+      await this._unitOfWork.CommitAsync();
+
+      return this._userMapper.ToDto(user);
+    }
+
+    public async Task<UserDto> CreateSystemUser(CreateUserRequestDto requestDto)
+    {
+      var foundUser = await this.FindUserByEmail(requestDto.Email);
+      if (foundUser != null)
+      {
+        throw new BusinessRuleValidationException($"User with Email {requestDto.Email} already exists.");
+      }
+
+      var user = User.CreateSystemUser(requestDto);
       await this._repo.AddAsync(user);
       await this._unitOfWork.CommitAsync();
 

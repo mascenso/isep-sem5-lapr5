@@ -13,13 +13,45 @@ export default (app: Router) => {
 
   const ctrl = Container.get(config.controllers.task.name) as ITaskController;
 
-  route.post('',
+  route.post('/vigilance',
     celebrate({
       body: Joi.object({
-        name: Joi.string().required()
+        description: Joi.string().required(),
+        buildingId: Joi.string().required(),
+        floors: Joi.array().required(),
+        contactNumber: Joi.number().required(),
+        user: Joi.object().required()
       })
     }),
-    (req, res, next) => ctrl.createTask(req, res, next) );
+    (req, res, next) => ctrl.createVigilanceTask(req, res, next) );
+
+  route.post('/pickupDelivery',
+    celebrate({
+      body: Joi.object({
+        description: Joi.string().required(),
+        pickupLocalization: Joi.object({
+          buildingId: Joi.string().required(),
+          floor: Joi.object().required(),
+          room: Joi.array().required()          //coordinates of room
+        }).required(),
+        deliveryLocalization: Joi.object({
+          buildingId: Joi.string().required(),
+          floor: Joi.object().required(),
+          room: Joi.array().required()          //coordinates of room
+        }).required(),
+        contactNumber: Joi.number().required(),
+        user: Joi.object().required(),
+        deliveryContact: Joi.object({
+          name: Joi.string().required(),
+          contactNumber: Joi.number().required()
+        }).required(),
+        pickupDelivery: Joi.object({
+          name: Joi.string().required(),
+          contactNumber: Joi.number().required()
+        }).required()
+      })
+    }),
+    (req, res, next) => ctrl.createPickupDeliveryTask(req, res, next) );
 
   route.put('',
     celebrate({

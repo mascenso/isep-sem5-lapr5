@@ -26,7 +26,7 @@ namespace UserManagement.Controllers
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("/register")]
         [AllowAnonymous]
         public async Task<ActionResult<UserDto>> RegisterUser(CreateUserRequestDto userDto)
         {
@@ -75,11 +75,11 @@ namespace UserManagement.Controllers
 
         // PATCH: api/Users/5
         [HttpPatch("{id}")]
-        public async Task<ActionResult<UserDto>> UpdateUser(Guid id, [FromBody] UpdateUserRequestDto patchDto)
+        public async Task<ActionResult<UserDto>> PatchUser(Guid id, [FromBody] UpdateUserRequestDto patchDto)
         {
           try
           {
-            var updatedUser = await _userService.UpdateUser(new UserId(id), patchDto);
+            var updatedUser = await _userService.PatchUserData(new UserId(id), patchDto);
             return Ok(updatedUser); // 200 OK
           }
           catch (NotFoundException)
@@ -92,9 +92,9 @@ namespace UserManagement.Controllers
           }
         }
 
-        [HttpPost("login")]
+        [HttpPost("/auth")]
         [AllowAnonymous]
-        public async Task<ActionResult<TokenDto>> Login([FromBody] UserLoginRequestDto loginDto)
+        public async Task<ActionResult<TokenDto>> Authenticate([FromBody] UserLoginRequestDto loginDto)
         {
           try
           {
@@ -113,6 +113,23 @@ namespace UserManagement.Controllers
           {
             return BadRequest(new { Message = e.Message });
           }
+        }
+
+        [Authorize]
+        [HttpGet("validate-token")]
+        public async Task<ActionResult<TokenValidationResponseDto>> ValidateTokenWithRole([FromQuery] string requiredRole)
+        {
+          // Check if the user has the required role
+          if (User.IsInRole(requiredRole))
+          {
+            // If the execution reaches here, it means the user has the required role.
+            // You can perform additional actions or return a success response.
+            return Ok( new TokenValidationResponseDto(
+              $"Token validation successful. User has the required role: {requiredRole}"));
+          }
+
+          // If the user doesn't have the required role, return a 403 Forbidden response
+          return Forbid();
         }
 
     }

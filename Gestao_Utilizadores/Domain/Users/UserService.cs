@@ -47,13 +47,13 @@ namespace UserManagement.Domain.Users
           user.Active);
     }
 
-    public async Task<UserDto> UpdateUser(UserId userId, UpdateUserRequestDto patchDto)
+    public async Task<UserDto> PatchUserData(UserId userId, UpdateUserRequestDto patchDto)
     {
       var existingUser = await this._repo.GetByIdAsync(userId);
 
       if (existingUser == null)
       {
-        return null;
+        throw new NotFoundException($"User with ID {userId} not found.");
       }
 
       // Update user properties based on the patched DTO

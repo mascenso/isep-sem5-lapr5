@@ -18,7 +18,8 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
         floors: taskVigilance.floors,
         contactNumber: taskVigilance.contactNumber,
         user: taskVigilance.user,
-        approved: taskVigilance.approved
+        approved: taskVigilance.approved,
+        pending: taskVigilance.pending
       } as ITaskVigilanceDTO;
     }
   
@@ -30,7 +31,8 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
             floors: taskVigilance.floors,
             contactNumber: taskVigilance.contactNumber,
             user: taskVigilance.user,
-            approved: taskVigilance.approved
+            approved: taskVigilance.approved,
+            pending: taskVigilance.pending
         },
         new UniqueEntityID(taskVigilance.domainId)
       );
@@ -48,7 +50,8 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
         floors: taskVigilance.floors,
         contactNumber: taskVigilance.contactNumber,
         user: taskVigilance.user,
-        approved: taskVigilance.approved
+        approved: taskVigilance.approved,
+        pending: taskVigilance.pending
       }
       return a;
     }

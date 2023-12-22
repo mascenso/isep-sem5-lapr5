@@ -11,7 +11,8 @@ const TaskPickupDeliverySchema = new mongoose.Schema(
     user:{ type: Object, unique: false },
     deliveryContact:{ type: Object, unique: false },
     pickupContact:{ type: Object, unique: false },
-    approved: {type:Boolean,unique:false}
+    approved: {type:Boolean,unique:false},
+    pending: {type:Boolean,unique:false}
   },
   {
     timestamps: true

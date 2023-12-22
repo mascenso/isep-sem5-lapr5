@@ -1,3 +1,7 @@
+using System;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -5,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.IdentityModel.Tokens;
 using UserManagement.Domain.Auth;
 using UserManagement.Infrastructure;
 using UserManagement.Infrastructure.Categories;
@@ -66,6 +71,7 @@ namespace UserManagement
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -76,6 +82,30 @@ namespace UserManagement
 
         public void ConfigureMyServices(IServiceCollection services)
         {
+
+            services.AddAuthentication(options =>
+            {
+              options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+              options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+              var jwtSettings = Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+              options.TokenValidationParameters = new TokenValidationParameters
+              {
+                ValidateIssuer = true,
+                ValidIssuer = jwtSettings.Issuer,
+                ValidateAudience = true,
+                ValidAudience = jwtSettings.Audience,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero,
+                RequireSignedTokens = true,
+                RequireExpirationTime = true,
+                RoleClaimType = "role"
+              };
+              options.MapInboundClaims = false;
+            });
             services.AddSingleton<JwtSettings>(provider =>
             {
               // Load JwtSettings from configuration or wherever it is configured

@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UserManagement.Domain.Auth;
@@ -10,6 +12,7 @@ namespace UserManagement.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
       private readonly UserService _userService;
@@ -24,6 +27,7 @@ namespace UserManagement.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<UserDto>> RegisterUser(CreateUserRequestDto userDto)
         {
           try
@@ -89,7 +93,8 @@ namespace UserManagement.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login([FromBody] UserLoginRequestDto loginDto)
+        [AllowAnonymous]
+        public async Task<ActionResult<TokenDto>> Login([FromBody] UserLoginRequestDto loginDto)
         {
           try
           {
@@ -102,7 +107,7 @@ namespace UserManagement.Controllers
               return Unauthorized(new { Message = "Invalid email or password." });
             }
             // Login successful, generate JWT token
-            return Ok(new { Token = token });
+            return Ok(token);
           }
           catch (BusinessRuleValidationException e)
           {

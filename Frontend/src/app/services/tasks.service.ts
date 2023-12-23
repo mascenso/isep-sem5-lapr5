@@ -3,6 +3,7 @@ import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import { TaskVigilanceRequestDTO } from "../../dto/taskVigilanceDTO";
+import { TaskPickupRequestDTO } from 'src/dto/taskPickupDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,10 @@ export class TasksService {
 
   public createVigilanceTask(vigilanceTask: TaskVigilanceRequestDTO): Observable<TaskVigilanceRequestDTO[]> {
     return this.http.post<TaskVigilanceRequestDTO[]>(`${this.API_URL}/api/tasks/vigilance`, vigilanceTask);
+  }
+
+  public createPickupTask(pickupTask: TaskPickupRequestDTO): Observable<TaskPickupRequestDTO[]> {
+    return this.http.post<TaskPickupRequestDTO[]>(`${this.API_URL}/api/tasks/pickupDelivery`, pickupTask);
   }
 
 }

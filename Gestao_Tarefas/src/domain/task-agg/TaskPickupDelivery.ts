@@ -108,11 +108,11 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
     this.props.description = value;
   }
 
-  set pickupLocalization ( value: {buildingId:string; floor: object; room:number[]; }) {
+  set pickupLocalization ( value: any) {
     this.props.pickupLocalization = value;
   }
 
-  set deliveryLocalization ( value: {buildingId:string; floor: object; room:number[]; }) {
+  set deliveryLocalization ( value: any) {
     this.props.deliveryLocalization = value;
   }
 
@@ -124,11 +124,11 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
     this.props.user = value;
   }
 
-  set deliveryContact ( value: { name: string; contactNumber: number }) {
+  set deliveryContact ( value: any) {
     this.props.deliveryContact = value;
   }
 
-  set pickupContact ( value: { name: string; contactNumber: number }) {
+  set pickupContact ( value: any) {
     this.props.pickupContact = value;
   }
   set approved ( value: boolean) {

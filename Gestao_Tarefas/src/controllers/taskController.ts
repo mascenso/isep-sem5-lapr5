@@ -96,4 +96,41 @@ export default class TaskController implements ITaskController /* TODO: extends 
       return next(e);
     }
   }
+
+ public async getAllVigilancePendingTasks(req: Request, res: Response, next: NextFunction) {
+
+  try {
+    const tasksOrError = await this.taskServiceInstance.getAllVigilancePendingTasks() as Result<Array<ITaskVigilanceDTO[]>>;
+
+    if (tasksOrError.isFailure) {
+      return res.status(404).send();
+    }
+
+    const tasksDTO = tasksOrError.getValue();
+    return res.status(201).json( tasksDTO );
+  }
+  catch (e) {
+    return next(e);
+  }
+}  
+
+public async getAllPickupDeliveryPendingTasks(req: Request, res: Response, next: NextFunction) {
+
+  try {
+    const tasksOrError = await this.taskServiceInstance.getAllPickupDeliveryPendingTasks() as Result<Array<ITaskPickupDeliveryDTO[]>>;
+
+    if (tasksOrError.isFailure) {
+      return res.status(404).send();
+    }
+
+    const tasksDTO = tasksOrError.getValue();
+    return res.status(201).json( tasksDTO );
+  }
+  catch (e) {
+    return next(e);
+  }
+}  
+
+
+
 }

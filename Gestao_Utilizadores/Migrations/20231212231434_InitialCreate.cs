@@ -76,7 +76,7 @@ namespace UserManagement.Migrations
               values: new object[]
               {
                 Guid.NewGuid().ToString(),          // UserId
-                "admin@admin",    // Email
+                "admin@email.pt",    // Email
                 "$2b$10$9JGYmmkpHiiFQoI63xyqyOhTtRJYK/2kDfy8nNsyA0UBeLioxRNVK",      // Password (hashed for security)
                 "Manel",                // FirstName
                 "Da Maquina",                 // LastName

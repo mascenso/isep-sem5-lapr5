@@ -9,7 +9,6 @@ import {FleetComponent} from "./home/fleet/fleet.component";
 import {TasksComponent} from "./home/tasks/tasks.component";
 import {ViewComponent} from "./home/view/view.component";
 import {LoginComponent} from "./login/login.component";
-import {NewLoginComponent} from "./new-login/new-login.component";
 import {RegisterComponent} from "./register/register.component";
 import {CreateBuildingComponent} from "./home/campus/create-building/create-building.component";
 import {CreateRobotTypeComponent} from "./home/fleet/create-robot-type/create-robot-type.component";

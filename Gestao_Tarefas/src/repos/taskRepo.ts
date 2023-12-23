@@ -13,10 +13,10 @@ export default class TaskRepo implements ITaskRepo {
   private models: any;
 
   constructor(
-    @Inject('taskSchema') private taskSchema : Model<ITaskPersistence & Document>,
-  ) {}
+    @Inject('taskSchema') private taskSchema: Model<ITaskPersistence & Document>,
+  ) { }
 
-  private createBaseQuery (): any {
+  private createBaseQuery(): any {
     return {
       where: {},
     }
@@ -26,19 +26,19 @@ export default class TaskRepo implements ITaskRepo {
 
     const idX = task.id instanceof TaskId ? (<TaskId>task.id).toValue() : task.id;
 
-    const query = { domainId: idX};
-    const taskDocument = await this.taskSchema.findOne( query as FilterQuery<ITaskPersistence & Document>);
+    const query = { domainId: idX };
+    const taskDocument = await this.taskSchema.findOne(query as FilterQuery<ITaskPersistence & Document>);
 
     return !!taskDocument === true;
   }
 
-  public async save (task: Task): Promise<Task> {
-    const query = { domainId: task.id.toString()};
+  public async save(task: Task): Promise<Task> {
+    const query = { domainId: task.id.toString() };
 
-    const taskDocument = await this.taskSchema.findOne( query );
+    const taskDocument = await this.taskSchema.findOne(query);
 
     try {
-      if (taskDocument === null ) {
+      if (taskDocument === null) {
         const rawTask: any = TaskMap.toPersistence(task);
 
         const taskCreated = await this.taskSchema.create(rawTask);
@@ -55,11 +55,11 @@ export default class TaskRepo implements ITaskRepo {
     }
   }
 
-  public async findByDomainId (taskId: TaskId | string): Promise<Task> {
-    const query = { domainId: taskId};
-    const taskRecord = await this.taskSchema.findOne( query as FilterQuery<ITaskPersistence & Document> );
+  public async findByDomainId(taskId: TaskId | string): Promise<Task> {
+    const query = { domainId: taskId };
+    const taskRecord = await this.taskSchema.findOne(query as FilterQuery<ITaskPersistence & Document>);
 
-    if( taskRecord != null) {
+    if (taskRecord != null) {
       return TaskMap.toDomain(taskRecord);
     }
     else
@@ -70,4 +70,6 @@ export default class TaskRepo implements ITaskRepo {
     const tasks = await this.taskSchema.find();
     return tasks.map((task) => TaskMap.toDomain(task));
   }
+ 
 }
+

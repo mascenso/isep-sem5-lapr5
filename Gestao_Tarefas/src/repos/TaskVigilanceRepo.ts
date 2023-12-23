@@ -1,12 +1,12 @@
 import { Service, Inject } from 'typedi';
 
-import ITaskVigilanceRepo from "../services/IRepos/ITaskVigilanceRepo";
-import { TaskVigilance } from "../domain/task-agg/taskVigilance";
 import { TaskVigilanceId } from "../domain/task-agg/taskVigilanceId";
 import { TaskVigilanceMap } from "../mappers/TaskVigilanceMap";
 
 import { Document, FilterQuery, Model } from 'mongoose';
 import { ITaskVigilancePersistence } from '../dataschema/ITaskVigilancePersistence';
+import { TaskVigilance } from '../domain/task-agg/TaskVigilance';
+import ITaskVigilanceRepo from '../services/IRepos/ITaskVigilanceRepo';
 
 @Service()
 export default class TaskVigilanceRepo implements ITaskVigilanceRepo {
@@ -70,4 +70,6 @@ export default class TaskVigilanceRepo implements ITaskVigilanceRepo {
     const tasks = await this.taskVigilanceSchema.find();
     return tasks.map((task) => TaskVigilanceMap.toDomain(task));
   }
+
 }
+

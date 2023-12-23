@@ -21,7 +21,7 @@ export default class Maze {
             this.size = description.size;
 
             // Store the player's initial position and direction
-            this.initialPosition = this.cellToCartesian(description.initialPosition);
+            this.initialPosition = this.initialPos!= undefined ? this.cellToCartesian(this.initialPos) : this.cellToCartesian(description.initialPosition);
             this.initialDirection = description.initialDirection;
 
             // Store the maze's exit location

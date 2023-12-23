@@ -737,7 +737,7 @@ export default class ThumbRaiser {
                 // Check if the player found a bridge
                 this.bridgeInfo = this.maze.foundBridge(this.player.position);
 
-                if (this.bridgeInfo && !this.automaticMode) {
+                if (this.bridgeInfo ) {
 
                     console.log("We will change maps according to the bridge connection!");
 
@@ -911,9 +911,13 @@ export default class ThumbRaiser {
                     this.maze = new Maze(this.mazeParameters);
                 }else{
                     //muda a posicao inicial do robot, util para quando sai de elevador ou passagem
-                    this.mazeParameters.url.initialPosition = newPosition;
-                    
+                    //this.mazeParameters.url.initialPosition = newPosition;
+                    this.mazeParameters.initialPos = newPosition;
                     this.maze = new Maze(this.mazeParameters); 
+                    while(!this.maze.loaded){
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    }
+
                 }
             }
 
@@ -931,19 +935,18 @@ export default class ThumbRaiser {
      * @param {*} inicialPosition posicao para iniciar trajeto
      */
     async performAutomaticMovements(movementsRobot, inicialPosition) {
-
+        let cellDeInicio = inicialPosition;
         for (const numberOfFloors of movementsRobot){
             this.automaticMode = true;
-            const movements = this.calculateMovements(inicialPosition, numberOfFloors.caminho);
+            const movements = this.calculateMovements(cellDeInicio, numberOfFloors.caminho);
             await new Promise(resolve => setTimeout(resolve, 2000));
-    
+            
             for (const movement of movements) {
-    
+                
                 const finalPositiveZ = this.player.position.z + 1;
                 const finalNegativeZ = this.player.position.z - 1;
                 const finalPositiveX = this.player.position.x + 1;
                 const finalNegativeX = this.player.position.x - 1;
-    
                 if (movement.Up) {
                     await this.movement(180, finalNegativeZ, finalPositiveZ)
                 } else if (movement.Down) {
@@ -980,8 +983,12 @@ export default class ThumbRaiser {
                 }
                 //apagar luz elevador
                 this.scene3D.remove(light);
-                this.changeMap(numberOfFloors.map);
+                this.changeMap(numberOfFloors.map, numberOfFloors.initialPosition);
+
             }
+
+            cellDeInicio = numberOfFloors.initialPosition;
+
         }
 
     }
@@ -1048,7 +1055,6 @@ export default class ThumbRaiser {
      */
     calculateMovements(initialCell, destinyCells) {
         const movements = [];
-
         for (const destinyCell of destinyCells) {
             if (destinyCell[0] > initialCell[0]) {
                 if (destinyCell[1] > initialCell[1]) {      //diagonal cima / direita

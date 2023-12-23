@@ -22,10 +22,10 @@ export default {
   //databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/test",
 
   //Base de dados do DEI para demo
-  databaseURL: process.env.MONGODB_URI || "mongodb://mongoadmin:9e591ec9fd4cb27b85363734@vs199.dei.isep.ipp.pt:27017/admin",
+  databaseURL: process.env.MONGODB_URI || "mongodb://mongoadmin:9e591ec9fd4cb27b85363734@vsgate-s1.dei.isep.ipp.pt:10199/admin",
 
   //Base de dados do DEI para testes (trash)
-  //databaseURL: process.env.MONGODB_URI || "mongodb://mongoadmin:123456789@vs199.dei.isep.ipp.pt:27017/dummyDB",
+  //databaseURL: process.env.MONGODB_URI || "mongodb://mongoadmin:123456789@vsgate-s1.dei.isep.ipp.pt:10199/dummyDB",
   
   /**
    * Your secret sauce

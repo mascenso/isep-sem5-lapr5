@@ -157,7 +157,7 @@ export class CreateTaskComponent implements OnInit{
         }
       );
     }else if (this.selectedTask === 'pickup'){
-      console.log(this.pickupForm.value)
+
       let taskForm = this.pickupForm.value;
       taskForm.contactNumber = this.pickupForm.value.user.userContact;
       this.taskService.createPickupTask(this.pickupForm.value).subscribe(

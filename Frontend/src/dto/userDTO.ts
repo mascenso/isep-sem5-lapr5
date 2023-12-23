@@ -5,6 +5,7 @@ export interface UserResponseDTO {
   firstName: string,
   lastName: string;
   role: string;
+  active: boolean;
 }
 
 export interface CreateUserRequestDTO {

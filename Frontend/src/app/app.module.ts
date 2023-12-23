@@ -55,6 +55,7 @@ import { PlanRouteWithViewComponent } from './home/tasks/plan-route-with-view/pl
 import { UsersComponent } from './home/users/users.component';
 import { ValidateUserComponent } from './home/users/validate-user/validate-user.component';
 import { CreateUserComponent } from './home/users/create-user/create-user.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,8 @@ import { CreateUserComponent } from './home/users/create-user/create-user.compon
     PlanRouteWithViewComponent,
     UsersComponent,
     ValidateUserComponent,
-    CreateUserComponent
+    CreateUserComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

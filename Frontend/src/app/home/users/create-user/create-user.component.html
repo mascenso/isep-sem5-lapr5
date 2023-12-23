@@ -43,6 +43,9 @@
                   </mat-select>
                   </mat-form-field>
             </p>
+            <p>
+                <mat-checkbox [formControl]="createUserForm.controls.active">Active?</mat-checkbox>
+            </p>
             <div class="form-button-group">
               <button mat-flat-button color="primary" type="submit" [disabled]="!createUserForm.valid">Create</button>
             </div>

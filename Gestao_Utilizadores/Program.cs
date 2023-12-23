@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace DDDSample1
+namespace UserManagement
 {
     public class Program
     {
@@ -13,5 +13,6 @@ namespace DDDSample1
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
+
     }
 }

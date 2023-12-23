@@ -8,15 +8,6 @@ body {
   min-height: 100vh;
   background: #e2e2e2;
 }
-.title-app {
-	font-size: 24px; /* Adjust the font size as needed */
-	display: flex; /* Add this line to use flexbox */
-	justify-content: center; /* Horizontally center the content */
-	align-items: center; /* Vertically center the content */
-	font-weight: bold; /* To make the text bold */
-	color: #333; /* Set the text color */
-	/* Additional styles can be added based on your preference */
-  }
 .app-header {
   justify-content: space-between;
   position: fixed;

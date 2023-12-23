@@ -17,6 +17,7 @@ export class CreateUserComponent {
     firstName: new FormControl(''),
     lastName: new FormControl(''),
     userRole: new FormControl(''),
+    active: new FormControl(false)
   });
 
   createdUser: UserResponseDTO | undefined;

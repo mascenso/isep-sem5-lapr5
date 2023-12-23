@@ -9,6 +9,8 @@ import {FleetComponent} from "./home/fleet/fleet.component";
 import {TasksComponent} from "./home/tasks/tasks.component";
 import {ViewComponent} from "./home/view/view.component";
 import {LoginComponent} from "./login/login.component";
+import {NewLoginComponent} from "./new-login/new-login.component";
+import {RegisterComponent} from "./register/register.component";
 import {CreateBuildingComponent} from "./home/campus/create-building/create-building.component";
 import {CreateRobotTypeComponent} from "./home/fleet/create-robot-type/create-robot-type.component";
 import {FloorListComponent} from "./home/campus/floor-list/floor-list.component";
@@ -36,6 +38,7 @@ import {PlanRouteWithViewComponent} from "./home/tasks/plan-route-with-view/plan
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
   {path: 'login', component: LoginComponent},
+  { path: 'register', component: RegisterComponent },
   {
     path: 'home', component: HomeComponent, canActivate: [authGuard],
     children: [

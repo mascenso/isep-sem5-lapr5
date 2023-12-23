@@ -16,16 +16,18 @@ export class UserService {
   public registerUser(user: CreateUserRequestDTO, showSpinner?: boolean): Observable<UserResponseDTO> {
     const headers = new HttpHeaders({
         'Content-Type': 'application/json',
-        // Add any additional headers as needed
     });
 
     const options = {
         headers: headers,
         reportProgress: showSpinner
-        // Other options if needed
     };
 
-    return this.http.post<UserResponseDTO>(`${this.API_URL}/api/users/`, user, options);
+    console.log(user);
+    const url = `http://localhost:5000/api/users/`;
+
+    //return this.http.post<UserResponseDTO>(`${this.API_URL}/api/users/`, user, options);
+    return this.http.post<UserResponseDTO>(url, user);
 }
 
 

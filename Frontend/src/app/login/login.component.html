@@ -1,29 +1,31 @@
-<div class="login-container">
-  <div class="title-app">RobDroneGo App</div>
-  <div class="main">
-    <input type="checkbox" id="chk" aria-hidden="true">
-      <div class="signup">
-        <form (ngSubmit)="onSubmit($event,email,password,selectedRole)">
-          <label for="chk" aria-hidden="true">Sign up</label>
-          <input type="email" name="txt" placeholder="Email" required="">
-          <input type="password" name="pswd" placeholder="Password" required="">
-                    <select id="role" name="role2" [(ngModel)]="selectedRole">
-                        <option [ngValue]="role" *ngFor="let role of roles">{{ role }}</option>
-                    </select>
-          <button id="signUp">Sign up</button>
-        </form>
-      </div>
-
-      <div class="login">
-        <form (ngSubmit)="onLogin($event,email,password, selectedRole)">
-          <label for="chk" aria-hidden="true">Login</label>
-          <input type="email" name="email" placeholder="Email" required="">
-          <input type="password" name="pswd" placeholder="Password" required="">
-          <select name="role" [(ngModel)]="selectedRole">
-            <option [ngValue]="role" *ngFor="let role of roles">{{ role }}</option>
-          </select>
-          <button>Login</button>
-        </form>
-      </div>
-  </div>
+<mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between center">
+  <span>
+    <button mat-button routerLink="/">Login</button>
+    <button mat-button routerLink="/register">Register</button>
+  </span>
+</mat-toolbar>
+<div class="title-app">RobDroneGo App</div>
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+  <mat-card class="box">
+    <mat-card-header>
+      <mat-card-title>Log in</mat-card-title>
+    </mat-card-header>
+    <form (ngSubmit)="onLogin($event, email, password, selectedRole)">
+      <mat-card-content>
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Email" name="email" required [(ngModel)]="email">
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input matInput type="password" placeholder="Password" name="password" required [(ngModel)]="password">
+        </mat-form-field>
+        <select name="role" [(ngModel)]="selectedRole">
+          <option [ngValue]="role" *ngFor="let role of roles">{{ role }}</option>
+        </select>
+      </mat-card-content>
+      <button mat-stroked-button color="accent" class="btn-block" type="submit">Log in</button>
+    </form>
+  </mat-card>
 </div>
+
+
+

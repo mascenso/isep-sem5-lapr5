@@ -10,4 +10,6 @@ export default interface ITaskService  {
   createPickupDeliveryTask(taskDTO: ITaskPickupDeliveryDTO): Promise<Result<ITaskPickupDeliveryDTO>>;
   getTask (taskId: string): Promise<Result<ITaskDTO>>;
   getAllTasks(): Promise<Result<Array<ITaskDTO>>>;
+  getAllVigilancePendingTasks(): Promise<Result<Array<ITaskVigilanceDTO[]>>>;
+  getAllPickupDeliveryPendingTasks(): Promise<Result<Array<ITaskPickupDeliveryDTO[]>>>;
 }

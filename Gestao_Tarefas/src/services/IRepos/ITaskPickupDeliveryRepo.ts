@@ -1,6 +1,7 @@
 import { Repo } from "../../core/infra/Repo";
-import { TaskPickupDelivery } from "../../domain/task-agg/taskPickupDelivery";
-import { TaskPickupDeliveryId } from "../../domain/task-agg/taskPickupDeliveryId";
+import { TaskPickupDelivery } from "../../domain/task-agg/TaskPickupDelivery";
+import { TaskPickupDeliveryId } from "../../domain/task-agg/TaskPickupDeliveryId";
+
 
 export default interface ITaskPickupDeliveryRepo extends Repo<TaskPickupDelivery> {
   save(task: TaskPickupDelivery): Promise<TaskPickupDelivery>;

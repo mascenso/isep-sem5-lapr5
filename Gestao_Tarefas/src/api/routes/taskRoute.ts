@@ -69,4 +69,10 @@ export default (app: Router) => {
   route.get('',
     (req, res, next) => ctrl.getAllTasks(req, res, next) );
 
+  route.get('/pendingVigilance', 
+    (req, res, next) => ctrl.getAllVigilancePendingTasks(req, res, next));
+
+  route.get('/pendingPickUp', 
+    (req, res, next) => ctrl.getAllPickupDeliveryPendingTasks(req, res, next));
+
 };

@@ -27,6 +27,7 @@ interface TaskPickupDeliveryProps {
     };
     approved:boolean;
     pending:boolean;
+    planned:boolean;
 }
 
 export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
@@ -47,6 +48,7 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
       { argument: props.pickupContact, argumentName: 'pickupContact' },
       { argument: props.approved, argumentName: 'approved' },
       { argument: props.pending, argumentName: 'pending' },
+      { argument: props.planned, argumentName: 'planned' },
     ];
 
 
@@ -100,6 +102,9 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
   public get pending() : boolean {
     return this.props.pending;
   }
+  public get planned() : boolean {
+    return this.props.planned;
+  }
 
 
 
@@ -136,5 +141,8 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
   }
   set pending ( value: boolean) {
     this.props.pending = value;
+  }
+  set planned ( value: boolean) {
+    this.props.planned = value;
   }
 }

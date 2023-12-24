@@ -22,7 +22,8 @@ export default (app: Router) => {
         contactNumber: Joi.number().required(),
         user: Joi.object().required(),
         approved: Joi.boolean().default(false),
-        pending: Joi.boolean().default(true)
+        pending: Joi.boolean().default(true),
+        planned: Joi.boolean().default(false),
       })
     }),
     (req, res, next) => ctrl.createVigilanceTask(req, res, next) );
@@ -52,7 +53,8 @@ export default (app: Router) => {
           contactNumber: Joi.number().required()
         }).required(),
         approved: Joi.boolean().default(false),
-        pending: Joi.boolean().default(true)
+        pending: Joi.boolean().default(true),
+        planned: Joi.boolean().default(false),
       })
     }),
     (req, res, next) => ctrl.createPickupDeliveryTask(req, res, next) );

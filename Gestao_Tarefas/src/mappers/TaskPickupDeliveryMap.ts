@@ -21,7 +21,8 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
             deliveryContact: taskPickupDelivery.deliveryContact,
             pickupContact: taskPickupDelivery.pickupContact,
             approved: taskPickupDelivery.approved,
-            pending: taskPickupDelivery.pending
+            pending: taskPickupDelivery.pending,
+            planned: taskPickupDelivery.planned
       } as ITaskPickupDeliveryDTO;
     }
   
@@ -36,7 +37,8 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
             deliveryContact: taskPickupDelivery.deliveryContact,
             pickupContact: taskPickupDelivery.pickupContact,
             approved: taskPickupDelivery.approved,
-            pending: taskPickupDelivery.pending
+            pending: taskPickupDelivery.pending,
+            planned: taskPickupDelivery.planned
         },
         new UniqueEntityID(taskPickupDelivery.domainId)
       );
@@ -57,7 +59,8 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
         deliveryContact: taskPickupDelivery.deliveryContact,
         pickupContact: taskPickupDelivery.pickupContact,
         approved: taskPickupDelivery.approved,
-        pending: taskPickupDelivery.pending
+        pending: taskPickupDelivery.pending,
+        planned: taskPickupDelivery.planned
       }
       return a;
     }

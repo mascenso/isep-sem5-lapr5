@@ -8,4 +8,5 @@ export default interface ITaskVigilanceDTO {
   user:object;
   approved: boolean;
   pending: boolean;
+  planned: boolean;
 }

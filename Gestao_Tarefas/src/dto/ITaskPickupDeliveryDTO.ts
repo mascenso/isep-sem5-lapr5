@@ -24,4 +24,5 @@ export default interface ITaskPickupDeliveryDTO {
   };
   approved:boolean;
   pending:boolean;
+  planned:boolean;
 }

@@ -11,6 +11,7 @@ interface TaskVigilanceProps {
     user:object;
     approved:boolean;
     pending:boolean;
+    planned:boolean;
 }
 
 export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
@@ -29,6 +30,7 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
       { argument: props.user, argumentName: 'user' },
       { argument: props.approved, argumentName: 'approved' },
       { argument: props.pending, argumentName: 'pending' },
+      { argument: props.planned, argumentName: 'planned' }
     ];
 
 
@@ -74,6 +76,9 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
   public get pending() : boolean {
     return this.props.pending;
   }
+  public get planned() : boolean {
+    return this.props.planned;
+  }
 
 
   set description ( value: string) {
@@ -100,6 +105,9 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
   }
   set pending ( value: boolean) {
     this.props.pending = value;
+  }
+  set planned ( value: boolean) {
+    this.props.planned = value;
   }
 
 }

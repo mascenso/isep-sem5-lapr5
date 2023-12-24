@@ -162,6 +162,28 @@ public async getAllPickupDeliveryPendingTasks(): Promise<Result<Array<ITaskPicku
   }
 }
 
+public async getAllPendingTasks(): Promise<Result<Array<any[]>>> {
+  try {
+    const pickUptasksOrError = await this.getAllPickupDeliveryPendingTasks();
+    const vigilanceTasksOrError = await this.getAllVigilancePendingTasks();
+
+    if (pickUptasksOrError.isFailure || vigilanceTasksOrError.isFailure) {
+      return Result.fail<Array<any[]>>([
+        pickUptasksOrError.errorValue(),
+        vigilanceTasksOrError.errorValue(),
+      ]);
+    }
+
+    const allPendingTasks: any[] = [
+      ...pickUptasksOrError.getValue(),
+      ...vigilanceTasksOrError.getValue(),
+    ];
+
+    return Result.ok<Array<any[]>>(allPendingTasks);
+  } catch (error) {
+    return Result.fail<Array<any[]>>([error]); // Retorna falha em caso de erro
+  }
+}
 
 
 }

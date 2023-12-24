@@ -8,4 +8,5 @@ export interface ITaskVigilancePersistence {
   user:object;
   approved:boolean;
   pending:boolean;
+  planned:boolean;
 }

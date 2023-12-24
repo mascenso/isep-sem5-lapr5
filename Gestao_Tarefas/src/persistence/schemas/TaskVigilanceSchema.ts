@@ -10,7 +10,8 @@ const TaskVigilanceSchema = new mongoose.Schema(
     contactNumber: { type: Number, unique: false },
     user:{ type: Object, unique: false },
     approved:{type:Boolean, unique:false},
-    pending:{type:Boolean, unique:false}
+    pending:{type:Boolean, unique:false},
+    planned: {type:Boolean, unique:false}
   },
   {
     timestamps: true

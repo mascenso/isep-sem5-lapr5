@@ -24,4 +24,5 @@ export interface ITaskPickupDeliveryPersistence {
   };
   approved:boolean;
   pending:boolean;
+  planned:boolean;
 }

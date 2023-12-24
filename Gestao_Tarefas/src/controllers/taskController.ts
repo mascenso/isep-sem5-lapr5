@@ -11,6 +11,8 @@ import ITaskVigilanceDTO from '../dto/ITaskVigilanceDTO';
 import { Result } from "../core/logic/Result";
 import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
+import { TaskVigilance } from '../domain/task-agg/TaskVigilance';
+import { TaskPickupDelivery } from '../domain/task-agg/TaskPickupDelivery';
 
 @Service()
 export default class TaskController implements ITaskController /* TODO: extends ../core/infra/BaseController */ {
@@ -96,7 +98,7 @@ export default class TaskController implements ITaskController /* TODO: extends 
       return next(e);
     }
   }
-
+/*
  public async getAllVigilancePendingTasks(req: Request, res: Response, next: NextFunction) {
 
   try {
@@ -129,8 +131,26 @@ public async getAllPickupDeliveryPendingTasks(req: Request, res: Response, next:
   catch (e) {
     return next(e);
   }
-}  
+}
+ */
+
+public async getAllPendingTasks(req: Request, res: Response, next: NextFunction) {
 
 
+  try {
+    const tasksOrError = await this.taskServiceInstance.getAllPendingTasks() as Result<Array<any[]>>;
+
+    if (tasksOrError.isFailure) {
+      return res.status(404).send();
+    }
+
+    const tasksDTO = tasksOrError.getValue();
+    return res.status(201).json( tasksDTO );
+  }
+  catch (e) {
+    return next(e);
+  }
+
+}
 
 }

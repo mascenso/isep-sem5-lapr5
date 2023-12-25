@@ -22,4 +22,8 @@ export class TasksService {
     return this.http.post<TaskPickupRequestDTO[]>(`${this.API_URL}/api/tasks/pickupDelivery`, pickupTask);
   }
 
+  public getAllPendingTasks(): Observable<any[]> {
+    console.log("sERVICO");
+    return this.http.get<any[]>(`${this.API_URL}/api/tasks/pending`);
+  }
 }

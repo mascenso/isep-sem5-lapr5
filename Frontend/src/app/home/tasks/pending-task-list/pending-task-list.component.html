@@ -1,0 +1,24 @@
+<table mat-table [dataSource]="pendingTaskList" class="mat-elevation-z8">
+  <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+    <th mat-header-cell *matHeaderCellDef> {{ column | titlecase }} </th>
+    <td mat-cell *matCellDef="let task">
+      <!-- Descrição da Tarefa -->
+      <ng-container *ngIf="column === 'description'">
+        {{ task[column] }}
+      </ng-container>
+      <!-- Informação do utilizador -->
+      <ng-container *ngIf="column === 'user name'">
+        {{ task.user.name }}
+      </ng-container>
+      <!-- Caso não seja 'description' nem 'user', exibir vazio -->
+      <ng-container *ngIf="column === 'user contact'">
+        {{ task.user.contacto }}
+      </ng-container>
+      <!-- ... outros blocos de condição para outras colunas ... -->
+    </td>
+  </ng-container>
+
+  <!-- Defina a ordem das colunas -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

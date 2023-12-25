@@ -8,6 +8,6 @@ export default interface ITaskController  {
   getAllTasks(req: Request, res: Response, next: NextFunction);
   //getAllVigilancePendingTasks(eq: Request, res: Response, next: NextFunction);
   //getAllPickupDeliveryPendingTasks(eq: Request, res: Response, next: NextFunction);
-  getAllPendingTasks(eq: Request, res: Response, next: NextFunction);
-
+  getAllPendingTasks(req: Request, res: Response, next: NextFunction);
+  getAllApprovedTasks(req: Request, res: Response, next: NextFunction);
 }

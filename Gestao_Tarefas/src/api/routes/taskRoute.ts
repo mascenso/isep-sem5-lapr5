@@ -80,4 +80,6 @@ export default (app: Router) => {
     route.get('/pending', 
     (req, res, next) => ctrl.getAllPendingTasks(req, res, next));
     
+    route.get('/approved', 
+    (req, res, next) => ctrl.getAllApprovedTasks(req, res, next));
 };

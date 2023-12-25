@@ -53,6 +53,7 @@ import { ViewComponent } from "./home/view/view.component";
 import { CreateRoomComponent } from './home/campus/create-room/create-room.component';
 import { PlanRouteWithViewComponent } from './home/tasks/plan-route-with-view/plan-route-with-view.component';
 import { CreateTaskComponent } from './home/tasks/create-task/create-task.component';
+import { PendingTaskListComponent } from './home/tasks/pending-task-list/pending-task-list.component';
 
 
 @NgModule({
@@ -85,7 +86,8 @@ import { CreateTaskComponent } from './home/tasks/create-task/create-task.compon
     EditElevatorsComponent,
     CreateRoomComponent,
     PlanRouteWithViewComponent,
-    CreateTaskComponent
+    CreateTaskComponent,
+    PendingTaskListComponent
   ],
   imports: [
     BrowserModule,

@@ -13,4 +13,5 @@ export default interface ITaskService  {
   //getAllVigilancePendingTasks(): Promise<Result<Array<ITaskVigilanceDTO[]>>>;
   //getAllPickupDeliveryPendingTasks(): Promise<Result<Array<ITaskPickupDeliveryDTO[]>>>;
   getAllPendingTasks():Promise<Result<Array<any[]>>>;
+  getAllApprovedTasks():Promise<Result<Array<any[]>>>;
 }

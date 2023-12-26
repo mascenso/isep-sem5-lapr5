@@ -45,6 +45,15 @@ namespace UserManagement
 
 
             services.AddControllers().AddNewtonsoftJson();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,10 +62,10 @@ namespace UserManagement
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors();
             }
             else
             {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -64,7 +73,8 @@ namespace UserManagement
 
             app.UseRouting();
 
-            app.UseAuthentication();
+            // app.UseCors(); // Apply CORS after routing and before Authorization
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -72,6 +82,8 @@ namespace UserManagement
                 endpoints.MapControllers();
             });
         }
+
+
 
         public void ConfigureMyServices(IServiceCollection services)
         {

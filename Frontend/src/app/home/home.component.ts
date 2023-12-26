@@ -35,6 +35,12 @@ interface MenuEntry {
 
 const MENU_ENTRIES: MenuEntry[] = [
   {
+    title: "Users Management",
+    icon: "person_add",
+    authorizedRoles: ['', 'Administrador'],
+    redirectTo: 'users'
+  },
+  {
     title: "Campus management",
     icon: "domain_add",
     authorizedRoles: ['','Administrador', 'Gestor de Campus'],

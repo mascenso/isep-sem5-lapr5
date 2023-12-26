@@ -8,15 +8,6 @@ body {
   min-height: 100vh;
   background: #e2e2e2;
 }
-.title-app {
-	font-size: 24px; /* Adjust the font size as needed */
-	display: flex; /* Add this line to use flexbox */
-	justify-content: center; /* Horizontally center the content */
-	align-items: center; /* Vertically center the content */
-	font-weight: bold; /* To make the text bold */
-	color: #333; /* Set the text color */
-	/* Additional styles can be added based on your preference */
-  }
 .app-header {
   justify-content: space-between;
   position: fixed;
@@ -103,4 +94,22 @@ body {
 }
 .login-wrapper .mat-form-field-appearance-legacy .mat-form-field-infix {
   padding: 0.8375em 0;
+}
+.terms-text {
+    margin-bottom: 20px; /* Adjust the top margin as needed */
+    font-size: 12px; /* Adjust the font size */
+    color: gray; /* Adjust the text color */
+  }
+
+.btn-block {
+    margin-top: 20px; /* Adjust the top margin as needed */
+}
+.fake-link {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.fake-link:hover {
+    color: darkblue;
 }

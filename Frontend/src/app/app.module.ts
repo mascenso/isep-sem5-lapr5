@@ -28,6 +28,7 @@ import { CreateRobotTypeComponent } from './home/fleet/create-robot-type/create-
 import { MatSelectModule } from '@angular/material/select';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {ServiceInterceptor} from "./interceptors/service.interceptor";
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { FloorListComponent } from './home/campus/floor-list/floor-list.component';
 import { BridgeListComponent } from "./home/campus/list-bridge/bridge-list.component";
@@ -52,6 +53,11 @@ import { EditElevatorsComponent } from './home/campus/edit-elevators/edit-elevat
 import { ViewComponent } from "./home/view/view.component";
 import { CreateRoomComponent } from './home/campus/create-room/create-room.component';
 import { PlanRouteWithViewComponent } from './home/tasks/plan-route-with-view/plan-route-with-view.component';
+import { UsersComponent } from './home/users/users.component';
+import { ValidateUserComponent } from './home/users/validate-user/validate-user.component';
+import { CreateUserComponent } from './home/users/create-user/create-user.component';
+import { RegisterComponent } from './register/register.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { CreateTaskComponent } from './home/tasks/create-task/create-task.component';
 
 
@@ -60,6 +66,7 @@ import { CreateTaskComponent } from './home/tasks/create-task/create-task.compon
     AppComponent,
     LoginComponent,
     HomeComponent,
+    UsersComponent,
     CampusComponent,
     FleetComponent,
     TasksComponent,
@@ -85,7 +92,12 @@ import { CreateTaskComponent } from './home/tasks/create-task/create-task.compon
     EditElevatorsComponent,
     CreateRoomComponent,
     PlanRouteWithViewComponent,
-    CreateTaskComponent
+    CreateTaskComponent,
+    UsersComponent,
+    ValidateUserComponent,
+    CreateUserComponent,
+    RegisterComponent,
+    PrivacyPolicyComponent
   ],
   imports: [
     BrowserModule,
@@ -110,6 +122,7 @@ import { CreateTaskComponent } from './home/tasks/create-task/create-task.compon
     MatProgressBarModule,
     MatSelectModule,
     MatCheckboxModule,
+    MatDialogModule,
   ],
   providers: [
     {

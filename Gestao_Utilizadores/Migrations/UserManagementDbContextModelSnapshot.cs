@@ -83,11 +83,13 @@ namespace UserManagement.Migrations
                         .HasColumnName("Active");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("text")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
                         .HasColumnName("FirstName");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("text")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
                         .HasColumnName("LastName");
 
                     b.Property<string>("Role")
@@ -108,10 +110,14 @@ namespace UserManagement.Migrations
                                 .HasColumnType("text");
 
                             b1.Property<string>("Value")
+                                .IsRequired()
                                 .HasColumnType("text")
                                 .HasColumnName("Email");
 
                             b1.HasKey("UserId");
+
+                            b1.HasIndex("Value")
+                                .IsUnique();
 
                             b1.ToTable("Users");
 
@@ -125,6 +131,7 @@ namespace UserManagement.Migrations
                                 .HasColumnType("text");
 
                             b1.Property<string>("Value")
+                                .IsRequired()
                                 .HasColumnType("text")
                                 .HasColumnName("Password");
 

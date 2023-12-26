@@ -2,7 +2,6 @@
 :-dynamic edge/2.
 
 
-
 /*Ligacoes HTTP*/
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
@@ -24,12 +23,7 @@ caminho_handler(Request) :-
     reply_json(json([caminho=LCam, custo=CustoTotal])).
 
 
-
-
-
-
-
-:- consult('AlgoritmosGenericos.pl').
+:- consult('Algoritmos.pl').
 :- consult('BC_RobDroneGo.pl').
 
 
@@ -87,8 +81,8 @@ map_value(Col,Lin,Map,V):-
 
 /*Predicado auxiliar para adicionar conexões com pesos */
 cria_conexoes(Col1,Lin1,Col2,Lin2,Peso) :-
-    assertz(ligacel(cel(Col1,Lin1),cel(Col2,Lin2),Peso)),
-	assertz(edge(cel(Col1,Lin1),cel(Col2,Lin2))).
+    assertz(ligacel([Col1,Lin1],[Col2,Lin2],Peso)),
+	assertz(edge([Col1,Lin1],[Col2,Lin2])).
 
 /* Predicado para mostrar as conexões criadas -> testar grafo */
 mostra_conexoes2 :-
@@ -106,38 +100,40 @@ LCam - Lista de caminhos percorrido;
 LLig - Lista de ligaçoes percorridas;
 Custo - Custo associado ao percuros;
 */
-
-caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal):-
+caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal,Cel):-
     pisos(EdOr, LPisosOr),
     member(PisoOr, LPisosOr),
     pisos(EdDest, LPisosDest),
     member(PisoDest, LPisosDest), 
     caminho_edificios(EdOr, EdDest, LCam),
     segue_pisos(PisoOr,PisoDest,LCam,LLig),
-    calcular_custo_total(LLig, PisoOr, CustoTotal). 
-    %write('CustoTotal= '),write(CustoTotal),nl.
+    calcular_custo_total(LLig, PisoOr, CustoTotal,Cel). 
 
 /*Calculo custo total da viagem usando aStar em cada piso*/
-calcular_custo_total([], _, 0).
+calcular_custo_total([], _, 0,[]).
 
 /* Predicado para somar todos os custos*/
-calcular_custo_total([Acao | RestoAcoes], PisoAtual, CustoTotal) :-
-    calcular_custo_unico(Acao, PisoAtual, CustoParcial),
+calcular_custo_total([Acao | RestoAcoes], PisoAtual, CustoTotal,Cel) :-
+    calcular_custo_unico(Acao, PisoAtual, CustoParcial,CelParcial),
     novo_piso_destino(Acao, PisoDestino),
-    calcular_custo_total(RestoAcoes, PisoDestino, CustoResto),
-    CustoTotal is CustoParcial + CustoResto.
+    calcular_custo_total(RestoAcoes, PisoDestino, CustoResto,RestoCel),
+    CustoTotal is CustoParcial + CustoResto,
+    append(CelParcial, RestoCel, Cel).
 
 /*Calcula distancia desde posicao inicial ate elevador do piso*/
-calcular_custo_unico(elev(PisoOr, _), PisoAtual, Custo) :-
+calcular_custo_unico(elev(PisoOr, _), PisoAtual, Custo,Cel) :-
     pos_init(PisoAtual, Orig),
     elev_pos(PisoOr, CDestino),
-    aStar(Orig, CDestino, _, Custo).
+    aStar(Orig, CDestino, Cel, CustoElevador),
+    Custo is CustoElevador + 30.  % 30 unidades detempo para atravessar o corredor externo (pdf)
 
 /*Calcula distancia desde posicao inicia ate passagem*/
-calcular_custo_unico(cor(PisoOr, PisoDest), PisoOr, Custo) :-
+calcular_custo_unico(cor(PisoOr, PisoDest), PisoOr, Custo,Cel) :-
     pos_init(PisoOr,Orig),
     (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
-    aStar(Orig, CDestino, _, Custo).
+    aStar(Orig, CDestino, Cel, CustoPassagem),
+    Custo is CustoPassagem + 5. %5 unidades detempo para atravessar o corredor externo (pdf)
+
 
 novo_piso_destino(elev(_, PisoDest), PisoDest).
 novo_piso_destino(cor(_, PisoDest), PisoDest).
@@ -262,32 +258,4 @@ calcular_custo_unico_dfs(cor(PisoOr, PisoDest), PisoOr, Custo) :-
     (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
     dfs_com_custo(Orig, CDestino, _, Custo).
 
-/*
-%este algoritmo é para calcular a distancia entre a posiçao inicial do robot com a de destino na primeira interaçao. Se a lista estiver vazia, não avança.
-percorre_primeiro_lista([], _,0).
 
-percorre_primeiro_lista([elev(PisoOr, _) | _], PisoOr, CustoTotal):-
-        pos_init(PisoOr,Orig),
-        elev_pos(PisoOr, CDestino),
-        aStar(Orig, CDestino, _, CustoTotal),
-        write('Custo1 = '),write(CustoTotal),nl.
-
-
-percorre_primeiro_lista([cor(PisoOr, PisoDest) | _], PisoOr, CustoTotal):-
-        pos_init(PisoOr,Orig),
-        (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
-        aStar(Orig, CDestino, _, CustoTotal),
-        write('Custosss = '),write(CustoTotal),nl,
-        percorre_lista(Resto, CDestino ,CustoTotal).
-
-%este algoritmo é para calcular a distancia entre a posiçao anterior do robot com a proxima. Se chegou ao destino, para.
-percorre_lista([], _,0).
-
-percorre_lista([elev(_, _) | Resto], Destino, CustoTotal):-
-    percorre_lista(Resto, Destino, CustoTotal).
-
-percorre_lista([cor(PisoOr, PisoDest) | _], COrig,CustoTotal):-
-    (passag_pos(PisoOr,PisoDest,CDestino); passag_pos(PisoDest,PisoOr, CDestino)),
-    aStar(COrig, CDestino, _, CustoTotal),
-    write('Custotttt = '),write(CustoTotal),nl.
-    percorre_lista(Resto, CDestino, CustoTotal).*/

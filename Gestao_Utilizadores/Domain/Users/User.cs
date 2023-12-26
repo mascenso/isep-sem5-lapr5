@@ -61,7 +61,37 @@ namespace UserManagement.Domain.Users
 
       // create user password
       return new User(
-        new UserEmail(dto.Email), new UserPassword(UserPassword.HashPassword(dto.Password), true),
+        new UserEmail(dto.Email), new UserPassword(UserPassword.HashPassword(dto.Password)),
+        dto.FirstName, dto.LastName, userRole,
+        true
+      );
+    }
+
+    public static User CreateSystemUser(CreateUserRequestDto dto)
+    {
+      if (dto.Role == null || UserRole.USER.ToString().Equals(dto.Role))
+      {
+        throw new BusinessRuleValidationException("Invalid role!");
+      }
+
+      if (dto.Email == null)
+      {
+        throw new BusinessRuleValidationException("Email can not be null!");
+      }
+
+      if (dto.Password == null)
+      {
+        throw new BusinessRuleValidationException("Password can not be null!");
+      }
+
+      if (!Enum.TryParse(dto.Role, out UserRole userRole))
+      {
+        throw new BusinessRuleValidationException($"Invalid role: '{dto.Role}'");
+      };
+
+      // create user password
+      return new User(
+        new UserEmail(dto.Email), new UserPassword(UserPassword.HashPassword(dto.Password)),
         dto.FirstName, dto.LastName, userRole,
         true
       );
@@ -79,10 +109,6 @@ namespace UserManagement.Domain.Users
         this.LastName = updateDto.LastName;
       }
 
-      if (updateDto.Email != null)
-      {
-        this.Email = new UserEmail(updateDto.Email);
-      }
     }
 
     public bool VerifyPassword(string password)
@@ -90,16 +116,15 @@ namespace UserManagement.Domain.Users
       return this.Password.VerifyPassword(password);
     }
 
-    //public void ChangeDescription(string description)
-    //{
-    //  if (!this.Active)
-    //    throw new BusinessRuleValidationException("It is not possible to change the description of an inactive user.");
-    //  this.Description = description;
-    //}
+    public void Deactivate()
+    {
+      this.Active = false;
+    }
 
-    //public void MarkAsInative()
-    //{
-    //  this.Active = false;
-    //}
+    public bool IsActive()
+    {
+      return this.Active;
+    }
+
   }
 }

@@ -1,0 +1,109 @@
+{
+    "groundTextureUrl": "./assets/textures/parquet.jpg",
+    "wallTextureUrl": "./assets/textures/wall4.jpeg",
+    "windowTextureUrl":"./assets/textures/tijoloWallWindow.jpg",
+    "doorTextureUrl":"./assets/textures/door1.jpg",
+    "size": { "width": 22, "height": 10 },
+    "map": [
+        [3  ,  2,2.1,  2,  3,  2,2.1,  2,  3,  2,2.1,  2,  3,  2,  2,2.1,  3,  2,2.1,  2,  1,  0,  0],
+        [1  ,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0],
+        [1.1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  2,  2,  2,  0,  2,  1],
+        [1  ,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  0,  0,  1],
+        [1  ,  0,  0,  0,  3,  2,  2,0.2,  2,0.2,  2,  2,  2,0.2,  2,  2,  0,  0,  0,  0,  0,  0,  1],
+        [1  ,  0,  0,  0,0.4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  5],
+        [3  ,  2,  2,  2,  2,  2,  2,0.3,1.3,  2,  2,  2,1.3,  2,  2,  2,  1,  0,  0,  0,  0,  0,  1],
+        [1  ,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  0,  0,  1],
+        [1  ,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  2,  2,  2,  2,  1],
+        [1  ,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  0,  0,  1],
+        [2  ,  2,  2,  2,  2,2.1,  2,  2,  2,  2,  2,2.1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  0]
+    ],
+    "initialPosition": [8, 19],
+    "initialDirection": 0.0,
+    "elevators":[
+        {
+            "position":[2,20],
+            "orientation":"S",
+            "exit": [2.1,20]
+        }
+    ],
+    "bridges":[
+        {
+            "locationBridge":[5,22],
+            "buildind":
+                {
+                    "code":"B",
+                    "floor":2,
+                    "inicialPosition":[2,10]
+                }
+        }
+    ],
+    "exitLocation": [0,0],
+    "locker":[
+        {
+            "position" :[1,0.4],
+            "orientation":"S"
+        },
+        {
+            "position" :[2,0.4],
+            "orientation":"S"
+        },
+        {
+            "position" :[5,0.4],
+            "orientation":"S"
+        },
+        {
+            "position" :[5,6.4],
+            "orientation":"S"
+        },
+        {
+            "position" :[5,6.4],
+            "orientation":"S"
+        },
+        {
+            "position" :[6,0.4],
+            "orientation":"S"
+        },
+        {
+            "position" :[9,0.4],
+            "orientation":"S"
+        },
+        {
+            "position" :[10,0.4],
+            "orientation":"S"
+        }
+    ],
+    "tables":[
+        {
+            "position":[1,1],
+            "orientation":"S"
+        },
+        {
+            "position":[1,2],
+            "orientation":"S"
+        },
+        {
+            "position":[1,3],
+            "orientation":"S"
+        },
+        {
+            "position":[1,4],
+            "orientation":"S"
+        },
+        {
+            "position":[2,1],
+            "orientation":"S"
+        },
+        {
+            "position":[2,2],
+            "orientation":"S"
+        },
+        {
+            "position":[2,3],
+            "orientation":"S"
+        },
+        {
+            "position":[2,4],
+            "orientation":"S"
+        }
+    ]
+}

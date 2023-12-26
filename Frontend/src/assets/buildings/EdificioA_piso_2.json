@@ -1,6 +1,6 @@
 {
     "groundTextureUrl": "./assets/textures/parquet.jpg",
-    "wallTextureUrl": "./assets/textures/wall4.jpeg",
+    "wallTextureUrl": "./assets/textures/wall2.jpeg",
     "windowTextureUrl":"./assets/textures/tijoloWallWindow.jpg",
     "doorTextureUrl":"./assets/textures/door1.jpg",
     "size": { "width": 22, "height": 10 },
@@ -17,12 +17,13 @@
         [1  ,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  0,  0,  1],
         [2  ,  2,  2,  2,  2,2.1,  2,  2,  2,  2,  2,2.1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  0]
     ],
-    "initialPosition": [0, 0],
+    "initialPosition": [4, 19],
     "initialDirection": 0.0,
     "elevators":[
         {
             "position":[2,20],
-            "orientation":"S"
+            "orientation":"S",
+            "exit": [2.1,20]
         }
     ],
     "bridges":[
@@ -30,8 +31,8 @@
             "locationBridge":[5,22],
             "buildind":
                 {
-                    "code":"A",
-                    "floor":1,
+                    "code":"B",
+                    "floor":2,
                     "inicialPosition":[2,10]
                 }
         }

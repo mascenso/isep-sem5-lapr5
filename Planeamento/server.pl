@@ -5,9 +5,10 @@
 :- use_module(library(http/http_json)).
 :- use_module(library(http/http_cors)).
 
-:- consult('AlgoritmosGenericos.pl').
+:- consult('Algoritmos.pl').
 :- consult('BC_RobDroneGo.pl').
 :- consult('Percurso_Robots.pl').
+:- consult('AlgoritmoGenetico.pl').
 
 :- set_setting(http:cors, [*]).
 

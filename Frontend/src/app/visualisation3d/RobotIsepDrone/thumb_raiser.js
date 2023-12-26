@@ -167,7 +167,7 @@ import UserInterface from "./user_interface.js";
  */
 
 export default class ThumbRaiser {
-    constructor(generalParameters, mazeParameters, playerParameters, lightsParameters, fogParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters, cubeTexturesParameters) {
+    constructor(generalParameters, mazeParameters, playerParameters, lightsParameters, fogParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters, cubeTexturesParameters, buildingService, floorService) {
         this.generalParameters = merge({}, generalData, generalParameters);
         this.mazeParameters = merge({}, mazeData, mazeParameters);
         this.playerParameters = merge({}, playerData, playerParameters);
@@ -199,11 +199,11 @@ export default class ThumbRaiser {
 
         // Create the cube texture
         this.cubeTexture = new CubeTexture(this.cubeTexturesParameters.skyboxes[0]);
-    
+
         // Add background
         this.scene3D.background = this.cubeTexture.textures;
 
-      // Create the maze
+        // Create the maze
         this.maze = new Maze(this.mazeParameters);
 
         // Create the player
@@ -231,15 +231,15 @@ export default class ThumbRaiser {
 
         // Create a renderer and turn on shadows in the renderer
         let canvas = document.getElementById("canvasForRender");
-        this.renderer = new THREE.WebGLRenderer({  canvas:canvas });
+        this.renderer = new THREE.WebGLRenderer({ canvas: canvas });
         if (this.generalParameters.setDevicePixelRatio) {
             this.renderer.setPixelRatio(window.devicePixelRatio);
         }
         this.renderer.autoClear = false;
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        const height = window.innerHeight-50;
-        const width = window.innerWidth-50;
+        const height = window.innerHeight - 50;
+        const width = window.innerWidth - 50;
         this.renderer.setSize(width, height);
 
         // Set the mouse move action (none)
@@ -330,6 +330,18 @@ export default class ThumbRaiser {
         this.activeElement = document.activeElement;
 
         this.listFloors = [];
+        this.floorActual = {};
+
+        //injeção dos serviços (não é a melhor pratica)
+        this.buildingService = buildingService;
+        this.floorService = floorService;
+
+        // para guardar a informação da passagem referente ao proximo mapa a carregar
+        this.bridgeInfo = "";
+
+        //modo automatico
+        this.automaticMode = false;
+
     }
 
     buildHelpPanel() {
@@ -355,7 +367,6 @@ export default class ThumbRaiser {
 
     // Set active view camera
     setActiveViewCamera(camera) {
-        console.log(camera)
         this.activeViewCamera = camera;
         this.horizontal.min = this.activeViewCamera.orientationMin.h.toFixed(0);
         this.horizontal.max = this.activeViewCamera.orientationMax.h.toFixed(0);
@@ -677,21 +688,21 @@ export default class ThumbRaiser {
         this.animations.fadeToAction("None", 0.2);
 
     }
-/*
+    /*
+        collision(position) {
+            return this.maze.distanceToWestWall(position) < this.player.radius || this.maze.distanceToEastWall(position) < this.player.radius || this.maze.distanceToNorthWall(position) < this.player.radius || this.maze.distanceToSouthWall(position) < this.player.radius;
+        }
+    */
     collision(position) {
-        return this.maze.distanceToWestWall(position) < this.player.radius || this.maze.distanceToEastWall(position) < this.player.radius || this.maze.distanceToNorthWall(position) < this.player.radius || this.maze.distanceToSouthWall(position) < this.player.radius;
-    }
-*/
-    collision(position) {
-        return this.maze.distanceToWestWall(position) < this.player.radius/4 || this.maze.distanceToEastWall(position) < this.player.radius/4 || this.maze.distanceToNorthWall(position) < this.player.radius/4|| this.maze.distanceToSouthWall(position) < this.player.radius/4;
+        return this.maze.distanceToWestWall(position) < this.player.radius / 4 || this.maze.distanceToEastWall(position) < this.player.radius / 4 || this.maze.distanceToNorthWall(position) < this.player.radius / 4 || this.maze.distanceToSouthWall(position) < this.player.radius / 4;
     }
 
 
-    update() {
-        
+    async update() {
+
         if (!this.gameRunning) {
             if (this.maze.loaded && this.player.loaded) { // If all resources have been loaded
-                
+
                 // Add the maze, the player and the lights to the scene
                 this.scene3D.add(this.maze.object);
                 this.scene3D.add(this.player.object);
@@ -722,21 +733,63 @@ export default class ThumbRaiser {
 
             // Update the player
             if (!this.animations.actionInProgress) {
-                // Check if the player found the exit
-                if (this.maze.foundBridge(this.player.position)) {
-                    this.changeMap("./mazes/EdificioB piso 2.json");
 
-                  //  this.mazeParameters.url = "./mazes/EdificioB piso 2.json"
+                // Check if the player found a bridge
+                this.bridgeInfo = this.maze.foundBridge(this.player.position);
 
-                    //this.maze = new Maze(changeMap("./mazes/EdificioB piso 2.json"));
-                   // changeMap("./mazes/EdificioB piso 2.json");
+                if (this.bridgeInfo ) {
+
+                    console.log("We will change maps according to the bridge connection!");
+
+                    let connectedBuildingCode = this.bridgeInfo.code;
+                    let connectedFloorNumber = this.bridgeInfo.floor;
+                    let nextMapStartPosition = this.bridgeInfo.inicialPosition;
+
+                    // this.changeMap("./assets/buildings/EdificioB_piso_2.json");
+
+                    this.buildingService.getAllBuildings().subscribe(
+                        data => {
+                            // Verifica se há dados e faz o find pelo edifício com o código correto                        
+                            let connectedBuilding = data.find(building => building.code.includes(connectedBuildingCode));
+
+                            this.floorService.getFloorsAtBuildings(connectedBuilding?.id).subscribe(
+                                floorData => {
+
+                                    let connectedFloor = floorData.find(objeto => objeto.floorNumber === connectedFloorNumber);
+
+                                    if (connectedFloor) {
+
+                                        connectedFloor.floorMap.initialPosition = nextMapStartPosition;
+                                        this.bridgeCross(connectedFloor);
+                                        //await new Promise(resolve => setTimeout(resolve, 5000));
+                                        //this.changeMap(connectedFloor);
+
+                                        //this.setActiveViewCamera(this.firstPersonViewCamera);
+
+                                    } else {
+                                        if (connectedFloor.length == 0) {
+                                            this._snackBar.open("There is no map on any floor of this building", "close", {
+                                                duration: 5000,
+                                                panelClass: ['snackbar-error']
+                                            })
+                                        }
+                                    };
+                                },
+                                error => {
+                                    this._snackBar.open(error.error, "close", {
+                                        duration: 5000,
+                                        panelClass: ['snackbar-error']
+                                    });
+                                }
+                            )
+                        }).catch(error => {
+                            console.error('Error getting building:', error);
+                        });
 
 
-                    //console.log("colocar aqui novo edificio")
-                }else if(this.maze.findElevator(this.player.position)){
-                    console.log("encontrei um elevador")
+                } else if (this.maze.findElevator(this.player.position) && !this.automaticMode) {
                     this.selectNewFloorFromBuilding();
-                }else {
+                } else {
                     let coveredDistance = this.player.walkingSpeed * deltaT;
                     let directionIncrement = this.player.turningSpeed * deltaT;
                     if (this.player.keyStates.run) {
@@ -753,7 +806,7 @@ export default class ThumbRaiser {
                     if (this.player.keyStates.backward) {
                         const newPosition = new THREE.Vector3(-coveredDistance * Math.sin(direction), 0.0, -coveredDistance * Math.cos(direction)).add(this.player.position);
                         if (this.collision(newPosition)) {
-                           // this.animations.fadeToAction("Death", 0.2);
+                            // this.animations.fadeToAction("Death", 0.2);
                             this.animations.fadeToAction("None", 0.2);
                         }
                         else {
@@ -764,32 +817,14 @@ export default class ThumbRaiser {
                     else if (this.player.keyStates.forward) {
                         const newPosition = new THREE.Vector3(coveredDistance * Math.sin(direction), 0.0, coveredDistance * Math.cos(direction)).add(this.player.position);
                         if (this.collision(newPosition)) {
-                           // this.animations.fadeToAction("Death", 0.2);
+                            // this.animations.fadeToAction("Death", 0.2);
                             this.animations.fadeToAction("None", 0.2);
                         }
                         else {
                             this.animations.fadeToAction(this.player.keyStates.run ? "run" : "walk", 0.2);
                             this.player.position = newPosition;
                         }
-                    }/*
-                    else if (this.player.keyStates.jump) {
-                        this.animations.fadeToAction("Jump", 0.2);
                     }
-                    else if (this.player.keyStates.yes) {
-                        this.animations.fadeToAction("Yes", 0.2);
-                    }
-                    else if (this.player.keyStates.no) {
-                        this.animations.fadeToAction("No", 0.2);
-                    }
-                    else if (this.player.keyStates.wave) {
-                        this.animations.fadeToAction("Wave", 0.2);
-                    }
-                    else if (this.player.keyStates.punch) {
-                        this.animations.fadeToAction("Punch", 0.2);
-                    }
-                    else if (this.player.keyStates.thumbsUp) {
-                        this.animations.fadeToAction("ThumbsUp", 0.2);
-                    } */
                     else {
                         this.animations.fadeToAction("idle", this.animations.activeName != "None" ? 0.2 : 0.6);
                         //this.animations.fadeToAction("Idle", this.animations.activeName != "Death" ? 0.2 : 0.6);
@@ -847,73 +882,164 @@ export default class ThumbRaiser {
             }
         }
     }
-    async changeMap(path){
-        this.gameRunning = false
-        this.scene3D.remove(this.maze.object)
-        this.mazeParameters.url = path;
-        this.maze = new Maze(this.mazeParameters);
-    }
+    async changeMap(path, newPosition = null) {
+        try {
 
-    async performAutomaticMovements(movementsRobot, inicialPosition) {
+            if(typeof path == "object"){
+                this.floorActual = path;
+                this.setActiveViewCamera(this.fixedViewCamera);
+                this.gameRunning = false
+                this.scene3D.remove(this.maze.object)
+                this.mazeParameters.url = path.floorMap;
+    
+                if(newPosition == null){                
+                    this.maze = new Maze(this.mazeParameters);
+                }else{
+                    //muda a posicao inicial do robot, util para quando sai de elevador ou passagem
+                    this.mazeParameters.url.initialPosition = newPosition;
+                    
+                    this.maze = new Maze(this.mazeParameters); 
+                }
+            }else{
+                this.floorActual = path;
+                this.setActiveViewCamera(this.fixedViewCamera);
+                this.gameRunning = false
+                this.scene3D.remove(this.maze.object)
+                this.mazeParameters.url = path;
+    
+                if(newPosition == null){                
+                    this.maze = new Maze(this.mazeParameters);
+                }else{
+                    //muda a posicao inicial do robot, util para quando sai de elevador ou passagem
+                    //this.mazeParameters.url.initialPosition = newPosition;
+                    this.mazeParameters.initialPos = newPosition;
+                    this.maze = new Maze(this.mazeParameters); 
+                    while(!this.maze.loaded){
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    }
 
-        const movements = this.calculateMovements(inicialPosition, movementsRobot);
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        for (const movement of movements) {
-
-            const finalPositiveZ = this.player.position.z+1;
-            const finalNegativeZ = this.player.position.z-1;
-            const finalPositiveX = this.player.position.x+1;
-            const finalNegativeX = this.player.position.x-1;
-
-            if(movement.Up){
-                await this.movement(180,finalNegativeZ,finalPositiveZ)
-            } else if (movement.Down){
-                await this.movement(0,finalNegativeZ,finalPositiveZ)
-            } else if(movement.Left){
-                await this.movement(270,finalNegativeX,finalPositiveX)
-            } else if(movement.Rigth){
-                await this.movement(90,finalNegativeX,finalPositiveX)
-            } else if(movement.UpRigth){
-                await this.movementDiagonal(135,finalNegativeX,finalPositiveX, finalNegativeZ, finalPositiveZ)
-            } else if(movement.UpLeft){
-                await this.movementDiagonal(225,finalNegativeX,finalPositiveX, finalNegativeZ, finalPositiveZ)
-            } else if(movement.DownRight){
-                await this.movementDiagonal(45,finalNegativeX,finalPositiveX, finalNegativeZ, finalPositiveZ)
-            } else if(movement.DownLeft){
-                await this.movementDiagonal(315,finalNegativeX,finalPositiveX, finalNegativeZ, finalPositiveZ)
+                }
             }
+
+        } catch (error) {
+            console.error('Error changing map:', error);
         }
     }
-    async movement(direction, finalNegative,finalPositive){
+
+    /**
+     * Recebe um array do tipo
+     * [
+     *  {caminho:[[x,y]], elevador:boolean, map:json or string}
+     * ]
+     * @param {*} movementsRobot lista de movimentos em x,y
+     * @param {*} inicialPosition posicao para iniciar trajeto
+     */
+    async performAutomaticMovements(movementsRobot, inicialPosition) {
+        let cellDeInicio = inicialPosition;
+        for (const numberOfFloors of movementsRobot){
+            this.automaticMode = true;
+            const movements = this.calculateMovements(cellDeInicio, numberOfFloors.caminho);
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            for (const movement of movements) {
+                
+                const finalPositiveZ = this.player.position.z + 1;
+                const finalNegativeZ = this.player.position.z - 1;
+                const finalPositiveX = this.player.position.x + 1;
+                const finalNegativeX = this.player.position.x - 1;
+                if (movement.Up) {
+                    await this.movement(180, finalNegativeZ, finalPositiveZ)
+                } else if (movement.Down) {
+                    await this.movement(0, finalNegativeZ, finalPositiveZ)
+                } else if (movement.Left) {
+                    await this.movement(270, finalNegativeX, finalPositiveX)
+                } else if (movement.Rigth) {
+                    await this.movement(90, finalNegativeX, finalPositiveX)
+                } else if (movement.UpRigth) {
+                    await this.movementDiagonal(135, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
+                } else if (movement.UpLeft) {
+                    await this.movementDiagonal(225, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
+                } else if (movement.DownRight) {
+                    await this.movementDiagonal(45, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
+                } else if (movement.DownLeft) {
+                    await this.movementDiagonal(315, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ)
+                }
+            }
+            
+            if(numberOfFloors.elevador){
+                let light;
+                light = this.pontualLight(this.player.position)
+
+
+                this.setActiveViewCamera(this.firstPersonViewCamera);
+                let repeat = 40;
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                while(repeat>0){
+                    this.player.direction += 0.2
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    this.player.direction -= 0.2
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    repeat--;
+                }
+                //apagar luz elevador
+                this.scene3D.remove(light);
+                this.changeMap(numberOfFloors.map, numberOfFloors.initialPosition);
+
+            }
+
+            cellDeInicio = numberOfFloors.initialPosition;
+
+        }
+
+    }
+
+    /**
+     * Adiciona luz pontual na posicao que queremos
+     * @param {} position 
+     * @returns 
+     */
+    pontualLight(position){
+        var light = new THREE.PointLight(0xffffff, 1, 10);
+        light.position.copy(position);
+        this.scene3D.add(light);
+        return light;
+    }
+    /**
+     * Remove luz pontual
+     * @param {*} light 
+     */
+    removeLight(light){
+        this.scene3D.remove(light);
+    }
+    async movement(direction, finalNegative, finalPositive) {
         this.player.direction = direction;
         let reachedFinalX = false;
         let reachedFinalZ = false;
         this.player.keyStates.forward = true;
 
-        do{
+        do {
 
             await new Promise(resolve => setTimeout(resolve, 100));
-            if(direction ==180 || direction == 0){
-                reachedFinalZ = this.player.position.z >= finalPositive ||  this.player.position.z <= finalNegative;
-            }else{
-                reachedFinalX = this.player.position.x >= finalPositive ||  this.player.position.x <= finalNegative;
+            if (direction == 180 || direction == 0) {
+                reachedFinalZ = this.player.position.z >= finalPositive || this.player.position.z <= finalNegative;
+            } else {
+                reachedFinalX = this.player.position.x >= finalPositive || this.player.position.x <= finalNegative;
             }
 
 
-        }while(!reachedFinalX && !reachedFinalZ)
+        } while (!reachedFinalX && !reachedFinalZ)
 
         this.player.keyStates.forward = false; // para de movimentar robot para a frente
     }
-    async movementDiagonal(direction, finalNegativeX,finalPositiveX, finalNegativeZ,finalPositiveZ){
+    async movementDiagonal(direction, finalNegativeX, finalPositiveX, finalNegativeZ, finalPositiveZ) {
         this.player.direction = direction;
         let reachedFinalX = false;
         let reachedFinalZ = false;
         this.player.keyStates.forward = true;
 
-        do{
+        do {
             await new Promise(resolve => setTimeout(resolve, 5));
-            reachedFinalX = this.player.position.x >= finalPositiveX ||  this.player.position.x <= finalNegativeX;
+            reachedFinalX = this.player.position.x >= finalPositiveX || this.player.position.x <= finalNegativeX;
             reachedFinalZ = this.player.position.z >= finalPositiveZ || this.player.position.z <= finalNegativeZ;
 
         } while (!reachedFinalX && !reachedFinalZ);
@@ -929,41 +1055,437 @@ export default class ThumbRaiser {
      */
     calculateMovements(initialCell, destinyCells) {
         const movements = [];
-      
         for (const destinyCell of destinyCells) {
-            if(destinyCell[0]>initialCell[0]){
-                if(destinyCell[1]>initialCell[1]){      //diagonal cima / direita
-                    movements.push({UpRigth:true});
-                }else if(destinyCell[1]<initialCell[1]){//diagonal cima / esquerda
-                    movements.push({UpLeft:true})
-                }else{                                  //cima
-                    movements.push({Up:true})
+            if (destinyCell[0] > initialCell[0]) {
+                if (destinyCell[1] > initialCell[1]) {      //diagonal cima / direita
+                    movements.push({ UpRigth: true });
+                } else if (destinyCell[1] < initialCell[1]) {//diagonal cima / esquerda
+                    movements.push({ UpLeft: true })
+                } else {                                  //cima
+                    movements.push({ Up: true })
                 }
-            } else if(destinyCell[0]<initialCell[0]){
-                if(destinyCell[1]>initialCell[1]){      //diagonal baxo / direita
-                    movements.push({DownRight:true})
-                }else if(destinyCell[1]<initialCell[1]){//diagonal vaixo / esquerda
-                    movements.push({DownLeft:true})
-                }else{                                  //baixo
-                    movements.push({Down:true})
-                }   
-            } else if(destinyCell[1]>initialCell[1]){
-                movements.push({Rigth:true})
-            }else if(destinyCell[1]<initialCell[1]){
-                movements.push({Left:true})
+            } else if (destinyCell[0] < initialCell[0]) {
+                if (destinyCell[1] > initialCell[1]) {      //diagonal baxo / direita
+                    movements.push({ DownRight: true })
+                } else if (destinyCell[1] < initialCell[1]) {//diagonal vaixo / esquerda
+                    movements.push({ DownLeft: true })
+                } else {                                  //baixo
+                    movements.push({ Down: true })
+                }
+            } else if (destinyCell[1] > initialCell[1]) {
+                movements.push({ Rigth: true })
+            } else if (destinyCell[1] < initialCell[1]) {
+                movements.push({ Left: true })
             }
-      
-          initialCell = destinyCell; // Atualiza a posição inicial para a célula atual
+
+            initialCell = destinyCell; // Atualiza a posição inicial para a célula atual
         }
-      
+
         return movements;
     }
-    listFloorThisBuilding(floors){
+
+
+
+    listFloorThisBuilding(floors,atualFloor) {
         this.listFloors = floors;
+        this.floorActual = atualFloor;
     }
-    selectNewFloorFromBuilding(){
+
+    changeToFixedView(){
+        this.setActiveViewCamera(this.fixedViewCamera);
+    }
+    async selectNewFloorFromBuilding() {
         this.setActiveViewCamera(this.firstPersonViewCamera);
-        this.player.direction = -90;
+        this.animations.actionInProgress = true;
+
+        this.initializeElevator(
+            this.player, this.floorActual, this.animations, this.maze, this.listFloors,this.changeMap.bind(this), this.changeToFixedView.bind(this),
+            this.pontualLight.bind(this), this.removeLight.bind(this))
 
     }
+
+    /**
+     * Animacao de elevador
+     * Esta a ser criado html e css atraves de javascript
+     * Nao mexer , a nao ser que sejas o Miguel Cardoso :D
+     * @param {*} player instancia player
+     * @param {*} floorActual json floor
+     * @param {*} animations instancia animation
+     * @param {*} maze instancia maze
+     * @param {*} buidlingsFloors floors
+     * @param {*} changeMap instancia da funcao changeMap
+     */
+    async initializeElevator(player,floorActual, animations, maze, buidlingsFloors, changeMap, changeToFixedView,pontualLight,removeLight) {
+        var ELEVATOR = {};
+        var lightElevator = {};
+        var lightOn = true;
+        function createElevatorElements() {
+            lightElevator = pontualLight(player.position)
+
+            var elevatorPanel = document.createElement('div');
+            elevatorPanel.id = 'elevator-panel';
+            elevatorPanel.style.background = '#dddddd';
+            elevatorPanel.style.border = '5px solid #000000';
+            elevatorPanel.style.padding = '30px';
+            elevatorPanel.style.width = '30%';
+            elevatorPanel.style.height = '70%';
+            elevatorPanel.style.zIndex = '9999';
+            elevatorPanel.style.position = 'fixed';
+            elevatorPanel.style.top = '50%';
+            elevatorPanel.style.left = '50%';
+            elevatorPanel.style.transform = 'translate(-50%, -50%)';
+        
+            var displayPanel = document.createElement('div');
+            displayPanel.id = 'display-panel';
+            displayPanel.style.position = 'relative';
+            displayPanel.style.background = '#000000';
+            displayPanel.style.overflow = 'hidden';
+            displayPanel.style.height = "40%";
+        
+            var floorNumber = document.createElement('div');
+            floorNumber.id = 'floor-number';
+            floorNumber.className = 'elevator-info';
+            floorNumber.textContent = floorActual.floorNumber;
+            floorNumber.style.position = 'absolute';
+            floorNumber.style.color = '#ffffff';
+            floorNumber.style.fontSize = '20em';
+            floorNumber.style.float = 'left';
+            floorNumber.style.margin = 'auto';
+        
+            var directionInfo = document.createElement('div');
+            directionInfo.id = 'direction-info';
+            directionInfo.className = 'elevator-info';
+            directionInfo.style.float = 'right';
+            directionInfo.style.height = '100%';
+            directionInfo.style.width =  '50%';
+            directionInfo.style.display = "grid";
+            directionInfo.style.alignItems = "center";
+            directionInfo.style.justifyContent = "center";
+        
+            var upIndicator = document.createElement('div');
+            upIndicator.id = 'up-indicator';
+            upIndicator.className = 'indicator';
+            upIndicator.style.backgroundColor = '#005900';
+            upIndicator.style.height = '70px';
+            upIndicator.style.width = '70px';
+        
+            var downIndicator = document.createElement('div');
+            downIndicator.id = 'down-indicator';
+            downIndicator.className = 'indicator';
+            downIndicator.style.backgroundColor = '#990000';
+            downIndicator.style.height = '70px';
+            downIndicator.style.width = '70px';
+        
+            var floorSelection = document.createElement('div');
+            floorSelection.id = 'floor-selection';
+            floorSelection.style.padding = '30px 0';
+        
+            var navigationList = document.createElement('ul');
+            navigationList.id = 'navigation';
+            navigationList.style.position = 'relative';
+
+            var arrowElement = document.createElement('div');
+            arrowElement.id = 'arrowElementExit'
+            arrowElement.style.position = 'absolute';
+            arrowElement.style.width = '0';
+            arrowElement.style.height = '0';
+            arrowElement.style.left = '-15%';
+            arrowElement.style.borderLeft = '20px solid transparent';
+            arrowElement.style.borderRight = '20px solid transparent';
+            arrowElement.style.borderBottom = '40px solid red';
+            arrowElement.style.marginBottom = '20px';
+            arrowElement.style.transform = 'rotate(-90deg)';
+            arrowElement.style.cursor = 'pointer';
+
+            var turnOnLightElement = document.createElement('div');
+            turnOnLightElement.id = 'turnOnLight'
+            turnOnLightElement.style.position = 'absolute';
+            turnOnLightElement.style.width = '0';
+            turnOnLightElement.style.height = '0';
+            turnOnLightElement.style.left = '43%';
+            turnOnLightElement.style.top = '67%';
+            turnOnLightElement.style.cursor = 'pointer';
+
+            var image = document.createElement('img');
+            image.src = 'assets/butons/light_button.png';
+
+            turnOnLightElement.appendChild(image);
+        
+            for (var i = 1; i <= 4; i++) {
+              var listItem = document.createElement('li');
+              listItem.style.position = 'absolute';
+              listItem.style.listStyle = 'none';
+              listItem.style.width = '110px';
+              listItem.style.lineHeight = '100px';
+        
+              if (i > 2) {
+                listItem.style.top = '150px';
+              }
+        
+              if (i % 2 === 0) {
+                listItem.style.right = '0';
+              } else {
+                listItem.style.left = '0';
+              }
+              var button = document.createElement('div');
+              button.className = 'button';
+              button.textContent = i;
+              button.style.backgroundColor = '#eeeeee';
+              button.style.borderRadius = '55px';
+              button.style.border = '5px solid #000000';
+              button.style.fontSize = '5em';
+              button.style.textAlign = 'center';
+              button.style.lineHeight = '100px';
+              button.style.color = '#000000';
+              button.style.cursor = 'pointer';
+
+              listItem.appendChild(button);
+              navigationList.appendChild(listItem);
+            }
+        
+            directionInfo.appendChild(upIndicator);
+            directionInfo.appendChild(downIndicator);
+        
+            displayPanel.appendChild(floorNumber);
+            displayPanel.appendChild(directionInfo);
+        
+            elevatorPanel.appendChild(displayPanel);
+            elevatorPanel.appendChild(floorSelection);
+            elevatorPanel.appendChild(arrowElement);
+            elevatorPanel.appendChild(turnOnLightElement);
+            floorSelection.appendChild(navigationList);
+        
+            document.body.appendChild(elevatorPanel);
+          }
+        
+          // Adicionar a criação de elementos antes da lógica existente
+        createElevatorElements();
+
+        ELEVATOR.selectedFloorList = [];
+        ELEVATOR.$button = document.querySelectorAll('.button');
+        ELEVATOR.$floorNumber = document.getElementById('floor-number');
+        ELEVATOR.$upIndicator = document.getElementById('up-indicator');
+        ELEVATOR.$downIndicator = document.getElementById('down-indicator');
+        ELEVATOR.$exitButton = document.getElementById('arrowElementExit');
+        ELEVATOR.$turnOnLight = document.getElementById('turnOnLight');
+        ELEVATOR.speedFactor = 10000;
+
+      
+        ELEVATOR.initialize = function (elevatorSpeed) {
+          ELEVATOR.speedFactor = elevatorSpeed;
+            
+          ELEVATOR.$exitButton.addEventListener('click',function(){
+                exitElevator(floorActual.floorMap.elevators[0].exit == undefined ? [0,0] : floorActual.floorMap.elevators[0].exit);
+          })
+
+          //funcao para ligar e desligar luz elevador
+          ELEVATOR.$turnOnLight.addEventListener('click',function(){
+            if(lightOn){
+                removeLight(lightElevator);
+                lightOn=false;
+            }else{
+                lightElevator = pontualLight(player.position);
+                lightOn=true
+            }
+        })
+
+          ELEVATOR.$button.forEach(function (button) {
+            button.addEventListener('click', function () {
+              var selectedFloor = button.textContent;
+              var currentFloor = ELEVATOR.$floorNumber.textContent;
+      
+              if (!button.classList.contains('selectedElevatorButton')) {
+                button.classList.add('selectedElevatorButton');
+      
+                if (selectedFloor === currentFloor) {
+                  setTimeout(function () {
+                    button.classList.remove('selectedElevatorButton');
+                  }, ELEVATOR.speedFactor / 4);
+                } else {
+                  ELEVATOR.selectedFloorList.push(selectedFloor);
+                  if (ELEVATOR.selectedFloorList.length === 1) {
+
+                    changeFloor();
+                  }
+                }
+              }
+            });
+          });
+        };
+    
+        function exitElevator( position =null){
+            //console.log(floorActual.floorMap.elevators[0].exit)
+            document.getElementById('elevator-panel').remove();
+            changeToFixedView()
+            if(position != null){
+                player.position = maze.cellToCartesian(position)
+            }
+            //desliga a luz antes de sair do elevador
+            if(lightOn){
+                removeLight(lightElevator);
+            }
+
+            animations.actionInProgress = false;
+        }
+        async function changeFloor() {
+            
+          var selectedFloor = ELEVATOR.selectedFloorList[0];
+          var currentFloor = ELEVATOR.$floorNumber.textContent;
+
+          //Up
+          if (selectedFloor > currentFloor) {
+            ELEVATOR.$upIndicator.style.backgroundColor = '#00cd00';
+            animateFloor(
+              selectedFloor,
+              add(currentFloor),
+              '0%',
+              '0%',
+              add
+            );
+            await vibracaoCamera();
+            floorActual = buidlingsFloors.find(objecto => objecto.floorNumber == selectedFloor);
+            await changeMap(floorActual,floorActual.floorMap.elevators[0].exit);
+            exitElevator(selectedFloor);
+
+          }
+          //DOWN
+          else if (selectedFloor < currentFloor) {
+            ELEVATOR.$downIndicator.style.backgroundColor = '#ff0000';
+            animateFloor(
+              selectedFloor,
+              subtract(currentFloor),
+              '0%',
+              '0%',
+              subtract
+            );
+            await vibracaoCamera();
+            floorActual = buidlingsFloors.find(objecto => objecto.floorNumber == selectedFloor);
+            await changeMap(floorActual, floorActual.floorMap.elevators[0].exit);
+            exitElevator(selectedFloor);
+            }
+        }
+      
+        function animateFloor(selectedFloor, nextFloor, firstMargin, secondMargin, directionOp) {
+          ELEVATOR.$floorNumber.style.marginTop = firstMargin;
+      
+          setTimeout(function () {
+            ELEVATOR.$floorNumber.textContent = nextFloor;
+            ELEVATOR.$floorNumber.style.marginTop = secondMargin;
+      
+            setTimeout(function () {
+              if (parseInt(selectedFloor) === nextFloor) {
+                // end and change
+                setTimeout(function () {
+                  ELEVATOR.selectedFloorList.splice(0, 1);
+                  resetIndicator();
+                  resetButton(selectedFloor);
+                  changeFloor();
+                }, ELEVATOR.speedFactor);
+              } else {
+                animateFloor(
+                  selectedFloor,
+                  directionOp(nextFloor),
+                  firstMargin,
+                  secondMargin,
+                  directionOp
+                );
+              }
+            }, ELEVATOR.speedFactor);
+          }, ELEVATOR.speedFactor);
+        }
+      
+        function add(value) {
+          return ++value;
+        }
+      
+        function subtract(value) {
+          return --value;
+        }
+      
+        function resetIndicator() {
+          ELEVATOR.$upIndicator.style.backgroundColor = '#005900';
+          ELEVATOR.$downIndicator.style.backgroundColor = '#990000';
+        }
+      
+        function resetButton(selectedFloor) {
+          var button = document.querySelector('#navigation li:nth-child(' + selectedFloor + ') .button');
+          button.classList.remove('selectedElevatorButton');
+        }
+
+        async function vibracaoCamera(){
+           
+            while(ELEVATOR.$upIndicator.style.backgroundColor == 'rgb(0, 205, 0)' || ELEVATOR.$downIndicator.style.backgroundColor == 'rgb(255, 0, 0)'){
+                player.direction += 0.2
+                await new Promise(resolve => setTimeout(resolve, 100));
+                player.direction -= 0.2
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+        }
+        ELEVATOR.initialize(1000);  
+        return floor;
+
+    }
+    
+    /**
+     * Funcao para animar com feedback visual a passagem entre edificios
+     * @param {*} connectedFloor 
+     */
+    async bridgeCross(connectedFloor){
+        this.animations.actionInProgress = true;
+
+        this.bridgeAnimation()
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        this.changeMap(connectedFloor);
+
+        //this.setActiveViewCamera(this.firstPersonViewCamera);
+    }
+
+    /**
+     * Feedback basico ao atravessar ponte
+     */
+    bridgeAnimation(){
+        var bridgePanel = document.createElement('div');
+        bridgePanel.id = 'bridge-panel';
+        bridgePanel.style.background = '#dddddd';
+        bridgePanel.style.border = '5px solid #000000';
+        bridgePanel.style.padding = '30px';
+        bridgePanel.style.width = '70%';
+        bridgePanel.style.height = '20%';
+        bridgePanel.style.zIndex = '9999';
+        bridgePanel.style.position = 'fixed';
+        bridgePanel.style.top = '50%';
+        bridgePanel.style.left = '50%';
+        bridgePanel.style.transform = 'translate(-50%, -50%)';
+        bridgePanel.style.fontSize = '40px';
+        bridgePanel.style.textAlign = 'center';
+        bridgePanel.style.borderRadius = '30px';
+
+        bridgePanel.innerHTML = "Estas a atravessar uma ponte entre pisos<br>Espera <span class='blink'>...</span>";
+
+        document.body.appendChild(bridgePanel);
+
+        //pisca pisca :)
+        var style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes blink {
+                0%, 49% {
+                    opacity: 1;
+                }
+                50%, 100% {
+                    opacity: 0;
+                }
+            }
+    
+            .blink {
+                display: inline-block;
+                animation: blink 1s step-end infinite;
+            }
+        `;
+        document.head.appendChild(style);
+
+        setTimeout(function () {
+            document.body.removeChild(bridgePanel);
+        }, 5500);
+    }
+    
 }

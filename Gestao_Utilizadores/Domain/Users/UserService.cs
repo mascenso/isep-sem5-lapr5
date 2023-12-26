@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.JsonPatch;
-using UserManagement.Domain.Auth;
+﻿using System.Threading.Tasks;
 using UserManagement.Domain.Shared;
 using UserManagement.Mappers;
 
@@ -25,14 +22,32 @@ namespace UserManagement.Domain.Users
 
     public async Task<UserDto> CreateUser(CreateUserRequestDto dto)
     {
+      var foundUser = await this.FindUserByEmail(dto.Email);
+      if (foundUser != null)
+      {
+        throw new UserAlreadyRegisteredException($"User with email {dto.Email} already exists.");
+      }
       var user = User.FromRequestDto(dto);
 
       await this._repo.AddAsync(user);
-
       await this._unitOfWork.CommitAsync();
 
-      return new UserDto(user.Id.AsGuid(), user.Email.Value, user.FirstName, user.LastName, user.Role.ToString(),
-        user.Active);
+      return this._userMapper.ToDto(user);
+    }
+
+    public async Task<UserDto> CreateSystemUser(CreateUserRequestDto requestDto)
+    {
+      var foundUser = await this.FindUserByEmail(requestDto.Email);
+      if (foundUser != null)
+      {
+        throw new BusinessRuleValidationException($"User with Email {requestDto.Email} already exists.");
+      }
+
+      var user = User.CreateSystemUser(requestDto);
+      await this._repo.AddAsync(user);
+      await this._unitOfWork.CommitAsync();
+
+      return this._userMapper.ToDto(user);
     }
 
     public async Task<UserDto> FindUserById(UserId userId)
@@ -44,13 +59,18 @@ namespace UserManagement.Domain.Users
           user.Active);
     }
 
-    public async Task<UserDto> UpdateUser(UserId userId, UpdateUserRequestDto patchDto)
+    public async Task<UserDto> PatchUserData(UserId userId, UpdateUserRequestDto patchDto)
     {
       var existingUser = await this._repo.GetByIdAsync(userId);
 
       if (existingUser == null)
       {
-        return null;
+        throw new NotFoundException($"User with ID {userId} not found.");
+      }
+
+      if (!existingUser.IsActive())
+      {
+        throw new BusinessRuleValidationException($"Can't patch a disabled user.");
       }
 
       // Update user properties based on the patched DTO
@@ -77,11 +97,7 @@ namespace UserManagement.Domain.Users
     public async Task<UserDto> FindUserByEmail(string email)
     {
       var user = await this._repo.GetUserByEmailAsync(email);
-      if (user == null)
-      {
-        throw new NotFoundException($"User with email {email} not found.");
-      }
-      return this._userMapper.ToDto(user);
+      return user == null ? null : this._userMapper.ToDto(user);
     }
 
   }

@@ -58,6 +58,8 @@ import { ValidateUserComponent } from './home/users/validate-user/validate-user.
 import { CreateUserComponent } from './home/users/create-user/create-user.component';
 import { RegisterComponent } from './register/register.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { CreateTaskComponent } from './home/tasks/create-task/create-task.component';
+
 
 @NgModule({
   declarations: [
@@ -90,6 +92,7 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
     EditElevatorsComponent,
     CreateRoomComponent,
     PlanRouteWithViewComponent,
+    CreateTaskComponent,
     UsersComponent,
     ValidateUserComponent,
     CreateUserComponent,

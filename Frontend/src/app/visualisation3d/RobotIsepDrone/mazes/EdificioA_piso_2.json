@@ -24,8 +24,8 @@
             "locationBridge":[5,22],
             "buildind":
                 {
-                    "code":"A",
-                    "floor":1,
+                    "code":"B",
+                    "floor":2,
                     "inicialPosition":[2,10]
                 }
         }

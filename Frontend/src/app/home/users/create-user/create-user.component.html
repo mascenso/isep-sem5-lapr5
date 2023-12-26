@@ -38,7 +38,7 @@
             <p>
                 <mat-form-field class="form-field form-field-user-role">
                     <mat-label>User Roles</mat-label>
-                  <mat-select matInput [formControl]="createUserForm.controls.userRole" data-testid="UserRoleSelect">
+                  <mat-select matInput [formControl]="createUserForm.controls.role" data-testid="UserRoleSelect">
                     <mat-option *ngFor="let roles of UserRoles" [value]="roles">{{ roles }}</mat-option>
                   </mat-select>
                   </mat-form-field>

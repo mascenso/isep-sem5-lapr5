@@ -3,7 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../../../services/user.service';
 import { UserResponseDTO, CreateUserRequestDTO } from '../../../../dto/userDTO';
-import UserRoles from '../../../../../../Gestao_Informacao/src/enums/userRole';
+import { userRole } from '../../../../../../Frontend/src/app/enums/userRole';
+//Gestao_Utilizadores/Domain/Users/UserRole.cs';
 
 @Component({
   selector: 'app-create-user',
@@ -16,13 +17,13 @@ export class CreateUserComponent {
     password: new FormControl('', [Validators.required]),
     firstName: new FormControl(''),
     lastName: new FormControl(''),
-    userRole: new FormControl(''),
+    role: new FormControl(''),
     active: new FormControl(false)
   });
 
   createdUser: UserResponseDTO | undefined;
 
-  UserRoles = Object.values(UserRoles);
+  UserRoles = Object.values(userRole);
 
   constructor(private userService: UserService,
     private _snackBar: MatSnackBar) {

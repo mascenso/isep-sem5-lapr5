@@ -51,7 +51,7 @@ namespace UserManagement
             {
                 options.AddDefaultPolicy(builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200")
+                    builder.AllowAnyOrigin()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
@@ -64,6 +64,7 @@ namespace UserManagement
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors();
             }
             else
             {
@@ -74,7 +75,7 @@ namespace UserManagement
 
             app.UseRouting();
 
-            app.UseCors(); // Apply CORS after routing and before Authorization
+            // app.UseCors(); // Apply CORS after routing and before Authorization
 
             app.UseAuthorization();
 

@@ -28,6 +28,7 @@ import { CreateRobotTypeComponent } from './home/fleet/create-robot-type/create-
 import { MatSelectModule } from '@angular/material/select';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {ServiceInterceptor} from "./interceptors/service.interceptor";
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { FloorListComponent } from './home/campus/floor-list/floor-list.component';
 import { BridgeListComponent } from "./home/campus/list-bridge/bridge-list.component";
@@ -56,6 +57,7 @@ import { UsersComponent } from './home/users/users.component';
 import { ValidateUserComponent } from './home/users/validate-user/validate-user.component';
 import { CreateUserComponent } from './home/users/create-user/create-user.component';
 import { RegisterComponent } from './register/register.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +93,8 @@ import { RegisterComponent } from './register/register.component';
     UsersComponent,
     ValidateUserComponent,
     CreateUserComponent,
-    RegisterComponent
+    RegisterComponent,
+    PrivacyPolicyComponent
   ],
   imports: [
     BrowserModule,
@@ -116,6 +119,7 @@ import { RegisterComponent } from './register/register.component';
     MatProgressBarModule,
     MatSelectModule,
     MatCheckboxModule,
+    MatDialogModule,
   ],
   providers: [
     {

@@ -33,11 +33,13 @@ import {PlanRobotRouteComponent} from './home/tasks/plan-robot-route/plan-robot-
 import { EditElevatorsComponent } from './home/campus/edit-elevators/edit-elevators.component';
 import { CreateRoomComponent } from "./home/campus/create-room/create-room.component";
 import {PlanRouteWithViewComponent} from "./home/tasks/plan-route-with-view/plan-route-with-view.component"
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
   {path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
+  { path: 'privacy-policy', component: PrivacyPolicyComponent },
   {
     path: 'home', component: HomeComponent, canActivate: [authGuard],
     children: [

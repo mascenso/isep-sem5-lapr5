@@ -35,11 +35,8 @@ export class AuthService {
     }
 
     private createSession(authResult: TokenDTO) {
-      const tokenInfo = this.decodeAccessToken(authResult.accessToken);
-      const role = tokenInfo?.role;
       const expiresAt = moment().add(authResult.expiresIn,'seconds');
       localStorage.setItem('token', authResult.accessToken);
-      localStorage.setItem('role', role);
       localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()) );
     }
 
@@ -49,9 +46,14 @@ export class AuthService {
 
     public logout(): void {
       localStorage.removeItem('token');
-      localStorage.removeItem('role');
       localStorage.removeItem('expires_at')
       this.router.navigate(['login']);
+    }
+
+    public userRole() {
+      const token = localStorage.getItem("token") ?? '';
+      const tokenInfo = this.decodeAccessToken(token);
+      return tokenInfo?.role;
     }
 
     private decodeAccessToken(token: string): any {

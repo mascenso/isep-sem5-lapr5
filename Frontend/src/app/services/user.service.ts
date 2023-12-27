@@ -28,12 +28,17 @@ export class UserService {
 
     //return this.http.post<UserResponseDTO>(`${this.API_URL}/api/users/`, user, options);
     return this.http.post<UserResponseDTO>(url, user);
-}
+  }
 
+  public GetInactiveUsers(): Observable<UserResponseDTO[]> {
+    return this.http.get<UserResponseDTO[]>(`${this.API_URL}/api/users/inactive`);
+  }
 
+  /*
   public getAllUsers(): Observable<UserResponseDTO[]> {
     return this.http.get<UserResponseDTO[]>(`${this.API_URL}/api/users/`);
   }
+  */
 
   public updateUser(user: CreateUserRequestDTO): Observable<UserResponseDTO> {
     return this.http.patch<UserResponseDTO>(`${this.API_URL}/api/users/`, user);

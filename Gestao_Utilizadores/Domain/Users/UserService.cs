@@ -1,6 +1,9 @@
 ﻿using System.Threading.Tasks;
 using UserManagement.Domain.Shared;
 using UserManagement.Mappers;
+using System.Collections.Generic;
+using System.Linq;
+
 
 namespace UserManagement.Domain.Users
 {
@@ -58,6 +61,18 @@ namespace UserManagement.Domain.Users
         : new UserDto(user.Id.AsGuid(), user.Email.Value, user.FirstName, user.LastName, user.Role.ToString(),
           user.Active);
     }
+
+    public async Task<IEnumerable<UserDto>> GetInactiveUsersAsync()
+    {
+        var inactiveUsers = await _repo.GetInactiveUsersAsync(); 
+        var inactiveUserDtos = inactiveUsers.Select(user =>
+            new UserDto(user.Id.AsGuid(), user.Email.Value, user.FirstName, user.LastName, user.Role.ToString(),
+                user.Active)
+        );
+
+        return inactiveUserDtos.ToList();
+    }
+
 
     public async Task<UserDto> PatchUserData(UserId userId, UpdateUserRequestDto patchDto)
     {

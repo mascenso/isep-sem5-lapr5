@@ -1,0 +1,43 @@
+<mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between center">
+    <span>
+      <button mat-button routerLink="/">Login</button>
+      <button mat-button routerLink="/register">Register</button>
+    </span>
+  </mat-toolbar>
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+    <mat-card class="box">
+      <mat-card-header>
+        <mat-card-title>Register</mat-card-title>
+      </mat-card-header>
+  <form class="example-form">
+  <mat-card-content>
+  <mat-form-field class="example-full-width">
+            <input matInput placeholder="Email">
+          </mat-form-field>
+  <mat-form-field class="example-full-width">
+            <input matInput placeholder="Password">
+          </mat-form-field>
+  <mat-form-field class="example-full-width">
+            <input matInput placeholder="First Name">
+          </mat-form-field>
+  <mat-form-field class="example-full-width">
+            <input matInput placeholder="Last Name">
+          </mat-form-field>
+  <mat-form-field class="example-full-width">
+            <mat-label>Choose a role...</mat-label>
+            <mat-select>
+              <mat-option [value]="roles" *ngFor="let roles of Roles">{{roles}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="terms-text">
+            By clicking Register, you accept our terms. 
+            Consult our <span class="fake-link" (click)="openPrivacyPolicyDialog()">Privacy Policy</span> 
+            to find out how we collect, use, and share your data.
+        </div>
+          
+  </mat-card-content>
+  <button mat-stroked-button color="accent" class="btn-block">Register</button>
+  </form>
+    </mat-card>
+  </div>

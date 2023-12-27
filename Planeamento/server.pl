@@ -19,6 +19,8 @@
 
 % Handler para lidar com requisições HTTP
 :- http_handler('/caminho', caminho_handler, []).
+:- http_handler('/tarefas', tarefas_handler, []).
+
 
 % Predicado para iniciar o servidor
 start_server(Port) :-
@@ -36,6 +38,15 @@ caminho_handler(Request) :-
                               pisoDestino(PisoDest, [])]),
     caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal, Cel),
     reply_json(json([caminho=LCam, custo=CustoTotal])).
+
+% Handler específico para as tarefas
+tarefas_handler(Request) :-
+    cors_enable(Request, [methods([get])]),
+    http_parameters(Request, [NG,DP,P1,P2,T,Av,NEstab]),
+    gera_frontend(NG,DP,P1,P2,T,Av,NEstab,F),
+    reply_json(json([sequencia=F])).
+
+
 
 stop_server_before_exit :-
     stop_server(8081),

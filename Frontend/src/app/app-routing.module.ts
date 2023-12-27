@@ -35,6 +35,7 @@ import { CreateRoomComponent } from "./home/campus/create-room/create-room.compo
 import {PlanRouteWithViewComponent} from "./home/tasks/plan-route-with-view/plan-route-with-view.component"
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { CreateTaskComponent } from './home/tasks/create-task/create-task.component';
+import { PendingTaskListComponent } from './home/tasks/pending-task-list/pending-task-list.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -81,6 +82,10 @@ const routes: Routes = [
       {
         path: 'tasks/create-task',
         component: CreateTaskComponent,
+      },
+      {
+        path: 'tasks/pending-task-list',
+        component: PendingTaskListComponent,
       },
       {
         path: 'view',

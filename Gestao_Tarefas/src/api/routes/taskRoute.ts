@@ -26,7 +26,7 @@ export default (app: Router) => {
         planned: Joi.boolean().default(false),
       })
     }),
-    (req, res, next) => ctrl.createVigilanceTask(req, res, next) );
+    (req, res, next) => ctrl.createVigilanceTask(req, res, next));
 
   route.post('/pickupDelivery',
     celebrate({
@@ -57,7 +57,7 @@ export default (app: Router) => {
         planned: Joi.boolean().default(false),
       })
     }),
-    (req, res, next) => ctrl.createPickupDeliveryTask(req, res, next) );
+    (req, res, next) => ctrl.createPickupDeliveryTask(req, res, next));
 
   route.put('',
     celebrate({
@@ -66,18 +66,20 @@ export default (app: Router) => {
         name: Joi.string().required()
       }),
     }),
-    (req, res, next) => ctrl.updateTask(req, res, next) );
+    (req, res, next) => ctrl.updateTask(req, res, next));
 
   route.get('',
-    (req, res, next) => ctrl.getAllTasks(req, res, next) );
-/*
-  route.get('/pendingVigilance', 
+    (req, res, next) => ctrl.getAllTasks(req, res, next));
+
+  route.get('/pendingVigilance',
     (req, res, next) => ctrl.getAllVigilancePendingTasks(req, res, next));
 
-  route.get('/pendingPickUp', 
+  route.get('/pendingPickUp',
     (req, res, next) => ctrl.getAllPickupDeliveryPendingTasks(req, res, next));
-*/
-    route.get('/pending', 
+/*
+  route.get('/pending',
     (req, res, next) => ctrl.getAllPendingTasks(req, res, next));
-    
+*/
+  route.get('/approved',
+    (req, res, next) => ctrl.getAllApprovedTasks(req, res, next));
 };

@@ -4,10 +4,55 @@
 :-dynamic prob_mutacao/1.
 :-dynamic tempo_transicao/3.
 :-dynamic lista_tarefas/1.
+:-dynamic tarefa/3.
+
 
 
 :- consult('BC_RobDroneGo.pl').
 :- consult('Percurso_Robots.pl').
+
+
+gera_frontend(NG,DP,P1,P2,T,Av,NEstab,F):-	
+    (retract(geracoes(_));true), asserta(geracoes(NG)),
+	(retract(populacao(_));true), asserta(populacao(DP)),
+	PC is P1/100, 
+	(retract(prob_cruzamento(_));true), asserta(prob_cruzamento(PC)),
+	PM is P2/100, 
+	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)),
+	(retract(tempo_limite(_));true), asserta(tempo_limite(T)),
+    (retract(avaliacao_especifica());true), asserta(av_inferior(Av)),    
+    (retract(estabilizacao());true), asserta(estabilizacao(NEstab)),!,
+	%inicializa_tempos_transicao_frontend,
+	inicializa_tempos_transicao,
+	gera_populacao(Pop),
+	avalia_populacao(Pop,PopAv),
+	ordena_populacao(PopAv,PopOrd),
+	geracoes(NG),
+	tempo_limite(Tlimite),
+	av_inferior(AvEspecifica),
+	estabilizacao(NEstab),
+	get_time(Tinicial),
+	gera_geracao(0,NG,PopOrd,Tinicial,Tlimite,AvEspecifica,NEstab,0),!,
+	final_geracao(Solucao),
+    F = Solucao.
+/*	
+criar_tarefas([]).
+
+criar_tarefas([[Tarefa, A, B] | Resto]) :-
+    %retractall(tarefa(_, _, _)),  % Remove versões anteriores das tarefa, se existirem
+    assertz(tarefa(Tarefa, A, B)),
+	write("TAREFA "), write(Tarefa), nl,
+    criar_tarefas(Resto).
+
+inicializa_tempos_transicao_frontend :-
+    retractall(tempo_transicao(_, _, _)),  
+    retractall(lista_tarefas(_)),  
+    findall(Tarefa, tarefa(Tarefa, _, _), ListaTarefas),
+        assertz(lista_tarefas(ListaTarefas)),
+	write("ListaTarefas "), write(ListaTarefas),nl.
+
+
+*/
 
 /* Predicado para inicializar as variaveis necessarias para o algoritmo genético.
 NG - Nº de gerações;
@@ -61,7 +106,7 @@ inicializa_tempos_transicao :-
     retractall(tempo_transicao(_, _, _)),  % Remove versões anteriores do tempo de transição, se existirem
     retractall(lista_tarefas(_)),  % Remove versões anteriores da lista de tarefas, se existirem
     findall(Tarefa, tarefa(Tarefa, _, _), ListaTarefas),
-    asserta(lista_tarefas(ListaTarefas)),
+	asserta(lista_tarefas(ListaTarefas)),
     assert_lista_tempos(ListaTarefas, ListaTarefas).
 
 /* Predicado para adicionar os tempos de transição à base de conhecimento */

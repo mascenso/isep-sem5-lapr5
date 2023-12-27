@@ -59,6 +59,7 @@ import { CreateUserComponent } from './home/users/create-user/create-user.compon
 import { RegisterComponent } from './register/register.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { CreateTaskComponent } from './home/tasks/create-task/create-task.component';
+import { PendingTaskListComponent } from './home/tasks/pending-task-list/pending-task-list.component';
 
 
 @NgModule({
@@ -93,6 +94,7 @@ import { CreateTaskComponent } from './home/tasks/create-task/create-task.compon
     CreateRoomComponent,
     PlanRouteWithViewComponent,
     CreateTaskComponent,
+    PendingTaskListComponent,
     UsersComponent,
     ValidateUserComponent,
     CreateUserComponent,

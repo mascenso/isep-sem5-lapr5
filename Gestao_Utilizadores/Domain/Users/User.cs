@@ -49,12 +49,12 @@ namespace UserManagement.Domain.Users
         throw new BusinessRuleValidationException("Password can not be null!");
       }
 
-      if (dto.Role == null)
+      if (dto.Role == null )
       {
         throw new BusinessRuleValidationException("Role can not be null!");
       }
 
-      if (!Enum.TryParse(dto.Role, out UserRole userRole))
+      if (!UserRole.USER.ToString().Equals(dto.Role) || !Enum.TryParse(dto.Role, out UserRole userRole) )
       {
         throw new BusinessRuleValidationException("Invalid role!");
       };
@@ -69,7 +69,7 @@ namespace UserManagement.Domain.Users
 
     public static User CreateSystemUser(CreateUserRequestDto dto)
     {
-      if (dto.Role == null || UserRole.USER.ToString().Equals(dto.Role))
+      if (dto.Role == null)
       {
         throw new BusinessRuleValidationException("Invalid role!");
       }

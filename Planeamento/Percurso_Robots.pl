@@ -19,7 +19,7 @@ start_server(Port) :-
 caminho_handler(Request) :-
     http_parameters(Request, [pisoOrigem(PisoOr, []),
                               pisoDestino(PisoDest, [])]),
-    caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal),
+    caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal, Cel),
     reply_json(json([caminho=LCam, custo=CustoTotal])).
 
 
@@ -75,7 +75,7 @@ cria_grafo_lin(Col,Lin, Map):-
 
 cria_grafo_lin(Col,Lin,Map):-Col1 is Col-1,cria_grafo_lin(Col1,Lin,Map).
 
-map_value(Col,Lin,Map,V):- 
+map_value(Col,Lin,Map,V):-
     nth1(Col, Map, Coluna),
     nth1(Lin, Coluna, V).
 
@@ -104,10 +104,10 @@ caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal,Cel):-
     pisos(EdOr, LPisosOr),
     member(PisoOr, LPisosOr),
     pisos(EdDest, LPisosDest),
-    member(PisoDest, LPisosDest), 
+    member(PisoDest, LPisosDest),
     caminho_edificios(EdOr, EdDest, LCam),
     segue_pisos(PisoOr,PisoDest,LCam,LLig),
-    calcular_custo_total(LLig, PisoOr, CustoTotal,Cel). 
+    calcular_custo_total(LLig, PisoOr, CustoTotal,Cel).
 
 /*Calculo custo total da viagem usando aStar em cada piso*/
 calcular_custo_total([], _, 0,[]).
@@ -151,10 +151,10 @@ caminho_pisos_com_custo_bbfs(PisoOr, PisoDest, LCam, LLig, CustoTotal):-
     pisos(EdOr, LPisosOr),
     member(PisoOr, LPisosOr),
     pisos(EdDest, LPisosDest),
-    member(PisoDest, LPisosDest), 
+    member(PisoDest, LPisosDest),
     caminho_edificios(EdOr, EdDest, LCam),
     segue_pisos(PisoOr,PisoDest,LCam,LLig),
-    calcular_custo_total_bbfs(LLig, PisoOr, CustoTotal). 
+    calcular_custo_total_bbfs(LLig, PisoOr, CustoTotal).
 
 /*Calculo custo total da viagem usando aStar em cada piso*/
 calcular_custo_total_bbfs([], _, 0).
@@ -191,10 +191,10 @@ caminho_pisos_com_custo_bfs(PisoOr, PisoDest, LCam, LLig, CustoTotal):-
     pisos(EdOr, LPisosOr),
     member(PisoOr, LPisosOr),
     pisos(EdDest, LPisosDest),
-    member(PisoDest, LPisosDest), 
+    member(PisoDest, LPisosDest),
     caminho_edificios(EdOr, EdDest, LCam),
     segue_pisos(PisoOr,PisoDest,LCam,LLig),
-    calcular_custo_total_bfs(LLig, PisoOr, CustoTotal). 
+    calcular_custo_total_bfs(LLig, PisoOr, CustoTotal).
 
 /*Calculo custo total da viagem usando aStar em cada piso*/
 calcular_custo_total_bfs([], _, 0).
@@ -231,10 +231,10 @@ caminho_pisos_com_custo_dfs(PisoOr, PisoDest, LCam, LLig, CustoTotal):-
     pisos(EdOr, LPisosOr),
     member(PisoOr, LPisosOr),
     pisos(EdDest, LPisosDest),
-    member(PisoDest, LPisosDest), 
+    member(PisoDest, LPisosDest),
     caminho_edificios(EdOr, EdDest, LCam),
     segue_pisos(PisoOr,PisoDest,LCam,LLig),
-    calcular_custo_total_dfs(LLig, PisoOr, CustoTotal). 
+    calcular_custo_total_dfs(LLig, PisoOr, CustoTotal).
 
 /*Calculo custo total da viagem usando aStar em cada piso*/
 calcular_custo_total_dfs([], _, 0).

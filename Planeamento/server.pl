@@ -22,7 +22,7 @@
 
 % Predicado para iniciar o servidor
 start_server(Port) :-
-    
+
     http_server(http_dispatch, [port(Port)]).
 
 % Predicado para parar o servidor
@@ -34,7 +34,7 @@ caminho_handler(Request) :-
     cors_enable(Request, [methods([get])]),
     http_parameters(Request, [pisoOrigem(PisoOr, []),
                               pisoDestino(PisoDest, [])]),
-    caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal),
+    caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal, Cel),
     reply_json(json([caminho=LCam, custo=CustoTotal])).
 
 stop_server_before_exit :-

@@ -43,7 +43,6 @@ namespace UserManagement
 
             ConfigureMyServices(services);
 
-
             services.AddControllers().AddNewtonsoftJson();
             services.AddCors(options =>
             {

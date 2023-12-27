@@ -61,7 +61,7 @@ namespace UserManagement.Controllers
         {
           try
           {
-            var responseDto = await _userService.CreateUser(userDto);
+            var responseDto = await _userService.CreateSystemUser(userDto);
             var token = this._authService.GenerateJwtToken(responseDto);
             // Include token in the response headers
             Response.Headers.Append("Authorization", "Bearer " + token);

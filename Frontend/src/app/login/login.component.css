@@ -38,7 +38,7 @@
 }
 
 .login-button-group {
-  margin-top: 2rem;
+  margin-top: 1rem;
   padding: 0 1.6rem 1rem;
   display:flex;
   justify-content: flex-end;
@@ -67,6 +67,6 @@ mat-card-header {
 
 .form-field {
   padding: 0;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   width: 100%;
 }

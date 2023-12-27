@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {Observable, of, Subject} from 'rxjs';
+import {Observable, Subject, tap} from 'rxjs';
 import {Router} from "@angular/router";
+import { TokenDTO } from 'src/dto/tokenDTO';
+import * as moment from "moment/moment";
+import {jwtDecode} from "jwt-decode";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-    private isLoggedIn = false;
+    private AUTH_API_URL = environment.C_SHARP;
 
     login$ = new Subject<boolean>();
 
@@ -19,24 +23,48 @@ export class AuthService {
       return this.http.get<string[]>('http://localhost:4000/api/roles');
     }
 
-    public login(email:string, password:string, role:string): Observable<any> {
-      this.isLoggedIn = true;
-      return of({
-        firstName: "Manel",
-        lastName: "da Maquina",
-        email: email,
-        role: role
-      });
+    public login(email:string, password:string,  showSpinner?: boolean) {
+      return this.http.post<TokenDTO>(
+        `${this.AUTH_API_URL}/api/users/authenticate`,
+        {email, password},
+        {reportProgress: showSpinner})
+        .pipe(
+          tap(res => this.createSession(res))
+        )
+
     }
 
-    public isLoggedId(): boolean {
-      return this.isLoggedIn;
+    private createSession(authResult: TokenDTO) {
+      const tokenInfo = this.decodeAccessToken(authResult.accessToken);
+      const role = tokenInfo?.role;
+      const expiresAt = moment().add(authResult.expiresIn,'seconds');
+      localStorage.setItem('token', authResult.accessToken);
+      localStorage.setItem('role', role);
+      localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()) );
+    }
+
+    public isLoggedIn() {
+      return moment().isBefore(this.tokenExpiration());
     }
 
     public logout(): void {
-      this.isLoggedIn = false;
       localStorage.removeItem('token');
       localStorage.removeItem('role');
+      localStorage.removeItem('expires_at')
       this.router.navigate(['login']);
+    }
+
+    private decodeAccessToken(token: string): any {
+      try {
+        return jwtDecode(token);
+      } catch(Error) {
+        return null;
+      }
+    }
+
+    private tokenExpiration() {
+      const expiration = localStorage.getItem("expires_at") ?? moment().subtract(1, 'seconds').toJSON();
+      const expiresAt = JSON.parse(expiration);
+      return moment(expiresAt);
     }
 }

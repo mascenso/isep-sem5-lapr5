@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {HomeComponent} from "./home/home.component";
+import {UsersComponent} from "./home/users/users.component";
+import {ValidateUserComponent} from "./home/users/validate-user/validate-user.component";
+import {CreateUserComponent} from "./home/users/create-user/create-user.component";
 import {CampusComponent} from "./home/campus/campus.component";
 import {FleetComponent} from "./home/fleet/fleet.component";
 import {TasksComponent} from "./home/tasks/tasks.component";
 import {ViewComponent} from "./home/view/view.component";
 import {LoginComponent} from "./login/login.component";
+import {RegisterComponent} from "./register/register.component";
 import {CreateBuildingComponent} from "./home/campus/create-building/create-building.component";
 import {CreateRobotTypeComponent} from "./home/fleet/create-robot-type/create-robot-type.component";
 import {FloorListComponent} from "./home/campus/floor-list/floor-list.component";
@@ -29,15 +33,32 @@ import {PlanRobotRouteComponent} from './home/tasks/plan-robot-route/plan-robot-
 import { EditElevatorsComponent } from './home/campus/edit-elevators/edit-elevators.component';
 import { CreateRoomComponent } from "./home/campus/create-room/create-room.component";
 import {PlanRouteWithViewComponent} from "./home/tasks/plan-route-with-view/plan-route-with-view.component"
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { CreateTaskComponent } from './home/tasks/create-task/create-task.component';
 import { PendingTaskListComponent } from './home/tasks/pending-task-list/pending-task-list.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
   {path: 'login', component: LoginComponent},
+  { path: 'register', component: RegisterComponent },
+  { path: 'privacy-policy', component: PrivacyPolicyComponent },
   {
     path: 'home', component: HomeComponent, canActivate: [authGuard],
     children: [
+      {
+        path: 'users',
+        component: UsersComponent
+      },
+      {
+        path: 'users/create-user',
+        component: CreateUserComponent,
+
+      },
+      {
+        path: 'users/validate-user',
+        component: ValidateUserComponent,
+
+      },
       {
         path: 'campus',
         component: CampusComponent

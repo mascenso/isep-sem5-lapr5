@@ -1,20 +1,20 @@
-<h1>Planiamento da rota.</h1>
+<h1>Robot route planning</h1>
 <mat-form-field>
     <mat-label>Selecione o Piso</mat-label>
     <mat-select [(ngModel)]="selectedFloor">
       <mat-option *ngFor="let floor of floors" [value]="floor.value">{{ floor.name }}</mat-option>
     </mat-select>
   </mat-form-field>
-  
+
   <mat-form-field>
     <mat-label>Selecione outro Piso</mat-label>
     <mat-select [(ngModel)]="selectedOtherFloor">
       <mat-option *ngFor="let floor of floors" [value]="floor.value">{{ floor.name }}</mat-option>
     </mat-select>
   </mat-form-field>
-  
+
   <button mat-raised-button color="primary" (click)="calcular()">Calcular</button>
-  
+
 <table mat-table [dataSource]="resultado" class="mat-elevation-z8">
   <!-- Position Column -->
   <ng-container matColumnDef="origem">

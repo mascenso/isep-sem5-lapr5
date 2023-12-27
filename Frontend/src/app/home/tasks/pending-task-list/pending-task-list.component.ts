@@ -1,8 +1,8 @@
-import { Component, OnInit } from "@angular/core";
-import { TasksService } from "src/app/services/tasks.service";
-import { TaskPickupViewModel } from "src/app/viewModel/taskPickUp";
-import { TaskViewModel } from "src/app/viewModel/taskView";
-import { TaskVigilanceViewModel } from "src/app/viewModel/taskVigilance";
+import { Component, OnInit } from '@angular/core';
+import { TasksService } from 'src/app/services/tasks.service';
+import { TaskViewModel } from 'src/app/viewModel/taskView';
+import { TaskPickupViewModel } from 'src/app/viewModel/taskPickUp';
+import { TaskVigilanceViewModel } from 'src/app/viewModel/taskVigilance';
 
 @Component({
   selector: 'app-pending-task-list',
@@ -12,15 +12,13 @@ import { TaskVigilanceViewModel } from "src/app/viewModel/taskVigilance";
 export class PendingTaskListComponent implements OnInit {
 
   pendingTaskList: TaskViewModel[] = [];
-  displayedColumns: string[] = ['description', 'user name', 'user contact'];
+  displayedColumns: string[] = ['description', 'user name', 'user contact', 'type'];
 
   constructor(private tasksService: TasksService) { }
 
   ngOnInit(): void {
     this.carregarLista();
   }
-
-  //UI (ViewModel) <-> Models <-> DTOs <-> Backend Services/APIs 
 
   carregarLista() {
     this.getPickupTasks();
@@ -29,9 +27,10 @@ export class PendingTaskListComponent implements OnInit {
 
   getPickupTasks() {
     this.tasksService.getAllPickupDeliveryPendingTasks().subscribe(
-      (pickupTasks) => {
+      pickupTasks => {
         const pickupTaskList = pickupTasks.flat();
-        const pickupTaskViewModels = pickupTaskList.map((task) => new TaskPickupViewModel(task));
+
+        const pickupTaskViewModels = pickupTaskList.map((task) => this.mapToTaskViewModel(task, 'Pickup'));
         this.updatePendingTaskList(pickupTaskViewModels);
       },
       (pickupError) => {
@@ -39,11 +38,13 @@ export class PendingTaskListComponent implements OnInit {
       }
     );
   }
+
   getVigilanceTasks() {
     this.tasksService.getAllVigilancePendingTasks().subscribe(
-      (vigilanceTasks) => {
-        const vigilanceTaskList = vigilanceTasks.flat();
-        const vigilanceTaskViewModels = vigilanceTaskList.map((task) => new TaskVigilanceViewModel(task));
+      vigilanceTasks => {
+        const vigilanceTasksList = vigilanceTasks.flat();
+
+        const vigilanceTaskViewModels = vigilanceTasksList.map((task) => this.mapToTaskViewModel(task, 'Vigilance'));
         this.updatePendingTaskList(vigilanceTaskViewModels);
       },
       (vigilanceError) => {
@@ -51,6 +52,27 @@ export class PendingTaskListComponent implements OnInit {
       }
     );
   }
+
+  mapToTaskViewModel(task: any, type: 'Pickup' | 'Vigilance'): TaskViewModel {
+    let viewModel: TaskViewModel;
+
+    console.log("task ", task);
+
+    if (type === 'Pickup') {
+      viewModel = {
+        ...task,
+        type: 'Pickup'
+      } as TaskPickupViewModel;
+    } else {
+      viewModel = {
+        ...task,
+        type: 'Vigilance'
+      } as TaskVigilanceViewModel;
+    }
+
+    return viewModel;
+  }
+
   updatePendingTaskList(tasks: TaskViewModel[]) {
     this.pendingTaskList = this.pendingTaskList.concat(tasks);
   }

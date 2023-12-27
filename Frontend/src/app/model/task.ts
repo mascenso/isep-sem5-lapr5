@@ -1,7 +1,9 @@
-export interface TaskViewModel {
+export interface Task {
     id: string;
     description: string;
     user: string;
     contact: number;
-    type: 'Pickup' | 'Vigilance';
   }
+  
+
+  

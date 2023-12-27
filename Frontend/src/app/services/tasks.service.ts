@@ -4,7 +4,6 @@ import { HttpClient } from "@angular/common/http";
 import { Observable, forkJoin, map, mergeMap, of } from "rxjs";
 import { TaskVigilanceRequestDTO } from "../../dto/taskVigilanceDTO";
 import { TaskPickupRequestDTO } from 'src/dto/taskPickupDTO';
-import { TaskViewModel } from '../viewModel/taskView';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +26,7 @@ export class TasksService {
   public getAllVigilancePendingTasks(): Observable<TaskVigilanceRequestDTO[]> {
     return this.http.get<TaskVigilanceRequestDTO[]>(`${this.API_URL}/api/tasks/pendingVigilance`);
   }
-  
+
   public getAllPickupDeliveryPendingTasks(): Observable<TaskPickupRequestDTO[]> {
     return this.http.get<TaskPickupRequestDTO[]>(`${this.API_URL}/api/tasks/pendingPickUp`);
   }

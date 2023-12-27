@@ -8,10 +8,14 @@
       </ng-container>
       <!-- Informação do utilizador -->
       <ng-container *ngIf="column === 'user name'">
-        {{ task.user }}
+        {{ task.user.name }}
       </ng-container>
       <ng-container *ngIf="column === 'user contact'">
-        {{ task.contact }}
+        {{ task.user.contacto }}
+      </ng-container>
+      <!-- Informação do utilizador -->
+      <ng-container *ngIf="column === 'type'">
+        {{ task.type }}
       </ng-container>
     </td>
   </ng-container>

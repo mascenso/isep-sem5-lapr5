@@ -24,7 +24,7 @@ export class ValidateUserComponent implements OnInit {
 
   columnsToDisplay = ['email', 'firstName', 'lastName'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-  expandedElement: UserResponseDTO | null | undefined;
+  expandedElement: any;
 
   constructor(private userService: UserService,
     private _snackBar: MatSnackBar) {}
@@ -42,4 +42,48 @@ export class ValidateUserComponent implements OnInit {
         }
       )
     }
+
+    toggleRowExpansion(row: any): void {
+      this.expandedElement = this.expandedElement === row ? null : row;
+    }
+
+    acceptUser(user: UserResponseDTO): void {
+      let approvedUser = {
+        id: user.id,
+        email: user.email,
+        password: user.password,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        active: true,
+      };
+    
+      this.userService.updateUser(user.id, approvedUser as UserResponseDTO).subscribe(
+        (approvedUser) => {
+          this._snackBar.open("User approved!", "close", {
+            duration: 5000,
+            panelClass: ['snackbar-success']
+          });
+        },
+        (error) => {
+          this._snackBar.open("Error in user approval!", "close", {
+            duration: 5000,
+            panelClass: ['snackbar-error']
+          });
+        }
+      );
+    
+      // Logic to handle user acceptance
+      // Example: Make an API call to accept the user
+      console.log('Accepted user:', user);
+    }
+    
+  
+    rejectUser(user: UserResponseDTO): void {
+      // Logic to handle user rejection
+      // Example: Make an API call to reject the user
+      console.log('Rejected user:', user);
+    }
+
+    
 }

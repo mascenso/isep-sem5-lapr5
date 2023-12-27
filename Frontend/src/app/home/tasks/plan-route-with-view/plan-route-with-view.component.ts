@@ -19,7 +19,7 @@ export class PlanRouteWithViewComponent {
   //popular isto com o array de movimentacoes que queremos
   movimentacaoRobotExemplo=[
     {
-      caminho:[[6,6],[5,7],[6,8],[5,9],[6,10],[6,11],[6,12],[6,13],[6,14],[6,15],[6,16],[6,17],[5,18],[6,19],[7,19],[8,19],[9,19]],
+      caminho:[[6,6],[6,7],[6,8],[6,9],[6,10],[6,11],[6,12],[6,13],[6,14],[6,15],[6,16],[6,17],[7,18],[8,19],[9,19]],
       elevador:true,
       map:'assets/buildings/EdificioA_piso_4.json',
       initialPosition:[2,20],

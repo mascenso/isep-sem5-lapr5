@@ -40,14 +40,14 @@ public onSubmit() {
     },
     error => {
         console.log('Error creating User: ', error);
-        this._snackBar.open(error.message, "close", {
+        this._snackBar.open(error.error.message, "close", {
           duration: 5000,
           panelClass: ['snackbar-error']
         });
     }
   );
 
-  
+
 }
 
 }

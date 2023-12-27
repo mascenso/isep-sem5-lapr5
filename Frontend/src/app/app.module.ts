@@ -59,6 +59,7 @@ import { CreateUserComponent } from './home/users/create-user/create-user.compon
 import { RegisterComponent } from './register/register.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { CreateTaskComponent } from './home/tasks/create-task/create-task.component';
+import {AuthInterceptor} from "./interceptors/auth.interceptor";
 
 
 @NgModule({
@@ -129,6 +130,11 @@ import { CreateTaskComponent } from './home/tasks/create-task/create-task.compon
     provide: HTTP_INTERCEPTORS,
     useClass: ServiceInterceptor,
     multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
     },
     AuthService,
     {

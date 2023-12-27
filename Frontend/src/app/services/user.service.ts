@@ -26,7 +26,7 @@ export class UserService {
     console.log(user);
 
     //return this.http.post<UserResponseDTO>(`${this.API_URL}/api/users/`, user, options);
-    return this.http.post<UserResponseDTO>(`${this.API_URL}/api/users/register`, user);
+    return this.http.post<UserResponseDTO>(`${this.API_URL}/api/users/register-system-user`, user);
   }
 
   public GetInactiveUsers(): Observable<UserResponseDTO[]> {

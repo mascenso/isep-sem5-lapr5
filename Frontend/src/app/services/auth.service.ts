@@ -63,7 +63,7 @@ export class AuthService {
     }
 
     private tokenExpiration() {
-      const expiration = localStorage.getItem("expires_at") ?? moment().subtract(1, 'seconds').toJSON();
+      const expiration = localStorage.getItem("expires_at") ?? '1';
       const expiresAt = JSON.parse(expiration);
       return moment(expiresAt);
     }

@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using UserManagement.Domain.Auth;
 using UserManagement.Domain.Shared;
 using UserManagement.Domain.Users;
+using System.Collections.Generic;
+using System.Linq;
+
 
 namespace UserManagement.Controllers
 {
@@ -82,6 +85,26 @@ namespace UserManagement.Controllers
 
           return user;
         }
+
+        [HttpGet("inactive")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetInactiveUsers()
+        {
+            var inactiveUsers = await _userService.GetInactiveUsersAsync();
+
+            if (inactiveUsers == null)
+            {
+                return NotFound();
+            }
+
+            var inactiveUserDtos = inactiveUsers.Select(user =>
+                new UserDto(user.Id, user.Email, user.FirstName, user.LastName, user.Role.ToString(), user.Active)
+            );
+
+            return inactiveUserDtos.ToList();
+        }
+
+
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]

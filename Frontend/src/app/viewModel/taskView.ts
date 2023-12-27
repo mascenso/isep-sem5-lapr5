@@ -2,7 +2,7 @@ export class TaskViewModel {
     id: string;
     description: string;
     user: string; 
-    contact: string; 
+    contact: number; 
 
     constructor(taskData: any) {
         this.id = taskData.id;

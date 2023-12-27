@@ -1,7 +1,8 @@
-// pending-task-list.component.ts
 import { Component, OnInit } from "@angular/core";
-import { TaskViewModel } from "src/app/viewModel/taskView";
 import { TasksService } from "src/app/services/tasks.service";
+import { TaskPickupViewModel } from "src/app/viewModel/taskPickUp";
+import { TaskViewModel } from "src/app/viewModel/taskView";
+import { TaskVigilanceViewModel } from "src/app/viewModel/taskVigilance";
 
 @Component({
   selector: 'app-pending-task-list',
@@ -9,20 +10,48 @@ import { TasksService } from "src/app/services/tasks.service";
   styleUrls: ['./pending-task-list.component.css']
 })
 export class PendingTaskListComponent implements OnInit {
+
   pendingTaskList: TaskViewModel[] = [];
   displayedColumns: string[] = ['description', 'user name', 'user contact'];
 
-  constructor(private taskService: TasksService) {}
+  constructor(private tasksService: TasksService) { }
 
   ngOnInit(): void {
-    this.taskService.getAllPendingTasks().subscribe(
-      (tasks) => {
+    this.carregarLista();
+  }
 
-        this.pendingTaskList = tasks;
+  //UI (ViewModel) <-> Models <-> DTOs <-> Backend Services/APIs 
+
+  carregarLista() {
+    this.getPickupTasks();
+    this.getVigilanceTasks();
+  }
+
+  getPickupTasks() {
+    this.tasksService.getAllPickupDeliveryPendingTasks().subscribe(
+      (pickupTasks) => {
+        const pickupTaskList = pickupTasks.flat();
+        const pickupTaskViewModels = pickupTaskList.map((task) => new TaskPickupViewModel(task));
+        this.updatePendingTaskList(pickupTaskViewModels);
       },
-      (error) => {
-        console.error('Erro ao buscar as tarefas pendentes:', error);
+      (pickupError) => {
+        console.error('Erro ao buscar as tarefas de pick up pendentes:', pickupError);
       }
     );
+  }
+  getVigilanceTasks() {
+    this.tasksService.getAllVigilancePendingTasks().subscribe(
+      (vigilanceTasks) => {
+        const vigilanceTaskList = vigilanceTasks.flat();
+        const vigilanceTaskViewModels = vigilanceTaskList.map((task) => new TaskVigilanceViewModel(task));
+        this.updatePendingTaskList(vigilanceTaskViewModels);
+      },
+      (vigilanceError) => {
+        console.error('Erro ao buscar as tarefas de vigilância pendentes:', vigilanceError);
+      }
+    );
+  }
+  updatePendingTaskList(tasks: TaskViewModel[]) {
+    this.pendingTaskList = this.pendingTaskList.concat(tasks);
   }
 }

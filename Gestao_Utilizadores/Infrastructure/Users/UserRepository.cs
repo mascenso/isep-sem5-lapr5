@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UserManagement.Domain.Users;
 using UserManagement.Infrastructure.Shared;
+using System.Collections.Generic;
+
 
 namespace UserManagement.Infrastructure.Users
 {
@@ -21,6 +23,12 @@ namespace UserManagement.Infrastructure.Users
       // Ensure the email comparison is case-insensitive
       return await this._objs.FirstOrDefaultAsync(u => EF.Functions.Like(u.Email.Value, email));
     }
+
+    public async Task<IEnumerable<User>> GetInactiveUsersAsync()
+    {
+        return await this._objs.Where(u => !u.Active).ToListAsync();
+    }
+
   }
 
 }

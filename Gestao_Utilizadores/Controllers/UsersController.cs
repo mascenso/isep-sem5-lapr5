@@ -9,6 +9,7 @@ using UserManagement.Domain.Shared;
 using UserManagement.Domain.Users;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Cors;
 
 
 namespace UserManagement.Controllers
@@ -166,7 +167,6 @@ namespace UserManagement.Controllers
           }
         }
 
-        [Authorize]
         [HttpGet("validate-token")]
         public async Task<ActionResult<TokenValidationResponseDto>> ValidateTokenWithRole([FromQuery] string requiredRole)
         {

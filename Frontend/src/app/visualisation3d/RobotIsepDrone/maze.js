@@ -4,7 +4,7 @@ import Wall from "./wall.js";
 import WallWindow from "./wallWindow.js";
 import Door from "./door.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-
+import ToolTipManager from './toolTipManager.js'
 /*
  * parameters = {
  *  url: String,
@@ -14,7 +14,8 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
  */
 
 export default class Maze {
-    constructor(parameters) {
+    constructor(parameters, tooltipsList) {
+
         this.onLoad = function (description) {
             // Store the maze's map and size
             this.map = description.map;
@@ -151,6 +152,8 @@ export default class Maze {
                         lockerModel.position.set(description.locker[i].position[0] - description.size.width / 2.0 + 0.5, 0, description.locker[i].position[1] - description.size.height / 2.0 - 0.25);
                         lockerModel.scale.set(0.5, 0.45, 0.2);
                         this.object.add(lockerModel);
+                        lockerModel.userData.name = "Olha um cacifo"
+                        tooltipsList.push(lockerModel)
                     });
                 }
             }
@@ -169,6 +172,8 @@ export default class Maze {
                         tableModel.rotation.y += Math.PI / 1.3
                         tableModel.rotation.y += this.rotation(description.tables[i].orientation)
                         this.object.add(tableModel);
+                        tableModel.userData.name = "Olha uma mesa"
+                        tooltipsList.push(tableModel)
                     });
                 }
             }
@@ -183,9 +188,11 @@ export default class Maze {
                         elevatorModel.scale.set(0.005, 0.005, 0.005);
                         //elevatorModel.rotation.y += Math.PI / 1.3
                         elevatorModel.rotation.y += this.rotation(description.elevators[i].orientation)
-                        console.log(elevatorModel)
+                        
                         this.object.add(elevatorModel);
-
+                        elevatorModel.userData.name = "Olha um elevador"
+                        tooltipsList.push(elevatorModel)
+                        //toolTipManager.addTooltip(elevatorModel,"Olha um elevador")
                     });
                 }
             }
@@ -464,6 +471,7 @@ export default class Maze {
             elevatorModel.scale.set(0.0051, 0.005, 0.005);
             elevatorModel.rotateY(Math.PI);
             this.object.add(elevatorModel);
+            console.log(2222)
         });
         object.add(wallObject);
     }

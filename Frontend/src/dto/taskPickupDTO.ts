@@ -24,4 +24,5 @@ export interface TaskPickupRequestDTO {
   };
   approved:boolean;
   pending:boolean;
+  planned :boolean;
 }

@@ -22,8 +22,24 @@ export class TasksService {
     return this.http.post<TaskPickupRequestDTO[]>(`${this.API_URL}/api/tasks/pickupDelivery`, pickupTask);
   }
 
-  public getAllPendingTasks(): Observable<any[]> {
-    console.log("sERVICO");
-    return this.http.get<any[]>(`${this.API_URL}/api/tasks/pending`);
+  public getAllVigilancePendingTasks(): Observable<TaskVigilanceRequestDTO[]> {
+    console.log("VIGILANCE SERVIÇO ");
+
+    return this.http.get<TaskVigilanceRequestDTO[]>(`${this.API_URL}/api/tasks/pendingVigilance`);
   }
+
+  public getAllPickupDeliveryPendingTasks(): Observable<TaskPickupRequestDTO[]> {
+    console.log("PICK UP SERVIÇO ");
+
+    return this.http.get<TaskPickupRequestDTO[]>(`${this.API_URL}/api/tasks/pendingPickUp`);
+  }
+/*
+  public getAllPendingTasks(): Observable<any[]> {
+    let pendingPickUp = this.getAllPickupDeliveryPendingTasks;
+    let pendingVigilance = this.getAllVigilancePendingTasks;
+
+    const allPendingTasks: any[] = [ pendingPickUp,pendingVigilance];
+    return allPendingTasks;
+  }
+*/
 }

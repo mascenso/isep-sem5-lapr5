@@ -98,7 +98,7 @@ export default class TaskController implements ITaskController /* TODO: extends 
       return next(e);
     }
   }
-  /*
+
    public async getAllVigilancePendingTasks(req: Request, res: Response, next: NextFunction) {
   
     try {
@@ -132,7 +132,7 @@ export default class TaskController implements ITaskController /* TODO: extends 
       return next(e);
     }
   }
-   */
+
 
   public async getAllPendingTasks(req: Request, res: Response, next: NextFunction) {
 

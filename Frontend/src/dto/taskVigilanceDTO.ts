@@ -7,4 +7,6 @@ export interface TaskVigilanceRequestDTO {
   contactNumber: number;
   user:object;
   approved: boolean;
+  pending: boolean;
+  planned :boolean;
 }

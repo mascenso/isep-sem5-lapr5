@@ -8,17 +8,14 @@
       </ng-container>
       <!-- Informação do utilizador -->
       <ng-container *ngIf="column === 'user name'">
-        {{ task.user.name }}
+        {{ task.user }}
       </ng-container>
-      <!-- Caso não seja 'description' nem 'user', exibir vazio -->
       <ng-container *ngIf="column === 'user contact'">
-        {{ task.user.contacto }}
+        {{ task.contact }}
       </ng-container>
-      <!-- ... outros blocos de condição para outras colunas ... -->
     </td>
   </ng-container>
 
-  <!-- Defina a ordem das colunas -->
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>

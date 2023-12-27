@@ -1,6 +1,5 @@
 import { Task } from "./task";
 
-  
  export interface TaskPickup extends Task {
    pickupLocalization: {
      buildingId: string;

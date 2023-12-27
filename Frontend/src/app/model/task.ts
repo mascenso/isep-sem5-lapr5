@@ -4,6 +4,3 @@ export interface Task {
     user: string;
     contact: number;
   }
-  
-
-  

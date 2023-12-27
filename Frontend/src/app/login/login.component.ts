@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {Router} from "@angular/router";
 import {AuthService} from "../services/auth.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,9 @@ export class LoginComponent {
   });
 
   constructor(private authService: AuthService,
-              private router: Router) {}
+              private router: Router,
+              private _snackBar: MatSnackBar
+  ) {}
 
   onSubmit(event:Event){
     event.preventDefault();
@@ -26,13 +29,17 @@ export class LoginComponent {
 
   onLogin(event:Event) {
     if (!this.loginForm.invalid) {
-      this.authService.login(this.loginForm.controls.email.value!, this.loginForm.controls.password.value!, '').subscribe(
-        result => {
-          if (result != null) {
-            localStorage.setItem('token', Math.random().toString());
-            localStorage.setItem('role', result.role);
+      this.authService.login(this.loginForm.controls.email.value!, this.loginForm.controls.password.value!)
+        .subscribe(
+          () => {
             this.router.navigate(['home']);
-          }
+        },
+        (error) => {
+
+          this._snackBar.open("Invalid credentials!", "close", {
+            duration: 5000,
+            panelClass: ['snackbar-error']
+          });
         }
       )
     }

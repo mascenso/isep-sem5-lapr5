@@ -37,31 +37,31 @@ const MENU_ENTRIES: MenuEntry[] = [
   {
     title: "Users Management",
     icon: "person_add",
-    authorizedRoles: ['', 'Administrador'],
+    authorizedRoles: ['', 'ADMINISTRATOR'],
     redirectTo: 'users'
   },
   {
     title: "Campus management",
     icon: "domain_add",
-    authorizedRoles: ['','Administrador', 'Gestor de Campus'],
+    authorizedRoles: ['','ADMINISTRATOR', 'Gestor de Campus'],
     redirectTo: 'campus'
   },
   {
     title: "Fleet management",
     icon: "precision_manufacturing",
-    authorizedRoles: ['','Administrador', 'Gestor de Frota'],
+    authorizedRoles: ['','ADMINISTRATOR', 'Gestor de Frota'],
     redirectTo: 'fleet'
   },
   {
     title: "Tasks management",
     icon: "list_alt",
-    authorizedRoles: ['','Administrador', 'Gestor de Tarefas'],
+    authorizedRoles: ['','ADMINISTRATOR', 'Gestor de Tarefas'],
     redirectTo: 'tasks'
   },
   {
     title: "3D visualization",
     icon: "view_in_ar",
-    authorizedRoles: ['','Administrador', 'Gestor de Campus', 'Gestor de Frota', 'Gestor de Tarefas'],
+    authorizedRoles: ['','ADMINISTRATOR', 'Gestor de Campus', 'Gestor de Frota', 'Gestor de Tarefas'],
     redirectTo: 'view'
   }
 ]

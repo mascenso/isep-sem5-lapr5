@@ -17,7 +17,6 @@ export class PendingTaskListComponent implements OnInit {
   ngOnInit(): void {
     this.taskService.getAllPendingTasks().subscribe(
       (tasks) => {
-        console.log("tasks ", tasks);
 
         this.pendingTaskList = tasks;
       },

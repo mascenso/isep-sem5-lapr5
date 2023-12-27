@@ -23,7 +23,7 @@ export class TasksService {
     return this.http.post<TaskPickupRequestDTO[]>(`${this.API_URL}/api/tasks/pickupDelivery`, pickupTask);
   }
 
-  /*
+  
   public getAllVigilancePendingTasks(): Observable<TaskVigilanceRequestDTO[]> {
     return this.http.get<TaskVigilanceRequestDTO[]>(`${this.API_URL}/api/tasks/pendingVigilance`);
   }
@@ -31,7 +31,7 @@ export class TasksService {
   public getAllPickupDeliveryPendingTasks(): Observable<TaskPickupRequestDTO[]> {
     return this.http.get<TaskPickupRequestDTO[]>(`${this.API_URL}/api/tasks/pendingPickUp`);
   }
-*/
+
 
 
   public getAllPendingTasks(): Observable<TaskViewModel[]> {

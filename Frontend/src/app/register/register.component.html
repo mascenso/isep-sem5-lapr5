@@ -49,7 +49,7 @@
                     </div>
                 </mat-card-content>
                 <div class="register-button-group">
-                    <button mat-flat-button color="primary" class="btn-register btn-register-register" type="submit">Register</button>
+                    <button mat-flat-button color="primary" class="btn-register btn-register-register" type="submit" [disabled]="!registerForm.valid">Register</button>
                 </div>
             </form>
         </mat-card>

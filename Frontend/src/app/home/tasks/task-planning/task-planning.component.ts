@@ -11,15 +11,17 @@ export class TaskPlanningComponent {
   displayedColumns: string[] = ['Nº Gerações', 'Dimensão População', 'Probabilidade Cruzamento(%)', 'Probabilidade Mutacao(%)', 'Tempo limite(s)', 'Avaliação especifica', 'Nº Gerações até estabilização'];
   tasks = [{ description: 'Tarefa spy 3', value: 't1' }, { name: 'Tarefa spy 4', value: 'a2' }, { name: 'Tarefa uber 3', value: 't4' }, { name: 'Tarefa uber 4', value: 't4' }];
   selectedTasks: string[]=[];
-  inputNGenerations: number = 0;
-  inputPopDimensions: number = 0;
-  inputPCrossing: number = 0;
-  inputPMutations: number = 0;
-  inputLTime: number = 0;
-  inputTargetEvalution: number = 0;
-  inputNGenerationsToStabilization: number = 0;
+  inputNGenerations: number = 6;
+  inputPopDimensions: number = 8;
+  inputPCrossing: number = 50;
+  inputPMutations: number = 25;
+  inputLTime: number = 2;
+  inputTargetEvalution: number = 40;
+  inputNGenerationsToStabilization: number = 4;
 
-  resultado = [{}];
+
+  resultado: { sequencia: string[], tempo: number } = { sequencia: [], tempo: 0 };
+
 
   constructor(private planingService: PlaningService) { }
 
@@ -41,15 +43,17 @@ removeSelectedTask(task: string) {
     //this.planingService.planear(this.selectedTasks, this.inputNGenerations, this.inputPopDimensions, this.inputPCrossing, this.inputPMutations, this.inputLTime,this.inputTargetEvalution, this.inputNGenerationsToStabilization )
     this.planingService.planear(
       this.inputNGenerations,
-      this.inputPopDimensions/1,
-      this.inputPCrossing/100,
-      this.inputPMutations/100,
+      this.inputPopDimensions,
+      this.inputPCrossing,
+      this.inputPMutations,
       this.inputLTime,
       this.inputTargetEvalution,
       this.inputNGenerationsToStabilization
     ).subscribe(result => {
-      // Assuming 'result' is an array of objects received from the service
-      this.resultado = result; // Assign the received data to 'resultado'
+
+
+
+      this.resultado = result;
     });
 
   }

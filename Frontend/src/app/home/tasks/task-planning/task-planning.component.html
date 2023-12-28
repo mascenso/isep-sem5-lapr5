@@ -1,13 +1,21 @@
 <div>
     <!-- Input fields for user data -->
     <div *ngFor="let column of displayedColumns">
-      <mat-form-field>
-        <mat-label>{{ column }}:</mat-label>
-        <input matInput [placeholder]="'Enter ' + column" type="number" [ngModel]="getColumnValue(column)" (ngModelChange)="updateColumnValue($event, column)">
-      </mat-form-field>
+        <mat-form-field>
+            <mat-label>{{ column }}:</mat-label>
+            <input matInput [placeholder]="'Enter ' + column" type="number" [ngModel]="getColumnValue(column)"
+                (ngModelChange)="updateColumnValue($event, column)">
+        </mat-form-field>
     </div>
-  
-    <button mat-raised-button color="primary" (click)="planear()">Planear</button>
-  </div>
 
-  
+    <button mat-raised-button color="primary" (click)="planear()">Planear</button>
+
+    <!-- Mostrar resultados -->
+    <div *ngIf="resultado.sequencia.length > 0">
+        <h3>Sequência:</h3>
+        <ul>
+            <li *ngFor="let item of resultado.sequencia">{{ resultado.sequencia }}</li>
+        </ul>
+        <p>Tempo: {{ resultado.tempo }}</p>
+    </div>
+</div>

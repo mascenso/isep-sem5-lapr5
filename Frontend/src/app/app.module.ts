@@ -60,6 +60,7 @@ import { RegisterComponent } from './register/register.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { CreateTaskComponent } from './home/tasks/create-task/create-task.component';
 import {AuthInterceptor} from "./interceptors/auth.interceptor";
+import { UserProfileComponent } from './home/user-profile/user-profile.component';
 
 
 @NgModule({
@@ -98,7 +99,8 @@ import {AuthInterceptor} from "./interceptors/auth.interceptor";
     ValidateUserComponent,
     CreateUserComponent,
     RegisterComponent,
-    PrivacyPolicyComponent
+    PrivacyPolicyComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,

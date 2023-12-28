@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserResponseDTO, CreateUserRequestDTO } from '../../dto/userDTO';
+import {PatchUserDataRequestDTO} from "../../dto/patchUserDataRequestDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -39,8 +40,16 @@ export class UserService {
   }
   */
 
-  public updateUser(user: CreateUserRequestDTO): Observable<UserResponseDTO> {
-    return this.http.patch<UserResponseDTO>(`${this.API_URL}/api/users/`, user);
+  public updateUser(user: PatchUserDataRequestDTO): Observable<UserResponseDTO> {
+    return this.http.patch<UserResponseDTO>(`${this.API_URL}/api/users/patch-user`, user);
+  }
+
+  public getUserData(showSpinner?: boolean): Observable<UserResponseDTO> {
+    return this.http.get<UserResponseDTO>(`${this.API_URL}/api/users/user`);
+  }
+
+  public deleteUser(showSpinner?: boolean): Observable<any> {
+    return this.http.delete(`${this.API_URL}/api/users/delete-user`);
   }
 
 }

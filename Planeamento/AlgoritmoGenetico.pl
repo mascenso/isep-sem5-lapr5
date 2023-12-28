@@ -7,8 +7,6 @@
 :-dynamic tarefa/3.
 
 
-
-
 /*Ligacoes HTTP*/
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
@@ -35,27 +33,25 @@ tarefas_handler(Request) :-
         format('Access-Control-Allow-Headers: Content-Type, Header-Name\r\n\r\n'),
 
     http_parameters(Request, [ng(NG,[]),
-                              dp(DP,[]), 
-                              p1(P1,[p1]), 
-                              p2(P2,[]), 
-                              t(T,[]), 
-                              av(Av,[]), 
+                              dp(DP,[integer]), 
+                              p1(P1,[float]), 
+                              p2(P2,[float]), 
+                              t(T,[integer]), 
+                              av(Av,[integer]), 
                               nestab(NEstab,[])]),
-    gera_frontend(NG, DP, P1, P2, T, Av, NEstab, F),
-    reply_json(json([tarefas=F])).
+    gera_frontend(NG, DP, P1, P2, T, Av, NEstab, Seq, Temp),
+    reply_json(json([sequencia=Seq, tempo=Temp])).
 
 :- consult('BC_RobDroneGo.pl').
 :- consult('Percurso_Robots.pl').
 
 
-gera_frontend(NG,DP,P1,P2,T,Av,NEstab,F):-
-    write("DP"),write(DP), 
-        write("NG"),write(NG), 	
+gera_frontend(NG,DP,P1,P2,T,Av,NEstab,Seq, Temp):-
     (retract(geracoes(_));true), asserta(geracoes(NG)),
 	(retract(populacao(_));true), asserta(populacao(DP)),
-	%PC is P1/100, 
+	PC is P1/100, 
 	(retract(prob_cruzamento(_));true), asserta(prob_cruzamento(P1)),
-	%PM is P2/100, 
+	PM is P2/100, 
 	(retract(prob_mutacao(_));true), asserta(prob_mutacao(P2)),
 	(retract(tempo_limite(_));true), asserta(tempo_limite(T)),
     (retract(avaliacao_especifica());true), asserta(av_inferior(Av)),    
@@ -70,9 +66,11 @@ gera_frontend(NG,DP,P1,P2,T,Av,NEstab,F):-
 	av_inferior(AvEspecifica),
 	estabilizacao(NEstab),
 	get_time(Tinicial),
-	gera_geracao(0,NG,PopOrd,Tinicial,Tlimite,AvEspecifica,NEstab,0),!,
-	final_geracao(Solucao),
-    F = Solucao.
+	gera_geracao_frontend(0,NG,PopOrd,Tinicial,Tlimite,AvEspecifica,NEstab,0),!,
+	final_geracao(Ind*V),!,
+    Seq=Ind,
+	Temp=V.
+
 /*	
 criar_tarefas([]).
 
@@ -145,7 +143,6 @@ inicializa_tempos_transicao :-
     retractall(lista_tarefas(_)),  % Remove versões anteriores da lista de tarefas, se existirem
     findall(Tarefa, tarefa(Tarefa, _, _), ListaTarefas),
 	asserta(lista_tarefas(ListaTarefas)),
-	write("aqui"),
     assert_lista_tempos(ListaTarefas, ListaTarefas).
 
 /* Predicado para adicionar os tempos de transição à base de conhecimento */
@@ -159,9 +156,9 @@ assert_lista_tempos(Tarefa, [Tarefa1 | Resto]) :-
 valida_tarefa_com_outras(_, []).
 
 valida_tarefa_com_outras(Tarefa, [OutraTarefa | Resto]) :-
-    Tarefa \== OutraTarefa,
-    \+ tempo_transicao(Tarefa, OutraTarefa, _),
-    \+ tempo_transicao(OutraTarefa, Tarefa, _),
+    dif(Tarefa, OutraTarefa),
+    not(tempo_transicao(Tarefa, OutraTarefa, _)),
+    not(tempo_transicao(OutraTarefa, Tarefa, _)),
 	tarefa(Tarefa, _, DestinoT1),
 	tarefa(OutraTarefa, OrigemT2, _),
 	%Para calcular apenas o custo entre tarefas e nao durante o processamento de tarefas
@@ -326,6 +323,66 @@ gera_geracao(N,G,Pop,Tinicial,Tlimite,AvEspecifica,NEstab,Count):-
     gera_geracao(N1,G,NovaGeracao,Tinicial,Tlimite,AvEspecifica,NEstab,Count1).
 
 
+
+/* Predicado para o frontend. Assim não tem "lixo" de prints para lidar na UI*/
+gera_geracao_frontend(_,_,Pop,Ti,Tlim,_,_,_):-
+	get_time(Tf), 
+	TPassado is Tf-Ti,
+	TPassado >= Tlim, 
+	termina_geracao(Pop).
+
+gera_geracao_frontend(_,_,[Ind*V|T1],_,_,AvEspecifica,_,_):-
+	V =< AvEspecifica,
+	termina_geracao([Ind*V|T1]).
+
+gera_geracao_frontend(_,_,[Ind*V|T1],_,_,_,NEstab,Count):-
+	NEstab == Count, 
+	termina_geracao([Ind*V|T1]).
+
+gera_geracao_frontend(G,G,Pop,_,_,_,_,_):-
+	termina_geracao(Pop).
+
+gera_geracao_frontend(N,G,Pop,Tinicial,Tlimite,AvEspecifica,NEstab,Count):-
+	%Para assegurar mais aleatoridade ao cruzamento
+	random_permutation(Pop, PopAleatoria), 
+
+	cruzamento(PopAleatoria,NPop1),
+	mutacao(NPop1,NPop),
+	avalia_populacao(NPop,NPopAv),
+	ordena_populacao(NPopAv,NPopOrd),
+	ordena_populacao(Pop,PopOrd),
+	%Para minimizar a presença de repetidos na lista All (T individuos)
+	union(PopOrd, NPopOrd, All), 
+	ordena_populacao(All, AllOrd),
+
+    length(Pop, Size),
+	%Calcula o número de melhores a serem preservados, garantindo que pelo menos 30% sao preservados da população incial
+    NumeroMelhoresPreservar is round(Size * 0.3), 
+
+	%Seleciona os melhores indivíduos para preservar na próxima geração
+    seleciona_melhores(AllOrd, NumeroMelhoresPreservar, Melhores,Restantes),
+
+	%Multiplica por um numero random entre 0 e 1
+    associa_random(Restantes, RestantesComProdutos),
+	ordena_populacao(RestantesComProdutos,RestantesComProdutosOrd),
+
+	%Recupera os Av dos individuos
+    recupera_avaliacoes(RestantesComProdutosOrd, AvRecuperados), 
+
+	%Vai buscar os N-P individuos da lista dos restantes (AvRecuperados)
+	seleciona_NP_restantes(AvRecuperados, Size-NumeroMelhoresPreservar, IndividuosParaProximaGeracao),
+
+	%Inclui os melhores indivíduos na próxima geração, assim como os restantes N-P individuos da lista conjunta da população atual e dos seus descendentes. 
+	append(Melhores,IndividuosParaProximaGeracao,NovaGeracao),
+
+	N1 is N+1,
+
+	((compare(D,NovaGeracao,Pop), D == (=), Count1 is Count + 1);Count1 is 0),
+    gera_geracao_frontend(N1,G,NovaGeracao,Tinicial,Tlimite,AvEspecifica,NEstab,Count1).
+
+
+
+
 /* Predicado para finalizar o predicado*/	
 termina_geracao([Ind*V|_]):-
     (retract(final_geracao());true), asserta(final_geracao(Ind*V)),!.
@@ -341,6 +398,7 @@ associa_random([Ind*Av|Restantes], [Power-Ind*Av|RestantesComPotencia]):-
 
 /* Predicado para recuperar a Av original dos individuos . */
 recupera_avaliacoes([], []).
+
 recupera_avaliacoes([_-Ind*Av|RestantesComPotencia], [Ind*Av|RestantesAvaliacoes]):-
     recupera_avaliacoes(RestantesComPotencia, RestantesAvaliacoes).
 
@@ -383,7 +441,7 @@ gerar_pontos_cruzamento1(P1,P2):-
 	NTemp is N+1,
 	random(1,NTemp,P11),
 	random(1,NTemp,P21),
-	P11\==P21,!,
+	dif(P11,P21),!,
 	((P11<P21,!,P1=P11,P2=P21);(P1=P21,P2=P11)).
 
 gerar_pontos_cruzamento1(P1,P2):-

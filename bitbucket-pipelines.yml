@@ -9,7 +9,7 @@ pipelines:
   default:
     - parallel:
         - step:
-            name: Build and Test
+            name: Build and Test Gestao_Informacao
             caches:
               - node
             script:

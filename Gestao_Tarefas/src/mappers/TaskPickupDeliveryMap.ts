@@ -2,7 +2,7 @@ import { Mapper } from "../core/infra/Mapper";
 
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
-import {TaskPickupDelivery} from "../domain/task-agg/taskPickupDelivery";
+import { TaskPickupDelivery } from "../domain/task-agg/TaskPickupDelivery";
 import ITaskPickupDeliveryDTO from "../dto/ITaskPickupDeliveryDTO";
 import {Document, Model} from "mongoose";
 import {ITaskPickupDeliveryPersistence} from "../dataschema/ITaskPickupDeliveryPersistence";
@@ -10,7 +10,7 @@ import {ITaskPickupDeliveryPersistence} from "../dataschema/ITaskPickupDeliveryP
 export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
 
     public static toDTO( taskPickupDelivery: TaskPickupDelivery): ITaskPickupDeliveryDTO {
-  
+
       return {
             id: taskPickupDelivery.id.toString(),
             description: taskPickupDelivery.description,
@@ -25,9 +25,9 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
             planned: taskPickupDelivery.planned
       } as ITaskPickupDeliveryDTO;
     }
-  
+
     public static toDomain (taskPickupDelivery: any | Model<ITaskPickupDeliveryPersistence & Document> ): TaskPickupDelivery {
-  
+
       const taskOrError = TaskPickupDelivery.create({
             description: taskPickupDelivery.description,
             pickupLocalization: taskPickupDelivery.pickupLocalization,
@@ -42,12 +42,12 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
         },
         new UniqueEntityID(taskPickupDelivery.domainId)
       );
-  
+
       taskOrError.isFailure ? console.log(taskOrError.error) : '';
-  
+
       return taskOrError.isSuccess ? taskOrError.getValue() : null;
     }
-  
+
     public static toPersistence (taskPickupDelivery: TaskPickupDelivery): any {
       const a = {
         domainId: taskPickupDelivery.id.toString(),
@@ -65,4 +65,3 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
       return a;
     }
   }
-  

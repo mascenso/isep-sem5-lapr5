@@ -60,6 +60,7 @@ import { RegisterComponent } from './register/register.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { CreateTaskComponent } from './home/tasks/create-task/create-task.component';
 import { PendingTaskListComponent } from './home/tasks/pending-task-list/pending-task-list.component';
+import { TaskPlanningComponent } from './home/tasks/task-planning/task-planning.component';
 
 
 @NgModule({
@@ -99,7 +100,8 @@ import { PendingTaskListComponent } from './home/tasks/pending-task-list/pending
     ValidateUserComponent,
     CreateUserComponent,
     RegisterComponent,
-    PrivacyPolicyComponent
+    PrivacyPolicyComponent,
+    TaskPlanningComponent
   ],
   imports: [
     BrowserModule,

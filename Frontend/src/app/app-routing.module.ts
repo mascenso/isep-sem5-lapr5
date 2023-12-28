@@ -36,6 +36,7 @@ import {PlanRouteWithViewComponent} from "./home/tasks/plan-route-with-view/plan
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { CreateTaskComponent } from './home/tasks/create-task/create-task.component';
 import { PendingTaskListComponent } from './home/tasks/pending-task-list/pending-task-list.component';
+import { TaskPlanningComponent } from './home/tasks/task-planning/task-planning.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -86,6 +87,10 @@ const routes: Routes = [
       {
         path: 'tasks/pending-task-list',
         component: PendingTaskListComponent,
+      },
+      {
+        path: 'tasks/task-planning',
+        component: TaskPlanningComponent,
       },
       {
         path: 'view',

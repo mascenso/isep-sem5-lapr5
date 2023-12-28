@@ -19,10 +19,10 @@ export default {
   /**
    * That long string from mlab
    */
-  //databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/test",
+  databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/test",
 
   //Base de dados do DEI para demo
-  databaseURL: process.env.MONGODB_URI || "mongodb://***REMOVED***@vsgate-s1.dei.isep.ipp.pt:10199/admin",
+ //databaseURL: process.env.MONGODB_URI || "mongodb://***REMOVED***@vsgate-s1.dei.isep.ipp.pt:10199/admin",
 
   //Base de dados do DEI para testes (trash)
   //databaseURL: process.env.MONGODB_URI || "mongodb://***REMOVED***@vsgate-s1.dei.isep.ipp.pt:10199/dummyDB",

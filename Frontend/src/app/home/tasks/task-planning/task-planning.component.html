@@ -1,0 +1,13 @@
+<div>
+    <!-- Input fields for user data -->
+    <div *ngFor="let column of displayedColumns">
+      <mat-form-field>
+        <mat-label>{{ column }}:</mat-label>
+        <input matInput [placeholder]="'Enter ' + column" type="number" [ngModel]="getColumnValue(column)" (ngModelChange)="updateColumnValue($event, column)">
+      </mat-form-field>
+    </div>
+  
+    <button mat-raised-button color="primary" (click)="planear()">Planear</button>
+  </div>
+
+  

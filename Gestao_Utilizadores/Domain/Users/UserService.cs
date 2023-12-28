@@ -83,10 +83,12 @@ namespace UserManagement.Domain.Users
         throw new NotFoundException($"User with ID {userId} not found.");
       }
 
+  /*
       if (!existingUser.IsActive())
       {
         throw new BusinessRuleValidationException($"Can't patch a disabled user.");
       }
+      */
 
       // Update user properties based on the patched DTO
       existingUser.PatchUser(patchDto);

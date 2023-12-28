@@ -9,6 +9,7 @@ using UserManagement.Domain.Shared;
 using UserManagement.Domain.Users;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
 
 
 namespace UserManagement.Controllers
@@ -75,6 +76,7 @@ namespace UserManagement.Controllers
 
         // GET: api/users/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserDto>> GetUserById(Guid id)
         {
           var user = await _userService.FindUserById(new UserId(id));
@@ -108,6 +110,7 @@ namespace UserManagement.Controllers
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult> DeleteUser(Guid id)
         {
           try
@@ -121,8 +124,31 @@ namespace UserManagement.Controllers
           }
         }
 
+        // Patch: api/users/{{id}}
+        [HttpPatch("{id}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserDto>> PatchUserById(Guid id, UpdateUserRequestDto patchDto)
+        {
+          Debug.WriteLine(patchDto);
+          
+          try
+          {
+            var updatedUser = await _userService.PatchUserData(new UserId(id), patchDto);
+            return Ok(updatedUser); // 200 OK
+          }
+          catch (NotFoundException)
+          {
+            return NotFound(); // 404 Not Found
+          }
+          catch (BusinessRuleValidationException e)
+          {
+            return BadRequest(new { Message = e.Message }); // 400 Bad Request
+          }
+        }
+
         // PATCH: api/Users/5
         [HttpPatch("patch-user")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserDto>> PatchUser([FromBody] UpdateUserRequestDto patchDto)
         {
           try

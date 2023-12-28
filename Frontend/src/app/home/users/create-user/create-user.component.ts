@@ -4,7 +4,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../../../services/user.service';
 import { UserResponseDTO, CreateUserRequestDTO } from '../../../../dto/userDTO';
 import { userRole } from '../../../../../../Frontend/src/app/enums/userRole';
-//Gestao_Utilizadores/Domain/Users/UserRole.cs';
 
 @Component({
   selector: 'app-create-user',
@@ -30,7 +29,7 @@ export class CreateUserComponent {
 }
 
 public onSubmit() {
-  this.userService.registerUser(this.createUserForm.value as CreateUserRequestDTO, true).subscribe(
+  this.userService.registerSystemUser(this.createUserForm.value as CreateUserRequestDTO, true).subscribe(
     response => {
         this.createdUser = response;
         this._snackBar.open("User created!", "close", {

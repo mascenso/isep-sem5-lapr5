@@ -1,11 +1,11 @@
 <div class="profile-container">
   <div class="profile-section">
     <mat-card class="form-card-container">
-      <h2>User Profile</h2>
+      <h2>Profile</h2>
       <mat-card-content>
         <form class="form" [formGroup]="editUserDataForm" (ngSubmit)="onSubmit()">
           <p>
-            <mat-form-field class="form-field">
+            <mat-form-field class="form-field" appearance="outline">
               <mat-label>Email</mat-label>
               <input matInput formControlName="email" [readonly]="true">
               <mat-hint align="end">Email can't be changed</mat-hint>
@@ -29,7 +29,7 @@
             </mat-form-field>
           </p>
           <p>
-            <mat-form-field class="form-field">
+            <mat-form-field class="form-field" appearance="outline">
               <mat-label>Role</mat-label>
               <input matInput formControlName="role" [readonly]="true">
             </mat-form-field>

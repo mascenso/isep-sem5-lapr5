@@ -128,9 +128,7 @@ namespace UserManagement.Controllers
         [HttpPatch("{id}")]
         [AllowAnonymous]
         public async Task<ActionResult<UserDto>> PatchUserById(Guid id, UpdateUserRequestDto patchDto)
-        {
-          Debug.WriteLine(patchDto);
-          
+        { 
           try
           {
             var updatedUser = await _userService.PatchUserData(new UserId(id), patchDto);

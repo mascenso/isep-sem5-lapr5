@@ -15,8 +15,7 @@ export class HomeComponent implements OnInit {
   constructor(private authService: AuthService,
               public spinnerService: LoadingSpinnerService) {}
   ngOnInit(): void {
-    this.userRole = localStorage.getItem('role') ?? '';
-
+    this.userRole = this.authService.userRole();
   }
 
   public onLogout() {
@@ -37,31 +36,31 @@ const MENU_ENTRIES: MenuEntry[] = [
   {
     title: "Users Management",
     icon: "person_add",
-    authorizedRoles: ['', 'Administrador'],
+    authorizedRoles: ['', 'ADMINISTRATOR'],
     redirectTo: 'users'
   },
   {
     title: "Campus management",
     icon: "domain_add",
-    authorizedRoles: ['','Administrador', 'Gestor de Campus'],
+    authorizedRoles: ['','ADMINISTRATOR', 'CAMPUS_MANAGER'],
     redirectTo: 'campus'
   },
   {
     title: "Fleet management",
     icon: "precision_manufacturing",
-    authorizedRoles: ['','Administrador', 'Gestor de Frota'],
+    authorizedRoles: ['','ADMINISTRATOR', 'FLEET_MANAGER'],
     redirectTo: 'fleet'
   },
   {
     title: "Tasks management",
     icon: "list_alt",
-    authorizedRoles: ['','Administrador', 'Gestor de Tarefas'],
+    authorizedRoles: ['','ADMINISTRATOR', 'TASK_MANAGER', 'USER'],
     redirectTo: 'tasks'
   },
   {
     title: "3D visualization",
     icon: "view_in_ar",
-    authorizedRoles: ['','Administrador', 'Gestor de Campus', 'Gestor de Frota', 'Gestor de Tarefas'],
+    authorizedRoles: ['','ADMINISTRATOR', 'CAMPUS_MANAGER', 'FLEET_MANAGER', 'TASK_MANAGER'],
     redirectTo: 'view'
   }
 ]

@@ -60,7 +60,7 @@ namespace UserManagement.Controllers
         {
           try
           {
-            var responseDto = await _userService.CreateUser(userDto);
+            var responseDto = await _userService.CreateSystemUser(userDto);
             var token = this._authService.GenerateJwtToken(responseDto);
             // Include token in the response headers
             Response.Headers.Append("Authorization", "Bearer " + token);
@@ -86,6 +86,26 @@ namespace UserManagement.Controllers
           return user;
         }
 
+        [HttpGet("user")]
+        public async Task<ActionResult<UserDto>> GetUser()
+        {
+          try
+          {
+            var userIdFromClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            var userDto = await _userService.FindUserById(new UserId(userIdFromClaim));
+            return Ok(userDto); // 200 OK
+          }
+          catch (NotFoundException)
+          {
+            return NotFound(); // 404 Not Found
+          }
+          catch (BusinessRuleValidationException e)
+          {
+            return BadRequest(new { Message = e.Message }); // 400 Bad Request
+          }
+
+        }
+
         [HttpGet("inactive")]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetInactiveUsers()
@@ -107,12 +127,13 @@ namespace UserManagement.Controllers
 
 
         // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteUser(Guid id)
+        [HttpDelete("delete-user")]
+        public async Task<ActionResult> DeleteUser()
         {
           try
           {
-            await _userService.DeleteUser(new UserId(id));
+            var userIdFromClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            await _userService.DeleteUser(new UserId(userIdFromClaim));
             return NoContent(); // 204 No Content
           }
           catch (NotFoundException)
@@ -166,7 +187,6 @@ namespace UserManagement.Controllers
           }
         }
 
-        [Authorize]
         [HttpGet("validate-token")]
         public async Task<ActionResult<TokenValidationResponseDto>> ValidateTokenWithRole([FromQuery] string requiredRole)
         {

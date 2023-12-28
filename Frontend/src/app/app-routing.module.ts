@@ -35,6 +35,7 @@ import { CreateRoomComponent } from "./home/campus/create-room/create-room.compo
 import {PlanRouteWithViewComponent} from "./home/tasks/plan-route-with-view/plan-route-with-view.component"
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { CreateTaskComponent } from './home/tasks/create-task/create-task.component';
+import {UserProfileComponent} from "./home/user-profile/user-profile.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -57,6 +58,10 @@ const routes: Routes = [
         path: 'users/validate-user',
         component: ValidateUserComponent,
 
+      },
+      {
+        path: 'profile',
+        component: UserProfileComponent,
       },
       {
         path: 'campus',

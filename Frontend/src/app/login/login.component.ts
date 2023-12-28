@@ -32,7 +32,7 @@ export class LoginComponent {
       this.authService.login(this.loginForm.controls.email.value!, this.loginForm.controls.password.value!)
         .subscribe(
           () => {
-            this.router.navigate(['home']);
+            this.router.navigate(['home/profile']);
         },
         (error) => {
 

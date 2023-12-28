@@ -109,6 +109,11 @@ namespace UserManagement.Domain.Users
         this.LastName = updateDto.LastName;
       }
 
+      if (updateDto.Active != false)
+      {
+        this.Active = updateDto.Active;
+      }
+
     }
 
     public bool VerifyPassword(string password)

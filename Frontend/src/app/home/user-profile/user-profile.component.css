@@ -1,0 +1,66 @@
+
+.profile-container {
+    padding: 3rem 4rem;
+}
+
+h2 {
+    font-size: 3rem;
+    display: inline-block;
+    margin: 2rem 0rem 3rem 1.6rem;
+    color: var(--color-grey-dark);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.form-field {
+    width: 100%;
+}
+
+.form-button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form-button-group-download-submit {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.form-card-container {
+    margin: 0 auto;
+    padding: 2rem 3rem;
+    border-radius: 1rem;
+    max-width: 500px;
+}
+
+.btn-profile {
+    height: 4rem;
+}
+
+.btn-profile-download {
+    --mdc-filled-button-container-color: var(--secondary-color);
+    --mdc-filled-button-label-text-color: #fff;
+}
+
+.btn-profile-delete {
+    width: 100%;
+    height: 3rem;
+}
+.delete-account-text {
+    margin-top: 1.6rem;
+    color: var(--color-grey);
+    display: block;
+    cursor: pointer;
+}
+
+
+
+
+
+

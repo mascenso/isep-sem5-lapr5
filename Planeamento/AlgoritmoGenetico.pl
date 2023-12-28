@@ -8,17 +8,55 @@
 
 
 
+
+/*Ligacoes HTTP*/
+:- use_module(library(http/thread_httpd)).
+:- use_module(library(http/http_dispatch)).
+:- use_module(library(http/http_parameters)).
+:- use_module(library(http/http_json)).
+
+% Handler para lidar com requisições HTTP
+:- http_handler('/tarefas', tarefas_handler,[]).
+
+% Predicado para iniciar o servidor
+server(Port) :-
+    http_server(http_dispatch,
+                [ port(Port),
+                  workers(16)
+                ]).
+
+% Handler específico para caminho
+tarefas_handler(Request) :-
+    cors_enable(Request, [ methods( [get, post, options] ),
+        headers( [content_type('application/json'), header('Header-Name')] ),
+        methods_allowed([get, post, options])]),
+        format('Access-Control-Allow-Origin: *\r\n'),
+        format('Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n'),
+        format('Access-Control-Allow-Headers: Content-Type, Header-Name\r\n\r\n'),
+
+    http_parameters(Request, [ng(NG,[]),
+                              dp(DP,[]), 
+                              p1(P1,[p1]), 
+                              p2(P2,[]), 
+                              t(T,[]), 
+                              av(Av,[]), 
+                              nestab(NEstab,[])]),
+    gera_frontend(NG, DP, P1, P2, T, Av, NEstab, F),
+    reply_json(json([tarefas=F])).
+
 :- consult('BC_RobDroneGo.pl').
 :- consult('Percurso_Robots.pl').
 
 
-gera_frontend(NG,DP,P1,P2,T,Av,NEstab,F):-	
+gera_frontend(NG,DP,P1,P2,T,Av,NEstab,F):-
+    write("DP"),write(DP), 
+        write("NG"),write(NG), 	
     (retract(geracoes(_));true), asserta(geracoes(NG)),
 	(retract(populacao(_));true), asserta(populacao(DP)),
-	PC is P1/100, 
-	(retract(prob_cruzamento(_));true), asserta(prob_cruzamento(PC)),
-	PM is P2/100, 
-	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)),
+	%PC is P1/100, 
+	(retract(prob_cruzamento(_));true), asserta(prob_cruzamento(P1)),
+	%PM is P2/100, 
+	(retract(prob_mutacao(_));true), asserta(prob_mutacao(P2)),
 	(retract(tempo_limite(_));true), asserta(tempo_limite(T)),
     (retract(avaliacao_especifica());true), asserta(av_inferior(Av)),    
     (retract(estabilizacao());true), asserta(estabilizacao(NEstab)),!,
@@ -107,6 +145,7 @@ inicializa_tempos_transicao :-
     retractall(lista_tarefas(_)),  % Remove versões anteriores da lista de tarefas, se existirem
     findall(Tarefa, tarefa(Tarefa, _, _), ListaTarefas),
 	asserta(lista_tarefas(ListaTarefas)),
+	write("aqui"),
     assert_lista_tempos(ListaTarefas, ListaTarefas).
 
 /* Predicado para adicionar os tempos de transição à base de conhecimento */

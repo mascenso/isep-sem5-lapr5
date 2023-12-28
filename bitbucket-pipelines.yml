@@ -21,3 +21,9 @@ pipelines:
                 set +e  # Ignore newman fails, it should work when backend is running remotely
                 newman run tests/RobDroneGo.postman_collection.json -e tests/RobDroneGoEnv.postman_environment.json
                 set -e
+        - step:
+            name: Build and Test Gestao_Tarefas
+            script:
+              - cd Gestao_Tarefas
+              - npm install
+              - npm test

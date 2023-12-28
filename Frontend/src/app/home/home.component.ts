@@ -16,7 +16,6 @@ export class HomeComponent implements OnInit {
               public spinnerService: LoadingSpinnerService) {}
   ngOnInit(): void {
     this.userRole = this.authService.userRole();
-    console.log(this.userRole);
   }
 
   public onLogout() {

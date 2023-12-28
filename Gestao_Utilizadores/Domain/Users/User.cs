@@ -86,7 +86,7 @@ namespace UserManagement.Domain.Users
 
       if (!Enum.TryParse(dto.Role, out UserRole userRole))
       {
-        throw new BusinessRuleValidationException($"Invalid role: '{dto.Role}'");
+        throw new BusinessRuleValidationException($"Can't parse role: '{dto.Role}'");
       };
 
       // create user password

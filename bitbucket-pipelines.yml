@@ -34,4 +34,5 @@ pipelines:
             image: mcr.microsoft.com/dotnet/runtime-deps:8.0-jammy-chiseled
             script:
               - cd Gestao_Utilizadores
+              - dotnet build
               - dotnet test

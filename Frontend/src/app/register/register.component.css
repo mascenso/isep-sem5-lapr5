@@ -1,19 +1,19 @@
-
 .register-container {
   display: flex;
   flex-direction: column;
   height: 100%;
+
+}
+
+.toolbar-button-group {
+  display: flex;
+  gap: 1rem;
 }
 
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
   z-index: 99;
-}
-
-.toolbar-button-group {
-  display: flex;
-  gap: 1rem;
 }
 
 .mat-toolbar {
@@ -24,108 +24,69 @@
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
-.app-header {
-  justify-content: space-between;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);
-}
-.login-wrapper {
-	height: 100%;
-	display: flex; /* Add this line to use flexbox */
-	justify-content: center; /* Horizontally center the content */
-	align-items: center; /* Vertically center the content */
-  }
-.positronx {
-  text-decoration: none;
-  color: #ffffff;
-}
 .box {
-	/* Remove 'float: left;' and 'width: 100%;' */
-	position: relative;
-	top: 0;
-	opacity: 1;
-	/* float: left; */
-	padding: 60px 50px 40px 50px;
-	/* width: 100%; */
-	background: #fff;
-	border-radius: 10px;
-	transform: scale(1);
-	-webkit-transform: scale(1);
-	-ms-transform: scale(1);
-	z-index: 5;
-	max-width: 330px;
-  }
-.box.back {
-  transform: scale(.95);
-  -webkit-transform: scale(.95);
-  -ms-transform: scale(.95);
-  top: -20px;
-  opacity: .8;
-  z-index: -1;
+  margin: 0 auto 10rem auto;
+  width: 80%;
+  max-width: 60rem;
+  padding: 4rem 6rem;
+  border-radius: 1rem;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
-.box:before {
-  content: "";
-  width: 100%;
-  height: 30px;
-  border-radius: 10px;
-  position: absolute;
-  top: -10px;
-  background: rgba(255, 255, 255, .6);
-  left: 0;
-  transform: scale(.95);
-  -webkit-transform: scale(.95);
-  -ms-transform: scale(.95);
-  z-index: -1;
-}
-.login-wrapper .example-form {
-  min-width: 100%;
-  max-width: 300px;
-  width: 100%;
-}
-.login-wrapper .example-full-width,
-.login-wrapper .btn-block {
-  width: 100%;
-}
-.login-wrapper mat-card-header {
-  text-align: center;
-  width: 100%;
-  display: block;
-  font-weight: 700;
-}
-.login-wrapper mat-card-header mat-card-title {
-  font-size: 30px;
-  margin: 0;
-}
-.login-wrapper .mat-card {
-  padding: 40px 70px 50px;
-}
-.login-wrapper .mat-stroked-button {
-  border: 1px solid currentColor;
-  line-height: 54px;
-  background: #FFF7FA;
-}
-.login-wrapper .mat-form-field-appearance-legacy .mat-form-field-infix {
-  padding: 0.8375em 0;
-}
-.terms-text {
-    margin-bottom: 20px; /* Adjust the top margin as needed */
-    font-size: 12px; /* Adjust the font size */
-    color: gray; /* Adjust the text color */
-  }
 
-.btn-block {
-    margin-top: 20px; /* Adjust the top margin as needed */
+.register-wrapper {
+  width: 100%;
+  margin-top: 10rem;
 }
+
+.register-button-group {
+  margin-top: 1rem;
+  padding: 0 1.6rem 1rem;
+  display:flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.btn-register {
+  width: 10rem;
+  height: 4rem;
+}
+
+
+mat-card-header {
+  margin: 0 auto 4rem 0;
+}
+
+.register-text {
+  font-weight: bold;
+  font-size: 4rem;
+  color: var(--primary-color-dark);
+}
+
+.form-field {
+  padding: 0;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
 .fake-link {
-    color: blue;
-    cursor: pointer;
-    text-decoration: underline;
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .fake-link:hover {
-    color: darkblue;
+  color: darkblue;
 }
+
+.terms-text {
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+  color: var(--color-grey);
+}
+
+.terms-and-conditions {
+  display:flex;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+

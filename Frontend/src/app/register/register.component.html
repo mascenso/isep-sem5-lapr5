@@ -1,46 +1,57 @@
-<div class="register-container">
-  <mat-toolbar color="primary">
-    <span>RobDroneGo</span>
-    <div class="toolbar-button-group">
-      <button mat-button routerLink="/login">Login</button>
-      <button mat-button routerLink="/register">Register</button>
-    </div>
-  </mat-toolbar>
-  <div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
-      <mat-card class="box">
-        <mat-card-header>
-          <mat-card-title>Register</mat-card-title>
-        </mat-card-header>
-    <form class="example-form">
-    <mat-card-content>
-    <mat-form-field class="example-full-width">
-              <input matInput placeholder="Email">
-            </mat-form-field>
-    <mat-form-field class="example-full-width">
-              <input matInput placeholder="Password">
-            </mat-form-field>
-    <mat-form-field class="example-full-width">
-              <input matInput placeholder="First Name">
-            </mat-form-field>
-    <mat-form-field class="example-full-width">
-              <input matInput placeholder="Last Name">
-            </mat-form-field>
-    <mat-form-field class="example-full-width">
-              <mat-label>Choose a role...</mat-label>
-              <mat-select>
-                <mat-option [value]="roles" *ngFor="let roles of Roles">{{roles}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            <div class="terms-text">
-              By clicking Register, you accept our terms.
-              Consult our <span class="fake-link" (click)="openPrivacyPolicyDialog()">Privacy Policy</span>
-              to find out how we collect, use, and share your data.
-          </div>
-
-    </mat-card-content>
-    <button mat-stroked-button color="accent" class="btn-block">Register</button>
-    </form>
-      </mat-card>
+<div class="login-container">
+    <mat-toolbar color="primary">
+        <span>RobDroneGo</span>
+        <div class="toolbar-button-group">
+            <button mat-button routerLink="/login">Login</button>
+            <button mat-button routerLink="/register">Register</button>
+        </div>
+    </mat-toolbar>
+    <div class="register-wrapper">
+        <mat-card class="box">
+            <mat-card-header>
+                <mat-card-title class="register-text">Register</mat-card-title>
+            </mat-card-header>
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                <mat-card-content>
+                    <mat-form-field class="form-field form-field-email" appearance="outline">
+                        <mat-label>Enter your email</mat-label>
+                        <input matInput placeholder="aprende-sozinho@isep.ipp.pt" formControlName="email" required>
+                        <mat-error *ngIf="registerForm.controls.email.invalid">{{getErrorMessage()}}</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="form-field form-field-password" appearance="outline">
+                        <mat-label>Enter your password</mat-label>
+                        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+                        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+                            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <mat-form-field class="form-field"  appearance="outline">
+                        <mat-label>First Name</mat-label>
+                        <input matInput formControlName="firstName" #firstName maxlength="50">
+                        <mat-hint align="end">{{firstName.value.length}}/50</mat-hint>
+                        <mat-error *ngIf="registerForm.controls.firstName.hasError('pattern')"></mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="form-field"  appearance="outline">
+                        <mat-label>Last Name</mat-label>
+                        <input matInput formControlName="lastName" #lastName maxlength="50">
+                        <mat-hint align="end">{{lastName.value.length}}/50</mat-hint>
+                        <mat-error *ngIf="registerForm.controls.lastName.hasError('pattern')"></mat-error>
+                    </mat-form-field>
+                    <div class="terms-and-conditions">
+                        <div class="terms-text">
+                            By clicking Register, you accept our terms.
+                            Consult our <span class="fake-link" (click)="openPrivacyPolicyDialog()">Privacy Policy</span>
+                            to find out how we collect, use, and share your data.
+                        </div>
+                        <div class="terms-checkbox">
+                            <mat-checkbox color="primary" formControlName="termsAndConditions"></mat-checkbox>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <div class="register-button-group">
+                    <button mat-flat-button color="primary" class="btn-register btn-register-register" type="submit">Register</button>
+                </div>
+            </form>
+        </mat-card>
     </div>
 </div>

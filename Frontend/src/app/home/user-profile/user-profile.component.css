@@ -6,7 +6,7 @@
 h2 {
     font-size: 3rem;
     display: inline-block;
-    margin: 2rem 0rem 3rem 1.6rem;
+    margin: 2rem 0 3rem 1.6rem;
     color: var(--color-grey-dark);
 }
 
@@ -33,7 +33,6 @@ h2 {
 }
 
 .form-card-container {
-    margin: 0 auto;
     padding: 2rem 3rem;
     border-radius: 1rem;
     max-width: 500px;

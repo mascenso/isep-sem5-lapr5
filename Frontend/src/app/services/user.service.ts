@@ -15,6 +15,10 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   public registerUser(user: CreateUserRequestDTO, showSpinner?: boolean): Observable<UserResponseDTO> {
+    return this.http.post<UserResponseDTO>(`${this.API_URL}/api/users/register`, user);
+  }
+
+  public registerSystemUser(user: CreateUserRequestDTO, showSpinner?: boolean): Observable<UserResponseDTO> {
     return this.http.post<UserResponseDTO>(`${this.API_URL}/api/users/register-system-user`, user);
   }
 

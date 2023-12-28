@@ -34,8 +34,11 @@ server(Port) :-
                 ]).
 
 % Handler para lidar com solicitações OPTIONS
-:- http_handler('/caminho', caminho_handler, [methods([get, post, options])]).
-:- http_handler('/tarefas', tarefas_handler, [methods([get, post, options])]).
+:- http_handler('/caminho', caminho_handler, [methods([get, post, options]]).
+:- http_handler('/tarefas', tarefas_handler, []).
+
+server(Port) :-
+        http_server(http_dispatch, [ port(Port), workers(16) ]).
 
 
 % Predicado para parar o servidor

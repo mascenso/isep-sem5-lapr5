@@ -3,7 +3,7 @@
 #  This template allows you to validate your NodeJS code.
 #  The workflow allows running tests and code linting on the default branch.
 
-image: node:16
+image: node:18.18.0
 
 pipelines:
   default:
@@ -15,9 +15,17 @@ pipelines:
             script:
               - cd Gestao_Informacao
               - npm install
+              - npm run build
               - npm test
               - npm install -g newman
               - |
                 set +e  # Ignore newman fails, it should work when backend is running remotely
                 newman run tests/RobDroneGo.postman_collection.json -e tests/RobDroneGoEnv.postman_environment.json
                 set -e
+        - step:
+            name: Build and Test Gestao_Tarefas
+            script:
+              - cd Gestao_Tarefas
+              - npm install
+              - npm run build
+              - npm test

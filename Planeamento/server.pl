@@ -27,18 +27,16 @@
 :-cria_grafo_piso(b1).
 :-cria_grafo_piso(c3).
 
+% Handler para lidar com solicitações OPTIONS
+:- http_handler('/caminho', caminho_handler, [methods([get, post, options])]).
+:- http_handler('/tarefas', tarefas_handler, [methods([get, post, options])]).
+
+
 server(Port) :-
     http_server(http_dispatch,
                 [ port(Port),
                   workers(16)
                 ]).
-
-% Handler para lidar com solicitações OPTIONS
-:- http_handler('/caminho', caminho_handler, [methods([get, post, options]]).
-:- http_handler('/tarefas', tarefas_handler, []).
-
-server(Port) :-
-        http_server(http_dispatch, [ port(Port), workers(16) ]).
 
 
 % Predicado para parar o servidor
@@ -67,9 +65,9 @@ tarefas_handler(Request) :-
                 format('Access-Control-Allow-Origin: *\r\n'),
                 format('Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n'),
                 format('Access-Control-Allow-Headers: Content-Type, Header-Name\r\n\r\n'),
-                    http_parameters(Request, [NG,DP,P1,P2,T,Av,NEstab]),
+    http_parameters(Request, [NG,DP,P1,P2,T,Av,NEstab]),
     gera_frontend(NG,DP,P1,P2,T,Av,NEstab,F),
-    reply_json(json([result=F])).
+    reply_json_dict(json{result: F}).
 
 stop_server_before_exit :-
     stop_server(8081),

@@ -61,7 +61,7 @@ export class ValidateUserComponent implements OnInit {
 
       console.log('Accepted user:', approvedUser);
 
-      this.userService.updateUser(user.id, approvedUser as UserResponseDTO).subscribe(
+      this.userService.updateUserById(user.id, approvedUser as UserResponseDTO).subscribe(
         (approvedUser) => {
           this._snackBar.open("User approved!", "close", {
             duration: 5000,
@@ -84,7 +84,7 @@ export class ValidateUserComponent implements OnInit {
     
   
     rejectUser(user: UserResponseDTO): void {
-      this.userService.deleteUser(user.id).subscribe(
+      this.userService.deleteUserById(user.id).subscribe(
         response => {this._snackBar.open("User deleted!", "close", {
           duration: 5000,
           panelClass: ['snackbar-success']

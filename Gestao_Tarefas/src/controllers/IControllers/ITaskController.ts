@@ -6,8 +6,8 @@ export default interface ITaskController  {
   createVigilanceTask(req: Request, res: Response, next: NextFunction);
   createPickupDeliveryTask(req: Request, res: Response, next: NextFunction);
   getAllTasks(req: Request, res: Response, next: NextFunction);
-  //getAllVigilancePendingTasks(eq: Request, res: Response, next: NextFunction);
-  //getAllPickupDeliveryPendingTasks(eq: Request, res: Response, next: NextFunction);
-  getAllPendingTasks(eq: Request, res: Response, next: NextFunction);
-
+  getAllVigilancePendingTasks(eq: Request, res: Response, next: NextFunction);
+  getAllPickupDeliveryPendingTasks(eq: Request, res: Response, next: NextFunction);
+  getAllPendingTasks(req: Request, res: Response, next: NextFunction);
+  getAllApprovedTasks(req: Request, res: Response, next: NextFunction);
 }

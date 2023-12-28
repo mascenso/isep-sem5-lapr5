@@ -1,30 +1,38 @@
-<mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between center">
-  <span>
-    <button mat-button routerLink="/">Login</button>
-    <button mat-button routerLink="/register">Register</button>
-  </span>
-</mat-toolbar>
-<div class="title-app">RobDroneGo App</div>
-<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
-  <mat-card class="box">
-    <mat-card-header>
-      <mat-card-title>Log in</mat-card-title>
-    </mat-card-header>
-    <form (ngSubmit)="onLogin($event, email, password, selectedRole)">
-      <mat-card-content>
-        <mat-form-field class="example-full-width">
-          <input matInput placeholder="Email" name="email" required [(ngModel)]="email">
-        </mat-form-field>
-        <mat-form-field class="example-full-width">
-          <input matInput type="password" placeholder="Password" name="password" required [(ngModel)]="password">
-        </mat-form-field>
-        <select name="role" [(ngModel)]="selectedRole">
-          <option [ngValue]="role" *ngFor="let role of roles">{{ role }}</option>
-        </select>
-      </mat-card-content>
-      <button mat-stroked-button color="accent" class="btn-block" type="submit">Log in</button>
-    </form>
-  </mat-card>
+<div class="login-container">
+  <mat-toolbar color="primary">
+    <span>RobDroneGo</span>
+    <div class="toolbar-button-group">
+      <button mat-button routerLink="/login">Login</button>
+      <button mat-button routerLink="/register">Register</button>
+    </div>
+  </mat-toolbar>
+  <div class="login-wrapper">
+    <mat-card class="box">
+      <mat-card-header>
+        <mat-card-title class="login-text">Login</mat-card-title>
+      </mat-card-header>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit($event)">
+        <mat-card-content>
+          <mat-form-field class="form-field form-field-email" appearance="outline">
+            <mat-label>Enter your email</mat-label>
+            <input matInput placeholder="aprende-sozinho@isep.ipp.pt" formControlName="email" required>
+            <mat-error *ngIf="loginForm.controls.email.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="form-field form-field-password" appearance="outline">
+            <mat-label>Enter your password</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </mat-form-field>
+        </mat-card-content>
+        <div class="login-button-group">
+          <button mat-flat-button class="btn-login btn-login-register" routerLink="/register" type="button">Register</button>
+          <button mat-flat-button color="primary" class="btn-login btn-login-login" type="submit">Login</button>
+        </div>
+      </form>
+    </mat-card>
+  </div>
 </div>
 
 

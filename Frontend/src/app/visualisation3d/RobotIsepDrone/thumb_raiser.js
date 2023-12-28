@@ -22,7 +22,7 @@ import Fog from "./fog.js";
 import Camera from "./camera.js";
 import Animations from "./animations.js";
 import CubeTexture from "./cubetexture.js";
-
+import ToolTipManager from './toolTipManager.js'
 import UserInterface from "./user_interface.js";
 
 /*
@@ -167,6 +167,7 @@ import UserInterface from "./user_interface.js";
  */
 
 export default class ThumbRaiser {
+    
     constructor(generalParameters, mazeParameters, playerParameters, lightsParameters, fogParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters, cubeTexturesParameters, buildingService, floorService) {
         this.generalParameters = merge({}, generalData, generalParameters);
         this.mazeParameters = merge({}, mazeData, mazeParameters);
@@ -203,8 +204,14 @@ export default class ThumbRaiser {
         // Add background
         this.scene3D.background = this.cubeTexture.textures;
 
+        // Create a renderer and turn on shadows in the renderer
+        let canvas = document.getElementById("canvasForRender");
+        this.renderer = new THREE.WebGLRenderer({ canvas: canvas });
+
+        this.tooltipsList =[]
+        //console.log(this.toolTipManager)
         // Create the maze
-        this.maze = new Maze(this.mazeParameters);
+        this.maze = new Maze(this.mazeParameters, this.tooltipsList);
 
         // Create the player
         this.player = new Player(this.playerParameters);
@@ -229,9 +236,7 @@ export default class ThumbRaiser {
         this.statistics.dom.style.visibility = "hidden";
         document.body.appendChild(this.statistics.dom);
 
-        // Create a renderer and turn on shadows in the renderer
-        let canvas = document.getElementById("canvasForRender");
-        this.renderer = new THREE.WebGLRenderer({ canvas: canvas });
+
         if (this.generalParameters.setDevicePixelRatio) {
             this.renderer.setPixelRatio(window.devicePixelRatio);
         }
@@ -557,6 +562,7 @@ export default class ThumbRaiser {
     }
 
     mouseMove(event) {
+
         if (event.buttons == 1 || event.buttons == 2) { // Primary or secondary button down
             if (this.changeCameraDistance || this.changeCameraOrientation || this.dragMiniMap) { // Mouse action in progress
                 // Compute mouse movement and update mouse position
@@ -583,6 +589,45 @@ export default class ThumbRaiser {
                     }
                 }
             }
+        }else{
+
+            /**
+             * RAYCASTER - TOOLTIP 
+             *  
+            this.raycaster = new THREE.Raycaster();
+            this.mouse = new THREE.Vector2();
+            this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            this.mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+            // Configurar o raio a partir das coordenadas do mouse
+            this.raycaster.setFromCamera(this.mouse, this.activeViewCamera.perspective);
+
+            // Verificar se o raio intersecta os objetos de tooltips
+            var intersects = this.raycaster.intersectObjects(this.tooltipsList,false);
+
+            // Exibir tooltip se houver interseção
+            if (intersects.length > 0) {
+                for (let i = 0; i < intersects.length; i++) {
+                    var tooltipText = intersects[i].object.userData.name;
+                    console.log("Tooltip: " + tooltipText);
+
+                    // Atualizar a posição da tooltip com base nas coordenadas do mouse
+                    this.toolTipFloor.style.left = `${event.clientX }px`; // Adicione algum espaço para não cobrir o cursor
+                    this.toolTipFloor.style.top = `${event.clientY }px`;
+
+                    // Atualizar o conteúdo da tooltip
+                    this.toolTipFloor.innerHTML = tooltipText;
+
+                    // Exibir a tooltip
+                    this.toolTipFloor.style.display = 'block';
+                }
+
+
+            }else {
+            // Ocultar a tooltip se não houver interseção
+            this.toolTipFloor.style.display = 'none';
+            }
+            */
         }
     }
 
@@ -893,12 +938,12 @@ export default class ThumbRaiser {
                 this.mazeParameters.url = path.floorMap;
     
                 if(newPosition == null){                
-                    this.maze = new Maze(this.mazeParameters);
+                    this.maze = new Maze(this.mazeParameters, this.tooltipsList);
                 }else{
                     //muda a posicao inicial do robot, util para quando sai de elevador ou passagem
                     this.mazeParameters.url.initialPosition = newPosition;
                     
-                    this.maze = new Maze(this.mazeParameters); 
+                    this.maze = new Maze(this.mazeParameters,this.tooltipsList); 
                 }
             }else{
                 this.floorActual = path;
@@ -908,12 +953,12 @@ export default class ThumbRaiser {
                 this.mazeParameters.url = path;
     
                 if(newPosition == null){                
-                    this.maze = new Maze(this.mazeParameters);
+                    this.maze = new Maze(this.mazeParameters,this.tooltipsList);
                 }else{
                     //muda a posicao inicial do robot, util para quando sai de elevador ou passagem
                     //this.mazeParameters.url.initialPosition = newPosition;
                     this.mazeParameters.initialPos = newPosition;
-                    this.maze = new Maze(this.mazeParameters); 
+                    this.maze = new Maze(this.mazeParameters,this.tooltipsList); 
                     while(!this.maze.loaded){
                         await new Promise(resolve => setTimeout(resolve, 500));
                     }

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserResponseDTO, CreateUserRequestDTO } from '../../dto/userDTO';
+import {PatchUserDataRequestDTO} from "../../dto/patchUserDataRequestDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -14,47 +15,35 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   public registerUser(user: CreateUserRequestDTO, showSpinner?: boolean): Observable<UserResponseDTO> {
-    const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-    });
+    return this.http.post<UserResponseDTO>(`${this.API_URL}/api/users/register`, user);
+  }
 
-    const options = {
-        headers: headers,
-        reportProgress: showSpinner
-    };
-
-    console.log(user);
-    const url = `http://localhost:5000/api/users/`;
-
-    return this.http.post<UserResponseDTO>(`${this.API_URL}/api/users/register`, user, options);
-    //return this.http.post<UserResponseDTO>(url, user);
+  public registerSystemUser(user: CreateUserRequestDTO, showSpinner?: boolean): Observable<UserResponseDTO> {
+    return this.http.post<UserResponseDTO>(`${this.API_URL}/api/users/register-system-user`, user);
   }
 
   public GetInactiveUsers(): Observable<UserResponseDTO[]> {
     return this.http.get<UserResponseDTO[]>(`${this.API_URL}/api/users/inactive`);
   }
 
-  /*
-  public getAllUsers(): Observable<UserResponseDTO[]> {
-    return this.http.get<UserResponseDTO[]>(`${this.API_URL}/api/users/`);
-  }
-  */
-
-  /*
-  public updateUser(user: CreateUserRequestDTO): Observable<UserResponseDTO> {
+  public updateUser(user: PatchUserDataRequestDTO): Observable<UserResponseDTO> {
     return this.http.patch<UserResponseDTO>(`${this.API_URL}/api/users/patch-user`, user);
   }
-  */
-
   
-  public updateUser(userId: string, user: Partial<CreateUserRequestDTO>): Observable<UserResponseDTO> {
+  public updateUserById(userId: string, user: Partial<CreateUserRequestDTO>): Observable<UserResponseDTO> {
     return this.http.patch<UserResponseDTO>(`${this.API_URL}/api/users/${userId}`, user);
   }
   
-  
-
-  public deleteUser(userId: string): Observable<UserResponseDTO> {
+  public deleteUserById(userId: string): Observable<UserResponseDTO> {
     return this.http.delete<UserResponseDTO>(`${this.API_URL}/api/users/${userId}`);
+  }
+
+  public getUserData(showSpinner?: boolean): Observable<UserResponseDTO> {
+    return this.http.get<UserResponseDTO>(`${this.API_URL}/api/users/user`);
+  }
+
+  public deleteUser(showSpinner?: boolean): Observable<any> {
+    return this.http.delete(`${this.API_URL}/api/users/delete-user`);
   }
 
 }

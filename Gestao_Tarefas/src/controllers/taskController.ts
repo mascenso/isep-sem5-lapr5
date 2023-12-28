@@ -30,7 +30,7 @@ export default class TaskController implements ITaskController /* TODO: extends 
       }
 
       const taskDTO = taskOrError.getValue();
-      return res.json( taskDTO ).status(201);
+      return res.json(taskDTO).status(201);
     }
     catch (e) {
       return next(e);
@@ -45,7 +45,7 @@ export default class TaskController implements ITaskController /* TODO: extends 
       }
 
       const taskDTO = taskOrError.getValue();
-      return res.json( taskDTO ).status(201);
+      return res.json(taskDTO).status(201);
     }
     catch (e) {
       return next(e);
@@ -60,7 +60,7 @@ export default class TaskController implements ITaskController /* TODO: extends 
       }
 
       const taskDTO = taskOrError.getValue();
-      return res.json( taskDTO ).status(201);
+      return res.json(taskDTO).status(201);
     }
     catch (e) {
       return next(e);
@@ -76,7 +76,7 @@ export default class TaskController implements ITaskController /* TODO: extends 
       }
 
       const taskDTO = taskOrError.getValue();
-      return res.status(201).json( taskDTO );
+      return res.status(201).json(taskDTO);
     }
     catch (e) {
       return next(e);
@@ -92,65 +92,84 @@ export default class TaskController implements ITaskController /* TODO: extends 
       }
 
       const tasksDTO = tasksOrError.getValue();
+      return res.status(201).json(tasksDTO);
+    }
+    catch (e) {
+      return next(e);
+    }
+  }
+
+   public async getAllVigilancePendingTasks(req: Request, res: Response, next: NextFunction) {
+  
+    try {
+      const tasksOrError = await this.taskServiceInstance.getAllVigilancePendingTasks() as Result<Array<ITaskVigilanceDTO[]>>;
+  
+      if (tasksOrError.isFailure) {
+        return res.status(404).send();
+      }
+  
+      const tasksDTO = tasksOrError.getValue();
+      return res.status(201).json( tasksDTO );
+    }
+    catch (e) {
+      return next(e);
+    }
+  }  
+  
+  public async getAllPickupDeliveryPendingTasks(req: Request, res: Response, next: NextFunction) {
+  
+    try {
+      const tasksOrError = await this.taskServiceInstance.getAllPickupDeliveryPendingTasks() as Result<Array<ITaskPickupDeliveryDTO[]>>;
+  
+      if (tasksOrError.isFailure) {
+        return res.status(404).send();
+      }
+  
+      const tasksDTO = tasksOrError.getValue();
       return res.status(201).json( tasksDTO );
     }
     catch (e) {
       return next(e);
     }
   }
-/*
- public async getAllVigilancePendingTasks(req: Request, res: Response, next: NextFunction) {
 
-  try {
-    const tasksOrError = await this.taskServiceInstance.getAllVigilancePendingTasks() as Result<Array<ITaskVigilanceDTO[]>>;
 
-    if (tasksOrError.isFailure) {
-      return res.status(404).send();
+  public async getAllPendingTasks(req: Request, res: Response, next: NextFunction) {
+
+
+    try {
+      const tasksOrError = await this.taskServiceInstance.getAllPendingTasks() as Result<Array<any[]>>;
+
+      if (tasksOrError.isFailure) {
+        return res.status(404).send();
+      }
+
+      const tasksDTO = tasksOrError.getValue();
+      return res.status(201).json(tasksDTO);
+    }
+    catch (e) {
+      return next(e);
     }
 
-    const tasksDTO = tasksOrError.getValue();
-    return res.status(201).json( tasksDTO );
   }
-  catch (e) {
-    return next(e);
-  }
-}  
 
-public async getAllPickupDeliveryPendingTasks(req: Request, res: Response, next: NextFunction) {
+  public async getAllApprovedTasks(req: Request, res: Response, next: NextFunction) {
 
-  try {
-    const tasksOrError = await this.taskServiceInstance.getAllPickupDeliveryPendingTasks() as Result<Array<ITaskPickupDeliveryDTO[]>>;
 
-    if (tasksOrError.isFailure) {
-      return res.status(404).send();
+    try {
+      const tasksOrError = await this.taskServiceInstance.getAllApprovedTasks() as Result<Array<any[]>>;
+
+      if (tasksOrError.isFailure) {
+        return res.status(404).send();
+      }
+
+      const tasksDTO = tasksOrError.getValue();
+      return res.status(201).json(tasksDTO);
+    }
+    catch (e) {
+      return next(e);
     }
 
-    const tasksDTO = tasksOrError.getValue();
-    return res.status(201).json( tasksDTO );
   }
-  catch (e) {
-    return next(e);
-  }
-}
- */
-
-public async getAllPendingTasks(req: Request, res: Response, next: NextFunction) {
-
-
-  try {
-    const tasksOrError = await this.taskServiceInstance.getAllPendingTasks() as Result<Array<any[]>>;
-
-    if (tasksOrError.isFailure) {
-      return res.status(404).send();
-    }
-
-    const tasksDTO = tasksOrError.getValue();
-    return res.status(201).json( tasksDTO );
-  }
-  catch (e) {
-    return next(e);
-  }
-
-}
 
 }

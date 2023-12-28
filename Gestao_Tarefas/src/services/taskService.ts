@@ -133,57 +133,113 @@ export default class TaskService implements ITaskService {
 
   public async getAllVigilancePendingTasks(): Promise<Result<Array<ITaskVigilanceDTO[]>>> {
     try {
-      const allPendingTasks = await this.taskVigilanceRepo.findAll();
-  
+      const allTasks = await this.taskVigilanceRepo.findAll();
+
       // Filtra apenas as tarefas onde 'pending' é true
-      const filteredPendingTasks = allPendingTasks.filter(task => task.pending === true);
-  
+      const filteredPendingTasks = allTasks.filter(task => task.pending === true);
+
       const pendingTasksDTO = filteredPendingTasks.map((task) => TaskVigilanceMap.toDTO(task));
-  
-      return Result.ok<Array<ITaskVigilanceDTO[]>>([pendingTasksDTO]); 
+
+      return Result.ok<Array<ITaskVigilanceDTO[]>>([pendingTasksDTO]);
     } catch (error) {
       return Result.fail<Array<ITaskVigilanceDTO[]>>(error); // Retorna falha em caso de erro
     }
   }
 
 
-public async getAllPickupDeliveryPendingTasks(): Promise<Result<Array<ITaskPickupDeliveryDTO[]>>> {
-  try {
-    const allPendingTasks = await this.taskPickupDeliveryRepo.findAll();
+  public async getAllPickupDeliveryPendingTasks(): Promise<Result<Array<ITaskPickupDeliveryDTO[]>>> {
+    try {
+      const allTasks = await this.taskPickupDeliveryRepo.findAll();
 
-    // Filtra apenas as tarefas onde 'pending' é true
-    const filteredPendingTasks = allPendingTasks.filter(task => task.pending === true);
+      // Filtra apenas as tarefas onde 'pending' é true
+      const filteredPendingTasks = allTasks.filter(task => task.pending === true);
 
-    const pendingTasksDTO = filteredPendingTasks.map((task) => TaskPickupDeliveryMap.toDTO(task));
+      const pendingTasksDTO = filteredPendingTasks.map((task) => TaskPickupDeliveryMap.toDTO(task));
 
-    return Result.ok<Array<ITaskPickupDeliveryDTO[]>>([pendingTasksDTO]); 
-  } catch (error) {
-    return Result.fail<Array<ITaskPickupDeliveryDTO[]>>(error); // Retorna falha em caso de erro
-  }
-}
-
-public async getAllPendingTasks(): Promise<Result<Array<any[]>>> {
-  try {
-    const pickUptasksOrError = await this.getAllPickupDeliveryPendingTasks();
-    const vigilanceTasksOrError = await this.getAllVigilancePendingTasks();
-
-    if (pickUptasksOrError.isFailure || vigilanceTasksOrError.isFailure) {
-      return Result.fail<Array<any[]>>([
-        pickUptasksOrError.errorValue(),
-        vigilanceTasksOrError.errorValue(),
-      ]);
+      return Result.ok<Array<ITaskPickupDeliveryDTO[]>>([pendingTasksDTO]);
+    } catch (error) {
+      return Result.fail<Array<ITaskPickupDeliveryDTO[]>>(error); // Retorna falha em caso de erro
     }
-
-    const allPendingTasks: any[] = [
-      ...pickUptasksOrError.getValue(),
-      ...vigilanceTasksOrError.getValue(),
-    ];
-
-    return Result.ok<Array<any[]>>(allPendingTasks);
-  } catch (error) {
-    return Result.fail<Array<any[]>>([error]); // Retorna falha em caso de erro
   }
-}
 
+  public async getAllPendingTasks(): Promise<Result<Array<any[]>>> {
+    try {
+      const pickUptasksOrError = await this.getAllPickupDeliveryPendingTasks();
+      const vigilanceTasksOrError = await this.getAllVigilancePendingTasks();
+
+      if (pickUptasksOrError.isFailure || vigilanceTasksOrError.isFailure) {
+        return Result.fail<Array<any[]>>([
+          pickUptasksOrError.errorValue(),
+          vigilanceTasksOrError.errorValue(),
+        ]);
+      }
+
+      const allPendingTasks: any[] = [
+        ...pickUptasksOrError.getValue(),
+        ...vigilanceTasksOrError.getValue(),
+      ];
+
+      return Result.ok<Array<any[]>>(allPendingTasks);
+    } catch (error) {
+      return Result.fail<Array<any[]>>([error]); // Retorna falha em caso de erro
+    }
+  }
+
+  public async getAllApprovedTasks(): Promise<Result<Array<any[]>>> {
+    try {
+      const pickUptasksOrError = await this.getAllPickupDeliveryApprovedTasks();
+      const vigilanceTasksOrError = await this.getAllVigilanceApprovedTasks();
+
+      if (pickUptasksOrError.isFailure || vigilanceTasksOrError.isFailure) {
+        return Result.fail<Array<any[]>>([
+          pickUptasksOrError.errorValue(),
+          vigilanceTasksOrError.errorValue(),
+        ]);
+      }
+
+      const allPendingTasks: any[] = [
+        ...pickUptasksOrError.getValue(),
+        ...vigilanceTasksOrError.getValue(),
+      ];
+
+      return Result.ok<Array<any[]>>(allPendingTasks);
+    } catch (error) {
+      return Result.fail<Array<any[]>>([error]); // Retorna falha em caso de erro
+    }
+  }
+
+
+  public async getAllPickupDeliveryApprovedTasks(): Promise<Result<Array<ITaskVigilanceDTO[]>>> {
+    try {
+      const allTasks = await this.taskVigilanceRepo.findAll();
+
+      // Filtra apenas as tarefas onde 'pending' é true
+      const filteredApprovedTasks = allTasks.filter(task => task.approved === true);
+      const filteredApprovedNotPlannedTasks = filteredApprovedTasks.filter(task => task.planned === false);
+
+      const pendingTasksDTO = filteredApprovedNotPlannedTasks.map((task) => TaskVigilanceMap.toDTO(task));
+
+      return Result.ok<Array<ITaskVigilanceDTO[]>>([pendingTasksDTO]);
+    } catch (error) {
+      return Result.fail<Array<ITaskVigilanceDTO[]>>(error); // Retorna falha em caso de erro
+    }
+  }
+
+
+  public async getAllVigilanceApprovedTasks(): Promise<Result<Array<ITaskPickupDeliveryDTO[]>>> {
+    try {
+      const allTasks = await this.taskPickupDeliveryRepo.findAll();
+
+      // Filtra apenas as tarefas onde 'pending' é true
+      const filteredApprovedTasks = allTasks.filter(task => task.approved === true);
+      const filteredApprovedNotPlannedTasks = filteredApprovedTasks.filter(task => task.planned === false);
+
+      const pendingTasksDTO = filteredApprovedNotPlannedTasks.map((task) => TaskPickupDeliveryMap.toDTO(task));
+
+      return Result.ok<Array<ITaskPickupDeliveryDTO[]>>([pendingTasksDTO]);
+    } catch (error) {
+      return Result.fail<Array<ITaskPickupDeliveryDTO[]>>(error); // Retorna falha em caso de erro
+    }
+  }
 
 }

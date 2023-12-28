@@ -97,3 +97,12 @@ body {
     width: 100%;
     height: 100%;
   }
+
+  #toolTipFloor{
+    position: absolute;
+    z-index: 10;
+    background: #fff;
+    padding: 10px;
+    border: 1px solid #000;
+    display: none;
+  }

@@ -29,6 +29,14 @@ export class UserService {
   public updateUser(user: PatchUserDataRequestDTO): Observable<UserResponseDTO> {
     return this.http.patch<UserResponseDTO>(`${this.API_URL}/api/users/patch-user`, user);
   }
+  
+  public updateUserById(userId: string, user: Partial<CreateUserRequestDTO>): Observable<UserResponseDTO> {
+    return this.http.patch<UserResponseDTO>(`${this.API_URL}/api/users/${userId}`, user);
+  }
+  
+  public deleteUserById(userId: string): Observable<UserResponseDTO> {
+    return this.http.delete<UserResponseDTO>(`${this.API_URL}/api/users/${userId}`);
+  }
 
   public getUserData(showSpinner?: boolean): Observable<UserResponseDTO> {
     return this.http.get<UserResponseDTO>(`${this.API_URL}/api/users/user`);

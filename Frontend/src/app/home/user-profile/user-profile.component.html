@@ -1,0 +1,53 @@
+<div class="profile-container">
+  <div class="profile-section">
+    <mat-card class="form-card-container">
+      <h2>Profile</h2>
+      <mat-card-content>
+        <form class="form" [formGroup]="editUserDataForm" (ngSubmit)="onSubmit()">
+          <p>
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" [readonly]="true">
+              <mat-hint align="end">Email can't be changed</mat-hint>
+
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="form-field">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName" #firstName maxlength="50">
+              <mat-hint align="end">{{firstName.value.length}}/50</mat-hint>
+              <mat-error *ngIf="editUserDataForm.controls.firstName.hasError('pattern')"></mat-error>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="form-field">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName" #lastName maxlength="50">
+              <mat-hint align="end">{{lastName.value.length}}/50</mat-hint>
+              <mat-error *ngIf="editUserDataForm.controls.lastName.hasError('pattern')"></mat-error>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>Role</mat-label>
+              <input matInput formControlName="role" [readonly]="true">
+            </mat-form-field>
+          </p>
+          <div class="form-button-group">
+            <div class="form-button-group-download-submit">
+              <button mat-flat-button class="btn-profile btn-profile-download" type="button" (click)="onDownload()">Download data</button>
+              <div>
+                <button mat-flat-button class="btn-profile btn-profile-submit" color="primary" type="submit" [disabled]="!editUserDataForm.valid">Submit</button>
+                <a class="delete-account-text" (click)="deleteAccount = !deleteAccount">Delete my account</a>
+              </div>
+            </div>
+            <div class="form-button-group-delete" *ngIf="deleteAccount">
+              <button mat-flat-button  class="btn-profile btn-profile-delete" color="warn" type="button" (click)="onDelete()">Delete account</button>
+            </div>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

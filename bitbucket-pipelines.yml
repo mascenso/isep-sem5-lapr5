@@ -31,7 +31,7 @@ pipelines:
               - npm test
         - step:
             name: Build and Test Gestao_Utilizadores
+            image: mcr.microsoft.com/dotnet/runtime-deps:8.0-jammy-chiseled
             script:
               - cd Gestao_Utilizadores
-              - image: mcr.microsoft.com/dotnet/runtime-deps:8.0-jammy-chiseled
               - dotnet test

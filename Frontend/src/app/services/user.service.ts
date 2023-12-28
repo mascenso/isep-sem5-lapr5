@@ -26,8 +26,8 @@ export class UserService {
     console.log(user);
     const url = `http://localhost:5000/api/users/`;
 
-    //return this.http.post<UserResponseDTO>(`${this.API_URL}/api/users/`, user, options);
-    return this.http.post<UserResponseDTO>(url, user);
+    return this.http.post<UserResponseDTO>(`${this.API_URL}/api/users/register`, user, options);
+    //return this.http.post<UserResponseDTO>(url, user);
   }
 
   public GetInactiveUsers(): Observable<UserResponseDTO[]> {
@@ -40,8 +40,21 @@ export class UserService {
   }
   */
 
+  /*
   public updateUser(user: CreateUserRequestDTO): Observable<UserResponseDTO> {
-    return this.http.patch<UserResponseDTO>(`${this.API_URL}/api/users/`, user);
+    return this.http.patch<UserResponseDTO>(`${this.API_URL}/api/users/patch-user`, user);
+  }
+  */
+
+  
+  public updateUser(userId: string, user: Partial<CreateUserRequestDTO>): Observable<UserResponseDTO> {
+    return this.http.patch<UserResponseDTO>(`${this.API_URL}/api/users/${userId}`, user);
+  }
+  
+  
+
+  public deleteUser(userId: string): Observable<UserResponseDTO> {
+    return this.http.delete<UserResponseDTO>(`${this.API_URL}/api/users/${userId}`);
   }
 
 }

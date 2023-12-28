@@ -59,15 +59,22 @@ caminho_handler(Request) :-
 
 % Handler específico para as tarefas
 tarefas_handler(Request) :-
-                cors_enable(Request, [ methods( [get, post, options] ),
-                                       headers( [content_type('application/json'), header('Header-Name')] ),
-                                       methods_allowed([get, post, options])]),
-                format('Access-Control-Allow-Origin: *\r\n'),
-                format('Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n'),
-                format('Access-Control-Allow-Headers: Content-Type, Header-Name\r\n\r\n'),
-    http_parameters(Request, [NG,DP,P1,P2,T,Av,NEstab]),
-    gera_frontend(NG,DP,P1,P2,T,Av,NEstab,F),
-    reply_json_dict(json{result: F}).
+    cors_enable(Request, [ methods( [get, post, options] ),
+        headers( [content_type('application/json'), header('Header-Name')] ),
+        methods_allowed([get, post, options])]),
+        format('Access-Control-Allow-Origin: *\r\n'),
+        format('Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n'),
+        format('Access-Control-Allow-Headers: Content-Type, Header-Name\r\n\r\n'),
+
+    http_parameters(Request, [ng(NG,[]),
+                              dp(DP,[]), 
+                              p1(P1,[p1]), 
+                              p2(P2,[]), 
+                              t(T,[]), 
+                              av(Av,[]), 
+                              nestab(NEstab,[])]),
+    gera_frontend(NG, DP, P1, P2, T, Av, NEstab, F),
+    reply_json(json([tarefas=F])).
 
 stop_server_before_exit :-
     stop_server(8081),

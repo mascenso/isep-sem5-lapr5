@@ -41,9 +41,9 @@ removeSelectedTask(task: string) {
     //this.planingService.planear(this.selectedTasks, this.inputNGenerations, this.inputPopDimensions, this.inputPCrossing, this.inputPMutations, this.inputLTime,this.inputTargetEvalution, this.inputNGenerationsToStabilization )
     this.planingService.planear(
       this.inputNGenerations,
-      this.inputPopDimensions,
-      this.inputPCrossing,
-      this.inputPMutations,
+      this.inputPopDimensions/1,
+      this.inputPCrossing/100,
+      this.inputPMutations/100,
       this.inputLTime,
       this.inputTargetEvalution,
       this.inputNGenerationsToStabilization
@@ -56,12 +56,39 @@ removeSelectedTask(task: string) {
 
   // Defina displayedColumns e métodos getColumnValue e updateColumnValue no seu componente
 
-  getColumnValue(column: string): any {
-    return this[column as keyof TaskPlanningComponent]; // Usa 'keyof' para acessar corretamente as propriedades do componente
-  }
 
+  getColumnValue(column: string): any {
+    // Ajustando os nomes das propriedades para corresponder aos nomes das colunas
+    // Certifique-se de que os nomes correspondam exatamente, caso contrário, ajuste aqui
+    const propertyNameMap: { [key: string]: string } = {
+      'Nº Gerações': 'inputNGenerations',
+      'Dimensão População': 'inputPopDimensions',
+      'Probabilidade Cruzamento(%)': 'inputPCrossing',
+      'Probabilidade Mutacao(%)': 'inputPMutations',
+      'Tempo limite(s)': 'inputLTime',
+      'Avaliação especifica': 'inputTargetEvalution',
+      'Nº Gerações até estabilização': 'inputNGenerationsToStabilization'
+    };
+  
+    const propertyName = propertyNameMap[column];
+    return this[propertyName as keyof TaskPlanningComponent]; // Acessando a propriedade correspondente
+  }
+  
   updateColumnValue(value: any, column: string): void {
-    this[column as keyof TaskPlanningComponent] = value; // Usa 'keyof' para acessar corretamente as propriedades do componente
+    const propertyNameMap: { [key: string]: string } = {
+      'Nº Gerações': 'inputNGenerations',
+      'Dimensão População': 'inputPopDimensions',
+      'Probabilidade Cruzamento(%)': 'inputPCrossing',
+      'Probabilidade Mutacao(%)': 'inputPMutations',
+      'Tempo limite(s)': 'inputLTime',
+      'Avaliação especifica': 'inputTargetEvalution',
+      'Nº Gerações até estabilização': 'inputNGenerationsToStabilization'
+    };
+  
+    const propertyName = propertyNameMap[column];
+    this[propertyName as keyof TaskPlanningComponent] = value; // Atualizando a propriedade correspondente
+  
+    console.log(`Updated ${propertyName} with value: ${value}`); // Adicionando um log para verificar os valores atualizados
   }
 
 

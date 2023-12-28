@@ -16,12 +16,14 @@ export class PlaningService {
     return this.http.get(url, {responseType: 'text'});
   }
 
-  
   planear(Ngeracoes: number, dimensaoPop: number,pobCruz: number,  pobMut: number, tempoLimite: number,avaliacaoDef: number,nEstabiliz : number): Observable<any> {
-    //const url = `http://vs770.dei.isep.ipp.pt:8082/tarefas?NG=${Ngeracoes}&Dp=${dimensaoPop}&P1=${pobCruz}&P2=${pobMut}&T=${tempoLimite}&Av=${avaliacaoDef}&NEstab=${nEstabiliz};
-    //const url = `http://rdg-planning.h5b0bhc4e5a0dddx.westeurope.azurecontainer.io/tarefas?NG=${Ngeracoes}&Dp=${dimensaoPop}&P1=${pobCruz}&P2=${pobMut}&T=${tempoLimite}&Av=${avaliacaoDef}&NEstab=${nEstabiliz};
-    const url = `http://localhost:8082/tarefas?NG=${Ngeracoes}&Dp=${dimensaoPop}&P1=${pobCruz}&P2=${pobMut}&T=${tempoLimite}&Av=${avaliacaoDef}&NEstab=${nEstabiliz}`;
+    console.log("pobCruz",pobCruz);
+    console.log("pobMut",pobMut);
+    //const url = `http://vs770.dei.isep.ipp.pt:8082/tarefas?NG=${Ngeracoes}&Dp=${dimensaoPop}&P1=${pobCruz}&P2=${pobMut}&T=${tempoLimite}&Av=${avaliacaoDef}&NEstab=${nEstabiliz}`;
+    //const url = `http://rdg-planning.h5b0bhc4e5a0dddx.westeurope.azurecontainer.io/tarefas?NG=${Ngeracoes}&Dp=${dimensaoPop}&P1=${pobCruz}&P2=${pobMut}&T=${tempoLimite}&Av=${avaliacaoDef}&NEstab=${nEstabiliz}`;
+    const url = `http://localhost:8082/tarefas?ng=${Ngeracoes}&dp=${dimensaoPop}&p1=${pobCruz}&p2=${pobMut}&t=${tempoLimite}&av=${avaliacaoDef}&nestab=${nEstabiliz}`;
     return this.http.get(url, {responseType: 'text'});
   }
+
 
 }

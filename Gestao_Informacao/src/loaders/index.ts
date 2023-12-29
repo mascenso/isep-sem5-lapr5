@@ -95,11 +95,6 @@ export default async ({ expressApp }) => {
     path: config.repos.robotType.path
   };
 
-  const userRepo = {
-    name: config.repos.user.name,
-    path: config.repos.user.path
-  };
-
   const buildingRepo = {
     name: config.repos.building.name,
     path: config.repos.building.path

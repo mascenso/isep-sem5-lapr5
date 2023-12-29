@@ -21,12 +21,18 @@ namespace UserManagement.Domain.Users
 
     public bool Active { get; private set; }
 
+    public string TaxPayerNumber { get; private set; }
+
+    public string MechanographicNumber { get; private set; }
+
+    public string PhoneNumber { get; private set; }
+
     private User()
     {
       this.Active = true;
     }
 
-    private User(UserEmail email, UserPassword password, string firstName, string lastName, UserRole role, bool active = true)
+    private User(UserEmail email, UserPassword password, string firstName, string lastName, UserRole role, bool active, string taxPayerNumber, string mechanographicNumber, string phoneNumber)
     {
       this.Id = new UserId(Guid.NewGuid());
       this.Email = email;
@@ -35,6 +41,9 @@ namespace UserManagement.Domain.Users
       this.LastName = lastName;
       this.Role = role;
       this.Active = active;
+      this.TaxPayerNumber = taxPayerNumber;
+      this.MechanographicNumber = mechanographicNumber;
+      this.PhoneNumber = phoneNumber;
     }
 
     public static User FromRequestDto(CreateUserRequestDto dto)
@@ -63,7 +72,7 @@ namespace UserManagement.Domain.Users
       return new User(
         new UserEmail(dto.Email), new UserPassword(UserPassword.HashPassword(dto.Password)),
         dto.FirstName, dto.LastName, userRole,
-        false
+        false, dto.TaxPayerNumber, dto.MechanographicNumber, dto.PhoneNumber
       );
     }
 
@@ -93,7 +102,8 @@ namespace UserManagement.Domain.Users
       return new User(
         new UserEmail(dto.Email), new UserPassword(UserPassword.HashPassword(dto.Password)),
         dto.FirstName, dto.LastName, userRole,
-        true
+        true,
+        dto.TaxPayerNumber, dto.MechanographicNumber, dto.PhoneNumber
       );
     }
 

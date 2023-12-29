@@ -64,7 +64,7 @@ namespace UserManagement.Domain.Users
 
     public async Task<IEnumerable<UserDto>> GetInactiveUsersAsync()
     {
-        var inactiveUsers = await _repo.GetInactiveUsersAsync(); 
+        var inactiveUsers = await _repo.GetInactiveUsersAsync();
         var inactiveUserDtos = inactiveUsers.Select(user =>
             new UserDto(user.Id.AsGuid(), user.Email.Value, user.FirstName, user.LastName, user.Role.ToString(),
                 user.Active, user.TaxPayerNumber, user.MechanographicNumber, user.PhoneNumber)
@@ -105,6 +105,11 @@ namespace UserManagement.Domain.Users
       if (existingUser == null)
       {
         throw new NotFoundException($"User with ID {userId} not found.");
+      }
+
+      if ("admin@email.pt".Equals(existingUser.Email.ToString()))
+      {
+        throw new BusinessRuleValidationException($"Nice try ;)");
       }
 
       _repo.Remove(existingUser);

@@ -50,9 +50,9 @@ gera_frontend(NG,DP,P1,P2,T,Av,NEstab,Seq, Temp):-
     (retract(geracoes(_));true), asserta(geracoes(NG)),
 	(retract(populacao(_));true), asserta(populacao(DP)),
 	PC is P1/100, 
-	(retract(prob_cruzamento(_));true), asserta(prob_cruzamento(P1)),
+	(retract(prob_cruzamento(_));true), asserta(prob_cruzamento(PC)),
 	PM is P2/100, 
-	(retract(prob_mutacao(_));true), asserta(prob_mutacao(P2)),
+	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)),
 	(retract(tempo_limite(_));true), asserta(tempo_limite(T)),
     (retract(avaliacao_especifica());true), asserta(av_inferior(Av)),    
     (retract(estabilizacao());true), asserta(estabilizacao(NEstab)),!,
@@ -134,6 +134,9 @@ gera:-
 	estabilizacao(NEstab),
 	get_time(Tinicial),
 	gera_geracao(0,NG,PopOrd,Tinicial,Tlimite,AvEspecifica,NEstab,0),
+	get_time(TFinal),
+	TempoExec is TFinal- Tinicial,
+	write("TempoExec= "),write(TempoExec),nl,
 	final_geracao(Ind*V), nl,
 	write('Melhor solução: '), write(Ind*V), nl.
 

@@ -76,10 +76,15 @@ export default (app: Router) => {
 
   route.get('/pendingPickUp',
     (req, res, next) => ctrl.getAllPickupDeliveryPendingTasks(req, res, next));
-/*
-  route.get('/pending',
-    (req, res, next) => ctrl.getAllPendingTasks(req, res, next));
-*/
+  /*
+    route.get('/pending',
+      (req, res, next) => ctrl.getAllPendingTasks(req, res, next));
+  */
   route.get('/approved',
     (req, res, next) => ctrl.getAllApprovedTasks(req, res, next));
+
+
+  route.get('/planning/:taskInfo',
+  (req, res, next) => ctrl.planearTarefas(req, res, next));
+
 };

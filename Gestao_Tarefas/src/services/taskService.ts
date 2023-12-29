@@ -14,9 +14,14 @@ import ITaskPickupDeliveryRepo from './IRepos/ITaskPickupDeliveryRepo';
 import { TaskPickupDeliveryMap } from '../mappers/TaskPickupDeliveryMap';
 import { TaskVigilance } from '../domain/task-agg/TaskVigilance';
 import { TaskPickupDelivery } from '../domain/task-agg/TaskPickupDelivery';
+import axios from 'axios';
+
+
 
 @Service()
 export default class TaskService implements ITaskService {
+
+
   constructor(
     @Inject(config.repos.task.name) private taskRepo: ITaskRepo,
     @Inject(config.repos.taskVigilance.name) private taskVigilanceRepo: ITaskVigilanceRepo,
@@ -98,6 +103,31 @@ export default class TaskService implements ITaskService {
       throw e;
     }
   }
+
+  public async getTasksPlanning(info: any): Promise<Result<any>> {
+
+    console.log("info", info);
+
+    try {
+
+      const url = `http://localhost:8082/tarefas?ng=${info.Ngeracoes}&dp=${info.dimensaoPop}&p1=${info.pobCruz}&p2=${info.pobMut}&t=${info.tempoLimite}&av=${info.avaliacaoDef}&nestab=${info.nEstabiliz}`;
+      console.log("url ", url);
+
+        const response = await axios.get(url, { responseType: 'text' });
+        console.log("response ", response);
+
+        return Result.ok(response);
+
+    //  return this.http.get(url, { responseType: 'text' });
+
+    } catch (error) {
+
+      return Result.fail(error); // Retorna falha em caso de erro na solicitação
+
+    }
+
+  }
+
 
   public async updateTask(taskDTO: ITaskDTO): Promise<Result<ITaskDTO>> {
     try {

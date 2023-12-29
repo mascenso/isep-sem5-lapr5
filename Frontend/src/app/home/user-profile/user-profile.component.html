@@ -30,6 +30,27 @@
           </p>
           <p>
             <mat-form-field class="form-field" appearance="outline">
+              <mat-label>Tax Payer Number</mat-label>
+              <input matInput formControlName="taxPayerNumber" [readonly]="true">
+              <mat-hint align="end">Tax payer number can't be changed</mat-hint>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>mechanographic Number</mat-label>
+              <input matInput formControlName="mechanographicNumber" [readonly]="true">
+              <mat-hint align="end">Mechanographic number can't be changed</mat-hint>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>Phone Number</mat-label>
+              <input matInput formControlName="phoneNumber" [readonly]="true">
+              <mat-hint align="end">Phone number can't be changed</mat-hint>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="form-field" appearance="outline">
               <mat-label>Role</mat-label>
               <input matInput formControlName="role" [readonly]="true">
             </mat-form-field>

@@ -63,7 +63,7 @@ namespace UserManagement.Domain.Users
       return new User(
         new UserEmail(dto.Email), new UserPassword(UserPassword.HashPassword(dto.Password)),
         dto.FirstName, dto.LastName, userRole,
-        true
+        false
       );
     }
 

@@ -67,6 +67,7 @@ export class ValidateUserComponent implements OnInit {
             duration: 5000,
             panelClass: ['snackbar-success']
           });
+          this.router.navigate(['/home/users']);
         },
         (error) => {
           this._snackBar.open("Error in user approval!", "close", {

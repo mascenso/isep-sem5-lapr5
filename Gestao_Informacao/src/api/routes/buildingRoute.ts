@@ -3,11 +3,17 @@ import { celebrate, Joi } from 'celebrate';
 import { Container } from 'typedi';
 import config from "../../../config";
 import IBuildingController from "../../controllers/IControllers/IBuildingController";
+import middlewares from "../middlewares";
+import UserRole from "../../enums/userRole";
 
 const route = Router();
 
 export default (app: Router) => {
-  app.use('/buildings', route);
+  app.use('/buildings',
+    middlewares.authRequest([
+    UserRole.ADMINISTRATOR.toString(),
+    UserRole.CAMPUS_MANAGER.toString()
+  ]), route);
 
   const ctrl = Container.get(config.controllers.building.name) as IBuildingController;
 

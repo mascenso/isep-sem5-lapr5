@@ -3,11 +3,18 @@ import Container from "typedi";
 import config from "../../../config";
 import { Joi, celebrate } from "celebrate";
 import IFloorController from "../../controllers/IControllers/IFloorController";
+import middlewares from "../middlewares";
+import UserRole from "../../enums/userRole";
 
 const route = Router();
 
 export default (app: Router) => {
-    app.use('/floors', route);
+    app.use('/floors',
+      middlewares.authRequest([
+        UserRole.ADMINISTRATOR.toString(),
+        UserRole.CAMPUS_MANAGER.toString()
+      ]),
+      route);
 
     const ctrl = Container.get(config.controllers.floor.name) as IFloorController;
 

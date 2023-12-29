@@ -3,11 +3,18 @@ import { celebrate, Joi } from 'celebrate';
 import { Container } from 'typedi';
 import config from "../../../config";
 import IElevatorController from "../../controllers/IControllers/IElevatorController";
+import middlewares from "../middlewares";
+import UserRole from "../../enums/userRole";
 
 const route = Router();
 
 export default (app: Router) => {
-  app.use('/elevators', route);
+  app.use('/elevators',
+    middlewares.authRequest([
+      UserRole.ADMINISTRATOR.toString(),
+      UserRole.CAMPUS_MANAGER.toString()
+    ]),
+    route);
 
   const ctrl = Container.get(config.controllers.elevator.name) as IElevatorController;
 
@@ -38,17 +45,17 @@ export default (app: Router) => {
       id:Joi.string().required(),
       code: Joi.string().required(),
       buildingId: Joi.string().required(),
-      floorList: Joi.array().items(Joi.string()).required() 
+      floorList: Joi.array().items(Joi.string()).required()
     }),
   }),
 
   (req, res, next) => ctrl.updateElevator(req, res, next) );
 
-  route.get('', 
-    (req, res, next) => { ctrl.getAllElevators(req, res, next); 
+  route.get('',
+    (req, res, next) => { ctrl.getAllElevators(req, res, next);
   });
-   
-  route.get('/:buildingId', 
+
+  route.get('/:buildingId',
   (req, res, next) => ctrl.getBuildingElevators(req, res, next)
 );
 }

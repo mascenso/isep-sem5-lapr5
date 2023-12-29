@@ -5,11 +5,18 @@ import { Container } from 'typedi';
 import IBridgeController from '../../controllers/IControllers/IBridgeController';
 
 import config from "../../../config";
+import middlewares from "../middlewares";
+import UserRole from "../../enums/userRole";
 
 const route = Router();
 
 export default (app: Router) => {
-  app.use('/bridges', route);
+  app.use('/bridges',
+    middlewares.authRequest([
+      UserRole.ADMINISTRATOR.toString(),
+      UserRole.CAMPUS_MANAGER.toString()
+    ]),
+    route);
 
   const ctrl = Container.get(config.controllers.bridge.name) as IBridgeController;
 

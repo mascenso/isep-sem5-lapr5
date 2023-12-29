@@ -59,7 +59,7 @@ namespace UserManagement.Domain.Users
       return user == null
         ? null
         : new UserDto(user.Id.AsGuid(), user.Email.Value, user.FirstName, user.LastName, user.Role.ToString(),
-          user.Active);
+          user.Active, user.TaxPayerNumber, user.MechanographicNumber, user.PhoneNumber);
     }
 
     public async Task<IEnumerable<UserDto>> GetInactiveUsersAsync()
@@ -67,7 +67,7 @@ namespace UserManagement.Domain.Users
         var inactiveUsers = await _repo.GetInactiveUsersAsync(); 
         var inactiveUserDtos = inactiveUsers.Select(user =>
             new UserDto(user.Id.AsGuid(), user.Email.Value, user.FirstName, user.LastName, user.Role.ToString(),
-                user.Active)
+                user.Active, user.TaxPayerNumber, user.MechanographicNumber, user.PhoneNumber)
         );
 
         return inactiveUserDtos.ToList();

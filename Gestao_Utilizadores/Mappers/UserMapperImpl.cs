@@ -12,7 +12,10 @@ namespace UserManagement.Mappers
           user.FirstName,
           user.LastName,
           user.Role.ToString(),
-          user.Active
+          user.Active,
+          user.TaxPayerNumber,
+          user.MechanographicNumber,
+          user.PhoneNumber
         );
     }
   }

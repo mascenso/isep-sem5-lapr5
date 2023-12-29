@@ -5,11 +5,18 @@ import { Container } from 'typedi';
 import IRobotController from '../../controllers/IControllers/IRobotController';
 
 import config from "../../../config";
+import middlewares from "../middlewares";
+import UserRole from "../../enums/userRole";
 
 const route = Router();
 
 export default (app: Router) => {
-  app.use('/robots', route);
+  app.use('/robots',
+    middlewares.authRequest([
+      UserRole.ADMINISTRATOR.toString(),
+      UserRole.FLEET_MANAGER.toString()
+    ]),
+    route);
 
   const ctrl = Container.get(config.controllers.robot.name) as IRobotController;
 

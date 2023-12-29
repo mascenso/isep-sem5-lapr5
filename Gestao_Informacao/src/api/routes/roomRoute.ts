@@ -4,6 +4,8 @@ import config from "../../../config";
 import {celebrate, Joi} from "celebrate";
 import IRoomController from "../../controllers/IControllers/IRoomController";
 import {RoomType} from "../../domain/room-agg/roomType";
+import middlewares from "../middlewares";
+import UserRole from "../../enums/userRole";
 
 
 const route = Router();
@@ -21,9 +23,17 @@ export default (app: Router) => {
         roomType: Joi.string().valid(...Object.values(RoomType)).required()
       })
     }),
+    middlewares.authRequest([
+      UserRole.ADMINISTRATOR.toString(),
+      UserRole.CAMPUS_MANAGER.toString()
+    ]),
     (req, res, next) => ctrl.createRoom(req, res, next) );
 
   route.get('/buildings/:buildingId/floors/:floorId/rooms/:roomId',
+    middlewares.authRequest([
+      UserRole.ADMINISTRATOR.toString(),
+      UserRole.CAMPUS_MANAGER.toString()
+    ]),
     (req, res, next) => ctrl.getRoomById(req, res, next) );
 
 };

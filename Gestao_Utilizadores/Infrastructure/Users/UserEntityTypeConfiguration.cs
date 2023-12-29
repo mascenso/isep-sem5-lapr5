@@ -46,6 +46,15 @@ namespace UserManagement.Infrastructure.Users
       builder.Property(u => u.Active)
         .HasColumnName("Active"); // Map the column name for the active property
 
+      builder.Property(u => u.TaxPayerNumber)
+        .HasColumnName("TaxPayerNumber"); // Map the column name for the taxPayerNumber property
+
+      builder.Property(u => u.MechanographicNumber)
+        .HasColumnName("MechanographicNumber"); // Map the column name for the mechanographicNumber property
+
+      builder.Property(u => u.PhoneNumber)
+        .HasColumnName("PhoneNumber"); // Map the column name for the phoneNumber property
+
     }
   }
 

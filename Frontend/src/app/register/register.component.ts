@@ -20,7 +20,10 @@ export class RegisterComponent implements OnInit {
     password: new FormControl('', [Validators.required]),
     firstName: new FormControl('', [Validators.required]),
     lastName: new FormControl('', [Validators.required]),
-    termsAndConditions: new FormControl(false, [Validators.requiredTrue])
+    termsAndConditions: new FormControl(false, [Validators.requiredTrue]),
+    taxPayerNumber: new FormControl('', [Validators.required]),
+    mechanographicNumber: new FormControl('', [Validators.required]),
+    phoneNumber: new FormControl('', [Validators.required]),
   });
 
   hidePassword = true;
@@ -54,7 +57,10 @@ export class RegisterComponent implements OnInit {
         firstName: this.registerForm.controls.firstName.value!,
         lastName: this.registerForm.controls.lastName.value!,
         role: "USER",
-        active: false
+        active: false,
+        taxPayerNumber: this.registerForm.controls.taxPayerNumber.value!,
+        mechanographicNumber: this.registerForm.controls.mechanographicNumber.value!,
+        phoneNumber: this.registerForm.controls.phoneNumber.value!,
       }
       this.userService.registerUser(createUserRequestDto, true)
           .subscribe(

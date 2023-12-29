@@ -120,7 +120,7 @@ namespace UserManagement.Controllers
             }
 
             var inactiveUserDtos = inactiveUsers.Select(user =>
-                new UserDto(user.Id, user.Email, user.FirstName, user.LastName, user.Role.ToString(), user.Active)
+                new UserDto(user.Id, user.Email, user.FirstName, user.LastName, user.Role.ToString(), user.Active, user.TaxPayerNumber, user.MechanographicNumber, user.PhoneNumber)
             );
 
             return inactiveUserDtos.ToList();
@@ -209,12 +209,20 @@ namespace UserManagement.Controllers
           {
             // Validate loginDto and check if user exists
             var token = await _authService.AuthenticateUser(loginDto);
+            var user = await _userService.FindUserByEmail(loginDto.Email);
+            var userApproved = user.Active;
 
             if (token == null)
             {
               // Invalid credentials
               return Unauthorized(new { Message = "Invalid email or password." });
             }
+            
+            if (!userApproved) {
+              return Unauthorized(new { Message = "User waiting approval." });
+            }
+            
+            
             // Login successful, generate JWT token
             // Include token in the response headers
             Response.Headers.Append("Authorization", "Bearer " + token.AccessToken);

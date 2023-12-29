@@ -18,7 +18,7 @@ export default async ({ expressApp }) => {
   const taskVigilanceSchema = {
     // compare with the approach followed in repos and services
     name: 'taskVigilanceSchema',
-    schema: '../persistence/schemas/taskVigilanceSchema',
+    schema: '../persistence/schemas/TaskVigilanceSchema',
   };
   const taskPickupDeliverySchema = {
     // compare with the approach followed in repos and services

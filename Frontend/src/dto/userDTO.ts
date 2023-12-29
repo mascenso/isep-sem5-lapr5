@@ -6,6 +6,9 @@ export interface UserResponseDTO {
   lastName: string;
   role: string;
   active: boolean;
+  taxPayerNumber: string;
+  mechanographicNumber: string;
+  phoneNumber: string;
 }
 
 export interface CreateUserRequestDTO {
@@ -14,5 +17,8 @@ export interface CreateUserRequestDTO {
   firstName: string;
   lastName: string;
   role: string;
-  active: boolean; 
+  active: boolean;
+  taxPayerNumber: string;
+  mechanographicNumber: string;
+  phoneNumber: string;
 }

@@ -21,7 +21,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         email: new FormControl(''),
         firstName: new FormControl('', [Validators.pattern("[aA-zZ ]*")]),
         lastName: new FormControl('', [Validators.pattern("[aA-zZ ]*")]),
-        role: new FormControl('')
+        role: new FormControl(''),
+        taxPayerNumber: new FormControl(''),
+        mechanographicNumber: new FormControl(''),
+        phoneNumber: new FormControl('',),
     });
 
     private userSubscription = new Subscription();

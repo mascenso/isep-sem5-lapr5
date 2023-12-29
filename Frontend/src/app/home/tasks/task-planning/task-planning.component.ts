@@ -15,7 +15,7 @@ export class TaskPlanningComponent {
   inputPopDimensions: number = 8;
   inputPCrossing: number = 50;
   inputPMutations: number = 25;
-  inputLTime: number = 2;
+  inputLTime: number = 1;
   inputTargetEvalution: number = 40;
   inputNGenerationsToStabilization: number = 4;
 
@@ -39,31 +39,33 @@ removeSelectedTask(task: string) {
   }
 }
 
+
   planear() {
+    const taskParameters = {
+      Ngeracoes: this.inputNGenerations,
+      dimensaoPop: this.inputPopDimensions,
+      pobCruz: this.inputPCrossing,
+      pobMut: this.inputPMutations,
+      tempoLimite: this.inputLTime,
+      avaliacaoDef: this.inputTargetEvalution,
+      nEstabiliz: this.inputNGenerationsToStabilization
+    };
     //this.planingService.planear(this.selectedTasks, this.inputNGenerations, this.inputPopDimensions, this.inputPCrossing, this.inputPMutations, this.inputLTime,this.inputTargetEvalution, this.inputNGenerationsToStabilization )
-    this.planingService.planear(
-      this.inputNGenerations,
-      this.inputPopDimensions,
-      this.inputPCrossing,
-      this.inputPMutations,
-      this.inputLTime,
-      this.inputTargetEvalution,
-      this.inputNGenerationsToStabilization
-    ).subscribe(result => {
+    this.planingService.planear(taskParameters).subscribe(result => {
+      const json = result.substring(result.indexOf('{'));
 
+      let obj = JSON.parse(json);
+      const seq = obj.sequencia.join(' -> ');
+      obj.sequencia=seq;
 
-
-      this.resultado = result;
+      this.resultado.sequencia = obj.sequencia;
+      this.resultado.tempo = obj.tempo;
     });
 
   }
 
-  // Defina displayedColumns e métodos getColumnValue e updateColumnValue no seu componente
-
-
   getColumnValue(column: string): any {
     // Ajustando os nomes das propriedades para corresponder aos nomes das colunas
-    // Certifique-se de que os nomes correspondam exatamente, caso contrário, ajuste aqui
     const propertyNameMap: { [key: string]: string } = {
       'Nº Gerações': 'inputNGenerations',
       'Dimensão População': 'inputPopDimensions',

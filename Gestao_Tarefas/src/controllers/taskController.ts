@@ -9,10 +9,7 @@ import ITaskPickupDeliveryDTO from '../dto/ITaskPickupDeliveryDTO';
 import ITaskVigilanceDTO from '../dto/ITaskVigilanceDTO';
 
 import { Result } from "../core/logic/Result";
-import { ParamsDictionary } from 'express-serve-static-core';
-import { ParsedQs } from 'qs';
-import { TaskVigilance } from '../domain/task-agg/TaskVigilance';
-import { TaskPickupDelivery } from '../domain/task-agg/TaskPickupDelivery';
+
 
 @Service()
 export default class TaskController implements ITaskController /* TODO: extends ../core/infra/BaseController */ {
@@ -99,34 +96,34 @@ export default class TaskController implements ITaskController /* TODO: extends 
     }
   }
 
-   public async getAllVigilancePendingTasks(req: Request, res: Response, next: NextFunction) {
-  
+  public async getAllVigilancePendingTasks(req: Request, res: Response, next: NextFunction) {
+
     try {
       const tasksOrError = await this.taskServiceInstance.getAllVigilancePendingTasks() as Result<Array<ITaskVigilanceDTO[]>>;
-  
+
       if (tasksOrError.isFailure) {
         return res.status(404).send();
       }
-  
+
       const tasksDTO = tasksOrError.getValue();
-      return res.status(201).json( tasksDTO );
+      return res.status(201).json(tasksDTO);
     }
     catch (e) {
       return next(e);
     }
-  }  
-  
+  }
+
   public async getAllPickupDeliveryPendingTasks(req: Request, res: Response, next: NextFunction) {
-  
+
     try {
       const tasksOrError = await this.taskServiceInstance.getAllPickupDeliveryPendingTasks() as Result<Array<ITaskPickupDeliveryDTO[]>>;
-  
+
       if (tasksOrError.isFailure) {
         return res.status(404).send();
       }
-  
+
       const tasksDTO = tasksOrError.getValue();
-      return res.status(201).json( tasksDTO );
+      return res.status(201).json(tasksDTO);
     }
     catch (e) {
       return next(e);
@@ -172,4 +169,25 @@ export default class TaskController implements ITaskController /* TODO: extends 
 
   }
 
+  public async planearTarefas(req: Request, res: Response, next: NextFunction) {
+    console.log("CONTROLLER ANTES", req);
+    const taskInfo = req.params.taskInfo;
+    try {
+      // Obtenha os parâmetros do corpo da requisição
+      console.log("APOS CONTROLLER", req.params.taskInfo);
+      const tasksOrError = await this.taskServiceInstance.getTasksPlanning(taskInfo) as Result<any>;
+      console.log("APOS CONTROLLER", tasksOrError);
+
+      if (tasksOrError.isFailure) {
+        return res.status(404).send();
+      }
+
+      const tasksDTO = tasksOrError.getValue();
+      return res.status(201).json(tasksDTO);
+    }
+    catch (e) {
+      return next(e);
+    }
+  }
 }
+

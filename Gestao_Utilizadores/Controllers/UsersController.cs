@@ -209,20 +209,19 @@ namespace UserManagement.Controllers
           {
             // Validate loginDto and check if user exists
             var token = await _authService.AuthenticateUser(loginDto);
-            var userApproved = loginDto.Active;
+            var user = await _userService.FindUserByEmail(loginDto.Email);
+            var userApproved = user.Active;
 
             if (token == null)
             {
               // Invalid credentials
               return Unauthorized(new { Message = "Invalid email or password." });
             }
-
-            /*
             
             if (!userApproved) {
               return Unauthorized(new { Message = "User waiting approval." });
             }
-            */
+            
             
             // Login successful, generate JWT token
             // Include token in the response headers

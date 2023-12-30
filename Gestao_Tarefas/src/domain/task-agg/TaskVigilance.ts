@@ -7,6 +7,8 @@ interface TaskVigilanceProps {
     description: string;
     buildingId: string;
     floors:object[];
+    startPosition: number[];
+    endPosition: number[];
     contactNumber:number;
     user:object;
     approved:boolean;
@@ -26,6 +28,8 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
       { argument: props.description, argumentName: 'description' },
       { argument: props.buildingId, argumentName: 'buildingId' },
       { argument: props.floors, argumentName: 'floors' },
+      { argument: props.startPosition, argumentName: 'startPosition' },
+      { argument: props.endPosition, argumentName: 'endPosition' },
       { argument: props.contactNumber, argumentName: 'contactNumber' },
       { argument: props.user, argumentName: 'user' },
       { argument: props.approved, argumentName: 'approved' },
@@ -79,6 +83,12 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
   public get planned() : boolean {
     return this.props.planned;
   }
+  public get startPosition() : number[] {
+    return this.props.startPosition;
+  }
+  public get endPosition() : number[] {
+    return this.props.endPosition;
+  }
 
 
   set description ( value: string) {
@@ -108,6 +118,13 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
   }
   set planned ( value: boolean) {
     this.props.planned = value;
+  }
+
+  set startPosition ( value: number[]) {
+    this.props.startPosition = value;
+  }
+  set endPosition ( value: number[]) {
+    this.props.endPosition = value;
   }
 
 }

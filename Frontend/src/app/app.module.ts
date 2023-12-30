@@ -59,6 +59,8 @@ import { CreateUserComponent } from './home/users/create-user/create-user.compon
 import { RegisterComponent } from './register/register.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { CreateTaskComponent } from './home/tasks/create-task/create-task.component';
+import {AuthInterceptor} from "./interceptors/auth.interceptor";
+import { UserProfileComponent } from './home/user-profile/user-profile.component';
 import { PendingTaskListComponent } from './home/tasks/pending-task-list/pending-task-list.component';
 import { TaskPlanningComponent } from './home/tasks/task-planning/task-planning.component';
 
@@ -101,7 +103,8 @@ import { TaskPlanningComponent } from './home/tasks/task-planning/task-planning.
     CreateUserComponent,
     RegisterComponent,
     PrivacyPolicyComponent,
-    TaskPlanningComponent
+    TaskPlanningComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -133,6 +136,11 @@ import { TaskPlanningComponent } from './home/tasks/task-planning/task-planning.
     provide: HTTP_INTERCEPTORS,
     useClass: ServiceInterceptor,
     multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
     },
     AuthService,
     {

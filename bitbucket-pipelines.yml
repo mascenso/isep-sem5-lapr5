@@ -9,7 +9,7 @@ pipelines:
   default:
     - parallel:
         - step:
-            name: Build and Test
+            name: Build and Test Gestao_Informacao
             caches:
               - node
             script:
@@ -29,3 +29,10 @@ pipelines:
               - npm install
               - npm run build
               - npm test
+        - step:
+            name: Build and Test Gestao_Utilizadores
+            image: mcr.microsoft.com/dotnet/nightly/sdk:8.0
+            script:
+              - cd Gestao_Utilizadores
+              - dotnet build
+              - dotnet test

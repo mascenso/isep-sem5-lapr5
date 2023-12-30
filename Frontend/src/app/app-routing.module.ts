@@ -37,6 +37,7 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
 import { CreateTaskComponent } from './home/tasks/create-task/create-task.component';
 import { PendingTaskListComponent } from './home/tasks/pending-task-list/pending-task-list.component';
 import { TaskPlanningComponent } from './home/tasks/task-planning/task-planning.component';
+import {UserProfileComponent} from "./home/user-profile/user-profile.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -59,6 +60,10 @@ const routes: Routes = [
         path: 'users/validate-user',
         component: ValidateUserComponent,
 
+      },
+      {
+        path: 'profile',
+        component: UserProfileComponent,
       },
       {
         path: 'campus',

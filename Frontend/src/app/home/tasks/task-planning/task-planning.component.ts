@@ -25,20 +25,6 @@ export class TaskPlanningComponent {
 
   constructor(private planingService: PlaningService) { }
 
-  
-  // Método para adicionar uma tarefa selecionada ao array
-addSelectedTask(task: string) {
-  this.selectedTasks.push(task);
-}
-
-// Método para remover uma tarefa selecionada do array
-removeSelectedTask(task: string) {
-  const index = this.selectedTasks.indexOf(task);
-  if (index !== -1) {
-    this.selectedTasks.splice(index, 1);
-  }
-}
-
 
   planear() {
     const taskParameters = {

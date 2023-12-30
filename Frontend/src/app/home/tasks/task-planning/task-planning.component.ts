@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { PlaningService } from 'src/app/services/planing.service';
+import { TasksService } from 'src/app/services/tasks.service';
+import { TaskPickupViewModel } from 'src/app/viewModel/taskPickUp';
+import { TaskViewModel } from 'src/app/viewModel/taskView';
+import { TaskVigilanceViewModel } from 'src/app/viewModel/taskVigilance';
 
 @Component({
   selector: 'app-task-planning',
@@ -7,9 +11,14 @@ import { PlaningService } from 'src/app/services/planing.service';
   styleUrls: ['./task-planning.component.css']
 })
 export class TaskPlanningComponent {
+  pendingTaskList: TaskViewModel[] = [];
+
+  selectedPickupTasks: TaskViewModel[] = [];
+  selectedVigilanceTasks: TaskViewModel[] = [];
+  approvedVigilanceTasks: TaskViewModel[] = [];
+  approvedPickupTasks: TaskViewModel[] = [];
 
   displayedColumns: string[] = ['Nº Gerações', 'Dimensão População', 'Probabilidade Cruzamento(%)', 'Probabilidade Mutacao(%)', 'Tempo limite(s)', 'Avaliação especifica', 'Nº Gerações até estabilização'];
-  tasks = [{ description: 'Tarefa spy 3', value: 't1' }, { name: 'Tarefa spy 4', value: 'a2' }, { name: 'Tarefa uber 3', value: 't4' }, { name: 'Tarefa uber 4', value: 't4' }];
   selectedTasks: string[]=[];
   inputNGenerations: number = 6;
   inputPopDimensions: number = 8;
@@ -23,22 +32,106 @@ export class TaskPlanningComponent {
   resultado: { sequencia: string[], tempo: number } = { sequencia: [], tempo: 0 };
 
 
-  constructor(private planingService: PlaningService) { }
+  constructor(
+    private planingService: PlaningService,
+    private tasksService: TasksService) {     
+      this.getApprovedPickupTasks();
+      this.getApprovedVigilanceTasks();}
 
-  
-  // Método para adicionar uma tarefa selecionada ao array
-addSelectedTask(task: string) {
-  this.selectedTasks.push(task);
-}
 
-// Método para remover uma tarefa selecionada do array
-removeSelectedTask(task: string) {
-  const index = this.selectedTasks.indexOf(task);
-  if (index !== -1) {
-    this.selectedTasks.splice(index, 1);
+  getApprovedPickupTasks() {
+    this.tasksService.getAllPickupDeliveryApprovedTasks().subscribe(
+      pickupTasks => {
+        const pickupTaskList = pickupTasks.flat();
+        const pickupTaskViewModels = pickupTaskList.map((task) =>
+          this.mapToTaskViewModel(task, 'Pickup')
+        );
+        this.approvedPickupTasks = pickupTaskViewModels;
+      },
+      (pickupError) => {
+        console.error(
+          'Erro ao buscar as tarefas de pick up aprovadas:',
+          pickupError
+        );
+      }
+    );
   }
-}
 
+  getApprovedVigilanceTasks() {
+    this.tasksService.getAllVigilanceApprovedTasks().subscribe(
+      vigilanceTasks => {
+        const vigilanceTasksList = vigilanceTasks.flat();
+        const vigilanceTaskViewModels = vigilanceTasksList.map((task) =>
+          this.mapToTaskViewModel(task, 'Vigilance')
+        );
+        this.approvedVigilanceTasks = vigilanceTaskViewModels;
+      },
+      (vigilanceError) => {
+        console.error(
+          'Erro ao buscar as tarefas de vigilância aprovadas:',
+          vigilanceError
+        );
+      }
+    );
+  }
+
+  selectTasksForPlanning(selectedTasks: TaskViewModel[]) {
+    // Aqui você pode utilizar a lista de tarefas selecionadas para o planejamento
+    console.log('Tarefas selecionadas para o planejamento:', selectedTasks);
+  }
+/*
+  getPickupTasks() {
+    this.tasksService.getAllPickupDeliveryApprovedTasks().subscribe(
+      pickupTasks => {
+        const pickupTaskList = pickupTasks.flat();
+
+        const pickupTaskViewModels = pickupTaskList.map((task) => this.mapToTaskViewModel(task, 'Pickup'));
+        this.updatePendingTaskList(pickupTaskViewModels);
+      },
+      (pickupError) => {
+        console.error('Erro ao buscar as tarefas de pick up pendentes:', pickupError);
+      }
+    );
+  }
+
+  getVigilanceTasks() {
+    this.tasksService.getAllVigilanceApprovedTasks().subscribe(
+      vigilanceTasks => {
+        const vigilanceTasksList = vigilanceTasks.flat();
+
+        const vigilanceTaskViewModels = vigilanceTasksList.map((task) => this.mapToTaskViewModel(task, 'Vigilance'));
+        this.updatePendingTaskList(vigilanceTaskViewModels);
+      },
+      (vigilanceError) => {
+        console.error('Erro ao buscar as tarefas de vigilância pendentes:', vigilanceError);
+      }
+    );
+  }
+*/
+  mapToTaskViewModel(task: any, type: 'Pickup' | 'Vigilance'): TaskViewModel {
+    let viewModel: TaskViewModel;
+
+    console.log("task ", task);
+
+    if (type === 'Pickup') {
+      viewModel = {
+        ...task,
+        type: 'Pickup'
+      } as TaskPickupViewModel;
+    } else {
+      viewModel = {
+        ...task,
+        type: 'Vigilance'
+      } as TaskVigilanceViewModel;
+    }
+
+    return viewModel;
+  }
+/*
+  updatePendingTaskList(tasks: TaskViewModel[]) {
+    this.pendingTaskList = this.pendingTaskList.concat(tasks);
+  }
+  */
 
   planear() {
     const taskParameters = {

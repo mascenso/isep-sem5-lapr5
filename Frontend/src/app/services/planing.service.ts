@@ -32,9 +32,6 @@ export class PlaningService {
  */
 
   planear(taskInfo: any): Observable<any> {
-    console.log("AQUI");
-    // const url = `${this.API_URL}/api/tasks/planning`; 
-
     return this.http.post<any>(`${this.API_URL}/api/tasks/planning/`,taskInfo);
   }
 

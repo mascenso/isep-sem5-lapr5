@@ -1,5 +1,22 @@
 <h1>Task planning:</h1>
 <div class="input-section">
+    <mat-form-field>
+        <mat-label>Select Pick Up Tasks:</mat-label>
+        <mat-select multiple [(ngModel)]="selectedPickupTasks">
+            <mat-option *ngFor="let task of approvedPickupTasks" [value]="task">
+                {{ task.description }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Select Vigilance Tasks:</mat-label>
+        <mat-select multiple [(ngModel)]="selectedVigilanceTasks">
+            <mat-option *ngFor="let task of approvedVigilanceTasks" [value]="task">
+                {{ task.description }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
     <!-- Input fields for user data -->
     <div *ngFor="let column of displayedColumns">
         <mat-form-field>
@@ -13,16 +30,16 @@
 </div>
 
 <!-- Mostrar resultados -->
-<div class="result-section" fxLayout="column" fxLayoutAlign="center center" *ngIf="resultado.sequencia || resultado.tempo">
+<div class="result-section" fxLayout="column" fxLayoutAlign="center center"
+    *ngIf="resultado.sequencia || resultado.tempo">
     <div class="result-container">
         <div class="result-item">
-            <p><strong>Sequencia:</strong></p>
+            <p><strong>Sequence:</strong></p>
             <p>{{ resultado.sequencia }}</p>
         </div>
         <div class="result-item">
-            <p><strong>Tempo:</strong></p>
+            <p><strong>Time:</strong></p>
             <p>{{ resultado.tempo }}</p>
         </div>
     </div>
 </div>
-

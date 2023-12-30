@@ -9,6 +9,8 @@ export default interface ITaskController  {
   getAllVigilancePendingTasks(eq: Request, res: Response, next: NextFunction);
   getAllPickupDeliveryPendingTasks(eq: Request, res: Response, next: NextFunction);
   getAllPendingTasks(req: Request, res: Response, next: NextFunction);
-  getAllApprovedTasks(req: Request, res: Response, next: NextFunction);
+  getAllPickupDeliveryApprovedTasks(req: Request, res: Response, next: NextFunction);
+  getAllVigilanceApprovedTasks(req: Request, res: Response, next: NextFunction);
+ // getAllApprovedTasks(req: Request, res: Response, next: NextFunction);
   planearTarefas(req: Request, res: Response, next: NextFunction);
 }

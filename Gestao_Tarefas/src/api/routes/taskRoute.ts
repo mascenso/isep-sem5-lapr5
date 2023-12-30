@@ -76,13 +76,12 @@ export default (app: Router) => {
 
   route.get('/pendingPickUp',
     (req, res, next) => ctrl.getAllPickupDeliveryPendingTasks(req, res, next));
-  /*
-    route.get('/pending',
-      (req, res, next) => ctrl.getAllPendingTasks(req, res, next));
-  */
-  route.get('/approved',
-    (req, res, next) => ctrl.getAllApprovedTasks(req, res, next));
 
+  route.get('/approvedPickUp',
+    (req, res, next) => ctrl.getAllPickupDeliveryApprovedTasks(req, res, next));
+
+    route.get('/approvedVigilance',
+    (req, res, next) => ctrl.getAllVigilanceApprovedTasks(req, res, next));
 
   route.post('/planning/',
     celebrate({

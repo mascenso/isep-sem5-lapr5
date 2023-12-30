@@ -189,6 +189,8 @@ export default class TaskController implements ITaskController /* TODO: extends 
   }
 
   public async planearTarefas(req: Request, res: Response, next: NextFunction) {
+console.log("CHEGOU AQUI ",req.body);
+
     const taskInfo = req.body;
     try {
 

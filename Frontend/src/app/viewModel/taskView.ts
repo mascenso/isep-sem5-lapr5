@@ -5,3 +5,9 @@ export interface TaskViewModel {
     contact: number;
     type: 'Pickup' | 'Vigilance';
   }
+
+  export interface Floor {
+    description: string;
+    floorId: string;
+    floorNumber: number;
+  }

@@ -88,6 +88,17 @@ export default (app: Router) => {
   route.post('/planning/',
     celebrate({
       body: Joi.object({
+        ltasks: Joi.array()
+        .items(
+          Joi.array().items(
+            Joi.string(), // Descrição 
+            Joi.array().items(Joi.any()), // Array [x,y]
+            Joi.string(), 
+            Joi.array().items(Joi.any()), // Array [x,y]
+            Joi.string() 
+          )
+        )
+        .required(),
         Ngeracoes: Joi.number().required(),
         dimensaoPop: Joi.number().required(),
         pobCruz: Joi.number().required(),

@@ -32,21 +32,23 @@ tarefas_handler(Request) :-
         format('Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n'),
         format('Access-Control-Allow-Headers: Content-Type, Header-Name\r\n\r\n'),
 
-    http_parameters(Request, [ng(NG,[]),
+    http_parameters(Request, [ltasks(LTasks,[]),
+							  ng(NG,[]),
                               dp(DP,[integer]), 
                               p1(P1,[float]), 
                               p2(P2,[float]), 
                               t(T,[integer]), 
                               av(Av,[integer]), 
                               nestab(NEstab,[])]),
-    gera_frontend(NG, DP, P1, P2, T, Av, NEstab, Seq, Temp),
+    gera_frontend(LTasks,NG, DP, P1, P2, T, Av, NEstab, Seq, Temp),
     reply_json(json([sequencia=Seq, tempo=Temp])).
 
 :- consult('BC_RobDroneGo.pl').
 :- consult('Percurso_Robots.pl').
 
 
-gera_frontend(NG,DP,P1,P2,T,Av,NEstab,Seq, Temp):-
+gera_frontend(LTasks,NG,DP,P1,P2,T,Av,NEstab,Seq, Temp):-
+	criar_tarefas(LTasks),
     (retract(geracoes(_));true), asserta(geracoes(NG)),
 	(retract(populacao(_));true), asserta(populacao(DP)),
 	PC is P1/100, 
@@ -72,12 +74,12 @@ gera_frontend(NG,DP,P1,P2,T,Av,NEstab,Seq, Temp):-
 
 % Remove todas as tarefas existentes da Base de Conhecimento
 remover_todas_tarefas :-
-    retractall(tarefa(_, _, _)).
+    retractall(tarefa(_, _, _, _, _)).
 
 criar_tarefas([]).
 
-criar_tarefas([[Tarefa, A, B] | Resto]) :-
-    assertz(tarefa(Tarefa, A, B)),
+criar_tarefas([[Tarefa, A, B, C, D] | Resto]) :-
+    assertz(tarefa(Tarefa, A, B, C, D)),
     criar_tarefas(Resto).
 
 /* Predicado para inicializar as variaveis necessarias para o algoritmo genético.
@@ -131,7 +133,7 @@ gera:-
 inicializa_tempos_transicao :-
     retractall(tempo_transicao(_, _, _)),  % Remove versões anteriores do tempo de transição, se existirem
     retractall(lista_tarefas(_)),  % Remove versões anteriores da lista de tarefas, se existirem
-    findall(Tarefa, tarefa(Tarefa, _, _), ListaTarefas),
+    findall(Tarefa, tarefa(Tarefa, _, _, _, _), ListaTarefas),
 	asserta(lista_tarefas(ListaTarefas)),
     assert_lista_tempos(ListaTarefas, ListaTarefas).
 
@@ -149,13 +151,16 @@ valida_tarefa_com_outras(Tarefa, [OutraTarefa | Resto]) :-
     dif(Tarefa, OutraTarefa),
     not(tempo_transicao(Tarefa, OutraTarefa, _)),
     not(tempo_transicao(OutraTarefa, Tarefa, _)),
-	tarefa(Tarefa, _, DestinoT1),
-	tarefa(OutraTarefa, OrigemT2, _),
+	tarefa(Tarefa, _, _, CelEndTask, PisoEndTask),
+	tarefa(OutraTarefa, CelBeginTask, PisoBeginTask, _, _),
+
+	%tarefa(Tarefa, _, DestinoT1),
+	%tarefa(OutraTarefa, OrigemT2, _),
 	%Para calcular apenas o custo entre tarefas e nao durante o processamento de tarefas
-	localizacao(DestinoT1,PisoOrig, CelulaOrig),
-	localizacao(OrigemT2,PisoDest,CelulaDest),
-    ((PisoOrig == PisoDest, aStar(CelulaOrig, CelulaDest, _, Custo));
-    caminho_pisos_com_custo(PisoOrig, PisoDest, _, _, Custo, _)),
+	%localizacao(DestinoT1,PisoOrig, CelulaOrig),
+	%localizacao(OrigemT2,PisoDest,CelulaDest),
+    ((PisoEndTask == PisoBeginTask, aStar(CelEndTask, CelBeginTask, _, Custo));
+    caminho_pisos_com_custo(PisoEndTask, PisoBeginTask, _, _, Custo, _)),
     assert(tempo_transicao(Tarefa, OutraTarefa, Custo)),
     assert(tempo_transicao(OutraTarefa, Tarefa, Custo)),
     valida_tarefa_com_outras(Tarefa, Resto).
@@ -170,7 +175,7 @@ gera_populacao(Pop):-
 	populacao(TamPop),
 	lista_tarefas(LTar),
 	length(LTar,NumT),
-	findall(Tarefa,tarefa(Tarefa,_,_),ListaTarefas),
+	findall(Tarefa,tarefa(Tarefa,_,_,_,_),ListaTarefas),
 	gera_populacao(TamPop,ListaTarefas,NumT,Pop).
 
 gera_populacao(0,_,_,[]):-!.

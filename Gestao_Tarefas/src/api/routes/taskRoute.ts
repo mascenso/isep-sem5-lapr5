@@ -19,6 +19,8 @@ export default (app: Router) => {
         description: Joi.string().required(),
         buildingId: Joi.string().required(),
         floors: Joi.array().required(),
+        startPosition: Joi.array().required(),
+        endPosition: Joi.array().required(),
         contactNumber: Joi.number().required(),
         user: Joi.object().required(),
         approved: Joi.boolean().default(false),

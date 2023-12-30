@@ -4,6 +4,8 @@ export default interface ITaskVigilanceDTO {
   description: string;
   buildingId: string;
   floors: object[];
+  startPosition: number[];
+  endPosition: number[];
   contactNumber: number;
   user:object;
   approved: boolean;

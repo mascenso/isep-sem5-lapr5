@@ -27,18 +27,17 @@
 :-cria_grafo_piso(b1).
 :-cria_grafo_piso(c3).
 
+% Handler para lidar com solicitações OPTIONS
+:- http_handler('/caminho', caminho_handler, [methods([get, post, options])]).
+:- http_handler('/tarefas', tarefas_handler, [methods([get, post, options])]).
+
+
 server(Port) :-
     http_server(http_dispatch,
                 [ port(Port),
                   workers(16)
                 ]).
 
-% Handler para lidar com solicitações OPTIONS
-:- http_handler('/caminho', caminho_handler, [methods([get, post, options]]).
-:- http_handler('/tarefas', tarefas_handler, []).
-
-server(Port) :-
-        http_server(http_dispatch, [ port(Port), workers(16) ]).
 
 % Predicado para parar o servidor
 stop_server(Port) :-
@@ -58,18 +57,30 @@ caminho_handler(Request) :-
     reply_json(json([caminho=LCam, custo=CustoTotal])).
 
 
-
 % Handler específico para as tarefas
 tarefas_handler(Request) :-
-    cors_enable(Request, [methods([get])]),
-    http_parameters(Request, [NG,DP,P1,P2,T,Av,NEstab]),
-    gera_frontend(NG,DP,P1,P2,T,Av,NEstab,F),
-    reply_json(json([sequencia=F])).
+    cors_enable(Request, [ methods( [get, post, options] ),
+        headers( [content_type('application/json'), header('Header-Name')] ),
+        methods_allowed([get, post, options])]),
+        format('Access-Control-Allow-Origin: *\r\n'),
+        format('Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n'),
+        format('Access-Control-Allow-Headers: Content-Type, Header-Name\r\n\r\n'),
 
-
+    http_parameters(Request, [ng(NG,[]),
+                              dp(DP,[integer]), 
+                              p1(P1,[float]), 
+                              p2(P2,[float]), 
+                              t(T,[integer]), 
+                              av(Av,[integer]), 
+                              nestab(NEstab,[])]),
+    gera_frontend(NG, DP, P1, P2, T, Av, NEstab, Seq, Temp),
+    reply_json(json([sequencia=Seq, tempo=Temp])).
 
 stop_server_before_exit :-
     stop_server(8081),
     true.
 
 at_halt(stop_server_before_exit).
+
+
+

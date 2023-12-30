@@ -62,6 +62,7 @@ import { CreateTaskComponent } from './home/tasks/create-task/create-task.compon
 import {AuthInterceptor} from "./interceptors/auth.interceptor";
 import { UserProfileComponent } from './home/user-profile/user-profile.component';
 import { PendingTaskListComponent } from './home/tasks/pending-task-list/pending-task-list.component';
+import { TaskPlanningComponent } from './home/tasks/task-planning/task-planning.component';
 
 
 @NgModule({
@@ -102,6 +103,7 @@ import { PendingTaskListComponent } from './home/tasks/pending-task-list/pending
     CreateUserComponent,
     RegisterComponent,
     PrivacyPolicyComponent,
+    TaskPlanningComponent,
     UserProfileComponent
   ],
   imports: [

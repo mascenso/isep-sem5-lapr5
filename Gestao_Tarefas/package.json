@@ -36,6 +36,7 @@
     "agenda": "^2.0.2",
     "agendash": "^4.0.0",
     "argon2": "^0.21.0",
+    "axios": "^1.6.3",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
     "celebrate": "^9.1.0",

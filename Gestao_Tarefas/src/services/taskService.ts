@@ -103,20 +103,24 @@ export default class TaskService implements ITaskService {
       throw e;
     }
   }
+
   public async getTasksPlanning(info: any): Promise<Result<any>> {
     const axios = require('axios');
-  
-    let url ='http://127.0.0.1:8081/tarefas?ng=6&dp=6&p1=50&p2=25&t=2&av=40&nestab=3';
+    
+    let url = `http://127.0.0.1:8081/tarefas?ng=${info.Ngeracoes}&dp=${info.dimensaoPop}&p1=${info.pobCruz}&p2=${info.pobMut}&t=${info.tempoLimite}&av=${info.avaliacaoDef}&nestab=${info.nEstabiliz}`;
+    //let url = `http://vs770.dei.isep.ipp.pt:8082/tarefas?ng=${Ngeracoes}&dp=${dimensaoPop}&p1=${pobCruz}&p2=${pobMut}&t=${tempoLimite}&av=${avaliacaoDef}&nestab=${nEstabiliz}`;
+    //let url = `http://rdg-planning.h5b0bhc4e5a0dddx.westeurope.azurecontainer.io/tarefas?ng=${Ngeracoes}&dp=${dimensaoPop}&p1=${pobCruz}&p2=${pobMut}&t=${tempoLimite}&av=${avaliacaoDef}&nestab=${nEstabiliz}`;
 
     try {
       const response = await axios.get(url); // Espera pela resposta da requisição
+      console.log("dentro");
       return Result.ok(response.data);
     } catch (error) {
       console.error('Erro na chamada HTTP:', error);
       return Result.fail(error);
     }
   }
-  
+
 
   public async updateTask(taskDTO: ITaskDTO): Promise<Result<ITaskDTO>> {
     try {

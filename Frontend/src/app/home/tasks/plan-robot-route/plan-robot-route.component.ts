@@ -7,7 +7,7 @@ import {PlaningService} from '../../../services/planing.service'
   styleUrls: ['./plan-robot-route.component.css']
 })
 export class PlanRobotRouteComponent {
-  displayedColumns: string[] = ['origem','destino','caminho', 'custo'];
+  displayedColumns: string[] = ['origem','destino','edificios','caminho', 'custo'];
   floors = [{name:'Edificio A Piso 1',value:'a1'}, {name:'Edificio A Piso 2',value:'a2'}, {name:'Edificio B Piso 2',value:'b2'},{name:'Edificio C Piso 3',value:'c3'}];
   selectedFloor!: string;
   selectedOtherFloor!: string;
@@ -25,12 +25,13 @@ export class PlanRobotRouteComponent {
           const cam = obj.caminho.join(' -> ');
           obj.caminho = cam;
 
+
         //adiciona a origem e destino ao array que vem do swiprolog
         const caminho = {origem:this.floors.find(piso => piso.value === this.selectedFloor)!.name, destino:this.floors.find(piso => piso.value === this.selectedOtherFloor)!.name, ...obj}
 
         //valores para tabela
         this.resultado = [...this.resultado, caminho];
-
+        console.log(this.resultado)
       });
 
 

@@ -170,13 +170,10 @@ export default class TaskController implements ITaskController /* TODO: extends 
   }
 
   public async planearTarefas(req: Request, res: Response, next: NextFunction) {
-    console.log("CONTROLLER ANTES", req);
-    const taskInfo = req.params.taskInfo;
+    const taskInfo = req.body;
     try {
-      // Obtenha os parâmetros do corpo da requisição
-      console.log("APOS CONTROLLER", req.params.taskInfo);
+
       const tasksOrError = await this.taskServiceInstance.getTasksPlanning(taskInfo) as Result<any>;
-      console.log("APOS CONTROLLER", tasksOrError);
 
       if (tasksOrError.isFailure) {
         return res.status(404).send();

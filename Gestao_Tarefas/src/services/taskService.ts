@@ -14,7 +14,7 @@ import ITaskPickupDeliveryRepo from './IRepos/ITaskPickupDeliveryRepo';
 import { TaskPickupDeliveryMap } from '../mappers/TaskPickupDeliveryMap';
 import { TaskVigilance } from '../domain/task-agg/TaskVigilance';
 import { TaskPickupDelivery } from '../domain/task-agg/TaskPickupDelivery';
-import axios from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 
 
 
@@ -103,31 +103,20 @@ export default class TaskService implements ITaskService {
       throw e;
     }
   }
-
   public async getTasksPlanning(info: any): Promise<Result<any>> {
-
-    console.log("info", info);
+    const axios = require('axios');
+  
+    let url ='http://127.0.0.1:8081/tarefas?ng=6&dp=6&p1=50&p2=25&t=2&av=40&nestab=3';
 
     try {
-
-      const url = `http://localhost:8082/tarefas?ng=${info.Ngeracoes}&dp=${info.dimensaoPop}&p1=${info.pobCruz}&p2=${info.pobMut}&t=${info.tempoLimite}&av=${info.avaliacaoDef}&nestab=${info.nEstabiliz}`;
-      console.log("url ", url);
-
-        const response = await axios.get(url, { responseType: 'text' });
-        console.log("response ", response);
-
-        return Result.ok(response);
-
-    //  return this.http.get(url, { responseType: 'text' });
-
+      const response = await axios.get(url); // Espera pela resposta da requisição
+      return Result.ok(response.data);
     } catch (error) {
-
-      return Result.fail(error); // Retorna falha em caso de erro na solicitação
-
+      console.error('Erro na chamada HTTP:', error);
+      return Result.fail(error);
     }
-
   }
-
+  
 
   public async updateTask(taskDTO: ITaskDTO): Promise<Result<ITaskDTO>> {
     try {

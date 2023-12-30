@@ -84,7 +84,19 @@ export default (app: Router) => {
     (req, res, next) => ctrl.getAllApprovedTasks(req, res, next));
 
 
-  route.get('/planning/:taskInfo',
-  (req, res, next) => ctrl.planearTarefas(req, res, next));
+  route.post('/planning/',
+    celebrate({
+      body: Joi.object({
+        Ngeracoes: Joi.number().required(),
+        dimensaoPop: Joi.number().required(),
+        pobCruz: Joi.number().required(),
+        pobMut: Joi.number().required(),
+        tempoLimite: Joi.number().required(),
+        avaliacaoDef: Joi.number().required(),
+        nEstabiliz: Joi.number().required()
+      })
+
+    }),
+    (req, res, next) => ctrl.planearTarefas(req, res, next));
 
 };

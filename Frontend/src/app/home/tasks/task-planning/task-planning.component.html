@@ -1,0 +1,28 @@
+<h1>Task planning:</h1>
+<div class="input-section">
+    <!-- Input fields for user data -->
+    <div *ngFor="let column of displayedColumns">
+        <mat-form-field>
+            <mat-label>{{ column }}:</mat-label>
+            <input matInput [placeholder]="'Enter ' + column" type="number" [ngModel]="getColumnValue(column)"
+                (ngModelChange)="updateColumnValue($event, column)">
+        </mat-form-field>
+    </div>
+
+    <button mat-raised-button color="primary" (click)="planear()">Planear</button>
+</div>
+
+<!-- Mostrar resultados -->
+<div class="result-section" fxLayout="column" fxLayoutAlign="center center" *ngIf="resultado.sequencia || resultado.tempo">
+    <div class="result-container">
+        <div class="result-item">
+            <p><strong>Sequencia:</strong></p>
+            <p>{{ resultado.sequencia }}</p>
+        </div>
+        <div class="result-item">
+            <p><strong>Tempo:</strong></p>
+            <p>{{ resultado.tempo }}</p>
+        </div>
+    </div>
+</div>
+

@@ -26,7 +26,7 @@ export default {
 
   //Base de dados do DEI para testes (trash)
   //databaseURL: process.env.MONGODB_URI || "mongodb://***REMOVED***@vsgate-s1.dei.isep.ipp.pt:10199/dummyDB",
-  
+
   /**
    * Your secret sauce
    */
@@ -61,23 +61,23 @@ export default {
       name: "RobotTypeController",
       path: "../controllers/robotTypeController"
     },
-    building:  {
+    building: {
       name: "BuildingController",
       path: "../controllers/buildingController"
     },
-    floor:  {
+    floor: {
       name: "FloorController",
       path: "../controllers/floorController"
     },
-    bridge:  {
+    bridge: {
       name: "BridgeController",
       path: "../controllers/bridgeController"
     },
-    elevator:  {
+    elevator: {
       name: "ElevatorController",
       path: "../controllers/elevatorController"
     },
-    room:  {
+    room: {
       name: "RoomController",
       path: "../controllers/roomController"
     }

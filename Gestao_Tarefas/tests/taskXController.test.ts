@@ -12,14 +12,14 @@ import { Task } from '../src/domain/task';
 describe('task controller', function () {
 	const sandbox = sinon.createSandbox();
 
-	
+
 	beforeEach(function() {
 		this.timeout(9000);
 		Container.reset();
 
 		let taskPickupSchemaInstance = require("../src/persistence/schemas/TaskPickupDeliverySchema").default;
 		Container.set("taskPickupDeliverySchema", taskPickupSchemaInstance);
-		
+
 		let taskPickupRepoClass = require("../src/repos/TaskPickupDeliveryRepo").default;
 		let taskPickupRepoInstance = Container.get(taskPickupRepoClass);
 		Container.set("TaskPickupDeliveryRepo", taskPickupRepoInstance);
@@ -31,7 +31,7 @@ describe('task controller', function () {
 		let taskVigilanceRepoInstance = Container.get(taskVigilanceRepoClass);
 		Container.set("TaskVigilanceRepo", taskVigilanceRepoInstance);
 
-		let taskSchemaInstance = require("../src/persistence/schemas/taskSchema").default;
+		let taskSchemaInstance = require("../src/persistence/schemas/TaskSchema").default;
 		Container.set("taskSchema", taskSchemaInstance);
 
 		let taskRepoClass = require("../src/repos/taskRepo").default;

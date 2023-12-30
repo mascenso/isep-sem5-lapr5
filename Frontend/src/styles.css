@@ -15,6 +15,7 @@ body{
   --primary-color-light: #4db6ac;
   --primary-color: #009688;
   --primary-color-dark: #004d40;
+  --secondary-color: #a1887f;
   --color-black: #000;
   --color-grey-light-warm: #F1EBEC;
   --color-grey-light: #FAFAFA;
@@ -45,4 +46,15 @@ body{
   --mdc-snackbar-container-color: var(--color-warning);
   --mat-snack-bar-button-color: white;
   --mdc-snackbar-supporting-text-color: white;
+}
+
+.terms-modalbox mat-dialog-container {
+  margin: 0 auto;
+  width: 80%;
+  font-size: 1.6rem;
+  padding: 0;
+}
+
+.terms-modalbox mat-dialog-container mat-card {
+  padding: 0 4rem;
 }

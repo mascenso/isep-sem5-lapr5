@@ -9,6 +9,7 @@ using UserManagement.Domain.Shared;
 using UserManagement.Domain.Users;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
 
 
 namespace UserManagement.Controllers
@@ -60,7 +61,7 @@ namespace UserManagement.Controllers
         {
           try
           {
-            var responseDto = await _userService.CreateUser(userDto);
+            var responseDto = await _userService.CreateSystemUser(userDto);
             var token = this._authService.GenerateJwtToken(responseDto);
             // Include token in the response headers
             Response.Headers.Append("Authorization", "Bearer " + token);
@@ -75,6 +76,7 @@ namespace UserManagement.Controllers
 
         // GET: api/users/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserDto>> GetUserById(Guid id)
         {
           var user = await _userService.FindUserById(new UserId(id));
@@ -84,6 +86,26 @@ namespace UserManagement.Controllers
           }
 
           return user;
+        }
+
+        [HttpGet("user")]
+        public async Task<ActionResult<UserDto>> GetUser()
+        {
+          try
+          {
+            var userIdFromClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            var userDto = await _userService.FindUserById(new UserId(userIdFromClaim));
+            return Ok(userDto); // 200 OK
+          }
+          catch (NotFoundException)
+          {
+            return NotFound(); // 404 Not Found
+          }
+          catch (BusinessRuleValidationException e)
+          {
+            return BadRequest(new { Message = e.Message }); // 400 Bad Request
+          }
+
         }
 
         [HttpGet("inactive")]
@@ -98,7 +120,7 @@ namespace UserManagement.Controllers
             }
 
             var inactiveUserDtos = inactiveUsers.Select(user =>
-                new UserDto(user.Id, user.Email, user.FirstName, user.LastName, user.Role.ToString(), user.Active)
+                new UserDto(user.Id, user.Email, user.FirstName, user.LastName, user.Role.ToString(), user.Active, user.TaxPayerNumber, user.MechanographicNumber, user.PhoneNumber)
             );
 
             return inactiveUserDtos.ToList();
@@ -108,11 +130,28 @@ namespace UserManagement.Controllers
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteUser(Guid id)
+        [AllowAnonymous]
+        public async Task<ActionResult> DeleteUserById(Guid id)
         {
           try
           {
-            await _userService.DeleteUser(new UserId(id));
+            var userIdFromClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            await _userService.DeleteUser(new UserId(userIdFromClaim));
+            return NoContent(); // 204 No Content
+          }
+          catch (NotFoundException)
+          {
+            return NotFound(); // 404 Not Found
+          }
+        }
+        
+        [HttpDelete("delete-user")]
+        public async Task<ActionResult> DeleteUser()
+        {
+          try
+          {
+            var userIdFromClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            await _userService.DeleteUser(new UserId(userIdFromClaim));
             return NoContent(); // 204 No Content
           }
           catch (NotFoundException)
@@ -121,8 +160,29 @@ namespace UserManagement.Controllers
           }
         }
 
+        // Patch: api/users/{{id}}
+        [HttpPatch("{id}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserDto>> PatchUserById(Guid id, UpdateUserRequestDto patchDto)
+        { 
+          try
+          {
+            var updatedUser = await _userService.PatchUserData(new UserId(id), patchDto);
+            return Ok(updatedUser); // 200 OK
+          }
+          catch (NotFoundException)
+          {
+            return NotFound(); // 404 Not Found
+          }
+          catch (BusinessRuleValidationException e)
+          {
+            return BadRequest(new { Message = e.Message }); // 400 Bad Request
+          }
+        }
+
         // PATCH: api/Users/5
         [HttpPatch("patch-user")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserDto>> PatchUser([FromBody] UpdateUserRequestDto patchDto)
         {
           try
@@ -149,12 +209,20 @@ namespace UserManagement.Controllers
           {
             // Validate loginDto and check if user exists
             var token = await _authService.AuthenticateUser(loginDto);
+            var user = await _userService.FindUserByEmail(loginDto.Email);
+            var userApproved = user.Active;
 
             if (token == null)
             {
               // Invalid credentials
               return Unauthorized(new { Message = "Invalid email or password." });
             }
+            
+            if (!userApproved) {
+              return Unauthorized(new { Message = "User waiting approval." });
+            }
+            
+            
             // Login successful, generate JWT token
             // Include token in the response headers
             Response.Headers.Append("Authorization", "Bearer " + token.AccessToken);
@@ -166,7 +234,6 @@ namespace UserManagement.Controllers
           }
         }
 
-        [Authorize]
         [HttpGet("validate-token")]
         public async Task<ActionResult<TokenValidationResponseDto>> ValidateTokenWithRole([FromQuery] string requiredRole)
         {

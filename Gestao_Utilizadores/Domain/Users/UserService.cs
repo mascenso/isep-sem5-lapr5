@@ -59,15 +59,15 @@ namespace UserManagement.Domain.Users
       return user == null
         ? null
         : new UserDto(user.Id.AsGuid(), user.Email.Value, user.FirstName, user.LastName, user.Role.ToString(),
-          user.Active);
+          user.Active, user.TaxPayerNumber, user.MechanographicNumber, user.PhoneNumber);
     }
 
     public async Task<IEnumerable<UserDto>> GetInactiveUsersAsync()
     {
-        var inactiveUsers = await _repo.GetInactiveUsersAsync(); 
+        var inactiveUsers = await _repo.GetInactiveUsersAsync();
         var inactiveUserDtos = inactiveUsers.Select(user =>
             new UserDto(user.Id.AsGuid(), user.Email.Value, user.FirstName, user.LastName, user.Role.ToString(),
-                user.Active)
+                user.Active, user.TaxPayerNumber, user.MechanographicNumber, user.PhoneNumber)
         );
 
         return inactiveUserDtos.ToList();
@@ -83,10 +83,12 @@ namespace UserManagement.Domain.Users
         throw new NotFoundException($"User with ID {userId} not found.");
       }
 
+  /*
       if (!existingUser.IsActive())
       {
         throw new BusinessRuleValidationException($"Can't patch a disabled user.");
       }
+      */
 
       // Update user properties based on the patched DTO
       existingUser.PatchUser(patchDto);
@@ -103,6 +105,11 @@ namespace UserManagement.Domain.Users
       if (existingUser == null)
       {
         throw new NotFoundException($"User with ID {userId} not found.");
+      }
+
+      if ("admin@email.pt".Equals(existingUser.Email.Value))
+      {
+        throw new BusinessRuleValidationException($"Nice try ;)");
       }
 
       _repo.Remove(existingUser);

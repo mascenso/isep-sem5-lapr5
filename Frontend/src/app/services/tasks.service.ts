@@ -30,4 +30,12 @@ export class TasksService {
     return this.http.get<TaskPickupRequestDTO[]>(`${this.API_URL}/api/tasks/pendingPickUp`);
   }
 
+  public getAllPickupDeliveryApprovedTasks(): Observable<TaskPickupRequestDTO[]> {
+    return this.http.get<TaskPickupRequestDTO[]>(`${this.API_URL}/api/tasks/approvedPickUp`);
+  }
+
+  public getAllVigilanceApprovedTasks(): Observable<TaskVigilanceRequestDTO[]> {
+    return this.http.get<TaskVigilanceRequestDTO[]>(`${this.API_URL}/api/tasks/approvedVigilance`);
+  }
+  
 }

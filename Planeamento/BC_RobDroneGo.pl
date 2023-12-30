@@ -127,11 +127,11 @@ pos_init(c3,[3,4]).
 
 
 % tarefa(Id,Origem,Destino).
-tarefa(t1,a104,a101).
-tarefa(t2,a202,a202).
-tarefa(t3,a202,a204).
-tarefa(t4,b201,b203).
-tarefa(t5,c305,c309).
+%tarefa(t1,a104,a101).
+%tarefa(t2,a202,a202).
+%tarefa(t3,a202,a204).
+%tarefa(t4,b201,b203).
+%tarefa(t5,c305,c309).
 
 
 %localizacao(sala/gabinete/etc..,Piso, Celula)

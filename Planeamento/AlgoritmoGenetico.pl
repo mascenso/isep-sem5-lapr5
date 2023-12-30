@@ -56,7 +56,6 @@ gera_frontend(NG,DP,P1,P2,T,Av,NEstab,Seq, Temp):-
 	(retract(tempo_limite(_));true), asserta(tempo_limite(T)),
     (retract(avaliacao_especifica());true), asserta(av_inferior(Av)),    
     (retract(estabilizacao());true), asserta(estabilizacao(NEstab)),!,
-	%inicializa_tempos_transicao_frontend,
 	inicializa_tempos_transicao,
 	gera_populacao(Pop),
 	avalia_populacao(Pop,PopAv),
@@ -71,24 +70,15 @@ gera_frontend(NG,DP,P1,P2,T,Av,NEstab,Seq, Temp):-
     Seq=Ind,
 	Temp=V.
 
-/*	
+% Remove todas as tarefas existentes da Base de Conhecimento
+remover_todas_tarefas :-
+    retractall(tarefa(_, _, _)).
+
 criar_tarefas([]).
 
 criar_tarefas([[Tarefa, A, B] | Resto]) :-
-    %retractall(tarefa(_, _, _)),  % Remove versões anteriores das tarefa, se existirem
     assertz(tarefa(Tarefa, A, B)),
-	write("TAREFA "), write(Tarefa), nl,
     criar_tarefas(Resto).
-
-inicializa_tempos_transicao_frontend :-
-    retractall(tempo_transicao(_, _, _)),  
-    retractall(lista_tarefas(_)),  
-    findall(Tarefa, tarefa(Tarefa, _, _), ListaTarefas),
-        assertz(lista_tarefas(ListaTarefas)),
-	write("ListaTarefas "), write(ListaTarefas),nl.
-
-
-*/
 
 /* Predicado para inicializar as variaveis necessarias para o algoritmo genético.
 NG - Nº de gerações;
@@ -134,9 +124,6 @@ gera:-
 	estabilizacao(NEstab),
 	get_time(Tinicial),
 	gera_geracao(0,NG,PopOrd,Tinicial,Tlimite,AvEspecifica,NEstab,0),
-	get_time(TFinal),
-	TempoExec is TFinal- Tinicial,
-	write("TempoExec= "),write(TempoExec),nl,
 	final_geracao(Ind*V), nl,
 	write('Melhor solução: '), write(Ind*V), nl.
 

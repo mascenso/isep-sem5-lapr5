@@ -232,11 +232,11 @@ export default class TaskService implements ITaskService {
   }
 
 
-  public async getAllPickupDeliveryApprovedTasks(): Promise<Result<Array<ITaskVigilanceDTO[]>>> {
+  public async getAllVigilanceApprovedTasks(): Promise<Result<Array<ITaskVigilanceDTO[]>>> {
     try {
       const allTasks = await this.taskVigilanceRepo.findAll();
 
-      // Filtra apenas as tarefas onde 'pending' é true
+      // Filtra apenas as tarefas onde 'approved' é true
       const filteredApprovedTasks = allTasks.filter(task => task.approved === true);
       const filteredApprovedNotPlannedTasks = filteredApprovedTasks.filter(task => task.planned === false);
 
@@ -249,7 +249,7 @@ export default class TaskService implements ITaskService {
   }
 
 
-  public async getAllVigilanceApprovedTasks(): Promise<Result<Array<ITaskPickupDeliveryDTO[]>>> {
+  public async getAllPickupDeliveryApprovedTasks(): Promise<Result<Array<ITaskPickupDeliveryDTO[]>>> {
     try {
       const allTasks = await this.taskPickupDeliveryRepo.findAll();
 

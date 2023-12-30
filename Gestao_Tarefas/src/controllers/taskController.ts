@@ -186,5 +186,6 @@ export default class TaskController implements ITaskController /* TODO: extends 
       return next(e);
     }
   }
+  
 }
 

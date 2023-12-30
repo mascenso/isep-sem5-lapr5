@@ -48,6 +48,10 @@ export default {
     task: {
       name: "TaskController",
       path: "../controllers/taskController"
+    },
+    route: {
+      name: "RouteController",
+      path: "../controllers/routeController"
     }
   },
 
@@ -71,6 +75,10 @@ export default {
     task: {
       name: "TaskService",
       path: "../services/taskService"
+    },
+    route: {
+      name: "RouteService",
+      path: "../services/routeService"
     }
   },
 };

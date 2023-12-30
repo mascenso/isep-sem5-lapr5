@@ -3,12 +3,12 @@ import { TaskViewModel } from "./taskView";
 export interface TaskPickupViewModel extends TaskViewModel {
   pickupLocalization: {
     buildingId: string;
-    floor: object;
+    floor: Floor;
     room: number[];
   };
   deliveryLocalization: {
     buildingId: string;
-    floor: object;
+    floor: Floor;
     room: number[];
   };
   contactNumber: number;
@@ -23,4 +23,9 @@ export interface TaskPickupViewModel extends TaskViewModel {
   approved: boolean;
   pending: boolean;
   planned: boolean;
+}
+
+export interface Floor {
+  floorNumber: string;
+  code: string;
 }

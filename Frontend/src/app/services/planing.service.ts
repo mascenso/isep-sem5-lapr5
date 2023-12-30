@@ -35,7 +35,7 @@ export class PlaningService {
     console.log("AQUI");
     // const url = `${this.API_URL}/api/tasks/planning`; 
 
-    return this.http.get<any>(`${this.API_URL}/api/tasks/planning/${taskInfo}`);
+    return this.http.post<any>(`${this.API_URL}/api/tasks/planning/`,taskInfo);
   }
 
 }

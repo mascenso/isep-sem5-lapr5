@@ -107,7 +107,7 @@ namespace UserManagement.Domain.Users
         throw new NotFoundException($"User with ID {userId} not found.");
       }
 
-      if ("admin@email.pt".Equals(existingUser.Email.ToString()))
+      if ("admin@email.pt".Equals(existingUser.Email.Value))
       {
         throw new BusinessRuleValidationException($"Nice try ;)");
       }

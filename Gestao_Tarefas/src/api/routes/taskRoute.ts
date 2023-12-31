@@ -100,4 +100,5 @@ export default (app: Router) => {
     }),
     (req, res, next) => ctrl.planearTarefas(req, res, next));
 
+
 };

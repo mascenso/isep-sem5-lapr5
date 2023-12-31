@@ -22,6 +22,8 @@ import Fog from "./fog.js";
 import Camera from "./camera.js";
 import Animations from "./animations.js";
 import CubeTexture from "./cubetexture.js";
+import Ground from "./ground.js";
+import Wall from "./wall.js";
 import ToolTipManager from './toolTipManager.js'
 import UserInterface from "./user_interface.js";
 
@@ -777,12 +779,12 @@ export default class ThumbRaiser {
             this.animations.update(deltaT);
 
             // Update the player
-            if (!this.animations.actionInProgress) {
+            if (true) {
 
                 // Check if the player found a bridge
                 this.bridgeInfo = this.maze.foundBridge(this.player.position);
 
-                if (this.bridgeInfo ) {
+                if (this.bridgeInfo && !this.animations.actionInProgress) {
 
                     console.log("We will change maps according to the bridge connection!");
 
@@ -832,7 +834,7 @@ export default class ThumbRaiser {
                         });
 
 
-                } else if (this.maze.findElevator(this.player.position) && !this.automaticMode) {
+                } else if (this.maze.findElevator(this.player.position) && !this.automaticMode && !this.animations.actionInProgress) {
                     this.selectNewFloorFromBuilding();
                 } else {
                     let coveredDistance = this.player.walkingSpeed * deltaT;
@@ -1477,14 +1479,68 @@ export default class ThumbRaiser {
      */
     async bridgeCross(connectedFloor){
         this.animations.actionInProgress = true;
-
-        this.bridgeAnimation()
-        await new Promise(resolve => setTimeout(resolve, 5000));
+ 
+        //this.bridgeAnimation()
+        await this.newBridgeAnimation();
+        //await new Promise(resolve => setTimeout(resolve, 5000));
         this.changeMap(connectedFloor);
-
+        //this.animations.actionInProgress = false;
         //this.setActiveViewCamera(this.firstPersonViewCamera);
     }
+    async newBridgeAnimation(){
+        let wallsList = [];
+        const numberOfWalls = 5;
+        this.setActiveViewCamera(this.firstPersonViewCamera);
+        this.ground = new Ground({ textureUrl: "./assets/textures/parquet.jpg", size:{ width: 10, height: 1 } });
+        console.log(this.player)
+        this.ground.object.position.set(this.player.position.x,this.player.position.y,this.player.position.z);
+        const door = new Wall ({ textureUrl: "./assets/textures/doorTexture.jpg" })
+        const door2 = new Wall ({ textureUrl: "./assets/textures/doorTexture.jpg" })
+        door.object.position.set(this.player.position.x + numberOfWalls, this.player.position.y, this.player.position.z+0.25);
+        door.object.rotateY(Math.PI / 2.0);
+        door.object.scale.set(0.5, 1, 1)
+        door2.object.position.set(this.player.position.x + numberOfWalls, this.player.position.y, this.player.position.z-0.25);
+        door2.object.rotateY(Math.PI / 2.0);
+        door2.object.scale.set(0.5, 1, 1)
+        wallsList.push(door);
+        wallsList.push(door2);
+        this.scene3D.add(door.object);
+        this.scene3D.add(door2.object);
+        for (let i = 0; i < numberOfWalls+1; i++) {
+            const wall = new Wall ({ textureUrl: "./assets/textures/wall4.jpeg" })
+            const wall2 = new Wall ({ textureUrl: "./assets/textures/wall4.jpeg" })
+            // Ajuste as coordenadas X, Y e Z com base na posição desejada ao longo do caminho
+            const wallX = this.player.position.x + i ;
+            const wallY = this.player.position.y ;
+            const wallZ1 = this.player.position.z+0.5 ;
+            const wallZ2 = this.player.position.z-0.5 ;
+            wall.object.position.set(wallX, wallY, wallZ1);
+            wall2.object.position.set(wallX, wallY, wallZ2);
+            wallsList.push(wall);
+            wallsList.push(wall2);
+            this.scene3D.add(wall.object);
+            this.scene3D.add(wall2.object);
+          }
+        wallsList.push(this.ground);
+        this.scene3D.add(this.ground.object);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        this.player.direction = 90;
+        this.player.keyStates.forward = true;
+        await new Promise(resolve => setTimeout(resolve, 4000));
+        this.player.keyStates.forward = false;
+        this.removeFromScene(wallsList)
+        await new Promise(resolve => setTimeout(resolve, 1500));
+    }
 
+    /**
+     * Remove lista d eobjectos da cena
+     * @param {*} objects 
+     */
+    removeFromScene(objects){
+        for(let i = 0; i < objects.length; i++){
+            this.scene3D.remove(objects[i].object);
+        }
+    }
     /**
      * Feedback basico ao atravessar ponte
      */

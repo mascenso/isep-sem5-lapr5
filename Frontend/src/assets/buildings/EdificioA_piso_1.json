@@ -17,13 +17,13 @@
         [1  ,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1],
         [2  ,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  0]
     ],
-    "initialPosition": [4, 19],
+    "initialPosition": [2.1, 20],
     "initialDirection": 0.0,
     "elevators":[
         {
             "position":[2,20],
             "orientation":"S",
-            "exit": [3,20]
+            "exit": [2.1,20]
         }
     ],
     "bridges":[

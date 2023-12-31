@@ -106,14 +106,21 @@ export default class TaskService implements ITaskService {
 
   public async getTasksPlanning(info: any): Promise<Result<any>> {
     const axios = require('axios');
-    
-    let url = `http://127.0.0.1:8081/tarefas?ng=${info.Ngeracoes}&dp=${info.dimensaoPop}&p1=${info.pobCruz}&p2=${info.pobMut}&t=${info.tempoLimite}&av=${info.avaliacaoDef}&nestab=${info.nEstabiliz}`;
-    //let url = `http://vs770.dei.isep.ipp.pt:8082/tarefas?ng=${Ngeracoes}&dp=${dimensaoPop}&p1=${pobCruz}&p2=${pobMut}&t=${tempoLimite}&av=${avaliacaoDef}&nestab=${nEstabiliz}`;
-    //let url = `http://rdg-planning.h5b0bhc4e5a0dddx.westeurope.azurecontainer.io/tarefas?ng=${Ngeracoes}&dp=${dimensaoPop}&p1=${pobCruz}&p2=${pobMut}&t=${tempoLimite}&av=${avaliacaoDef}&nestab=${nEstabiliz}`;
 
     try {
-      const response = await axios.get(url); // Espera pela resposta da requisição
-      console.log("dentro");
+      /*
+      for (let i = 0; i < info.LTasks.length; i++) {
+        const task = info.LTasks[i];
+        let urlTasks = `http://127.0.0.1:8081/listaTarefas?tarefa=${task[0]}&origX=${task[1]}&origY=${task[2]}&pisoOrigem=${task[3]}&destX=${task[4]}&destY=${task[5]}&pisoDestino=${task[6]}`;
+        const response = await axios.get(urlTasks); // Espera pela resposta da requisição
+      }
+      */
+      let urlPlanning = `http://127.0.0.1:8081/tarefas?ng=${info.Ngeracoes}&dp=${info.dimensaoPop}&p1=${info.pobCruz}&p2=${info.pobMut}&t=${info.tempoLimite}&av=${info.avaliacaoDef}&nestab=${info.nEstabiliz}`;
+    //let urlPlanning = `http://vs770.dei.isep.ipp.pt:8082/tarefas?g=${info.Ngeracoes}&dp=${info.dimensaoPop}&p1=${info.pobCruz}&p2=${info.pobMut}&t=${info.tempoLimite}&av=${info.avaliacaoDef}&nestab=${info.nEstabiliz}`;
+    //let urlPlanning = `http://rdg-planning.h5b0bhc4e5a0dddx.westeurope.azurecontainer.io/tarefas?g=${info.Ngeracoes}&dp=${info.dimensaoPop}&p1=${info.pobCruz}&p2=${info.pobMut}&t=${info.tempoLimite}&av=${info.avaliacaoDef}&nestab=${info.nEstabiliz}`;
+
+      const response = await axios.get(urlPlanning); // Espera pela resposta da requisição
+
       return Result.ok(response.data);
     } catch (error) {
       console.error('Erro na chamada HTTP:', error);
@@ -264,5 +271,7 @@ export default class TaskService implements ITaskService {
       return Result.fail<Array<ITaskPickupDeliveryDTO[]>>(error); // Retorna falha em caso de erro
     }
   }
+
+  
 
 }

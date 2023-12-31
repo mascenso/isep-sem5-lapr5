@@ -63,6 +63,39 @@ caminho_handler(Request) :-
     converte_termos_para_strings(LLig, LLigStrings),
     reply_json(json([caminho=LCam, custo=CustoTotal, cel=Cel, liga= LLigStrings])).
 
+% Handler específico para lista de tarefas
+listaTarefas_handler(Request) :-
+                cors_enable(Request, [ methods( [get, post, options] ),
+                                       headers( [content_type('application/json'), header('Header-Name')] ),
+                                       methods_allowed([get, post, options])]),
+                format('Access-Control-Allow-Origin: *\r\n'),
+                format('Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n'),
+                format('Access-Control-Allow-Headers: Content-Type, Header-Name\r\n\r\n'),
+  % http_parameters(Request, [tarefa(T, []),
+							origX(A, [integer]),
+							origY(B, [integer]),
+							pisoOrigem(C, []),
+							destX(D, [integer]),
+							destY(E, [integer]),
+                            pisoDestino(F, [])]),
+		%http_read_json_dict(Request,Dados),
+		%adicionar_tarefa(Dados.tarefa, Dados.origX, Dados.origY, Dados.pisoOrigem, Dados.destX, Dados.destY, Dados.F),
+		  http_parameters(Request, [tarefa(T, []),
+                              origX(OrigX, []),
+                              origY(OrigY, []),
+                              pisoOrigem(PisoOrigem, []),
+                              destX(DestX, []),
+                              destY(DestY, []),
+                              pisoDestino(PisoDestino, [])]),
+
+    % Converter valores que deveriam ser números para inteiros
+    term_to_atom(OrigX, X), % Converte OrigX para um número
+    term_to_atom(OrigY, Y), % Converte OrigY para um número
+    term_to_atom(DestX, DX), % Converte DestX para um número
+    term_to_atom(DestY, DY), % Converte DestY para um número
+        adicionar_tarefa(T, X, Y, C, DX, DY, F),
+		obter_tarefas(Lista),
+    	reply_json(json([lista=Lista])).
 
 % Handler específico para as tarefas
 tarefas_handler(Request) :-
@@ -75,12 +108,18 @@ tarefas_handler(Request) :-
 
     http_parameters(Request, [ng(NG,[]),
                               dp(DP,[integer]), 
-                              p1(P1,[float]), 
-                              p2(P2,[float]), 
+                              p1(P1,[integer]), 
+                              p2(P2,[integer]), 
                               t(T,[integer]), 
                               av(Av,[integer]), 
                               nestab(NEstab,[])]),
+    %term_to_atom(X,LTasks),
+
+   %parse_tasks(X,Tasks),
     gera_frontend(NG, DP, P1, P2, T, Av, NEstab, Seq, Temp),
+    %http_read_json_dict(Request,Dados),
+    %parse_tasks(Dados.LTasks,Tasks),
+    %gera_frontend(Dados.LTasks,Dados.NG, Dados.DP, Dados.P1, Dados.P2, Dados.T, Dados.Av, Dados.NEstab, Seq, Temp),
     reply_json(json([sequencia=Seq, tempo=Temp])).
 
 stop_server_before_exit :-

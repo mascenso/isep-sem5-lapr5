@@ -4,7 +4,7 @@
 :-dynamic prob_mutacao/1.
 :-dynamic tempo_transicao/3.
 :-dynamic lista_tarefas/1.
-:-dynamic tarefa/3.
+:-dynamic tarefa/7.
 
 
 /*Ligacoes HTTP*/
@@ -23,6 +23,42 @@ server(Port) :-
                   workers(16)
                 ]).
 
+% Handler específico para lista de tarefas
+listaTarefas_handler(Request) :-
+                cors_enable(Request, [ methods( [get, post, options] ),
+                                       headers( [content_type('application/json'), header('Header-Name')] ),
+                                       methods_allowed([get, post, options])]),
+                format('Access-Control-Allow-Origin: *\r\n'),
+                format('Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n'),
+                format('Access-Control-Allow-Headers: Content-Type, Header-Name\r\n\r\n'),
+   % http_parameters(Request, [tarefa(T, []),
+							origX(A, [integer]),
+							origY(B, [integer]),
+							pisoOrigem(C, []),
+							destX(D, [integer]),
+							destY(E, [integer]),
+                            pisoDestino(F, [])]),
+		%http_read_json_dict(Request,Dados),
+		%adicionar_tarefa(Dados.tarefa, Dados.origX, Dados.origY, Dados.pisoOrigem, Dados.destX, Dados.destY, Dados.F),
+		%adicionar_tarefa(T, A, B, C, D, E, F),
+	http_parameters(Request, [tarefa(T, []),
+                              origX(OrigX, []),
+                              origY(OrigY, []),
+                              pisoOrigem(PisoOrigem, []),
+                              destX(DestX, []),
+                              destY(DestY, []),
+                              pisoDestino(PisoDestino, [])]),
+
+    % Converter valores que deveriam ser números para inteiros
+    term_to_atom(OrigX, X), % Converte OrigX para um número
+    term_to_atom(OrigY, Y), % Converte OrigY para um número
+    term_to_atom(DestX, DX), % Converte DestX para um número
+    term_to_atom(DestY, DY), % Converte DestY para um número
+        adicionar_tarefa(T, X, Y, C, DX, DY, F),
+		obter_tarefas(Lista),
+    	reply_json(json([lista=Lista])).
+
+
 % Handler específico para caminho
 tarefas_handler(Request) :-
     cors_enable(Request, [ methods( [get, post, options] ),
@@ -34,19 +70,27 @@ tarefas_handler(Request) :-
 
     http_parameters(Request, [ng(NG,[]),
                               dp(DP,[integer]), 
-                              p1(P1,[float]), 
-                              p2(P2,[float]), 
+                              p1(P1,[integer]), 
+                              p2(P2,[integer]), 
                               t(T,[integer]), 
                               av(Av,[integer]), 
                               nestab(NEstab,[])]),
-    gera_frontend(NG, DP, P1, P2, T, Av, NEstab, Seq, Temp),
+	%term_to_atom(X,LTasks),
+	%parse_tasks(X,Tasks),
+  gera_frontend(NG, DP, P1, P2, T, Av, NEstab, Seq, Temp),
+   % http_read_json_dict(Request,Dados),
+    %    parse_tasks(Dados.LTasks,Tasks),
+  %  gera_frontend(Dados.LTasks,Dados.NG, Dados.DP, Dados.P1, Dados.P2, Dados.T, Dados.Av, Dados.NEstab, Seq, Temp),
     reply_json(json([sequencia=Seq, tempo=Temp])).
 
-:- consult('BC_RobDroneGo.pl').
-:- consult('Percurso_Robots.pl').
 
-
+%gera_frontend(LTasks,NG,DP,P1,P2,T,Av,NEstab,Seq, Temp):-
 gera_frontend(NG,DP,P1,P2,T,Av,NEstab,Seq, Temp):-
+	%remover_todas_tarefas,
+	%obter_tarefas(Tasks),
+	%criar_tarefas(Tasks),
+	%write("Tasks"),write(Tasks),nl,
+
     (retract(geracoes(_));true), asserta(geracoes(NG)),
 	(retract(populacao(_));true), asserta(populacao(DP)),
 	PC is P1/100, 
@@ -56,6 +100,7 @@ gera_frontend(NG,DP,P1,P2,T,Av,NEstab,Seq, Temp):-
 	(retract(tempo_limite(_));true), asserta(tempo_limite(T)),
     (retract(avaliacao_especifica());true), asserta(av_inferior(Av)),    
     (retract(estabilizacao());true), asserta(estabilizacao(NEstab)),!,
+
 	inicializa_tempos_transicao,
 	gera_populacao(Pop),
 	avalia_populacao(Pop,PopAv),
@@ -72,13 +117,23 @@ gera_frontend(NG,DP,P1,P2,T,Av,NEstab,Seq, Temp):-
 
 % Remove todas as tarefas existentes da Base de Conhecimento
 remover_todas_tarefas :-
-    retractall(tarefa(_, _, _)).
+    retractall(tarefa(_, _,_, _, _,_, _)).
 
 criar_tarefas([]).
 
-criar_tarefas([[Tarefa, A, B] | Resto]) :-
-    assertz(tarefa(Tarefa, A, B)),
+criar_tarefas([[Tarefa, A, B, C, D,E,F] | Resto]) :-
+    assertz(tarefa(Tarefa, A, B, C, D,E,F)),
     criar_tarefas(Resto).
+
+
+% Predicado para adicionar uma nova tarefa à lista
+adicionar_tarefa(Tarefa, A, B, C, D, E, F) :-
+    assertz(tarefas([Tarefa, A, B, C, D, E, F])).
+
+% Predicado para obter a lista de listas com todas as tarefas
+obter_tarefas(Lista) :-
+    findall(Tarefa, tarefas(Tarefa), Lista).
+
 
 /* Predicado para inicializar as variaveis necessarias para o algoritmo genético.
 NG - Nº de gerações;
@@ -131,7 +186,7 @@ gera:-
 inicializa_tempos_transicao :-
     retractall(tempo_transicao(_, _, _)),  % Remove versões anteriores do tempo de transição, se existirem
     retractall(lista_tarefas(_)),  % Remove versões anteriores da lista de tarefas, se existirem
-    findall(Tarefa, tarefa(Tarefa, _, _), ListaTarefas),
+    findall(Tarefa, tarefa(Tarefa, _, _, _, _, _, _), ListaTarefas),
 	asserta(lista_tarefas(ListaTarefas)),
     assert_lista_tempos(ListaTarefas, ListaTarefas).
 
@@ -149,13 +204,16 @@ valida_tarefa_com_outras(Tarefa, [OutraTarefa | Resto]) :-
     dif(Tarefa, OutraTarefa),
     not(tempo_transicao(Tarefa, OutraTarefa, _)),
     not(tempo_transicao(OutraTarefa, Tarefa, _)),
-	tarefa(Tarefa, _, DestinoT1),
-	tarefa(OutraTarefa, OrigemT2, _),
+	tarefa(Tarefa, _, _, _, CelEndTask1,CelEndTask2, PisoEndTask),
+	tarefa(OutraTarefa, CelBeginTask1,CelBeginTask2, PisoBeginTask, _, _, _),
+
+	%tarefa(Tarefa, _, DestinoT1),
+	%tarefa(OutraTarefa, OrigemT2, _),
 	%Para calcular apenas o custo entre tarefas e nao durante o processamento de tarefas
-	localizacao(DestinoT1,PisoOrig, CelulaOrig),
-	localizacao(OrigemT2,PisoDest,CelulaDest),
-    ((PisoOrig == PisoDest, aStar(CelulaOrig, CelulaDest, _, Custo));
-    caminho_pisos_com_custo(PisoOrig, PisoDest, _, _, Custo, _)),
+	%localizacao(DestinoT1,PisoOrig, CelulaOrig),
+	%localizacao(OrigemT2,PisoDest,CelulaDest),
+    ((PisoEndTask == PisoBeginTask, aStar([CelEndTask1,CelEndTask2], [CelBeginTask1,CelBeginTask2], _, Custo));
+    caminho_pisos_com_custo(PisoEndTask, PisoBeginTask, _, _, Custo, _)),
     assert(tempo_transicao(Tarefa, OutraTarefa, Custo)),
     assert(tempo_transicao(OutraTarefa, Tarefa, Custo)),
     valida_tarefa_com_outras(Tarefa, Resto).
@@ -170,7 +228,7 @@ gera_populacao(Pop):-
 	populacao(TamPop),
 	lista_tarefas(LTar),
 	length(LTar,NumT),
-	findall(Tarefa,tarefa(Tarefa,_,_),ListaTarefas),
+	findall(Tarefa,tarefa(Tarefa,_,_,_,_,_,_),ListaTarefas),
 	gera_populacao(TamPop,ListaTarefas,NumT,Pop).
 
 gera_populacao(0,_,_,[]):-!.

@@ -82,33 +82,40 @@ export default (app: Router) => {
   route.get('/approvedPickUp',
     (req, res, next) => ctrl.getAllPickupDeliveryApprovedTasks(req, res, next));
 
-    route.get('/approvedVigilance',
+  route.get('/approvedVigilance',
     (req, res, next) => ctrl.getAllVigilanceApprovedTasks(req, res, next));
 
+
   route.post('/planning/',
+    (req, res, next) => {
+      console.log('INICIO');
+      console.log('Corpo da requisição:', req.body);
+      next();
+    },
     celebrate({
       body: Joi.object({
-        ltasks: Joi.array()
-        .items(
+        LTasks: Joi.array().items(
           Joi.array().items(
-            Joi.string(), // Descrição 
-            Joi.array().items(Joi.any()), // Array [x,y]
-            Joi.string(), 
-            Joi.array().items(Joi.any()), // Array [x,y]
-            Joi.string() 
+            Joi.string(), // Descrição
+            Joi.string().regex(/^\[\d+,\d+\]$/), // Coordenadas [x, y]
+            Joi.string(), // Valor intermediário
+            Joi.string().regex(/^\[\d+,\d+\]$/), // Coordenadas [x, y]
+            Joi.string() // Valor intermediário
           )
-        )
-        .required(),
+        ).required(),
         Ngeracoes: Joi.number().required(),
         dimensaoPop: Joi.number().required(),
         pobCruz: Joi.number().required(),
         pobMut: Joi.number().required(),
         tempoLimite: Joi.number().required(),
         avaliacaoDef: Joi.number().required(),
-        nEstabiliz: Joi.number().required()
-      })
-
+        nEstabiliz: Joi.number().required(),
+      }),
     }),
-    (req, res, next) => ctrl.planearTarefas(req, res, next));
+    (req, res, next) => {
+      console.log('FIM ');
+      console.log('Corpo da requisição:', req.body);
+      ctrl.planearTarefas(req, res, next)
+    });
 
 };

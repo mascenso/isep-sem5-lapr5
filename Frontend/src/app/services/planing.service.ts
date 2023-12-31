@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, catchError, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Conditional } from '@angular/compiler';
 
@@ -32,7 +32,18 @@ export class PlaningService {
  */
 
   planear(taskInfo: any): Observable<any> {
-    return this.http.post<any>(`${this.API_URL}/api/tasks/planning/`,taskInfo);
+    console.log("SERVIÇO UI taskInfo ",taskInfo);
+    //return this.http.post<any>(`${this.API_URL}/api/tasks/planning/`,taskInfo);
+    return this.http.post<any>(`${this.API_URL}/api/tasks/planning/`, taskInfo).pipe(
+      tap((response: Record<string, any>) => {
+        console.log("Resposta do servidor:", response);
+      }),
+      catchError((error) => {
+        console.error("Erro na solicitação:", error);
+        throw error; // lança o erro para ser tratado pelo chamador do método
+      })
+    );
+  }
   }
 
-}
+

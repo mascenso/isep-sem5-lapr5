@@ -35,19 +35,23 @@ tarefas_handler(Request) :-
     http_parameters(Request, [ltasks(LTasks,[]),
 							  ng(NG,[]),
                               dp(DP,[integer]), 
-                              p1(P1,[float]), 
-                              p2(P2,[float]), 
+                              p1(P1,[integer]), 
+                              p2(P2,[integer]), 
                               t(T,[integer]), 
                               av(Av,[integer]), 
                               nestab(NEstab,[])]),
-    gera_frontend(LTasks,NG, DP, P1, P2, T, Av, NEstab, Seq, Temp),
+	term_to_atom(X,LTasks),
+	%parse_tasks(X,Tasks),
+  gera_frontend(X,NG, DP, P1, P2, T, Av, NEstab, Seq, Temp),
+   % http_read_json_dict(Request,Dados),
+    %    parse_tasks(Dados.LTasks,Tasks),
+  %  gera_frontend(Dados.LTasks,Dados.NG, Dados.DP, Dados.P1, Dados.P2, Dados.T, Dados.Av, Dados.NEstab, Seq, Temp),
     reply_json(json([sequencia=Seq, tempo=Temp])).
-
-:- consult('BC_RobDroneGo.pl').
-:- consult('Percurso_Robots.pl').
 
 
 gera_frontend(LTasks,NG,DP,P1,P2,T,Av,NEstab,Seq, Temp):-
+	%write("LTasks"),write(LTasks),nl,
+	remover_todas_tarefas,
 	criar_tarefas(LTasks),
     (retract(geracoes(_));true), asserta(geracoes(NG)),
 	(retract(populacao(_));true), asserta(populacao(DP)),
@@ -81,6 +85,40 @@ criar_tarefas([]).
 criar_tarefas([[Tarefa, A, B, C, D] | Resto]) :-
     assertz(tarefa(Tarefa, A, B, C, D)),
     criar_tarefas(Resto).
+
+
+
+
+parse_coordinates([], []).
+parse_coordinates(['[' | Rest], [ParsedCoordinates | ParsedRest]) :-
+    extract_coordinates(Rest, ParsedCoordinates),
+    parse_coordinates(Rest, ParsedRest).
+
+extract_coordinates([], []).
+extract_coordinates([Coord1, ',' | Rest], [Coord1 | ParsedRest]) :-
+    extract_coordinates(Rest, ParsedRest).
+extract_coordinates([Coord1, ']' | _], [Coord1]).
+
+convert_task_structure([], []).
+convert_task_structure([Id, Coords1, _, Coords2, _ | Rest], [Task | ParsedRest]) :-
+    convert_coordinates(Coords1, ParsedCoords1),
+    convert_coordinates(Coords2, ParsedCoords2),
+    Task = [Id, ParsedCoords1, ParsedCoords2],
+    convert_task_structure(Rest, ParsedRest).
+
+convert_coordinates(StringCoord, Coords) :-
+    atom_string(AtomString, StringCoord),
+    sub_string(AtomString, 1, _, 1, SubString),
+    atomic_list_concat(SubList, ',', SubString),
+    maplist(atom_number, SubList, Coords).
+
+parse_tasks([], []).
+parse_tasks([Row | Rest], [ParsedRow | ParsedRest]) :-
+    convert_task_structure(Row, ParsedRow),
+    parse_tasks(Rest, ParsedRest).
+
+convert_task_structure([['t1', '[2,2]', 'b2', '[2,3]', 'b2'],['t2', '[2,2]', 'a1', '[2,3]', 'a1'],['t3', '[2,2]', 'a1', '[3,3]', 'a1']],L).
+parse_tasks([['t1', '[2,2]', 'b2', '[2,3]', 'b2'],['t2', '[2,2]', 'a1', '[2,3]', 'a1'],['t3', '[2,2]', 'a1', '[3,3]', 'a1']],L).
 
 /* Predicado para inicializar as variaveis necessarias para o algoritmo genético.
 NG - Nº de gerações;

@@ -128,23 +128,18 @@ pos_init(c3,[3,4]).
 
 % tarefa(Id,Origem,Destino).
 %tarefa(t1,a104,a101).
-%tarefa(t2,a202,a202).
+%tarefa(t2,a202,a204).
 %tarefa(t3,a202,a204).
 %tarefa(t4,b201,b203).
 %tarefa(t5,c305,c309).
+% tarefa(Id,OrgX,OrgY,PisoOrig,DestX,DestY,PisoDest).
+tarefa(t1,2,4,a1,3,4,a1).
+tarefa(t2,2,3,b2,4,4,c3).
+tarefa(t3,2,2,b2,2,3,b2).
+tarefa(t4,2,3,c3,4,4,c3).
+tarefa(t5,2,3,a2,2,2,a2).
 
 
-%localizacao(sala/gabinete/etc..,Piso, Celula)
-localizacao(a101,a1,[2,2]).
-localizacao(a104,a1,[2,3]).
 
-localizacao(a202,a2,[2,4]).
-localizacao(a204,a2,[3,3]).
-
-localizacao(b201,b2,[2,2]).
-localizacao(b203,b2,[2,3]).
-
-localizacao(c305,c3,[2,2]).
-localizacao(c309,c3,[4,4]).
 
 

@@ -30,6 +30,10 @@ export default async ({ expressApp }) => {
     name: config.controllers.task.name,
     path: config.controllers.task.path
   }
+  const routeController = {
+    name: config.controllers.route.name,
+    path: config.controllers.route.path
+  }
 
   const taskRepo = {
     name: config.repos.task.name,
@@ -49,6 +53,11 @@ export default async ({ expressApp }) => {
     path: config.services.task.path
   }
 
+  const routeService = {
+    name: config.services.route.name,
+    path: config.services.route.path
+  }
+
   await dependencyInjectorLoader({
     mongoConnection,
     schemas: [
@@ -57,7 +66,8 @@ export default async ({ expressApp }) => {
       taskPickupDeliverySchema
     ],
     controllers: [
-      taskController
+      taskController,
+      routeController
     ],
     repos: [
       taskRepo,
@@ -65,7 +75,8 @@ export default async ({ expressApp }) => {
       taskPickupDeliveryRepo
     ],
     services: [
-      taskService
+      taskService,
+      routeService
     ]
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');

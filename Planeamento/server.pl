@@ -43,6 +43,12 @@ server(Port) :-
 stop_server(Port) :-
     http_stop_server(Port,[]).
 
+% converte todo tipo de termos em strings para poder enviar elev(1,2)
+converte_termos_para_strings([], []).
+converte_termos_para_strings([Termo|Resto], [StringTermo|RestoStrings]) :-
+    term_string(Termo, StringTermo),
+    converte_termos_para_strings(Resto, RestoStrings).
+    
 % Handler específico para caminho
 caminho_handler(Request) :-
                 cors_enable(Request, [ methods( [get, post, options] ),
@@ -54,7 +60,8 @@ caminho_handler(Request) :-
     http_parameters(Request, [pisoOrigem(PisoOr, []),
                               pisoDestino(PisoDest, [])]),
     caminho_pisos_com_custo(PisoOr, PisoDest, LCam, LLig, CustoTotal, Cel),
-    reply_json(json([caminho=LCam, custo=CustoTotal])).
+    converte_termos_para_strings(LLig, LLigStrings),
+    reply_json(json([caminho=LCam, custo=CustoTotal, cel=Cel, liga= LLigStrings])).
 
 % Handler específico para lista de tarefas
 listaTarefas_handler(Request) :-

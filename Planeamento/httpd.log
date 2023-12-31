@@ -109,3 +109,5 @@ completed(21, 0.834179, 127, 200, ok).
 completed(22, 0.821481, 127, 200, ok).
 /*Fri Dec 29 20:25:06 2023*/ request(23, 1703881506.177, [peer(ip(127,0,0,1)),method(get),request_uri('/tarefas?ng=6&dp=8&p1=50&p2=25&t=1&av=40&nestab=4'),path('/tarefas'),search([ng='6',dp='8',p1='50',p2='25',t='1',av='40',nestab='4']),http_version(1-1),host(localhost),port(8082),connection('keep-alive'),sec_ch_ua('"Brave";v="119", "Chromium";v="119", "Not?A_Brand";v="24"'),content_type('application/json'),sec_ch_ua_mobile('?0'),user_agent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'),header_name('Piyali Das'),sec_ch_ua_platform('"macOS"'),sec_gpc('1'),origin('http://localhost:4200'),sec_fetch_site('same-site'),sec_fetch_mode(cors),sec_fetch_dest(empty),referer('http://localhost:4200/')]).
 completed(23, 0.837615, 127, 200, ok).
+server(started, 1704047927).
+completed(111, 7.297493, 127, 200, ok).

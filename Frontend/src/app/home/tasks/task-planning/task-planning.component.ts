@@ -18,7 +18,6 @@ export class TaskPlanningComponent {
   selectedVigilanceTasks: TaskVigilanceViewModel[] = [];
   approvedVigilanceTasks: TaskViewModel[] = [];
   approvedPickupTasks: TaskViewModel[] = [];
-  robot: RobotViewModel[]=[];
 
   displayedColumns: string[] = ['Nº Gerações', 'Dimensão População', 'Probabilidade Cruzamento(%)', 'Probabilidade Mutacao(%)', 'Tempo limite(s)', 'Avaliação especifica', 'Nº Gerações até estabilização'];
   allSelectedTasks: any[] = [];

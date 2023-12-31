@@ -66,15 +66,20 @@ tarefas_handler(Request) :-
         format('Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n'),
         format('Access-Control-Allow-Headers: Content-Type, Header-Name\r\n\r\n'),
 
-    http_parameters(Request, [ltasks(LTasks,[]),
+    http_parameters(Request, [ltasks(LTasks,[string]),
                               ng(NG,[]),
                               dp(DP,[integer]), 
-                              p1(P1,[float]), 
-                              p2(P2,[float]), 
+                              p1(P1,[integer]), 
+                              p2(P2,[integer]), 
                               t(T,[integer]), 
                               av(Av,[integer]), 
                               nestab(NEstab,[])]),
-    gera_frontend(LTasks,NG, DP, P1, P2, T, Av, NEstab, Seq, Temp),
+    term_to_atom(X,LTasks),
+   %parse_tasks(X,Tasks),
+    gera_frontend(X,NG, DP, P1, P2, T, Av, NEstab, Seq, Temp),
+    %http_read_json_dict(Request,Dados),
+    %parse_tasks(Dados.LTasks,Tasks),
+    %gera_frontend(Dados.LTasks,Dados.NG, Dados.DP, Dados.P1, Dados.P2, Dados.T, Dados.Av, Dados.NEstab, Seq, Temp),
     reply_json(json([sequencia=Seq, tempo=Temp])).
 
 stop_server_before_exit :-

@@ -195,6 +195,8 @@ console.log("CHEGOU AQUI ",req.body);
     try {
 
       const tasksOrError = await this.taskServiceInstance.getTasksPlanning(taskInfo) as Result<any>;
+      console.log("tasksOrError ",tasksOrError);
+
 
       if (tasksOrError.isFailure) {
         return res.status(404).send();

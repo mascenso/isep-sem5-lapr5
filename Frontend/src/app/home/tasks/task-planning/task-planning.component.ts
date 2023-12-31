@@ -44,12 +44,10 @@ export class TaskPlanningComponent {
   extractVigilanceTaskDetails(tasks: TaskVigilanceViewModel[]): any[] {
     return tasks.map(task => {
       const { description, floors, endPosition, startPosition } = task;
-
-      const floorsDescription = floors && floors.length > 0 ? floors[0].description : '';
-      const endPositionArray = Array.isArray(endPosition) ? endPosition : [];
-      const startPositionArray = Array.isArray(startPosition) ? startPosition : [];
-      console.log('floorsDescription: ', floorsDescription)
-      console.log('endPositionArray: ', endPositionArray)
+      const floorsDescription = floors[0].description;
+      const endPositionArray = JSON.stringify(endPosition);
+      console.log("endPositionArray ", endPositionArray);
+      const startPositionArray = JSON.stringify(startPosition);
 
       return [description, startPositionArray, floorsDescription, endPositionArray, floorsDescription];
     });
@@ -62,19 +60,14 @@ export class TaskPlanningComponent {
         pickupLocalization,
         deliveryLocalization
       } = task;
-      const pickupRoom = Array.isArray(pickupLocalization.room) ? deliveryLocalization.room : [];
-      console.log("pickupRoom ", pickupRoom);
 
-      const deliveryroom = Array.isArray(deliveryLocalization.room) ? deliveryLocalization.room : [];
-      console.log("deliveryroom ", deliveryroom);
+      const pickupRoom = JSON.stringify(pickupLocalization.room);
+      const deliveryroom = JSON.stringify(deliveryLocalization.room);
       const pickupCodeFloor = pickupLocalization.floor;
-      console.log("pickupCodeFloor ", pickupCodeFloor);
       const pickupCodes = pickupCodeFloor.code;
 
-      console.log("pickupCodes", pickupCodes);
 
       const deliveryCode = deliveryLocalization.floor.code;
-      console.log("deliveryCode", deliveryCode);
 
 
       return [description, pickupRoom, pickupCodes, deliveryroom, deliveryCode];
@@ -140,8 +133,20 @@ export class TaskPlanningComponent {
     const vigilanceTasksInfo = this.extractVigilanceTaskDetails(this.selectedVigilanceTasks);
     const pickUpVigilanceTasksInfo = this.extractPickupTaskDetails(this.selectedPickupTasks);
 
-    this.allSelectedTasks = vigilanceTasksInfo.concat(pickUpVigilanceTasksInfo);
-    console.log("allSelectedTasks", this.allSelectedTasks);
+    this.allSelectedTasks = vigilanceTasksInfo.concat(pickUpVigilanceTasksInfo);  
+    
+    this.allSelectedTasks = this.allSelectedTasks.map((task, index) => {
+      const taskIndex = index + 1; // Ou alguma lógica para obter o tXX correto
+      return [
+        `t${taskIndex}`,
+        task[1], // Coordenadas [2, 4], [2, 3], etc.
+        task[2], // Algum valor correspondente, como 'a1', 'a2', etc.
+        task[3], // Outra coordenada [3, 3], [2, 2], etc.
+        task[4]  // Outro valor correspondente, como 'a1', 'a2', etc.
+      ];
+    });
+    
+    console.log("allSelectedTasks 2 ", this.allSelectedTasks);
 
     const taskParameters = {
       LTasks: this.allSelectedTasks,

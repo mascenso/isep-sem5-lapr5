@@ -97,9 +97,11 @@ export default (app: Router) => {
         LTasks: Joi.array().items(
           Joi.array().items(
             Joi.string(), // Descrição
-            Joi.string().regex(/^\[\d+,\d+\]$/), // Coordenadas [x, y]
+            Joi.number(),
+            Joi.number(),
             Joi.string(), // Valor intermediário
-            Joi.string().regex(/^\[\d+,\d+\]$/), // Coordenadas [x, y]
+            Joi.number(),
+            Joi.number(),
             Joi.string() // Valor intermediário
           )
         ).required(),

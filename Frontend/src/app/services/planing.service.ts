@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Conditional } from '@angular/compiler';
+import { RobotDTO } from 'src/dto/robotDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,7 @@ export class PlaningService {
  */
 
   planear(taskInfo: any): Observable<any> {
-    console.log("SERVIÇO UI taskInfo ",taskInfo);
+    
     //return this.http.post<any>(`${this.API_URL}/api/tasks/planning/`,taskInfo);
     return this.http.post<any>(`${this.API_URL}/api/tasks/planning/`, taskInfo).pipe(
       tap((response: Record<string, any>) => {
@@ -44,6 +45,13 @@ export class PlaningService {
       })
     );
   }
+
+  public getAllRobots(): Observable<RobotDTO[]> {
+    return this.http.get<RobotDTO[]>(`${this.API_URL}/api/robots/`);
+  }
+
+
+
   }
 
 

@@ -16,25 +16,29 @@
   <button mat-raised-button color="primary" (click)="calcular()">Calcular</button>
 
 <table mat-table [dataSource]="resultado" class="mat-elevation-z8">
-  <!-- Position Column -->
+
   <ng-container matColumnDef="origem">
     <th mat-header-cell *matHeaderCellDef> Origem </th>
     <td mat-cell *matCellDef="let element"> {{element.origem}} </td>
   </ng-container>
 
-  <!-- Name Column -->
+
   <ng-container matColumnDef="destino">
     <th mat-header-cell *matHeaderCellDef> Destino </th>
     <td mat-cell *matCellDef="let element"> {{element.destino}} </td>
   </ng-container>
 
-  <!-- Weight Column -->
-  <ng-container matColumnDef="caminho">
-    <th mat-header-cell *matHeaderCellDef> Caminho </th>
+
+  <ng-container matColumnDef="edificios">
+    <th mat-header-cell *matHeaderCellDef> Edificios </th>
     <td mat-cell *matCellDef="let element"> {{element.caminho}} </td>
   </ng-container>
 
-  <!-- Symbol Column -->
+  <ng-container matColumnDef="caminho">
+    <th mat-header-cell *matHeaderCellDef> Caminho </th>
+    <td mat-cell *matCellDef="let element"> {{element.liga}} </td>
+  </ng-container>
+
   <ng-container matColumnDef="custo">
     <th mat-header-cell *matHeaderCellDef> Custo </th>
     <td mat-cell *matCellDef="let element"> {{element.custo}} </td>

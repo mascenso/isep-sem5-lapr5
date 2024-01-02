@@ -12,7 +12,8 @@ export default (app: Router) => {
     app.use('/floors',
       middlewares.authRequest([
         UserRole.ADMINISTRATOR.toString(),
-        UserRole.CAMPUS_MANAGER.toString()
+        UserRole.CAMPUS_MANAGER.toString(),
+        UserRole.USER.toString()
       ]),
       route);
 
@@ -74,7 +75,7 @@ export default (app: Router) => {
   (req, res, next) => ctrl.updateFloor(req, res, next) );
 
   //  GET /api/floors/buildings?building={building}
-  route.get('/buildings',  (req, res, next) => { ctrl.getFloorsAtBuildings(req, res, next); }  );
+  route.get('/buildings',(req, res, next) => { ctrl.getFloorsAtBuildings(req, res, next); }  );
 
   route.get('',  (req, res, next) => { ctrl.getAllFloors(req, res, next); }  );
 

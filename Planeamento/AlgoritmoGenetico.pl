@@ -50,10 +50,10 @@ listaTarefas_handler(Request) :-
                               pisoDestino(PisoDestino, [])]),
 
     % Converter valores que deveriam ser números para inteiros
-    term_to_atom(OrigX, X), % Converte OrigX para um número
-    term_to_atom(OrigY, Y), % Converte OrigY para um número
-    term_to_atom(DestX, DX), % Converte DestX para um número
-    term_to_atom(DestY, DY), % Converte DestY para um número
+    term_to_atom(X,OrigX), % Converte OrigX para um número
+    term_to_atom(Y,OrigY), % Converte OrigY para um número
+    term_to_atom(DX,DestX), % Converte DestX para um número
+    term_to_atom(DY,DestX), % Converte DestY para um número
         adicionar_tarefa(T, X, Y, C, DX, DY, F),
 		obter_tarefas(Lista),
     	reply_json(json([lista=Lista])).
@@ -346,7 +346,7 @@ gera_geracao(N,G,Pop,Tinicial,Tlimite,AvEspecifica,NEstab,Count):-
 	ordena_populacao(All, AllOrd),
 
     length(Pop, Size),
-	%Calcula o número de melhores a serem preservados, garantindo que pelo menos 30% sao preservados da população incial
+	%Calcula o número de melhores a serem preservados, garantindo que pelo menos 30% sao preservados da população atual
     NumeroMelhoresPreservar is round(Size * 0.3), 
 
 	%Seleciona os melhores indivíduos para preservar na próxima geração

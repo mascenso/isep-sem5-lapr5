@@ -87,11 +87,6 @@ export default (app: Router) => {
 
 
   route.post('/planning/',
-    (req, res, next) => {
-      console.log('INICIO');
-      console.log('Corpo da requisição:', req.body);
-      next();
-    },
     celebrate({
       body: Joi.object({
         LTasks: Joi.array().items(
@@ -114,11 +109,7 @@ export default (app: Router) => {
         nEstabiliz: Joi.number().required(),
       }),
     }),
-    (req, res, next) => {
-      console.log('FIM ');
-      console.log('Corpo da requisição:', req.body);
-      ctrl.planearTarefas(req, res, next)
-    });
+    (req, res, next) =>    ctrl.planearTarefas(req, res, next));
 
 
 };

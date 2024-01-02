@@ -189,14 +189,11 @@ export default class TaskController implements ITaskController /* TODO: extends 
   }
 
   public async planearTarefas(req: Request, res: Response, next: NextFunction) {
-console.log("CHEGOU AQUI ",req.body);
 
     const taskInfo = req.body;
     try {
 
       const tasksOrError = await this.taskServiceInstance.getTasksPlanning(taskInfo) as Result<any>;
-      console.log("tasksOrError ",tasksOrError);
-
 
       if (tasksOrError.isFailure) {
         return res.status(404).send();

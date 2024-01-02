@@ -1,0 +1,27 @@
+@startuml US480
+
+actor Utilizador
+participant "RobDroneGo" as Sistema
+participant "Frontend" as UI
+participant "Gestão Tarefas" as G.Tarefas
+
+Utilizador -> Sistema : Listar tarefas pendentes
+activate Sistema
+
+Sistema -> UI: Listar tarefas pendentes
+activate UI
+
+UI -> G.Tarefas : Busca tarefas pendentes
+activate G.Tarefas
+
+G.Tarefas  -> G.Tarefas : Busca tarefas pendentes
+G.Tarefas -> UI : Lista de tarefas pendentes/erro ao obter tarefas;
+deactivate G.Tarefas
+
+UI -> Sistema : Lista de tarefas pendentes/erro ao obter tarefas;
+deactivate UI
+
+Utilizador <-- Sistema: Mostra lista de tarefas pendentes/erro ao obter tarefas;
+deactivate Sistema
+
+@enduml

@@ -24,7 +24,7 @@
     "bridges":
     [
         {
-            "locationBridge":[12,9],
+            "locationBridge":[11.9,9],
             "buildind":
                 {
                     "code":"B",

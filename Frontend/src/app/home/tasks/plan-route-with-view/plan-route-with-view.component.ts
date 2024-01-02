@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { event } from 'cypress/types/jquery';
 import { findLastKey } from 'lodash';
+import * as caminhos from './caminhos'
 
 @Component({
   selector: 'app-plan-route-with-view',
@@ -15,42 +16,31 @@ export class PlanRouteWithViewComponent {
   mapToLoad:any={"data":{}};
   cellsToMove:object[]=[];
 
-  posicaoInicial = [5,5];
+  posicaoInicial = [5,10];
   //popular isto com o array de movimentacoes que queremos
-  movimentacaoRobotExemplo=[
-    {
-      caminho:[[6,6],[6,7],[6,8],[6,9],[6,10],[6,11],[6,12],[6,13],[6,14],[6,15],[6,16],[6,17],[7,18],[8,19],[9,19]],
-      elevador:true,
-      map:'assets/buildings/EdificioA_piso_4.json',
-      initialPosition:[2,20],
-    },
-    {
-      caminho:[[1,20],[0,20],[-1,20],[-1,21],[-1,22]],
-      elevador:false,
-      map:'assets/buildings/EdificioA_piso_4.json',
-      initialPosition:[8,19]
-    },
-  ]
-
+  movimentacaoRobotExemplo=caminhos.edAfloor1_edAfloor2;
+  
 
   buildingsInit: any[] = [
-    { id: 1, name: 'Edifício 1' },
-    { id: 2, name: 'Edifício 2' },
+    { id: "A", name: 'Edifício A' },
+    { id: "B", name: 'Edifício B' },
+    { id: "C", name: 'Edifício C' },
   ];
 
   floorsInit: any[] = [
-    { id: 1, floorNumber: 'Piso 1' },
-    { id: 2, floorNumber: 'Piso 2' },
+    { id: "1", floorNumber: 'Piso 1' },
+    { id: "2", floorNumber: 'Piso 2' },
   ];
 
   buildingsEnd: any[] = [
-    { id: 1, name: 'Edifício A' },
-    { id: 2, name: 'Edifício B' },
+    { id: "A", name: 'Edifício A' },
+    { id: "B", name: 'Edifício B' },
+    { id: "C", name: 'Edifício C' },
   ];
 
   floorsEnd: any[] = [
-    { id: 1, floorNumber: 'Piso X' },
-    { id: 2, floorNumber: 'Piso Y' },
+    { id: "1", floorNumber: 'Piso 1' },
+    { id: "2", floorNumber: 'Piso 2' },
   ];
 
   ngOnDestroy(): void {
@@ -59,10 +49,14 @@ export class PlanRouteWithViewComponent {
 
   async loadMapAndRoute(){
 
+
+    const routePlan = "ed"+this.selectedBuildingInit+"floor"+this.selectedFloorInit+"_ed"+this.selectedBuildingEnd+"floor"+this.selectedFloorEnd;
     //substituir aqui com o ficheiro json real
-    const mapToLoads = 'assets/buildings/EdificioA_piso_2.json';
+    const mapToLoads = caminhos[routePlan as keyof typeof caminhos];
+    console.log(mapToLoads)
+
     let mapJSON:any={};
-    await fetch(mapToLoads)
+    await fetch(mapToLoads[0].openMap!)
       .then(response => {
         if (!response.ok) {
           throw new Error('Erro ao carregar o arquivo JSON');
@@ -77,7 +71,7 @@ export class PlanRouteWithViewComponent {
       });
 
       //colocar uma posicao inicial que faça sentido no futuro
-      this.makeInitialPositionAndMove(this.posicaoInicial,mapJSON,this.movimentacaoRobotExemplo);
+      this.makeInitialPositionAndMove(mapToLoads[0].openMapInitialPosition!,mapJSON,mapToLoads);
     }
     
     //a posicao inicia é [linha,coluna]

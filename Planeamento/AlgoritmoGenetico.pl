@@ -206,12 +206,6 @@ valida_tarefa_com_outras(Tarefa, [OutraTarefa | Resto]) :-
     not(tempo_transicao(OutraTarefa, Tarefa, _)),
 	tarefa(Tarefa, _, _, _, CelEndTask1,CelEndTask2, PisoEndTask),
 	tarefa(OutraTarefa, CelBeginTask1,CelBeginTask2, PisoBeginTask, _, _, _),
-
-	%tarefa(Tarefa, _, DestinoT1),
-	%tarefa(OutraTarefa, OrigemT2, _),
-	%Para calcular apenas o custo entre tarefas e nao durante o processamento de tarefas
-	%localizacao(DestinoT1,PisoOrig, CelulaOrig),
-	%localizacao(OrigemT2,PisoDest,CelulaDest),
     ((PisoEndTask == PisoBeginTask, aStar([CelEndTask1,CelEndTask2], [CelBeginTask1,CelBeginTask2], _, Custo));
     caminho_pisos_com_custo(PisoEndTask, PisoBeginTask, _, _, Custo, _)),
     assert(tempo_transicao(Tarefa, OutraTarefa, Custo)),

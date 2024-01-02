@@ -1,0 +1,12 @@
+@startuml US480
+
+actor Utilizador
+participant "RobDroneGo" as Sistema
+
+Utilizador -> Sistema : Listar tarefas pendentes;
+activate Sistema
+Sistema->Sistema: Procura todas as tarefas pendentes;
+
+Utilizador <-- Sistema: Lista de tarefas pendentes/erro ao obter tarefas;
+deactivate Sistema
+@enduml

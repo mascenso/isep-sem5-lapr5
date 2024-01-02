@@ -18,20 +18,10 @@ export class PlaningService {
     return this.http.get<any>(`${this.API_URL}/api/route/routePlaning/${piso1}/${piso2}`);
   }
 
-
-  /* //ESTE FUNCIONA MAS ESTÁ A LIGAR DIRETAMENTE A UI AO PLANEMANENTO
-   planear(taskInfo: any): Observable<any> {
-     //const url = `http://vs770.dei.isep.ipp.pt:8082/tarefas?ng=${Ngeracoes}&dp=${dimensaoPop}&p1=${pobCruz}&p2=${pobMut}&t=${tempoLimite}&av=${avaliacaoDef}&nestab=${nEstabiliz}`;
-     //const url = `http://rdg-planning.h5b0bhc4e5a0dddx.westeurope.azurecontainer.io/tarefas?ng=${Ngeracoes}&dp=${dimensaoPop}&p1=${pobCruz}&p2=${pobMut}&t=${tempoLimite}&av=${avaliacaoDef}&nestab=${nEstabiliz}`;
-     const url = `http://localhost:8082/tarefas?ng=${taskInfo.Ngeracoes}&dp=${taskInfo.dimensaoPop}&p1=${taskInfo.pobCruz}&p2=${taskInfo.pobMut}&t=${taskInfo.tempoLimite}&av=${taskInfo.avaliacaoDef}&nestab=${taskInfo.nEstabiliz}`;
-     return this.http.get(url, {responseType: 'text'});
-   }
- */
-
   planear(taskInfo: any): Observable<any> {
     
-    //return this.http.post<any>(`${this.API_URL}/api/tasks/planning/`,taskInfo);
-    return this.http.post<any>(`${this.API_URL}/api/tasks/planning/`, taskInfo).pipe(
+    return this.http.post<any>(`${this.API_URL}/api/tasks/planning/`,taskInfo);
+   /* return this.http.post<any>(`${this.API_URL}/api/tasks/planning/`, taskInfo).pipe(
       tap((response: Record<string, any>) => {
         console.log("Resposta do servidor:", response);
       }),
@@ -39,13 +29,12 @@ export class PlaningService {
         console.error("Erro na solicitação:", error);
         throw error; // lança o erro para ser tratado pelo chamador do método
       })
-    );
+    ); */
   }
 
   public getAllRobots(): Observable<RobotDTO[]> {
     return this.http.get<RobotDTO[]>(`${this.API_URL}/api/robots/`);
   }
-
 
 
   }

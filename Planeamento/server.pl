@@ -89,10 +89,10 @@ listaTarefas_handler(Request) :-
                               pisoDestino(PisoDestino, [])]),
 
     % Converter valores que deveriam ser números para inteiros
-    term_to_atom(OrigX, X), % Converte OrigX para um número
-    term_to_atom(OrigY, Y), % Converte OrigY para um número
-    term_to_atom(DestX, DX), % Converte DestX para um número
-    term_to_atom(DestY, DY), % Converte DestY para um número
+    term_to_atom(X,OrigX), % Converte OrigX para um número
+    term_to_atom(Y,OrigY), % Converte OrigY para um número
+    term_to_atom(DX,DestX), % Converte DestX para um número
+    term_to_atom(DY,DestX), % Converte DestY para um número
         adicionar_tarefa(T, X, Y, C, DX, DY, F),
 		obter_tarefas(Lista),
     	reply_json(json([lista=Lista])).

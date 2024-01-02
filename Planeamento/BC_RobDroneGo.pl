@@ -125,21 +125,10 @@ pos_init(a2,[2,4]).
 pos_init(b2,[2,3]).
 pos_init(c3,[3,4]).
 
-
-% tarefa(Id,Origem,Destino).
-%tarefa(t1,a104,a101).
-%tarefa(t2,a202,a204).
-%tarefa(t3,a202,a204).
-%tarefa(t4,b201,b203).
-%tarefa(t5,c305,c309).
 % tarefa(Id,OrgX,OrgY,PisoOrig,DestX,DestY,PisoDest).
 tarefa(t1,2,4,a1,3,4,a1).
 tarefa(t2,2,3,b2,4,4,c3).
 tarefa(t3,2,2,b2,2,3,b2).
 tarefa(t4,2,3,c3,4,4,c3).
 tarefa(t5,2,3,a2,2,2,a2).
-
-
-
-
-
+tarefa(t6,3,3,a1,2,4,a2).

@@ -784,7 +784,7 @@ export default class ThumbRaiser {
                 // Check if the player found a bridge
                 this.bridgeInfo = this.maze.foundBridge(this.player.position);
 
-                if (this.bridgeInfo && !this.animations.actionInProgress) {
+                if (this.bridgeInfo && !this.animations.actionInProgress && !this.automaticMode) {
 
                     console.log("We will change maps according to the bridge connection!");
 
@@ -1031,10 +1031,15 @@ export default class ThumbRaiser {
                 //apagar luz elevador
                 this.scene3D.remove(light);
                 this.changeMap(numberOfFloors.map, numberOfFloors.initialPosition);
+                cellDeInicio = numberOfFloors.initialPosition;
 
+            }else if(numberOfFloors.bridge){
+                await this.bridgeCross(numberOfFloors.map, numberOfFloors.initialPosition);
+            }else{
+                cellDeInicio = numberOfFloors.initialPosition;
             }
 
-            cellDeInicio = numberOfFloors.initialPosition;
+
 
         }
 
@@ -1066,7 +1071,7 @@ export default class ThumbRaiser {
 
         do {
 
-            await new Promise(resolve => setTimeout(resolve, 100));
+            await new Promise(resolve => setTimeout(resolve, 10));
             if (direction == 180 || direction == 0) {
                 reachedFinalZ = this.player.position.z >= finalPositive || this.player.position.z <= finalNegative;
             } else {
@@ -1477,23 +1482,27 @@ export default class ThumbRaiser {
      * Funcao para animar com feedback visual a passagem entre edificios
      * @param {*} connectedFloor 
      */
-    async bridgeCross(connectedFloor){
+    async bridgeCross(connectedFloor, position = null){
         this.animations.actionInProgress = true;
  
         //this.bridgeAnimation()
         await this.newBridgeAnimation();
-        //await new Promise(resolve => setTimeout(resolve, 5000));
-        this.changeMap(connectedFloor);
-        //this.animations.actionInProgress = false;
-        //this.setActiveViewCamera(this.firstPersonViewCamera);
+        if(position == null){
+            this.changeMap(connectedFloor);
+        }else{
+            this.changeMap(connectedFloor,position)
+        }
+
+
     }
     async newBridgeAnimation(){
         let wallsList = [];
         const numberOfWalls = 5;
         this.setActiveViewCamera(this.firstPersonViewCamera);
+        this.player.direction = 90;
         this.ground = new Ground({ textureUrl: "./assets/textures/parquet.jpg", size:{ width: 10, height: 1 } });
-        console.log(this.player)
         this.ground.object.position.set(this.player.position.x,this.player.position.y,this.player.position.z);
+
         const door = new Wall ({ textureUrl: "./assets/textures/doorTexture.jpg" })
         const door2 = new Wall ({ textureUrl: "./assets/textures/doorTexture.jpg" })
         door.object.position.set(this.player.position.x + numberOfWalls, this.player.position.y, this.player.position.z+0.25);
@@ -1501,7 +1510,8 @@ export default class ThumbRaiser {
         door.object.scale.set(0.5, 1, 1)
         door2.object.position.set(this.player.position.x + numberOfWalls, this.player.position.y, this.player.position.z-0.25);
         door2.object.rotateY(Math.PI / 2.0);
-        door2.object.scale.set(0.5, 1, 1)
+        door2.object.scale.set(0.5, 1, 1);
+
         wallsList.push(door);
         wallsList.push(door2);
         this.scene3D.add(door.object);
@@ -1523,8 +1533,8 @@ export default class ThumbRaiser {
           }
         wallsList.push(this.ground);
         this.scene3D.add(this.ground.object);
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        this.player.direction = 90;
+
+        await new Promise(resolve => setTimeout(resolve, 5000));
         this.player.keyStates.forward = true;
         await new Promise(resolve => setTimeout(resolve, 4000));
         this.player.keyStates.forward = false;

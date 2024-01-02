@@ -11,9 +11,11 @@ const route = Router();
 export default (app: Router) => {
   app.use('/buildings',
     middlewares.authRequest([
-    UserRole.ADMINISTRATOR.toString(),
-    UserRole.CAMPUS_MANAGER.toString()
-  ]), route);
+      UserRole.ADMINISTRATOR.toString(),
+      UserRole.CAMPUS_MANAGER.toString(),
+      UserRole.USER.toString()
+    ]),
+    route);
 
   const ctrl = Container.get(config.controllers.building.name) as IBuildingController;
 

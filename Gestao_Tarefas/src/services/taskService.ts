@@ -21,6 +21,7 @@ import axios, { AxiosResponse, AxiosError } from 'axios';
 @Service()
 export default class TaskService implements ITaskService {
 
+  private apiUrl = config.apiUrlPROLOG;
 
   constructor(
     @Inject(config.repos.task.name) private taskRepo: ITaskRepo,
@@ -108,16 +109,7 @@ export default class TaskService implements ITaskService {
     const axios = require('axios');
 
     try {
-      /*
-      for (let i = 0; i < info.LTasks.length; i++) {
-        const task = info.LTasks[i];
-        let urlTasks = `http://127.0.0.1:8081/listaTarefas?tarefa=${task[0]}&origX=${task[1]}&origY=${task[2]}&pisoOrigem=${task[3]}&destX=${task[4]}&destY=${task[5]}&pisoDestino=${task[6]}`;
-        const response = await axios.get(urlTasks); // Espera pela resposta da requisição
-      }
-      */
-      let urlPlanning = `http://127.0.0.1:8081/tarefas?ng=${info.Ngeracoes}&dp=${info.dimensaoPop}&p1=${info.pobCruz}&p2=${info.pobMut}&t=${info.tempoLimite}&av=${info.avaliacaoDef}&nestab=${info.nEstabiliz}`;
-    //let urlPlanning = `http://vs770.dei.isep.ipp.pt:8082/tarefas?g=${info.Ngeracoes}&dp=${info.dimensaoPop}&p1=${info.pobCruz}&p2=${info.pobMut}&t=${info.tempoLimite}&av=${info.avaliacaoDef}&nestab=${info.nEstabiliz}`;
-    //let urlPlanning = `http://rdg-planning.h5b0bhc4e5a0dddx.westeurope.azurecontainer.io/tarefas?g=${info.Ngeracoes}&dp=${info.dimensaoPop}&p1=${info.pobCruz}&p2=${info.pobMut}&t=${info.tempoLimite}&av=${info.avaliacaoDef}&nestab=${info.nEstabiliz}`;
+      let urlPlanning = `${this.apiUrl}/tarefas?ng=${info.Ngeracoes}&dp=${info.dimensaoPop}&p1=${info.pobCruz}&p2=${info.pobMut}&t=${info.tempoLimite}&av=${info.avaliacaoDef}&nestab=${info.nEstabiliz}`;
 
       const response = await axios.get(urlPlanning); // Espera pela resposta da requisição
 
@@ -272,6 +264,6 @@ export default class TaskService implements ITaskService {
     }
   }
 
-  
+
 
 }

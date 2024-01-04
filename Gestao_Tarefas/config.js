@@ -22,13 +22,17 @@ export default {
   //databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/tasks",
   databaseURL: process.env.MONGODB_URI || "mongodb://***REMOVED***@vsgate-s1.dei.isep.ipp.pt:10199/tasksDB",
   /**
-   * 
+   *
    */
 
   /**
    * Your secret sauce
    */
   jwtSecret: process.env.JWT_SECRET || "my sakdfho2390asjod$%jl)!sdjas0i secret",
+
+  apiUrlPROLOG: process.env.NODE_ENV === 'production'
+    ? 'https://robdronego.westeurope.cloudapp.azure.com'
+    : 'http://127.0.0.1:8081',
 
   /**
    * Used by winston logger

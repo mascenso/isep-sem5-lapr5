@@ -3,19 +3,12 @@ import {UniqueEntityID} from "../../core/domain/UniqueEntityID";
 import {Result} from "../../core/logic/Result";
 import {Guard} from "../../core/logic/Guard";
 import { User } from "./user";
+import { LocationRoom } from "./locationRoom";
 
 interface TaskPickupDeliveryProps {
     description: string;
-    pickupLocalization: {
-      buildingId:String;
-      floor:object;
-      room: number[];
-    };
-    deliveryLocalization:{
-      buildingId:String;
-      floor:object;
-      room: number[];
-    };
+    pickupLocalization: LocationRoom;
+    deliveryLocalization:LocationRoom;
     contactNumber:number;
     user: User;
     deliveryContact: User;

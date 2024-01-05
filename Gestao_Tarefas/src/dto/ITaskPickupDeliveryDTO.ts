@@ -1,3 +1,4 @@
+import { User } from "../domain/task-agg/user";
 
 export default interface ITaskPickupDeliveryDTO {
   id: string;
@@ -13,15 +14,9 @@ export default interface ITaskPickupDeliveryDTO {
     room: number[];
   };
   contactNumber:number;
-  user:object;
-  deliveryContact:{
-    name:String;
-    contactNumber:number;
-  };
-  pickupContact:{
-    name:String;
-    contactNumber:number;
-  };
+  user:User;
+  deliveryContact:User;
+  pickupContact:User;
   approved:boolean;
   pending:boolean;
   planned:boolean;

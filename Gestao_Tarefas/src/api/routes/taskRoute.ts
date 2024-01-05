@@ -46,14 +46,8 @@ export default (app: Router) => {
         }).required(),
         contactNumber: Joi.number().required(),
         user: Joi.object().required(),
-        deliveryContact: Joi.object({
-          name: Joi.string().required(),
-          contactNumber: Joi.number().required()
-        }).required(),
-        pickupContact: Joi.object({
-          name: Joi.string().required(),
-          contactNumber: Joi.number().required()
-        }).required(),
+        deliveryContact: Joi.object().required(),
+        pickupContact: Joi.object().required(),
         approved: Joi.boolean().default(false),
         pending: Joi.boolean().default(true),
         planned: Joi.boolean().default(false),

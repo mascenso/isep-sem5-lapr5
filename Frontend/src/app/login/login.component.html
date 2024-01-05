@@ -15,20 +15,20 @@
         <mat-card-content>
           <mat-form-field class="form-field form-field-email" appearance="outline">
             <mat-label>Enter your email</mat-label>
-            <input matInput placeholder="aprende-sozinho@isep.ipp.pt" formControlName="email" required>
+            <input id="login-input-username" matInput placeholder="aprende-sozinho@isep.ipp.pt" formControlName="email" required>
             <mat-error *ngIf="loginForm.controls.email.invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>
           <mat-form-field class="form-field form-field-password" appearance="outline">
             <mat-label>Enter your password</mat-label>
-            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+            <input id="login-input-password" matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
             <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
               <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
           </mat-form-field>
         </mat-card-content>
         <div class="login-button-group">
-          <button mat-flat-button class="btn-login btn-login-register" routerLink="/register" type="button">Register</button>
-          <button mat-flat-button color="primary" class="btn-login btn-login-login" type="submit">Login</button>
+          <button id="login-button-register" mat-flat-button class="btn-login btn-login-register" routerLink="/register" type="button">Register</button>
+          <button id="login-button-submit" mat-flat-button color="primary" class="btn-login btn-login-login" type="submit">Login</button>
         </div>
       </form>
     </mat-card>

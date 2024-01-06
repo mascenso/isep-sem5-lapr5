@@ -2,29 +2,17 @@ import {AggregateRoot} from "../../core/domain/AggregateRoot";
 import {UniqueEntityID} from "../../core/domain/UniqueEntityID";
 import {Result} from "../../core/logic/Result";
 import {Guard} from "../../core/logic/Guard";
+import { User } from "./user";
+import { LocationRoom } from "./locationRoom";
 
 interface TaskPickupDeliveryProps {
     description: string;
-    pickupLocalization: {
-      buildingId:String;
-      floor:object;
-      room: number[];
-    };
-    deliveryLocalization:{
-      buildingId:String;
-      floor:object;
-      room: number[];
-    };
+    pickupLocalization: LocationRoom;
+    deliveryLocalization:LocationRoom;
     contactNumber:number;
-    user:object;
-    deliveryContact:{
-      name:String;
-      contactNumber:number;
-    };
-    pickupContact:{
-      name:String;
-      contactNumber:number;
-    };
+    user: User;
+    deliveryContact: User;
+    pickupContact: User;
     approved:boolean;
     pending:boolean;
     planned:boolean;
@@ -125,7 +113,7 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
     this.props.contactNumber = value;
   }
 
-  set user ( value: object) {
+  set user ( value: any) {
     this.props.user = value;
   }
 

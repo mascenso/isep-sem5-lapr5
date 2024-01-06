@@ -3,20 +3,22 @@ describe('List Building Floors', () => {
     beforeEach(() => {
       //criar edificio para ver na tabela
       cy.visit('http://localhost:4200/login');
-      cy.get('#role').select('Administrador');
-      cy.get('#signUp').click();
+      cy.get('#login-input-username').type('admin@email.pt');
+      cy.get('#login-input-password').type('admin');
+      cy.get('button[type="submit"]').click();
       cy.get('[id^="Campus"]').click();
       cy.get('[routerlink="create-building"]').click();
       const numeroAleatorio = Math.floor(1000 + Math.random() * 9000);
-      cy.get('#mat-input-0').type('A'+numeroAleatorio.toString());
-      cy.get('#mat-input-1').type('10');
-      cy.get('#mat-input-2').type('50');
-      cy.get('#mat-input-3').type('Edificio A');
-      cy.get('#mat-input-4').type('Edificio A - Administracao');
+      cy.get('#mat-input-9').type('A'+numeroAleatorio.toString());
+      cy.get('#mat-input-10').type("10");
+      cy.get('#mat-input-11').type('10');
+      cy.get('#mat-input-12').type('teste');
+      cy.get('#mat-input-13').type('Mais um edificio de teste');
       cy.get('.mdc-button__label').click();
       //ir para a pagina correta do teste
       cy.get('[id^="Campus"]').click();
       cy.get('[routerlink="list-building-floors"]').click();
+      cy.request('http://localhost:4000/api/floors'); 
     });
 
     beforeEach(() => {

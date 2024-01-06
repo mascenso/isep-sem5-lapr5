@@ -1,0 +1,87 @@
+/* Estilos para o container da tabela */
+.validate-task-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 3rem 4rem;
+}
+
+/* Estilos para a seção da tabela */
+.validate-task-section {
+  display: flex;
+  align-content: space-between;
+  flex-direction: column;
+  width: 100%;
+}
+
+h2 {
+  font-size: 3rem;
+  display: inline-block;
+  margin: 1.6rem 0;
+  color: var(--color-grey-dark);
+}
+
+/* Estilos para a tabela */
+table {
+  width: 100%;
+  border-collapse: collapse; /* Junta as bordas das células */
+}
+
+/* Estilos para as linhas da tabela */
+tr.validate-task-detail-row {
+  height: 0;
+}
+
+tr.validate-task-row:not(.elevator-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.validate-task-row:not(.elevator-expanded-row):active {
+  background: #efefef;
+}
+
+/* Estilos para as células */
+.validate-task-row td {
+  border-bottom-width: 0;
+}
+
+/* Estilos para os detalhes do elevador */
+.validate-task-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+/* Estilos para o diagrama do elevador */
+.validate-task-diagram {
+  min-width: 8rem;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 10.4rem;
+}
+
+.validate-task-symbol {
+  font-weight: bold;
+  font-size: 4rem;
+  line-height: normal;
+}
+
+/* Estilos para a descrição do elevador */
+.validate-task-description {
+  padding: 1.6rem;
+}
+
+/* Estilos para a atribuição da descrição do elevador */
+.validate-task-description-attribution {
+  opacity: 0.5;
+}
+
+/* Estilos para as células do rodapé */
+.footer-row td {
+  font-style: italic;
+}
+
+/* Estilos para elementos <pre> */
+pre {
+  font-size: 1.6rem;
+}

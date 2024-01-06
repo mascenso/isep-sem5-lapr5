@@ -37,5 +37,8 @@ export class TasksService {
   public getAllVigilanceApprovedTasks(): Observable<TaskVigilanceRequestDTO[]> {
     return this.http.get<TaskVigilanceRequestDTO[]>(`${this.API_URL}/api/tasks/approvedVigilance`);
   }
-  
+
+  public updateTaskById(task: TaskVigilanceRequestDTO | TaskPickupRequestDTO): Observable<TaskVigilanceRequestDTO | TaskPickupRequestDTO> {
+    return this.http.patch<TaskVigilanceRequestDTO | TaskPickupRequestDTO>(`${this.API_URL}/api/tasks/${task.id}`, task);
+  }
 }

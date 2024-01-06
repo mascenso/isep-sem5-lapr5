@@ -1,0 +1,132 @@
+@startuml US500
+
+actor Utilizador
+
+participant "TaskPlanningComponent" as UIComponent
+participant "task.service" as UIService
+participant "planning.service" as UIPlanService
+participant "TaskPickupDeliveryViewModel" as PUViewModel
+participant "TaskVigilanceViewModel" as VViewModel
+participant "taskRoute" as Route
+participant "taskController" as Controller
+participant "taskService" as Service
+participant "TaskPickupDeliveryRepo" as PURepo
+participant "TaskVigilanceRepo" as VRepo
+participant "TaskVigilanceDTO" as VDTO
+participant "TaskPickupDeliveryDTO" as PUDTO
+participant "Planeamento" as Planeamento
+
+Utilizador -> UIComponent : Planear tarefas;
+activate UIComponent
+
+
+UIComponent -> UIService: getAllPickupDeliveryApprovedTasks();
+activate UIService
+
+UIService -> Route: get(api/tasks/approvedPickUp)
+
+
+activate Route
+Route -> Controller: getAllPickupDeliveryApprovedTasks()
+activate Controller
+
+
+activate Service
+Controller -> Service : getAllPickupDeliveryApprovedTasks()
+
+Service -> PURepo : findAll()
+activate PURepo
+PURepo -> Service : allTasks
+deactivate PURepo
+Service -> Service : filteredApprovedTasks = allTasks.filter(task.approved);
+Service -> Service : filteredApprovedNotPlannedTasks = allTasks.filter(task.planned);
+Service -> PUDTO :filteredApprovedNotPlannedTasks.toDTO(tasks);
+activate PUDTO
+PUDTO --> Service : approvedTasksDTO[];
+deactivate PUDTO
+Service --> Controller : approvedTasksDTO[];
+deactivate Service
+Controller --> Route : approvedTasksDTO[];
+deactivate Controller
+Route --> UIService : approvedTasksDTO[];
+deactivate Route
+UIService --> UIComponent : approvedTasksDTO[];
+deactivate UIService
+UIComponent --> PUViewModel : approvedTasksDTO[];
+activate PUViewModel
+PUViewModel--> UIComponent: pickupTaskViewModels[];
+deactivate PUViewModel
+
+
+UIComponent -> UIService: getAllVigilancePendingTasks();
+activate UIService
+
+UIService -> Route: get(api/tasks/approvedVigilance)
+
+
+activate Route
+Route -> Controller: getAllVigilanceApprovedTasks()
+activate Controller
+
+Controller -> Service : getAllVigilancePendingTasks()
+activate Service
+Service -> VRepo : findAll()
+activate VRepo
+VRepo -> Service : allTasks
+deactivate VRepo
+Service -> Service : filteredApprovedTasks = allTasks.filter(task.approved);
+Service -> Service : filteredApprovedNotPlannedTasks = allTasks.filter(task.planned);
+Service -> VDTO :filteredApprovedNotPlannedTasks.toDTO(tasks);
+activate VDTO
+VDTO --> Service : approvedTasksDTO[];
+deactivate VDTO
+Service --> Controller : approvedTasksDTO[];
+deactivate Service
+Controller --> Route : approvedTasksDTO[];
+deactivate Controller
+Route --> UIService : approvedTasksDTO[];
+deactivate Route
+UIService --> UIComponent : approvedTasksDTO[];
+deactivate UIService
+
+UIComponent --> VViewModel : approvedTasksDTO[];
+activate VViewModel
+VViewModel--> UIComponent: vigilanceTaskViewModels[];
+deactivate VViewModel
+
+UIComponent --> Utilizador : Mostra tarefas aprovadas não planeadas/erro ao obter tarefas;
+
+Utilizador -> UIComponent : Seleciona tarefas para planear;
+
+
+UIComponent -> UIComponent : vigilanceTasksInfo=extractVigilanceTaskDetails(selectedVigilanceTasks);
+UIComponent -> UIComponent : pickUpVigilanceTasksInfo=extractPickupTaskDetails(selectedPickupTasks);
+UIComponent -> UIPlanService: planear(vigilanceTasksInfo) ou planear(pickUpVigilanceTasksInfo);
+activate UIPlanService
+UIPlanService-> Route:  get(api/tasks/planning/,tasksInfo);
+activate Route
+Route -> Controller : planearTarefas(tasksInfo);
+activate Controller
+Controller -> Service : getTasksPlanning(tasksInfo);
+activate Service
+Service -> Service: Cria URL planemento com base em tasksInfo;
+Service -> Planeamento : axios.get(urlPlanning);
+activate Planeamento
+
+Planeamento -> Planeamento: Planeia tarefas selecionadas;
+Planeamento -> Service : Sequência de tarefas planeadas/erro ao planear tarefas;
+deactivate Planeamento
+
+Service -> Controller : Sequência de tarefas planeadas/erro ao planear tarefas;
+
+deactivate Service
+Controller -> Route : Sequência de tarefas planeadas/erro ao planear tarefas;
+deactivate Controller
+Route -> UIPlanService : Sequência de tarefas planeadas/erro ao planear tarefas;
+deactivate Route
+UIPlanService -> UIComponent : Sequência de tarefas planeadas/erro ao planear tarefas;
+
+UIComponent -> Utilizador :  Sequência de tarefas planeadas/erro ao planear tarefas;
+
+
+@enduml

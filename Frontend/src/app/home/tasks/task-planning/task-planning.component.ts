@@ -177,7 +177,6 @@ export class TaskPlanningComponent {
       };
     });
 
-    console.log("taskConnections ", taskConnections);
     const taskParameters = {
       LTasks: this.allSelectedTasks,
       Ngeracoes: this.inputNGenerations,

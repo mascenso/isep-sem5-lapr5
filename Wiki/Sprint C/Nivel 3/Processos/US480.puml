@@ -20,62 +20,68 @@ activate UIService
 
 UIService-> Route :get(api/tasks/pendingPickUp)
 activate Route
-
-
-
-activate Controller
 Route -> Controller: getAllPickupDeliveryPendingTasks()
-
-
-
-activate Service
-
+activate Controller
 Controller -> Service : getAllPickupDeliveryPendingTasks()
-
+activate Service
 Service -> PURepo : findAll()
 activate PURepo
 PURepo -> Service : allTasks
 deactivate PURepo
 
-Service -> Service : filteredApprovedTasks = allTasks.filter(task.approved);
-Service -> Service : filteredApprovedNotPlannedTasks = allTasks.filter(task.planned);
-Service -> PUDTO :filteredApprovedNotPlannedTasks.toDTO(tasks);
+Service -> Service : filteredPendingTasks = allTasks.filter(task.pending);
+Service -> PUDTO :filteredPendingTasks.toDTO(tasks);
 activate PUDTO
 PUDTO --> Service : pendingTasksDTO[];
 deactivate PUDTO
 Service --> Controller : pendingTasksDTO[];
+deactivate Service
 Controller --> Route : pendingTasksDTO[];
+deactivate Controller
 Route --> UIService : pendingTasksDTO[];
-UIService --> PUViewModel : pendingTasksDTO[];
+deactivate Route
+UIService --> UIComponent : pendingTasksDTO[];
+deactivate UIService
+UIComponent --> PUViewModel : pendingTasksDTO[];
 activate PUViewModel
 PUViewModel--> UIComponent: pickupTaskViewModels[];
 deactivate PUViewModel
 UIComponent -> UIComponent : updatePendingTaskList(pickupTaskViewModels[]);
 
 UIComponent -> UIService :getAllVigilancePendingTasks()
+activate UIService
 UIService-> Route :get(api/tasks/pendingVigilance)
+activate Route
 Route -> Controller: getAllVigilancePendingTasks()
+activate Controller
 Controller -> Service : getAllVigilancePendingTasks()
-
+activate Service
 Service -> VRepo : findAll()
 activate VRepo
 VRepo -> Service : allTasks
 deactivate VRepo
 
-Service -> Service : filteredApprovedTasks = allTasks.filter(task.approved);
-Service -> Service : filteredApprovedNotPlannedTasks = allTasks.filter(task.planned);
-Service -> VDTO :filteredApprovedNotPlannedTasks.toDTO(tasks);
+Service -> Service : filteredPendingTasks = allTasks.filter(task.pending);
+Service -> VDTO :filteredPendingTasks.toDTO(tasks);
 activate VDTO
 VDTO --> Service : pendingTasksDTO[];
 deactivate VDTO
 Service --> Controller : pendingTasksDTO[];
+deactivate Service
 Controller --> Route : pendingTasksDTO[];
+deactivate Controller
 Route --> UIService : pendingTasksDTO[];
-UIService --> VViewModel : pendingTasksDTO[];
+deactivate Route
+UIService --> UIComponent : pendingTasksDTO[];
+deactivate UIService
+UIComponent --> VViewModel : pendingTasksDTO[];
+
 activate VViewModel
 VViewModel--> UIComponent: vigilanceTaskViewModels[];
 deactivate VViewModel
 UIComponent -> UIComponent : updatePendingTaskList(vigilanceTaskViewModels[]);
+
+
 
 
 UIComponent --> Utilizador : Mostra lista de tarefas pendentes/erro ao obter tarefas;

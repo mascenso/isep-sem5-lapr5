@@ -36,7 +36,23 @@ describe('Teste de listar uma tarefas pendentes', () => {
         cy.get('#pickupTaskContact').type("10");
         cy.get('#pickupTasklocalizationx2').type("10");
         cy.get('#createTaskPickupDescription').type("Testing Task 1");
-        cy.get('#pickupTasksubmitbutton').click()
+        cy.get('#pickupTasksubmitbutton').click();
+
+        cy.get('[id^="Tasks"]').click();
+        cy.get('[routerlink="create-task"]').click();
+        cy.get('#select-task-dropdown').click();
+        cy.get('#optionVigilance').click();
+        cy.get('#vigilanceTask-dropdownBuilding').click().get('mat-option').last().click();
+        cy.get('#vigilanceTask-dropdownFloor').click().get('mat-option').last().click();
+        cy.get('#vigilanceTaskDescription').type("Testing Task 1");
+        cy.get('#vigilanceTaskContact').type("10");
+        cy.get('#vigilanceTaskstartx').type("10");
+        cy.get('#vigilanceTaskstarty').type("10");
+        cy.get('#vigilanceTaskendx').type("10");
+        cy.get('#vigilanceTaskendy').type("10");
+        cy.get('#vigilanceTasksubmitbutton').click()
+
+
 
         cy.get('[id^="Tasks"]').click();
         cy.get('[routerlink="pending-task-list"]').click();

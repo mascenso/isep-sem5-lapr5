@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { UniqueEntityID } from '../src/core/domain/UniqueEntityID';
 import { TaskVigilance } from '../src/domain/task-agg/TaskVigilance';
+import { TaskStatusVO } from "../src/domain/task-agg/taskStatusVO";
 
 describe('TaskVigilance - Unit Test', () => {
   it('should create a valid TaskVigilance instance', () => {
@@ -12,9 +13,7 @@ describe('TaskVigilance - Unit Test', () => {
       endPosition: [4, 10],
       contactNumber: 123456789,
       user: { name: 'Zé' },
-      approved: false,
-      pending: true,
-      planned: false,
+      taskStatus: TaskStatusVO.create( false, true, false ).getValue()
     };
 
     // Cria a tarefa de vigilância
@@ -34,9 +33,9 @@ describe('TaskVigilance - Unit Test', () => {
     expect(taskVigilance.endPosition).to.deep.equal(taskProps.endPosition);
     expect(taskVigilance.contactNumber).to.equal(taskProps.contactNumber);
     expect(taskVigilance.user).to.deep.equal(taskProps.user);
-    expect(taskVigilance.approved).to.equal(taskProps.approved);
-    expect(taskVigilance.pending).to.equal(taskProps.pending);
-    expect(taskVigilance.planned).to.equal(taskProps.planned);
+    expect(taskVigilance.taskStatus.approved).to.equal(taskProps.taskStatus.approved);
+    expect(taskVigilance.taskStatus.pending).to.equal(taskProps.taskStatus.pending);
+    expect(taskVigilance.taskStatus.planned).to.equal(taskProps.taskStatus.planned);
   });
 
   /*

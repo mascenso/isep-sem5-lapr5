@@ -159,7 +159,7 @@ export default class TaskService implements ITaskService {
       const allTasks = await this.taskVigilanceRepo.findAll();
 
       // Filtra apenas as tarefas onde 'pending' é true
-      const filteredPendingTasks = allTasks.filter(task => task.pending === true);
+      const filteredPendingTasks = allTasks.filter(task => task.taskStatus.pending === true);
 
       const pendingTasksDTO = filteredPendingTasks.map((task) => TaskVigilanceMap.toDTO(task));
 
@@ -175,7 +175,7 @@ export default class TaskService implements ITaskService {
       const allTasks = await this.taskPickupDeliveryRepo.findAll();
 
       // Filtra apenas as tarefas onde 'pending' é true
-      const filteredPendingTasks = allTasks.filter(task => task.pending === true);
+      const filteredPendingTasks = allTasks.filter(task => task.taskStatus.pending === true);
 
       const pendingTasksDTO = filteredPendingTasks.map((task) => TaskPickupDeliveryMap.toDTO(task));
 
@@ -237,8 +237,8 @@ export default class TaskService implements ITaskService {
       const allTasks = await this.taskVigilanceRepo.findAll();
 
       // Filtra apenas as tarefas onde 'approved' é true
-      const filteredApprovedTasks = allTasks.filter(task => task.approved === true);
-      const filteredApprovedNotPlannedTasks = filteredApprovedTasks.filter(task => task.planned === false);
+      const filteredApprovedTasks = allTasks.filter(task => task.taskStatus.approved === true);
+      const filteredApprovedNotPlannedTasks = filteredApprovedTasks.filter(task => task.taskStatus.planned === false);
 
       const pendingTasksDTO = filteredApprovedNotPlannedTasks.map((task) => TaskVigilanceMap.toDTO(task));
 
@@ -254,8 +254,8 @@ export default class TaskService implements ITaskService {
       const allTasks = await this.taskPickupDeliveryRepo.findAll();
 
       // Filtra apenas as tarefas onde 'pending' é true
-      const filteredApprovedTasks = allTasks.filter(task => task.approved === true);
-      const filteredApprovedNotPlannedTasks = filteredApprovedTasks.filter(task => task.planned === false);
+      const filteredApprovedTasks = allTasks.filter(task => task.taskStatus.approved === true);
+      const filteredApprovedNotPlannedTasks = filteredApprovedTasks.filter(task => task.taskStatus.planned === false);
 
       const pendingTasksDTO = filteredApprovedNotPlannedTasks.map((task) => TaskPickupDeliveryMap.toDTO(task));
 

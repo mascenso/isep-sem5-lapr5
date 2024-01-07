@@ -14,9 +14,7 @@ export default interface ITaskSearchResponseDTO {
   pickupContact?:User;
   startPosition?: number[];
   endPosition?: number[];
-  approved:boolean;
-  pending:boolean;
-  planned:boolean;
+  taskStatus:object;
   taskType: TaskType;
 }
 

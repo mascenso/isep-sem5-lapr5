@@ -2,6 +2,7 @@ import {AggregateRoot} from "../../core/domain/AggregateRoot";
 import {UniqueEntityID} from "../../core/domain/UniqueEntityID";
 import {Result} from "../../core/logic/Result";
 import {Guard} from "../../core/logic/Guard";
+import { TaskStatusVO } from "./taskStatusVO";
 
 interface TaskVigilanceProps {
     description: string;
@@ -11,9 +12,10 @@ interface TaskVigilanceProps {
     endPosition: number[];
     contactNumber:number;
     user:object;
-    approved:boolean;
-    pending:boolean;
-    planned:boolean;
+    taskStatus: TaskStatusVO;
+  //approved:boolean;
+  //pending:boolean;
+  //planned:boolean;
 }
 
 export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
@@ -32,9 +34,7 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
       { argument: props.endPosition, argumentName: 'endPosition' },
       { argument: props.contactNumber, argumentName: 'contactNumber' },
       { argument: props.user, argumentName: 'user' },
-      { argument: props.approved, argumentName: 'approved' },
-      { argument: props.pending, argumentName: 'pending' },
-      { argument: props.planned, argumentName: 'planned' }
+      { argument: props.taskStatus, argumentName: 'taskStatus' },
     ];
 
 
@@ -74,14 +74,8 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
   public get user() : object {
     return this.props.user;
   }
-  public get approved() : boolean {
-    return this.props.approved;
-  }
-  public get pending() : boolean {
-    return this.props.pending;
-  }
-  public get planned() : boolean {
-    return this.props.planned;
+  public get taskStatus() : TaskStatusVO {
+    return this.props.taskStatus;
   }
   public get startPosition() : number[] {
     return this.props.startPosition;
@@ -110,14 +104,8 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
   set user ( value: object) {
     this.props.user = value;
   }
-  set approved ( value: boolean) {
-    this.props.approved = value;
-  }
-  set pending ( value: boolean) {
-    this.props.pending = value;
-  }
-  set planned ( value: boolean) {
-    this.props.planned = value;
+  set taskStatus ( value: TaskStatusVO) {
+    this.props.taskStatus = value;
   }
 
   set startPosition ( value: number[]) {

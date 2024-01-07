@@ -22,9 +22,11 @@ export interface TaskPickupRequestDTO {
     name:String;
     contactNumber:number;
   };
+  taskStatus:{
   approved:boolean;
   pending:boolean;
   planned :boolean;
+  };
 }
 
 

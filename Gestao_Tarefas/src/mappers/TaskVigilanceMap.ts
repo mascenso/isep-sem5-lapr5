@@ -8,6 +8,7 @@ import {Document, Model} from "mongoose";
 import {ITaskVigilancePersistence} from "../dataschema/ITaskVigilancePersistence";
 import {TaskPickupDelivery} from "../domain/task-agg/TaskPickupDelivery";
 import ITaskSearchResponseDTO, {TaskType} from "../dto/ITaskSearchResponseDTO";
+import { TaskStatusVO } from "../domain/task-agg/taskStatusVO";
 
 export class TaskVigilanceMap extends Mapper<TaskVigilance> {
 
@@ -22,9 +23,10 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
         endPosition: taskVigilance.endPosition,
         contactNumber: taskVigilance.contactNumber,
         user: taskVigilance.user,
-        approved: taskVigilance.approved,
-        pending: taskVigilance.pending,
-        planned: taskVigilance.planned
+        taskStatus: taskVigilance.taskStatus,
+        //approved:boolean;
+        //pending:boolean;
+        //planned:boolean;
       } as ITaskVigilanceDTO;
     }
 
@@ -38,9 +40,10 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
             endPosition: taskVigilance.endPosition,
             contactNumber: taskVigilance.contactNumber,
             user: taskVigilance.user,
-            approved: taskVigilance.approved,
-            pending: taskVigilance.pending,
-            planned: taskVigilance.planned
+            taskStatus: taskVigilance.taskStatus
+          //approved:boolean;
+          //pending:boolean;
+          //planned:boolean;
         },
         new UniqueEntityID(taskVigilance.domainId)
       );
@@ -60,9 +63,10 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
         endPosition: taskVigilance.endPosition,
         contactNumber: taskVigilance.contactNumber,
         user: taskVigilance.user,
-        approved: taskVigilance.approved,
-        pending: taskVigilance.pending,
-        planned: taskVigilance.planned
+        taskStatus: taskVigilance.taskStatus
+        //approved:boolean;
+        //pending:boolean;
+        //planned:boolean;
       }
       return a;
     }
@@ -78,9 +82,10 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
       endPosition: taskVigilance.endPosition,
       contactNumber: taskVigilance.contactNumber,
       user: taskVigilance.user,
-      approved: taskVigilance.approved,
-      pending: taskVigilance.pending,
-      planned: taskVigilance.planned,
+      taskStatus: taskVigilance.taskStatus,
+      //approved:boolean;
+      //pending:boolean;
+      //planned:boolean;
       taskType: TaskType.VIGILANCE,
     } as ITaskSearchResponseDTO;
   }

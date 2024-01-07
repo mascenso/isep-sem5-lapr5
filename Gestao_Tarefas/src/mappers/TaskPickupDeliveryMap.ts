@@ -21,9 +21,7 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
             user: taskPickupDelivery.user,
             deliveryContact: taskPickupDelivery.deliveryContact,
             pickupContact: taskPickupDelivery.pickupContact,
-            approved: taskPickupDelivery.approved,
-            pending: taskPickupDelivery.pending,
-            planned: taskPickupDelivery.planned
+            taskStatus: taskPickupDelivery.taskStatus,
       } as ITaskPickupDeliveryDTO;
     }
 
@@ -37,9 +35,7 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
             user: taskPickupDelivery.user,
             deliveryContact: taskPickupDelivery.deliveryContact,
             pickupContact: taskPickupDelivery.pickupContact,
-            approved: taskPickupDelivery.approved,
-            pending: taskPickupDelivery.pending,
-            planned: taskPickupDelivery.planned
+            taskStatus: taskPickupDelivery.taskStatus,
         },
         new UniqueEntityID(taskPickupDelivery.domainId)
       );
@@ -59,9 +55,7 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
         user: taskPickupDelivery.user,
         deliveryContact: taskPickupDelivery.deliveryContact,
         pickupContact: taskPickupDelivery.pickupContact,
-        approved: taskPickupDelivery.approved,
-        pending: taskPickupDelivery.pending,
-        planned: taskPickupDelivery.planned
+        taskStatus: taskPickupDelivery.taskStatus,
       }
       return a;
     }
@@ -76,9 +70,7 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
         user: taskPickupDelivery.user,
         deliveryContact: taskPickupDelivery.deliveryContact,
         pickupContact: taskPickupDelivery.pickupContact,
-        approved: taskPickupDelivery.approved,
-        pending: taskPickupDelivery.pending,
-        planned: taskPickupDelivery.planned,
+        taskStatus: taskPickupDelivery.taskStatus,
         taskType: TaskType.DELIVERY
       } as ITaskSearchResponseDTO;
   }

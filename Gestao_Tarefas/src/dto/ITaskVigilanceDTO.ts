@@ -1,3 +1,4 @@
+import { TaskStatusVO } from "../domain/task-agg/taskStatusVO";
 
 export default interface ITaskVigilanceDTO {
   id: string;
@@ -8,7 +9,8 @@ export default interface ITaskVigilanceDTO {
   endPosition: number[];
   contactNumber: number;
   user:object;
-  approved: boolean;
-  pending: boolean;
-  planned: boolean;
+  taskStatus: TaskStatusVO;
+  //approved:boolean;
+  //pending:boolean;
+  //planned:boolean;
 }

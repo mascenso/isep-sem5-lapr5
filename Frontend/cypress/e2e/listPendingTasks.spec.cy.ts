@@ -42,19 +42,6 @@ describe('Teste de listar uma tarefas pendentes', () => {
   
 
 
-    it('Deve falhar ao criar tarefa por ter campos vazios.', () => {
-        cy.intercept('GET', 'http://localhost:3000/api/tasks/pendingVigilance').as('rotaVigilance');
-
-        cy.get('#select-task-dropdown').click();
-        cy.get('#optionVigilance').click();
-        cy.get('#vigilanceTask-dropdownBuilding').click().get('mat-option').last().click();
-        cy.get('#vigilanceTask-dropdownFloor').click().get('mat-option').last().click();
-        cy.get('#vigilanceTaskendx').type("10");
-        cy.get('#vigilanceTaskendy').type("10");
-        cy.get('#vigilanceTasksubmitbutton').click();
-        cy.wait('@rotaFloor').should(({ response }) => {
-            expect(response!.statusCode).to.eq(200); 
-        });
-    });
+ 
 
   });

@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable, forkJoin, map, mergeMap, of } from "rxjs";
 import { TaskVigilanceRequestDTO } from "../../dto/taskVigilanceDTO";
 import { TaskPickupRequestDTO } from 'src/dto/taskPickupDTO';
+import {TaskListResponseDTO} from "../../dto/taskListResponseDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +41,13 @@ export class TasksService {
 
   public updateTaskById(task: TaskVigilanceRequestDTO | TaskPickupRequestDTO): Observable<TaskVigilanceRequestDTO | TaskPickupRequestDTO> {
     return this.http.patch<TaskVigilanceRequestDTO | TaskPickupRequestDTO>(`${this.API_URL}/api/tasks/${task.id}`, task);
+  }
+
+  public getTasksByUserEmail(userEmail: string, showSpinner=true): Observable<TaskListResponseDTO[]> {
+    return this.http.get<TaskListResponseDTO[]>(`${this.API_URL}/api/tasks/users/${userEmail}`, {reportProgress:showSpinner});
+  }
+
+  public getTasksByStatus(status: string, showSpinner=true): Observable<TaskListResponseDTO[]> {
+    return this.http.get<TaskListResponseDTO[]>(`${this.API_URL}/api/tasks/status/${status}`, {reportProgress:showSpinner});
   }
 }

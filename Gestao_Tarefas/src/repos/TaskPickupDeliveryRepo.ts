@@ -8,6 +8,7 @@ import { Document, FilterQuery, Model } from 'mongoose';
 import { ITaskPickupDeliveryPersistence } from '../dataschema/ITaskPickupDeliveryPersistence';
 import { TaskPickupDelivery } from '../domain/task-agg/TaskPickupDelivery';
 import { TaskPickupDeliveryId } from '../domain/task-agg/TaskPickupDeliveryId';
+import {TaskStatus} from "../domain/task-agg/TaskStatus";
 
 @Service()
 export default class TaskPickupDeliveryRepo implements ITaskPickupDeliveryRepo {
@@ -70,7 +71,68 @@ export default class TaskPickupDeliveryRepo implements ITaskPickupDeliveryRepo {
   public async findAll(): Promise<TaskPickupDelivery[]> {
     const tasks = await this.taskPickupDeliverySchema.find();
     return tasks.map((task) => TaskPickupDeliveryMap.toDomain(task));
-  }  
+  }
+
+  public async findByUserEmail(email: string): Promise<TaskPickupDelivery[]> {
+    const query = {"user.userEmail": email};
+    const tasks = await this.taskPickupDeliverySchema.find(query);
+    return tasks.map(task => TaskPickupDeliveryMap.toDomain(task));
+  }
+
+  public async findByTaskStatus(status: TaskStatus): Promise<TaskPickupDelivery[]> {
+    const query = this.mapToQuery(status);
+    const tasks = await this.taskPickupDeliverySchema.find(query);
+    return tasks.map(task => TaskPickupDeliveryMap.toDomain(task));
+  }
+
+  private mapToQuery(status: TaskStatus): any {
+    let query: any;
+    switch (status) {
+      case TaskStatus.APPROVED:
+        query = {
+          $and: [
+            {'approved': true},
+            {'planned': false},
+            {'pending':false}
+          ]
+        };
+        break;
+
+      case TaskStatus.PENDING:
+        query = {
+          $and: [
+            {'approved': false},
+            {'planned': false},
+            {'pending':true}
+          ]
+        };
+        break;
+
+      case TaskStatus.PLANNED:
+        query = {
+          $and: [
+            {'approved': false},
+            {'planned': true},
+            {'pending':false}
+          ]
+        }
+        break;
+
+      case TaskStatus.ACCEPTED_AND_PLANNED:
+        query = {
+          $and: [
+            {'approved': true},
+            {'planned': true},
+            {'pending':false}
+          ]
+        }
+        break;
+
+      default:
+        query = {};
+    }
+    return query;
+  }
 
 }
 

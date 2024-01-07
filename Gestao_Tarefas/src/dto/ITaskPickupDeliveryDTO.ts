@@ -1,5 +1,6 @@
 import { User } from "../domain/task-agg/user";
 import { LocationRoom } from "../domain/task-agg/locationRoom";
+import { TaskStatusVO } from "../domain/task-agg/taskStatusVO";
 
 export default interface ITaskPickupDeliveryDTO {
   id: string;
@@ -10,7 +11,5 @@ export default interface ITaskPickupDeliveryDTO {
   user:User;
   deliveryContact:User;
   pickupContact:User;
-  approved:boolean;
-  pending:boolean;
-  planned:boolean;
+  taskStatus:TaskStatusVO;
 }

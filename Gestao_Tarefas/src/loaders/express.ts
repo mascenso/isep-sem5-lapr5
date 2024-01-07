@@ -47,6 +47,25 @@ export default ({ app }: { app: express.Application }) => {
     next(err);
   });
 
+   //catch the error when missing a parameter on joi
+   app.use((err, req, res, next) => {
+    if (err.isJoi) {
+      
+      const validationErrors = {};
+      err.details.forEach((detail) => {
+        validationErrors[detail.path] = detail.message;
+      });
+
+      res.status(400).json({
+        error: 'Validation error',
+        validationErrors,
+      });
+    } else {
+
+      next(err);
+    }
+  });
+  
   /// error handlers
   app.use((err, req, res, next) => {
     /**

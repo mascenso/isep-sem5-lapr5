@@ -23,9 +23,11 @@ export default (app: Router) => {
         endPosition: Joi.array().required(),
         contactNumber: Joi.number().required(),
         user: Joi.object().required(),
-        approved: Joi.boolean().default(false),
-        pending: Joi.boolean().default(true),
-        planned: Joi.boolean().default(false),
+        taskStatus: Joi.object({
+          approved: Joi.boolean().default(false),
+          pending: Joi.boolean().default(true),
+          planned: Joi.boolean().default(false)
+        }).required(),
       })
     }),
     (req, res, next) => ctrl.createVigilanceTask(req, res, next));
@@ -48,9 +50,11 @@ export default (app: Router) => {
         user: Joi.object().required(),
         deliveryContact: Joi.object().required(),
         pickupContact: Joi.object().required(),
-        approved: Joi.boolean().default(false),
-        pending: Joi.boolean().default(true),
-        planned: Joi.boolean().default(false),
+        taskStatus: Joi.object({
+          approved: Joi.boolean().default(false),
+          pending: Joi.boolean().default(true),
+          planned: Joi.boolean().default(false)
+        }).required(),
       })
     }),
     (req, res, next) => ctrl.createPickupDeliveryTask(req, res, next));
@@ -105,5 +109,10 @@ export default (app: Router) => {
     }),
     (req, res, next) =>    ctrl.planearTarefas(req, res, next));
 
+  route.get('/users/:userEmail',
+    (req, res, next) => ctrl.getTasksByUserEmail(req, res, next));
+
+  route.get('/status/:taskStatus',
+    (req, res, next) => ctrl.getTasksByStatus(req, res, next));
 
 };

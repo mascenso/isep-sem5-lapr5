@@ -6,6 +6,9 @@ import { TaskVigilance } from "../domain/task-agg/TaskVigilance";
 import ITaskVigilanceDTO from "../dto/ITaskVigilanceDTO";
 import {Document, Model} from "mongoose";
 import {ITaskVigilancePersistence} from "../dataschema/ITaskVigilancePersistence";
+import {TaskPickupDelivery} from "../domain/task-agg/TaskPickupDelivery";
+import ITaskSearchResponseDTO, {TaskType} from "../dto/ITaskSearchResponseDTO";
+import { TaskStatusVO } from "../domain/task-agg/taskStatusVO";
 
 export class TaskVigilanceMap extends Mapper<TaskVigilance> {
 
@@ -20,9 +23,10 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
         endPosition: taskVigilance.endPosition,
         contactNumber: taskVigilance.contactNumber,
         user: taskVigilance.user,
-        approved: taskVigilance.approved,
-        pending: taskVigilance.pending,
-        planned: taskVigilance.planned
+        taskStatus: taskVigilance.taskStatus,
+        //approved:boolean;
+        //pending:boolean;
+        //planned:boolean;
       } as ITaskVigilanceDTO;
     }
 
@@ -36,9 +40,10 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
             endPosition: taskVigilance.endPosition,
             contactNumber: taskVigilance.contactNumber,
             user: taskVigilance.user,
-            approved: taskVigilance.approved,
-            pending: taskVigilance.pending,
-            planned: taskVigilance.planned
+            taskStatus: taskVigilance.taskStatus
+          //approved:boolean;
+          //pending:boolean;
+          //planned:boolean;
         },
         new UniqueEntityID(taskVigilance.domainId)
       );
@@ -58,10 +63,32 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
         endPosition: taskVigilance.endPosition,
         contactNumber: taskVigilance.contactNumber,
         user: taskVigilance.user,
-        approved: taskVigilance.approved,
-        pending: taskVigilance.pending,
-        planned: taskVigilance.planned
+        taskStatus: taskVigilance.taskStatus
+        //approved:boolean;
+        //pending:boolean;
+        //planned:boolean;
       }
       return a;
     }
+
+  public static toSearchResponseDTO( taskVigilance: TaskVigilance): ITaskSearchResponseDTO {
+
+    return {
+      id: taskVigilance.id.toString(),
+      description: taskVigilance.description,
+      buildingId: taskVigilance.buildingId,
+      floors: taskVigilance.floors,
+      startPosition: taskVigilance.startPosition,
+      endPosition: taskVigilance.endPosition,
+      contactNumber: taskVigilance.contactNumber,
+      user: taskVigilance.user,
+      taskStatus: taskVigilance.taskStatus,
+      //approved:boolean;
+      //pending:boolean;
+      //planned:boolean;
+      taskType: TaskType.VIGILANCE,
+    } as ITaskSearchResponseDTO;
   }
+
+
+}

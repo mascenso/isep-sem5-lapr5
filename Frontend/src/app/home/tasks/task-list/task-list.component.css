@@ -1,0 +1,59 @@
+.task-list-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 3rem 4rem;
+}
+
+.task-list-section {
+  display:flex;
+  align-content: space-between;
+  flex-direction: column;
+  width: 100%;
+}
+
+h2 {
+  font-size: 3rem;
+  display: inline-block;
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: var(--color-grey-dark);
+}
+
+.task-list-card {
+  width: 100%;
+  padding: 1rem 2rem;
+}
+
+table {
+  width: 100%;
+}
+
+.task-row td {
+  width: 25%;
+  border-bottom-width: 1px;
+}
+
+.footer-row td {
+  font-style: italic;
+}
+
+.task-list-filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: start;
+}
+
+.form-field {
+  width: 20rem;
+}
+
+.form-field-email {
+  width: 40rem;
+}
+.form-field-status {
+  width: 25rem;
+}
+
+
+

@@ -4,6 +4,7 @@ import {Result} from "../../core/logic/Result";
 import {Guard} from "../../core/logic/Guard";
 import { User } from "./user";
 import { LocationRoom } from "./locationRoom";
+import { TaskStatusVO } from "./taskStatusVO";
 
 interface TaskPickupDeliveryProps {
     description: string;
@@ -13,9 +14,10 @@ interface TaskPickupDeliveryProps {
     user: User;
     deliveryContact: User;
     pickupContact: User;
-    approved:boolean;
-    pending:boolean;
-    planned:boolean;
+    taskStatus: TaskStatusVO;
+    //approved:boolean;
+    //pending:boolean;
+    //planned:boolean;
 }
 
 export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
@@ -34,9 +36,7 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
       { argument: props.user, argumentName: 'user' },
       { argument: props.deliveryContact, argumentName: 'deliveryContact' },
       { argument: props.pickupContact, argumentName: 'pickupContact' },
-      { argument: props.approved, argumentName: 'approved' },
-      { argument: props.pending, argumentName: 'pending' },
-      { argument: props.planned, argumentName: 'planned' },
+      { argument: props.taskStatus, argumentName: 'taskStatus' },
     ];
 
 
@@ -84,14 +84,8 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
   public get pickupContact() : object {
     return this.props.pickupContact;
   }
-  public get approved() : boolean {
-    return this.props.approved;
-  }
-  public get pending() : boolean {
-    return this.props.pending;
-  }
-  public get planned() : boolean {
-    return this.props.planned;
+  public get taskStatus() : TaskStatusVO {
+    return this.props.taskStatus;
   }
 
 
@@ -124,13 +118,7 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
   set pickupContact ( value: any) {
     this.props.pickupContact = value;
   }
-  set approved ( value: boolean) {
-    this.props.approved = value;
-  }
-  set pending ( value: boolean) {
-    this.props.pending = value;
-  }
-  set planned ( value: boolean) {
-    this.props.planned = value;
+  set taskStatus ( value: TaskStatusVO) {
+    this.props.taskStatus = value;
   }
 }

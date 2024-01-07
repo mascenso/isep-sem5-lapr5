@@ -105,5 +105,10 @@ export default (app: Router) => {
     }),
     (req, res, next) =>    ctrl.planearTarefas(req, res, next));
 
+  route.get('/users/:userEmail',
+    (req, res, next) => ctrl.getTasksByUserEmail(req, res, next));
+
+  route.get('/status/:taskStatus',
+    (req, res, next) => ctrl.getTasksByStatus(req, res, next));
 
 };

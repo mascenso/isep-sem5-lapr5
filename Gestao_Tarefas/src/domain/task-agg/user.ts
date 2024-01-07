@@ -4,6 +4,7 @@ import { Result } from "../../core/logic/Result";
 interface UserProps {
   userName: string;
   userContact: number;
+  userEmail: string;
 }
 
 export class User extends ValueObject<UserProps>{
@@ -12,10 +13,10 @@ export class User extends ValueObject<UserProps>{
     super(props);
   }
 
-  public static create(userName: string, userContact: number): Result<User> {
+  public static create(userName: string, userContact: number, userEmail: string): Result<User> {
 
 
-    if (userName ==null || userContact==null ) {
+    if (userName ==null || userContact==null  || userEmail== null) {
       return Result.fail<User>('Contact must have userName and phone number');
     }
 
@@ -27,7 +28,7 @@ export class User extends ValueObject<UserProps>{
       return Result.fail<User>('Invalid number. (9s)');
     }
 
-    return  Result.ok<User>(new User({userName, userContact: userContact}));
+    return  Result.ok<User>(new User({userName, userContact: userContact, userEmail: userEmail}));
   }
 
   get userName(): string {
@@ -36,6 +37,10 @@ export class User extends ValueObject<UserProps>{
 
   get contactNumber(): number {
     return this.props.userContact;
+  }
+
+  get userEmail(): string {
+    return this.props.userEmail;
   }
 
   private static isValidName(userName: string): boolean {

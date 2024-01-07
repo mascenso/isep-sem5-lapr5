@@ -1,0 +1,65 @@
+<div class="task-list-container">
+  <div class="task-list-section">
+    <h2>List tasks</h2>
+    <mat-card class="task-list-card">
+      <mat-card-content>
+        <div class="task-list-filter-form">
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>Filter by</mat-label>
+            <mat-select [formControl]="filterSelectionControl" (valueChange)="setFilterOption($event)">
+              <mat-option *ngFor="let option of filterOptions" [value]="option">{{option}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="form-field form-field-email" *ngIf="selectedFilterOption === FilterOptions.USER_EMAIL">
+            <mat-label>User Email</mat-label>
+            <input id="input-username" matInput placeholder="user@email.pt" [formControl]="emailInputControl" (keyup.enter)="getTasksByUserEmail($event)">
+            <mat-error *ngIf="emailInputControl.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="form-field form-field-status" *ngIf="selectedFilterOption === FilterOptions.STATUS">
+            <mat-label>Task Status</mat-label>
+            <mat-select [formControl]="filterSelectionControl" (valueChange)="getTasksByStatus($event)">
+              <mat-option *ngFor="let option of statusOptions" [value]="option">{{option}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="mat-elevation-z8">
+          <table mat-table
+                [dataSource]="dataSource"
+                 multiTemplateDataRows>
+            <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+              <th mat-header-cell *matHeaderCellDef> {{ column | titlecase }} </th>
+              <td mat-cell *matCellDef="let task">
+                <!-- Descrição da Tarefa -->
+                <ng-container *ngIf="column === 'description'">
+                  {{ task[column] }}
+                </ng-container>
+                <!-- Informação do utilizador -->
+                <ng-container *ngIf="column === 'user name'">
+                  {{ task.user.userName }}
+                </ng-container>
+                <ng-container *ngIf="column === 'user email'">
+                  {{ task.user.userEmail ?? 'N/A' }}
+                </ng-container>
+                <!-- Informação do utilizador -->
+                <ng-container *ngIf="column === 'type'">
+                  {{ task.taskType }}
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="disclaimer">
+              <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
+                No data to display
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="task-row"></tr>
+            <tr mat-footer-row *matFooterRowDef="['disclaimer']" class="footer-row" [style.display]="dataSource.data.length === 0 ? 'block' : 'none'"></tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20, 30, dataSource.data.length]" showFirstLastButtons></mat-paginator>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

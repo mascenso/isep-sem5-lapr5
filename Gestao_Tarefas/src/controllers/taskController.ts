@@ -206,6 +206,49 @@ export default class TaskController implements ITaskController /* TODO: extends 
       return next(e);
     }
   }
-  
+
+  public async getTasksByUserEmail(req: Request, res: Response, next: NextFunction) {
+
+    try {
+      const userEmail = req.params.userEmail;
+      if (!userEmail || !userEmail.includes("@")) {
+        return res.status(400).send("Invalid user email!");
+      }
+      const tasksOrError = await this.taskServiceInstance.getTasksByUserEmail(userEmail) as Result<any>;
+      if (tasksOrError.isFailure) {
+        return res.status(404).send();
+      }
+      return res.status(200).json(tasksOrError.getValue());
+
+    }
+    catch (e) {
+
+      return next(e);
+
+    }
+  }
+
+  public async getTasksByStatus(req: Request, res: Response, next: NextFunction) {
+
+    try {
+      const taskStatus = req.params.taskStatus;
+      if (!taskStatus) {
+        return res.status(400).send("Status can't be null!");
+      }
+      const tasksOrError = await this.taskServiceInstance.getTasksByStatus(taskStatus) as Result<any>;
+      if (tasksOrError.isFailure) {
+        return res.status(404).send();
+      }
+      return res.status(200).json(tasksOrError.getValue());
+
+    }
+    catch (e) {
+
+      return next(e);
+
+    }
+  }
+
+
 }
 

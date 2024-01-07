@@ -27,7 +27,7 @@ export class CreateTaskComponent implements OnInit{
   buildingServiceSubscription$ = new Subscription();
   floorServiceSubscription$ = new Subscription();
 
-  user = {userName:"", userContact:""}
+  user = {userName:"", userContact:"", userEmail:""}
 
 
   constructor(private fb: FormBuilder, private buildingService: BuildingService,
@@ -37,7 +37,7 @@ export class CreateTaskComponent implements OnInit{
     private userService: UserService) { }
 
   ngOnInit(): void {
-    this.userService.getUserData(true).subscribe((response) => {this.user.userName = response.firstName, this.user.userContact = response.phoneNumber},);
+    this.userService.getUserData(true).subscribe((response) => {this.user.userName = response.firstName, this.user.userContact = response.phoneNumber, this.user.userEmail = response.email},);
 
     // Inicialize os formulários conforme necessário
     this.vigilanciaForm = this.fb.group({
@@ -55,7 +55,9 @@ export class CreateTaskComponent implements OnInit{
       contactNumber: [null, Validators.required],
       user: this.fb.group({
         userName:[null, Validators.required],
-        userContact:[null,Validators.required]}),
+        userContact:[null,Validators.required],
+        userEmail:[null,Validators.required]}
+      ),
       approved: [false],
       pending:[true]
     });

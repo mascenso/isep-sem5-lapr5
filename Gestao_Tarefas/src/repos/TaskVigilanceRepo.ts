@@ -7,6 +7,9 @@ import { Document, FilterQuery, Model } from 'mongoose';
 import { ITaskVigilancePersistence } from '../dataschema/ITaskVigilancePersistence';
 import { TaskVigilance } from '../domain/task-agg/TaskVigilance';
 import ITaskVigilanceRepo from '../services/IRepos/ITaskVigilanceRepo';
+import {TaskPickupDelivery} from "../domain/task-agg/TaskPickupDelivery";
+import {TaskPickupDeliveryMap} from "../mappers/TaskPickupDeliveryMap";
+import {TaskStatus} from "../domain/task-agg/TaskStatus";
 
 @Service()
 export default class TaskVigilanceRepo implements ITaskVigilanceRepo {
@@ -70,6 +73,70 @@ export default class TaskVigilanceRepo implements ITaskVigilanceRepo {
     const tasks = await this.taskVigilanceSchema.find();
     return tasks.map((task) => TaskVigilanceMap.toDomain(task));
   }
+
+
+  public async findByUserEmail(email: string): Promise<TaskVigilance[]> {
+    const query = {user: {userEmail: email}};
+    const tasks = await this.taskVigilanceSchema.find(query);
+    return tasks.map(task => TaskVigilanceMap.toDomain(task));
+  }
+
+  public async findByTaskStatus(status: TaskStatus): Promise<TaskVigilance[]> {
+    const query = this.mapToQuery(status);
+    const tasks = await this.taskVigilanceSchema.find(query);
+    return tasks.map(task => TaskVigilanceMap.toDomain(task));
+  }
+
+
+  private mapToQuery(status: TaskStatus): any {
+    let query: any;
+    switch (status) {
+      case TaskStatus.APPROVED:
+        query = {
+          $and: [
+            {'approved': true},
+            {'planned': false},
+            {'pending':false}
+          ]
+        };
+        break;
+
+      case TaskStatus.PENDING:
+        query = {
+          $and: [
+            {'approved': false},
+            {'planned': false},
+            {'pending':true}
+          ]
+        };
+        break;
+
+      case TaskStatus.PLANNED:
+        query = {
+          $and: [
+            {'approved': false},
+            {'planned': true},
+            {'pending':false}
+          ]
+        }
+        break;
+
+      case TaskStatus.ACCEPTED_AND_PLANNED:
+        query = {
+          $and: [
+            {'approved': true},
+            {'planned': true},
+            {'pending':false}
+          ]
+        }
+        break;
+
+      default:
+        query = {};
+    }
+    return query;
+  }
+
 
 }
 

@@ -53,7 +53,9 @@ export interface TaskPickupResponseDTO {
     name:String;
     contactNumber:number;
   };
-  approved:boolean;
-  pending:boolean;
-  planned :boolean;
+  taskStatus:{
+    approved:boolean;
+    pending:boolean;
+    planned :boolean;
+  };
 }

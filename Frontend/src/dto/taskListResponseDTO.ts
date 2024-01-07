@@ -11,8 +11,10 @@ export interface TaskListResponseDTO {
   pickupContact?:any;
   startPosition?: number[];
   endPosition?: number[];
-  approved:boolean;
-  pending:boolean;
-  planned:boolean;
+  taskStatus:{
+    approved:boolean;
+    pending:boolean;
+    planned :boolean;
+  };
   taskType:string;
 }

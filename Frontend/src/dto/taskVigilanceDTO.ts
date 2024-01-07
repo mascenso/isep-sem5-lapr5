@@ -6,9 +6,11 @@ export interface TaskVigilanceRequestDTO {
   floors: object[];
   contactNumber: number;
   user:object;
-  approved: boolean;
-  pending: boolean;
-  planned :boolean;
+  taskStatus:{
+    approved:boolean;
+    pending:boolean;
+    planned :boolean;
+  };
 }
 
 
@@ -19,9 +21,11 @@ export interface TaskVigilanceResponseDTO {
   floors: object[];
   contactNumber: number;
   user:object;
-  approved: boolean;
-  pending: boolean;
-  planned :boolean;
+  taskStatus:{
+    approved:boolean;
+    pending:boolean;
+    planned :boolean;
+  };
 }
 
 export interface TaskVigilancePedidoDTO {

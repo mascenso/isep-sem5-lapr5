@@ -60,8 +60,10 @@ export class CreateTaskComponent implements OnInit{
         userContact:[null,Validators.required],
         userEmail:[null,Validators.required]}
       ),
-      approved: [false],
-      pending:[true]
+      taskStatus:{
+        approved:false,
+        pending:true
+      }
     });
 
     this.pickupForm = this.fb.group({
@@ -94,8 +96,10 @@ export class CreateTaskComponent implements OnInit{
         name: ['', Validators.required],
         contactNumber: [null, Validators.required]
       }),
-      approved: [false],
-      pending:[true]
+      taskStatus:{
+        approved:false,
+        pending:true
+      }
     });
 
        // fetch building list from service

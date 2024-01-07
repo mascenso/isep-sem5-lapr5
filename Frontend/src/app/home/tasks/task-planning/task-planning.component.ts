@@ -22,13 +22,13 @@ export class TaskPlanningComponent {
   displayedColumns: string[] = ['Nº Gerações', 'Dimensão População', 'Probabilidade Cruzamento(%)', 'Probabilidade Mutacao(%)', 'Tempo limite(s)', 'Avaliação especifica', 'Nº Gerações até estabilização'];
   allSelectedTasks: any[] = [];
   allSelectedTasksInfo: any[] = [];
-  inputNGenerations: number = 6;
-  inputPopDimensions: number = 8;
-  inputPCrossing: number = 50;
-  inputPMutations: number = 25;
-  inputLTime: number = 1;
-  inputTargetEvalution: number = 40;
-  inputNGenerationsToStabilization: number = 4;
+  inputNGenerations: number = 0;
+  inputPopDimensions: number = 0;
+  inputPCrossing: number = 0;
+  inputPMutations: number = 0;
+  inputLTime: number = 0;
+  inputTargetEvalution: number = 0;
+  inputNGenerationsToStabilization: number = 0;
 
 
   resultado: { sequencia: string[], tempo: number } = { sequencia: [], tempo: 0 };

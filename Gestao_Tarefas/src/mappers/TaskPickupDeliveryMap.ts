@@ -1,11 +1,12 @@
-import { Mapper } from "../core/infra/Mapper";
+import {Mapper} from "../core/infra/Mapper";
 
-import { UniqueEntityID } from "../core/domain/UniqueEntityID";
+import {UniqueEntityID} from "../core/domain/UniqueEntityID";
 
-import { TaskPickupDelivery } from "../domain/task-agg/TaskPickupDelivery";
+import {TaskPickupDelivery} from "../domain/task-agg/TaskPickupDelivery";
 import ITaskPickupDeliveryDTO from "../dto/ITaskPickupDeliveryDTO";
 import {Document, Model} from "mongoose";
 import {ITaskPickupDeliveryPersistence} from "../dataschema/ITaskPickupDeliveryPersistence";
+import ITaskSearchResponseDTO, {TaskType} from "../dto/ITaskSearchResponseDTO";
 
 export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
 
@@ -64,4 +65,21 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
       }
       return a;
     }
+
+  public static toSearchResponseDTO( taskPickupDelivery: TaskPickupDelivery): ITaskSearchResponseDTO {
+      return {
+        id: taskPickupDelivery.id.toString(),
+        description: taskPickupDelivery.description,
+        pickupLocalization: taskPickupDelivery.pickupLocalization,
+        deliveryLocalization: taskPickupDelivery.deliveryLocalization,
+        contactNumber: taskPickupDelivery.contactNumber,
+        user: taskPickupDelivery.user,
+        deliveryContact: taskPickupDelivery.deliveryContact,
+        pickupContact: taskPickupDelivery.pickupContact,
+        approved: taskPickupDelivery.approved,
+        pending: taskPickupDelivery.pending,
+        planned: taskPickupDelivery.planned,
+        taskType: TaskType.DELIVERY
+      } as ITaskSearchResponseDTO;
   }
+}

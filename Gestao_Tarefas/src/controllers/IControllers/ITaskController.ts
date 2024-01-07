@@ -13,4 +13,6 @@ export default interface ITaskController  {
   getAllVigilanceApprovedTasks(req: Request, res: Response, next: NextFunction);
  // getAllApprovedTasks(req: Request, res: Response, next: NextFunction);
   planearTarefas(req: Request, res: Response, next: NextFunction);
+  getTasksByUserEmail(req: Request, res: Response, next: NextFunction);
+  getTasksByStatus(req: Request, res: Response, next: NextFunction);
 }

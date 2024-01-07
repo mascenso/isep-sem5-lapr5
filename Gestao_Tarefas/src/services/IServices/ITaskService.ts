@@ -2,6 +2,7 @@ import { Result } from "../../core/logic/Result";
 import ITaskDTO from "../../dto/ITaskDTO";
 import ITaskPickupDeliveryDTO from "../../dto/ITaskPickupDeliveryDTO";
 import ITaskVigilanceDTO from "../../dto/ITaskVigilanceDTO";
+import ITaskSearchResponseDTO from "../../dto/ITaskSearchResponseDTO";
 
 export default interface ITaskService  {
   createTask(taskDTO: ITaskDTO): Promise<Result<ITaskDTO>>;
@@ -17,5 +18,6 @@ export default interface ITaskService  {
   getTasksPlanning(params:any):Promise<Result<any>>;
   getAllPickupDeliveryApprovedTasks(): Promise<Result<Array<ITaskPickupDeliveryDTO[]>>>;
   getAllVigilanceApprovedTasks(): Promise<Result<Array<ITaskVigilanceDTO[]>>>;
-  
+  getTasksByUserEmail(userEmail: string): Promise<Result<Array<ITaskSearchResponseDTO>>>;
+  getTasksByStatus(status: string): Promise<Result<Array<ITaskSearchResponseDTO>>>;
 }

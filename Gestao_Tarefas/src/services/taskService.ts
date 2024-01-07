@@ -14,7 +14,8 @@ import ITaskPickupDeliveryRepo from './IRepos/ITaskPickupDeliveryRepo';
 import { TaskPickupDeliveryMap } from '../mappers/TaskPickupDeliveryMap';
 import { TaskVigilance } from '../domain/task-agg/TaskVigilance';
 import { TaskPickupDelivery } from '../domain/task-agg/TaskPickupDelivery';
-import axios, { AxiosResponse, AxiosError } from 'axios';
+import ITaskSearchResponseDTO from "../dto/ITaskSearchResponseDTO";
+import {ParseUtils} from "../utils/ParseUtils";
 
 
 
@@ -264,6 +265,42 @@ export default class TaskService implements ITaskService {
     }
   }
 
+  public async getTasksByUserEmail(userEmail: string): Promise<Result<Array<ITaskSearchResponseDTO>>> {
+    try {
+      const deliveryTasks = await this.taskPickupDeliveryRepo.findByUserEmail(userEmail);
+      const vigilanceTasks = await this.taskVigilanceRepo.findByUserEmail(userEmail);
 
+      const tasksDTO = [];
+      deliveryTasks.map(deliveryTask => tasksDTO.push(TaskPickupDeliveryMap.toSearchResponseDTO(deliveryTask)));
+      vigilanceTasks.map(vigilanceTasks => tasksDTO.push(TaskVigilanceMap.toSearchResponseDTO(vigilanceTasks)));
+      return Result.ok<Array<ITaskSearchResponseDTO>>(tasksDTO);
+
+    }
+    catch (error) {
+      return Result.fail<Array<ITaskSearchResponseDTO>>(error);
+    }
+
+  }
+
+  public async getTasksByStatus(taskStatus: string): Promise<Result<Array<ITaskSearchResponseDTO>>> {
+    try {
+      const status = ParseUtils.parseStringToTaskStatus(taskStatus);
+      if (!status) {
+        return Result.fail<Array<ITaskSearchResponseDTO>>('Invalid task status');
+      }
+      const deliveryTasks = await this.taskPickupDeliveryRepo.findByTaskStatus(status);
+      const vigilanceTasks = await this.taskVigilanceRepo.findByTaskStatus(status);
+
+      const tasksDTO = [];
+      deliveryTasks.map(deliveryTask => tasksDTO.push(TaskPickupDeliveryMap.toSearchResponseDTO(deliveryTask)));
+      vigilanceTasks.map(vigilanceTasks => tasksDTO.push(TaskVigilanceMap.toSearchResponseDTO(vigilanceTasks)));
+      return Result.ok<Array<ITaskSearchResponseDTO>>(tasksDTO);
+
+    }
+    catch (error) {
+      return Result.fail<Array<ITaskSearchResponseDTO>>(error);
+    }
+
+  }
 
 }

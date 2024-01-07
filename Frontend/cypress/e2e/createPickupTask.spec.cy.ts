@@ -66,7 +66,6 @@ describe('Teste de criar uma Tarefa de vigilancia', () => {
         cy.get('#pickupTaskName').type("10");
         cy.get('#pickupTaskContact').type("10");
         cy.get('#pickupTasklocalizationx2').type("10");
-        cy.get('#createTaskPickupDescription').type("10");
         cy.get('#pickupTasksubmitbutton').click()
         
         cy.wait('@rotaFloor').should(({ response }) => {

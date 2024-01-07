@@ -1,14 +1,14 @@
 <mat-form-field>
     <mat-label>Escolha a tarefa</mat-label>
-    <mat-select [(value)]="selectedTask">
-      <mat-option value="vigilancia">Tarefa de Vigilância</mat-option>
-      <mat-option value="pickup">Tarefa de Pickup</mat-option>
+    <mat-select id="select-task-dropdown" [(value)]="selectedTask">
+      <mat-option id="optionVigilance" value="vigilancia">Tarefa de Vigilância</mat-option>
+      <mat-option id="optionPickup" value="pickup">Tarefa de Pickup</mat-option>
     </mat-select>
 </mat-form-field>
 <div *ngIf="selectedTask === 'vigilancia'">
     <mat-form-field>
         <mat-label>Select building</mat-label>
-        <mat-select id="dropdownBuilding" [(ngModel)]="selectedBuilding" (valueChange)="onBuildingSelector($event)">
+        <mat-select id="vigilanceTask-dropdownBuilding" [(ngModel)]="selectedBuilding" (valueChange)="onBuildingSelector($event)">
           <mat-option *ngFor="let building of buildings" [value]="building.id">
             {{ building.name }}
           </mat-option>
@@ -16,7 +16,7 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Select floor</mat-label>
-        <mat-select id="dropdownFloor" [(ngModel)]="selectedFloor">
+        <mat-select id="vigilanceTask-dropdownFloor" [(ngModel)]="selectedFloor">
           <mat-option *ngFor="let floor of floors" [value]="floor">
             {{ floor.floorNumber }}
           </mat-option>
@@ -24,34 +24,34 @@
       </mat-form-field>
     <form [formGroup]="vigilanciaForm">
         <mat-form-field>
-            <input matInput placeholder="Description" formControlName="description">
+            <input id="vigilanceTaskDescription" matInput placeholder="Description" formControlName="description">
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Contact Number" formControlName="contactNumber">
+          <input id="vigilanceTaskContact" matInput placeholder="Contact Number" formControlName="contactNumber">
         </mat-form-field>
         <div formGroupName="startPosition">
           <h2>Start Position</h2>
           <mat-form-field>
               <span matPrefix>X </span>
-              <input matInput formControlName="x">
+              <input id="vigilanceTaskstartx" matInput formControlName="x">
           </mat-form-field>
           <mat-form-field>
               <span matPrefix>Y </span>
-              <input matInput formControlName="y">
+              <input id="vigilanceTaskstarty" matInput formControlName="y">
           </mat-form-field>
         </div>
         <div formGroupName="endPosition">
           <h2>End Position</h2>
           <mat-form-field>
               <span matPrefix>X </span>
-              <input matInput formControlName="x">
+              <input id="vigilanceTaskendx" matInput formControlName="x">
           </mat-form-field>
           <mat-form-field>
               <span matPrefix>Y </span>
-              <input matInput formControlName="y">
+              <input id="vigilanceTaskendy" matInput formControlName="y">
           </mat-form-field>
         </div>
-        <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">Criar tarefa</button>
+        <button id="vigilanceTasksubmitbutton" mat-raised-button color="primary" type="submit" (click)="onSubmit()">Criar tarefa</button>
     </form>
 </div>
 <div *ngIf="selectedTask === 'pickup'" >
@@ -62,7 +62,7 @@
         <div formGroupName="pickupLocalization">
           <mat-form-field>
             <mat-label>Select building</mat-label>
-            <mat-select id="dropdownBuildingPickup" formControlName="buildingId" (valueChange)="onBuildingPickupSelector($event)">
+            <mat-select id="pickupTask-dropdownBuildingPickup" formControlName="buildingId" (valueChange)="onBuildingPickupSelector($event)">
               <mat-option *ngFor="let building of buildings" [value]="building.id">
                 {{ building.name }}
               </mat-option>
@@ -70,7 +70,7 @@
           </mat-form-field>
           <mat-form-field>
             <mat-label>Select floor</mat-label>
-            <mat-select id="dropdownFloorPickup" formControlName="floor">
+            <mat-select id="pickupTask-dropdownFloorPickup" formControlName="floor">
               <mat-option *ngFor="let floor of pickupFloors" [value]="floor">
                 {{ floor.floorNumber }}
               </mat-option>
@@ -80,20 +80,20 @@
             <h2>Localization</h2>
             <mat-form-field>
                 <span matPrefix>X </span>
-                <input matInput formControlName="x">
+                <input id="pickupTasklocalizationx" matInput formControlName="x">
             </mat-form-field>
             <mat-form-field>
                 <span matPrefix>Y </span>
-                <input matInput formControlName="y">
+                <input id="pickupTasklocalizationy" matInput formControlName="y">
             </mat-form-field>
           </div>
         </div>
         <div formGroupName="pickupContact">
           <mat-form-field>
-            <input matInput placeholder="User Name" formControlName="name">
+            <input id="pickupTaskName" matInput placeholder="User Name" formControlName="name">
           </mat-form-field>
           <mat-form-field>
-            <input matInput placeholder="Contact Number" formControlName="contactNumber">
+            <input id="pickupTaskContact" matInput placeholder="Contact Number" formControlName="contactNumber">
           </mat-form-field>
         </div>
       </div>
@@ -102,7 +102,7 @@
         <div formGroupName="deliveryLocalization">
           <mat-form-field>
             <mat-label>Select building</mat-label>
-            <mat-select id="dropdownBuildingDelivery" formControlName="buildingId" (valueChange)="onBuildingDeliverySelector($event)">
+            <mat-select id="pickupTask-dropdownBuildingPickup-2" formControlName="buildingId" (valueChange)="onBuildingDeliverySelector($event)">
               <mat-option *ngFor="let building of buildings" [value]="building.id">
                 {{ building.name }}
               </mat-option>
@@ -110,7 +110,7 @@
           </mat-form-field>
           <mat-form-field>
             <mat-label>Select floor</mat-label>
-            <mat-select id="dropdownFloorDelivery" formControlName="floor">
+            <mat-select id="pickupTask-dropdownFloorDelivery2" formControlName="floor">
               <mat-option *ngFor="let floor of deliveryFloors" [value]="floor">
                 {{ floor.floorNumber }}
               </mat-option>
@@ -120,20 +120,20 @@
             <h2>Localization</h2>
             <mat-form-field>
                 <span matPrefix>X </span>
-                <input matInput formControlName="x">
+                <input id="pickupTasklocalizationx2" matInput formControlName="x">
             </mat-form-field>
             <mat-form-field>
                 <span matPrefix>Y </span>
-                <input matInput formControlName="y">
+                <input id="pickupTasklocalizationy2" matInput formControlName="y">
             </mat-form-field>
           </div>
         </div>
         <div formGroupName="deliveryContact">
           <mat-form-field>
-            <input matInput placeholder="User Name" formControlName="name">
+            <input id="pickupTaskName2" matInput placeholder="User Name" formControlName="name">
           </mat-form-field>
           <mat-form-field>
-            <input matInput placeholder="Contact Number" formControlName="contactNumber">
+            <input id="pickupTaskContact2" matInput placeholder="Contact Number" formControlName="contactNumber">
           </mat-form-field>
         </div>
 
@@ -141,10 +141,10 @@
     </div>
     <div>
       <mat-form-field>
-        <input matInput placeholder="Description" formControlName="description">
+        <input id="createTaskPickupDescription" matInput placeholder="Description" formControlName="description">
       </mat-form-field>
     </div>
 
-    <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">Criar tarefa</button>
+    <button id="pickupTasksubmitbutton" mat-raised-button color="primary" type="submit" (click)="onSubmit()">Criar tarefa</button>
   </form>
 </div>

@@ -71,13 +71,13 @@ export class TaskPlanningComponent {
       const deliveryroomY = deliveryLocalization.room[1];
 
       const pickupCodeFloor = pickupLocalization.floor;
-      const pickupCodes = pickupCodeFloor.code;
+      const pickupFloorCode = pickupCodeFloor.code;
 
 
-      const deliveryCode = deliveryLocalization.floor.code;
+      const deliveryFloorCode = deliveryLocalization.floor.code;
 
 
-      return [description, pickupRoomX, pickupRoomY, pickupCodes, deliveryroomX, deliveryroomY, deliveryCode];
+      return [description, pickupRoomX, pickupRoomY, pickupFloorCode, deliveryroomX, deliveryroomY, deliveryFloorCode];
     });
   }
 

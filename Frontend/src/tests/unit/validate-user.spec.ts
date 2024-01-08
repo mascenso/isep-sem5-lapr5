@@ -4,7 +4,7 @@ import { MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterTestingModule } from '@angular/router/testing';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { UserResponseDTO } from "src/dto/userDTO";
 import { ValidateUserComponent } from 'src/app/home/users/validate-user/validate-user.component';
 import { UserService } from 'src/app/services/user.service';
@@ -72,6 +72,17 @@ describe('ValidateUserComponent', () => {
     expect(component.userList).toEqual(mockUsers);
   });
 
+  it('should not return error when there are no inactive users on initialization', () => {
+    const mockUsers: UserResponseDTO[] = [];
+    (mockUserService.GetInactiveUsers as jasmine.Spy).and.callFake(() => {
+      return of(mockUsers);
+    });
+
+    component.ngOnInit();
+  
+    expect(mockUserService.GetInactiveUsers).toHaveBeenCalled();
+    expect(component.userList).toEqual(mockUsers);
+  });
  
 
   it('should accept a user', () => {
@@ -110,6 +121,44 @@ describe('ValidateUserComponent', () => {
     });
   });
 
+
+  it('should not accept a user with error', () => {
+    const userToAccept: UserResponseDTO = {
+      id: '2',
+      email: 'test@example.com',
+      password: 'password',
+      firstName: 'John',
+      lastName: 'Doe',
+      role: 'user',
+      active: true,
+      taxPayerNumber: '12345',
+      mechanographicNumber: '54321',
+      phoneNumber: '987654321'
+    };
+
+    mockUserService.updateUserById.and.returnValue(throwError({ message: 'Error in user approval!' }));
+
+    component.acceptUser(userToAccept);
+
+    expect(mockUserService.updateUserById).toHaveBeenCalledWith(
+      '2', // ID
+      jasmine.objectContaining({ 
+        id: '2',
+        email: 'test@example.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        role: 'user',
+        active: true,
+      })
+    );
+    expect(mockSnackBar.open).toHaveBeenCalledWith(
+      "Error in user approval!", 'close', 
+    {
+      duration: 5000,
+      panelClass: ['snackbar-error']
+    });
+  });
+
   it('should reject a user', () => {
     const userToReject: UserResponseDTO = {
       id: '1',
@@ -132,4 +181,31 @@ describe('ValidateUserComponent', () => {
       panelClass: ['snackbar-success']
     });
   });
+
+
+  it('should not reject a user with errors', () => {
+    const userToReject: UserResponseDTO = {
+      id: '1',
+      email: 'test@example.com',
+      password: 'password',
+      firstName: 'John',
+      lastName: 'Doe',
+      role: 'user',
+      active: true,
+      taxPayerNumber: '12345',
+      mechanographicNumber: '54321',
+      phoneNumber: '987654321'
+    }
+
+    mockUserService.deleteUserById.and.returnValue(throwError({ message: 'Error in user rejection!' }));
+
+    component.rejectUser(userToReject);
+  
+    expect(mockUserService.deleteUserById).toHaveBeenCalledWith('1');  
+    expect(mockSnackBar.open).toHaveBeenCalledWith("Error in user rejection!", "close", {
+      duration: 5000,
+      panelClass: ['snackbar-error']
+    });
+  });
+
 });

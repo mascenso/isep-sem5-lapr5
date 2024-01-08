@@ -66,7 +66,7 @@ export default class TaskController implements ITaskController /* TODO: extends 
 
   public async updateTask(req: Request, res: Response, next: NextFunction) {
     try {
-      const taskOrError = await this.taskServiceInstance.updateTask(req.body as ITaskDTO) as Result<ITaskDTO>;
+      const taskOrError = await this.taskServiceInstance.updateTask(req.body as ITaskDTO, req.params.id) as Result<ITaskPickupDeliveryDTO | ITaskVigilanceDTO>;
 
       if (taskOrError.isFailure) {
         return res.status(404).send();
@@ -79,22 +79,6 @@ export default class TaskController implements ITaskController /* TODO: extends 
       return next(e);
     }
   };
-
-  public async getAllTasks(req: Request, res: Response, next: NextFunction) {
-    try {
-      const tasksOrError = await this.taskServiceInstance.getAllTasks() as Result<Array<ITaskDTO>>;
-
-      if (tasksOrError.isFailure) {
-        return res.status(404).send();
-      }
-
-      const tasksDTO = tasksOrError.getValue();
-      return res.status(201).json(tasksDTO);
-    }
-    catch (e) {
-      return next(e);
-    }
-  }
 
   public async getAllVigilancePendingTasks(req: Request, res: Response, next: NextFunction) {
 

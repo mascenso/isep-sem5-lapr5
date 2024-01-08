@@ -60,17 +60,13 @@ export default (app: Router) => {
     }),
     (req, res, next) => ctrl.createPickupDeliveryTask(req, res, next));
 
-  route.put('',
+  route.patch('/:id',
     celebrate({
       body: Joi.object({
-        id: Joi.string().required(),
-        name: Joi.string().required()
+        taskStatus: Joi.string().required(),
       }),
     }),
     (req, res, next) => ctrl.updateTask(req, res, next));
-
-  route.get('',
-    (req, res, next) => ctrl.getAllTasks(req, res, next));
 
   route.get('/pendingVigilance',
     (req, res, next) => ctrl.getAllVigilancePendingTasks(req, res, next));

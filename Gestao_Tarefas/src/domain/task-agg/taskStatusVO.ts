@@ -48,31 +48,12 @@ export class TaskStatusVO extends ValueObject<TaskStatusProps> {
     this.setTaskStatus();
   }
 
-  public acceptTask(): void {
-    if (this.pending) {
-      this.approved = true;
-      this.pending = false;
-      this.planned = false;
-    } else
-      throw new Error("Task is not pending");
-    this.setTaskStatus();
+  public get status(): TaskStatus {
+    return this.props.status;
   }
 
-  public rejectTask(): void {
-    this.approved = false;
-    this.pending = false;
-    this.planned = false;
-    this.setTaskStatus();
-  }
-
-  public planTask(): void {
-    if (this.approved) {
-      this.planned = true;
-      this.approved = false;
-      this.pending = false;
-    } else
-      throw new Error("Task is not approved");
-    this.setTaskStatus();
+  public set status(value: TaskStatus) {
+    this.props.status = value;
   }
 
   public static whichStatus(approved: boolean, pending: boolean, planned: boolean): TaskStatus {

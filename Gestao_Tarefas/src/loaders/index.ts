@@ -35,10 +35,6 @@ export default async ({ expressApp }) => {
     path: config.controllers.route.path
   }
 
-  const taskRepo = {
-    name: config.repos.task.name,
-    path: config.repos.task.path
-  }
   const taskVigilanceRepo = {
     name: config.repos.taskVigilance.name,
     path: config.repos.taskVigilance.path
@@ -70,7 +66,6 @@ export default async ({ expressApp }) => {
       routeController
     ],
     repos: [
-      taskRepo,
       taskVigilanceRepo,
       taskPickupDeliveryRepo
     ],

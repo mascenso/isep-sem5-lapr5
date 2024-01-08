@@ -7,8 +7,6 @@ import { Document, FilterQuery, Model } from 'mongoose';
 import { ITaskVigilancePersistence } from '../dataschema/ITaskVigilancePersistence';
 import { TaskVigilance } from '../domain/task-agg/TaskVigilance';
 import ITaskVigilanceRepo from '../services/IRepos/ITaskVigilanceRepo';
-import {TaskPickupDelivery} from "../domain/task-agg/TaskPickupDelivery";
-import {TaskPickupDeliveryMap} from "../mappers/TaskPickupDeliveryMap";
 import {TaskStatus} from "../domain/task-agg/TaskStatus";
 
 @Service()
@@ -48,9 +46,15 @@ export default class TaskVigilanceRepo implements ITaskVigilanceRepo {
 
         return TaskVigilanceMap.toDomain(taskCreated);
       } else {
-        taskDocument.id = taskVigilance.id;
-        await taskDocument.save();
+        const updateFields = ['taskStatus']
 
+        for (const field of updateFields) {
+          if (taskVigilance[field] !== undefined) {
+            taskDocument[field] = taskVigilance[field].props;
+          }
+        }
+
+        await taskDocument.save();
         return taskVigilance;
       }
     } catch (err) {

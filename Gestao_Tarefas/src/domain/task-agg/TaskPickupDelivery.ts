@@ -5,6 +5,7 @@ import {Guard} from "../../core/logic/Guard";
 import { User } from "./user";
 import { LocationRoom } from "./locationRoom";
 import { TaskStatusVO } from "./taskStatusVO";
+import { TaskStatus } from "./TaskStatus";
 
 interface TaskPickupDeliveryProps {
     description: string;
@@ -124,5 +125,24 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
   }
   set taskStatus ( value: TaskStatusVO) {
     this.props.taskStatus = value;
+  }
+
+  public updateTaskStatus(taskStatus: TaskStatus): void {
+    switch (taskStatus) {
+      case TaskStatus.APPROVED:
+        this.props.taskStatus = TaskStatusVO.create(true, false, false).getValue();
+        break;
+      case TaskStatus.PENDING:
+        this.props.taskStatus = TaskStatusVO.create(false, true, false).getValue();
+        break;
+      case TaskStatus.PLANNED:
+        this.props.taskStatus = TaskStatusVO.create(true, false, true).getValue();
+        break;
+      case TaskStatus.REJECTED:
+          this.props.taskStatus = TaskStatusVO.create(false, false, false).getValue();
+          break;
+      default:
+        throw new Error("TaskStatus not valid");
+    }
   }
 }

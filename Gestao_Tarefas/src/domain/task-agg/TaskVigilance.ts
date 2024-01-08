@@ -3,6 +3,7 @@ import {UniqueEntityID} from "../../core/domain/UniqueEntityID";
 import {Result} from "../../core/logic/Result";
 import {Guard} from "../../core/logic/Guard";
 import { TaskStatusVO } from "./taskStatusVO";
+import { TaskStatus } from "./TaskStatus";
 
 interface TaskVigilanceProps {
     description: string;
@@ -118,6 +119,25 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
   }
   set endPosition ( value: number[]) {
     this.props.endPosition = value;
+  }
+
+  public updateTaskStatus(taskStatus: TaskStatus): void {
+    switch (taskStatus) {
+      case TaskStatus.APPROVED:
+        this.props.taskStatus = TaskStatusVO.create(true, false, false).getValue();
+        break;
+      case TaskStatus.PENDING:
+        this.props.taskStatus = TaskStatusVO.create(false, true, false).getValue();
+        break;
+      case TaskStatus.PLANNED:
+        this.props.taskStatus = TaskStatusVO.create(true, false, true).getValue();
+        break;
+      case TaskStatus.REJECTED:
+        this.props.taskStatus = TaskStatusVO.create(false, false, false).getValue();
+        break;
+      default:
+        throw new Error("TaskStatus not valid");
+    }
   }
 
 }

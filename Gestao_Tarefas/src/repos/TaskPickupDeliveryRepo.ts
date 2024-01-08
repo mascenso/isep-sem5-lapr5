@@ -47,9 +47,16 @@ export default class TaskPickupDeliveryRepo implements ITaskPickupDeliveryRepo {
 
         return TaskPickupDeliveryMap.toDomain(taskCreated);
       } else {
-        taskDocument.id = taskPickupDelivery.id;
-        await taskDocument.save();
 
+        const updateFields = ['taskStatus']
+
+        for (const field of updateFields) {
+          if (taskPickupDelivery[field] !== undefined) {
+            taskDocument[field] = taskPickupDelivery[field].props;
+          }
+        }
+
+        await taskDocument.save();
         return taskPickupDelivery;
       }
     } catch (err) {

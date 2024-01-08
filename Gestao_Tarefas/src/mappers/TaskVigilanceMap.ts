@@ -24,9 +24,6 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
         contactNumber: taskVigilance.contactNumber,
         user: taskVigilance.user,
         taskStatus: taskVigilance.taskStatus,
-        //approved:boolean;
-        //pending:boolean;
-        //planned:boolean;
       } as ITaskVigilanceDTO;
     }
 
@@ -41,9 +38,6 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
             contactNumber: taskVigilance.contactNumber,
             user: taskVigilance.user,
             taskStatus: taskVigilance.taskStatus
-          //approved:boolean;
-          //pending:boolean;
-          //planned:boolean;
         },
         new UniqueEntityID(taskVigilance.domainId)
       );
@@ -64,9 +58,6 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
         contactNumber: taskVigilance.contactNumber,
         user: taskVigilance.user,
         taskStatus: taskVigilance.taskStatus
-        //approved:boolean;
-        //pending:boolean;
-        //planned:boolean;
       }
       return a;
     }
@@ -83,9 +74,6 @@ export class TaskVigilanceMap extends Mapper<TaskVigilance> {
       contactNumber: taskVigilance.contactNumber,
       user: taskVigilance.user,
       taskStatus: taskVigilance.taskStatus,
-      //approved:boolean;
-      //pending:boolean;
-      //planned:boolean;
       taskType: TaskType.VIGILANCE,
     } as ITaskSearchResponseDTO;
   }

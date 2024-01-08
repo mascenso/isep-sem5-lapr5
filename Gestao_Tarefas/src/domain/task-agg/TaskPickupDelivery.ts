@@ -8,16 +8,15 @@ import { TaskStatusVO } from "./taskStatusVO";
 
 interface TaskPickupDeliveryProps {
     description: string;
+    user: User;
+    taskStatus: TaskStatusVO;
+
     pickupLocalization: LocationRoom;
     deliveryLocalization:LocationRoom;
     contactNumber:number;
-    user: User;
     deliveryContact: User;
+
     pickupContact: User;
-    taskStatus: TaskStatusVO;
-    //approved:boolean;
-    //pending:boolean;
-    //planned:boolean;
 }
 
 export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {

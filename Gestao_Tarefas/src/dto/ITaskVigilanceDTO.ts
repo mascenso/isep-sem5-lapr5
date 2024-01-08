@@ -10,7 +10,4 @@ export default interface ITaskVigilanceDTO {
   contactNumber: number;
   user:object;
   taskStatus: TaskStatusVO;
-  //approved:boolean;
-  //pending:boolean;
-  //planned:boolean;
 }

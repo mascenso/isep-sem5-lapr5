@@ -6,16 +6,14 @@ import { TaskStatusVO } from "./taskStatusVO";
 
 interface TaskVigilanceProps {
     description: string;
+    user:object;
+    taskStatus: TaskStatusVO;
+
     buildingId: string;
     floors:object[];
     startPosition: number[];
     endPosition: number[];
     contactNumber:number;
-    user:object;
-    taskStatus: TaskStatusVO;
-  //approved:boolean;
-  //pending:boolean;
-  //planned:boolean;
 }
 
 export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {

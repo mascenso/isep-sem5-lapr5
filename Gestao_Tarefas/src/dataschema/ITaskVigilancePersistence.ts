@@ -8,7 +8,9 @@ export interface ITaskVigilancePersistence {
   endPosition: number[];
   contactNumber: number;
   user:object;
-  approved:boolean;
-  pending:boolean;
-  planned:boolean;
+  taskStatus:{
+    approved:boolean;
+    pending:boolean;
+    planned:boolean;
+  };
 }

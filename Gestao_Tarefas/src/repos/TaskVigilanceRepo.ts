@@ -94,9 +94,9 @@ export default class TaskVigilanceRepo implements ITaskVigilanceRepo {
       case TaskStatus.APPROVED:
         query = {
           $and: [
-            {'approved': true},
-            {'planned': false},
-            {'pending':false}
+            {'taskStatus.approved': true},
+            {'taskStatus.planned': false},
+            {'taskStatus.pending':false}
           ]
         };
         break;
@@ -104,9 +104,9 @@ export default class TaskVigilanceRepo implements ITaskVigilanceRepo {
       case TaskStatus.PENDING:
         query = {
           $and: [
-            {'approved': false},
-            {'planned': false},
-            {'pending':true}
+            {'taskStatus.approved': false},
+            {'taskStatus.planned': false},
+            {'taskStatus.pending':true}
           ]
         };
         break;
@@ -114,19 +114,9 @@ export default class TaskVigilanceRepo implements ITaskVigilanceRepo {
       case TaskStatus.PLANNED:
         query = {
           $and: [
-            {'approved': false},
-            {'planned': true},
-            {'pending':false}
-          ]
-        }
-        break;
-
-      case TaskStatus.ACCEPTED_AND_PLANNED:
-        query = {
-          $and: [
-            {'approved': true},
-            {'planned': true},
-            {'pending':false}
+            {'taskStatus.approved': true},
+            {'taskStatus.planned': true},
+            {'taskStatus.pending':false}
           ]
         }
         break;

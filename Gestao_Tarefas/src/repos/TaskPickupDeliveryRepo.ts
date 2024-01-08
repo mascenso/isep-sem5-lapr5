@@ -111,16 +111,6 @@ export default class TaskPickupDeliveryRepo implements ITaskPickupDeliveryRepo {
       case TaskStatus.PLANNED:
         query = {
           $and: [
-            {'taskStatus.approved': false},
-            {'taskStatus.planned': true},
-            {'taskStatus.pending':false}
-          ]
-        }
-        break;
-
-      case TaskStatus.ACCEPTED_AND_PLANNED:
-        query = {
-          $and: [
             {'taskStatus.approved': true},
             {'taskStatus.planned': true},
             {'taskStatus.pending':false}

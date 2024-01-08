@@ -35,6 +35,13 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
       { argument: props.taskStatus, argumentName: 'taskStatus' },
     ];
 
+    const taskStatus = TaskStatusVO.create(props.taskStatus.approved, props.taskStatus.pending, props.taskStatus.planned);
+    if (taskStatus.isFailure) {
+      return Result.fail<TaskVigilance>(taskStatus.error.toString())
+    }
+    else {
+      props.taskStatus = taskStatus.getValue();
+    }
 
     const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 

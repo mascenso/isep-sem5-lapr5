@@ -53,7 +53,8 @@ export default (app: Router) => {
         taskStatus: Joi.object({
           approved: Joi.boolean().default(false),
           pending: Joi.boolean().default(true),
-          planned: Joi.boolean().default(false)
+          planned: Joi.boolean().default(false),
+          status: Joi.string()
         }).required(),
       })
     }),

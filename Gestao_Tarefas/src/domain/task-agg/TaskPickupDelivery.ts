@@ -38,6 +38,13 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
       { argument: props.taskStatus, argumentName: 'taskStatus' },
     ];
 
+    const taskStatus = TaskStatusVO.create(props.taskStatus.approved, props.taskStatus.pending, props.taskStatus.planned);
+    if (taskStatus.isFailure) {
+      return Result.fail<TaskPickupDelivery>(taskStatus.error.toString())
+    }
+    else {
+      props.taskStatus = taskStatus.getValue();
+    }
 
     const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
@@ -86,8 +93,6 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
   public get taskStatus() : TaskStatusVO {
     return this.props.taskStatus;
   }
-
-
 
 
   set description ( value: string) {

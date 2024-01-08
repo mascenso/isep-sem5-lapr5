@@ -21,7 +21,7 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
             user: taskPickupDelivery.user,
             deliveryContact: taskPickupDelivery.deliveryContact,
             pickupContact: taskPickupDelivery.pickupContact,
-            taskStatus: taskPickupDelivery.taskStatus,
+            taskStatus: taskPickupDelivery.taskStatus.props,
       } as ITaskPickupDeliveryDTO;
     }
 
@@ -35,7 +35,7 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
             user: taskPickupDelivery.user,
             deliveryContact: taskPickupDelivery.deliveryContact,
             pickupContact: taskPickupDelivery.pickupContact,
-            taskStatus: taskPickupDelivery.taskStatus,
+            taskStatus: taskPickupDelivery.taskStatus
         },
         new UniqueEntityID(taskPickupDelivery.domainId)
       );
@@ -55,7 +55,7 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
         user: taskPickupDelivery.user,
         deliveryContact: taskPickupDelivery.deliveryContact,
         pickupContact: taskPickupDelivery.pickupContact,
-        taskStatus: taskPickupDelivery.taskStatus,
+        taskStatus: taskPickupDelivery.taskStatus.props,
       }
       return a;
     }
@@ -70,7 +70,7 @@ export class TaskPickupDeliveryMap extends Mapper<TaskPickupDelivery> {
         user: taskPickupDelivery.user,
         deliveryContact: taskPickupDelivery.deliveryContact,
         pickupContact: taskPickupDelivery.pickupContact,
-        taskStatus: taskPickupDelivery.taskStatus,
+        taskStatus: taskPickupDelivery.taskStatus.props,
         taskType: TaskType.DELIVERY
       } as ITaskSearchResponseDTO;
   }

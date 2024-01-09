@@ -18,21 +18,7 @@ export default class TaskController implements ITaskController /* TODO: extends 
   ) {
   }
 
-  public async createTask(req: Request, res: Response, next: NextFunction) {
-    try {
-      const taskOrError = await this.taskServiceInstance.createTask(req.body as ITaskDTO) as Result<ITaskDTO>;
 
-      if (taskOrError.isFailure) {
-        return res.status(402).send();
-      }
-
-      const taskDTO = taskOrError.getValue();
-      return res.json(taskDTO).status(201);
-    }
-    catch (e) {
-      return next(e);
-    }
-  };
   public async createVigilanceTask(req: Request, res: Response, next: NextFunction) {
     try {
       const taskOrError = await this.taskServiceInstance.createVigilanceTask(req.body as ITaskVigilanceDTO) as Result<ITaskVigilanceDTO>;

@@ -106,6 +106,7 @@ export class ValidateTaskComponent implements OnInit {
           duration: 5000,
           panelClass: ['snackbar-success']
         });
+        this.router.navigate(['/home/tasks']);
       },
       (error) => {
         this._snackBar.open("Error in task approval!", "close", {
@@ -122,10 +123,17 @@ export class ValidateTaskComponent implements OnInit {
 
     this.tasksService.updateTaskById(taskPatchRequestDTO as TaskPatchRequestDTO, task.id).subscribe(
       (rejectedTask) => {
-        console.log("rejectedTask", rejectedTask);
+        this._snackBar.open("Task approved!", "close", {
+          duration: 5000,
+          panelClass: ['snackbar-success']
+        });
+        this.router.navigate(['/home/tasks']);
       },
       (error) => {
-        console.error('Erro ao rejeitar a tarefa:', error);
+        this._snackBar.open("Error in task approval!", "close", {
+          duration: 5000,
+          panelClass: ['snackbar-error']
+        });
       }
     );
   }

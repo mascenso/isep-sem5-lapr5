@@ -4,6 +4,9 @@ import { TaskViewModel } from "../../../viewModel/taskView";
 import { TasksService } from "../../../services/tasks.service";
 import { TaskPickupViewModel } from "../../../viewModel/taskPickUp";
 import { TaskVigilanceViewModel } from "../../../viewModel/taskVigilance";
+import { TaskPatchRequestDTO } from "../../../../dto/taskPatchRequestDTO";
+import { Router } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-validate-task',
@@ -24,7 +27,9 @@ export class ValidateTaskComponent implements OnInit {
   expandedElement: any;
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
 
-  constructor(private tasksService: TasksService) { }
+  constructor(private tasksService: TasksService,
+  private router: Router,
+  private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.carregarLista();
@@ -47,6 +52,10 @@ export class ValidateTaskComponent implements OnInit {
         console.error('Erro ao buscar as tarefas de pick up pendentes:', pickupError);
       }
     );
+  }
+
+  toggleRowExpansion(row: any): void {
+    this.expandedElement = this.expandedElement === row ? null : row;
   }
 
   getVigilanceTasks() {
@@ -87,12 +96,37 @@ export class ValidateTaskComponent implements OnInit {
     this.pendingTaskList = this.pendingTaskList.concat(tasks);
   }
 
-
   acceptTask(task: TaskViewModel): void {
-    throw new Error('Method not implemented.');
+
+    let taskPatchRequestDTO = { taskStatus: "APPROVED" };
+
+    this.tasksService.updateTaskById(taskPatchRequestDTO as TaskPatchRequestDTO, task.id).subscribe(
+      (approvedTask) => {
+        this._snackBar.open("Task approved!", "close", {
+          duration: 5000,
+          panelClass: ['snackbar-success']
+        });
+      },
+      (error) => {
+        this._snackBar.open("Error in task approval!", "close", {
+          duration: 5000,
+          panelClass: ['snackbar-error']
+        });
+      }
+    );
+
   }
 
   rejectTask(task: TaskViewModel) {
-    throw new Error('Method not implemented.');
+    let taskPatchRequestDTO = { taskStatus: "REJECTED" };
+
+    this.tasksService.updateTaskById(taskPatchRequestDTO as TaskPatchRequestDTO, task.id).subscribe(
+      (rejectedTask) => {
+        console.log("rejectedTask", rejectedTask);
+      },
+      (error) => {
+        console.error('Erro ao rejeitar a tarefa:', error);
+      }
+    );
   }
 }

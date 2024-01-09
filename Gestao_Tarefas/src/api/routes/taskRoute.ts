@@ -23,9 +23,11 @@ export default (app: Router) => {
         endPosition: Joi.array().required(),
         contactNumber: Joi.number().required(),
         user: Joi.object().required(),
-        approved: Joi.boolean().default(false),
-        pending: Joi.boolean().default(true),
-        planned: Joi.boolean().default(false),
+        taskStatus: Joi.object({
+          approved: Joi.boolean().default(false),
+          pending: Joi.boolean().default(true),
+          planned: Joi.boolean().default(false)
+        }).required(),
       })
     }),
     (req, res, next) => ctrl.createVigilanceTask(req, res, next));
@@ -46,32 +48,25 @@ export default (app: Router) => {
         }).required(),
         contactNumber: Joi.number().required(),
         user: Joi.object().required(),
-        deliveryContact: Joi.object({
-          name: Joi.string().required(),
-          contactNumber: Joi.number().required()
+        deliveryContact: Joi.object().required(),
+        pickupContact: Joi.object().required(),
+        taskStatus: Joi.object({
+          approved: Joi.boolean().default(false),
+          pending: Joi.boolean().default(true),
+          planned: Joi.boolean().default(false),
+          status: Joi.string()
         }).required(),
-        pickupContact: Joi.object({
-          name: Joi.string().required(),
-          contactNumber: Joi.number().required()
-        }).required(),
-        approved: Joi.boolean().default(false),
-        pending: Joi.boolean().default(true),
-        planned: Joi.boolean().default(false),
       })
     }),
     (req, res, next) => ctrl.createPickupDeliveryTask(req, res, next));
 
-  route.put('',
+  route.patch('/:id',
     celebrate({
       body: Joi.object({
-        id: Joi.string().required(),
-        name: Joi.string().required()
+        taskStatus: Joi.string().required(),
       }),
     }),
     (req, res, next) => ctrl.updateTask(req, res, next));
-
-  route.get('',
-    (req, res, next) => ctrl.getAllTasks(req, res, next));
 
   route.get('/pendingVigilance',
     (req, res, next) => ctrl.getAllVigilancePendingTasks(req, res, next));
@@ -87,11 +82,6 @@ export default (app: Router) => {
 
 
   route.post('/planning/',
-    (req, res, next) => {
-      console.log('INICIO');
-      console.log('Corpo da requisição:', req.body);
-      next();
-    },
     celebrate({
       body: Joi.object({
         LTasks: Joi.array().items(
@@ -114,11 +104,12 @@ export default (app: Router) => {
         nEstabiliz: Joi.number().required(),
       }),
     }),
-    (req, res, next) => {
-      console.log('FIM ');
-      console.log('Corpo da requisição:', req.body);
-      ctrl.planearTarefas(req, res, next)
-    });
+    (req, res, next) =>    ctrl.planearTarefas(req, res, next));
 
+  route.get('/users/:userEmail',
+    (req, res, next) => ctrl.getTasksByUserEmail(req, res, next));
+
+  route.get('/status/:taskStatus',
+    (req, res, next) => ctrl.getTasksByStatus(req, res, next));
 
 };

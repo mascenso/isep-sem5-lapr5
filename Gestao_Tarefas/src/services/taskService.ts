@@ -1,6 +1,6 @@
 import { Service, Inject } from 'typedi';
 import config from "../../config";
-import ITaskDTO from '../dto/ITaskDTO';
+import ITaskPatchRequestDTO from '../dto/ITaskPatchRequestDTO';
 import { Task } from "../domain/task";
 import ITaskRepo from '../services/IRepos/ITaskRepo';
 import ITaskService from './IServices/ITaskService';
@@ -14,19 +14,34 @@ import ITaskPickupDeliveryRepo from './IRepos/ITaskPickupDeliveryRepo';
 import { TaskPickupDeliveryMap } from '../mappers/TaskPickupDeliveryMap';
 import { TaskVigilance } from '../domain/task-agg/TaskVigilance';
 import { TaskPickupDelivery } from '../domain/task-agg/TaskPickupDelivery';
-import axios, { AxiosResponse, AxiosError } from 'axios';
-
+import ITaskSearchResponseDTO from "../dto/ITaskSearchResponseDTO";
+import { ParseUtils } from "../utils/ParseUtils";
+import { TaskStatus } from "../domain/task-agg/TaskStatus";
+import ITaskDTO from "../dto/ITaskDTO";
 
 
 @Service()
 export default class TaskService implements ITaskService {
 
+  private apiUrl = config.apiUrlPROLOG;
 
   constructor(
     @Inject(config.repos.task.name) private taskRepo: ITaskRepo,
     @Inject(config.repos.taskVigilance.name) private taskVigilanceRepo: ITaskVigilanceRepo,
     @Inject(config.repos.taskPickupDelivery.name) private taskPickupDeliveryRepo: ITaskPickupDeliveryRepo,
   ) { }
+
+  public async getAllTasks(): Promise<Result<Array<ITaskDTO>>> {
+    try {
+      const allTasks = await this.taskRepo.findAll();
+
+      const tasksDTO = allTasks.map((task) => TaskMap.toDTO(task));
+
+      return Result.ok<Array<ITaskDTO>>(tasksDTO);
+    } catch (error) {
+      return Result.fail<Array<ITaskDTO>>(error);
+    }
+  }
 
   public async getTask(taskId: string): Promise<Result<ITaskDTO>> {
     try {
@@ -108,16 +123,7 @@ export default class TaskService implements ITaskService {
     const axios = require('axios');
 
     try {
-      /*
-      for (let i = 0; i < info.LTasks.length; i++) {
-        const task = info.LTasks[i];
-        let urlTasks = `http://127.0.0.1:8081/listaTarefas?tarefa=${task[0]}&origX=${task[1]}&origY=${task[2]}&pisoOrigem=${task[3]}&destX=${task[4]}&destY=${task[5]}&pisoDestino=${task[6]}`;
-        const response = await axios.get(urlTasks); // Espera pela resposta da requisição
-      }
-      */
-      let urlPlanning = `http://127.0.0.1:8081/tarefas?ng=${info.Ngeracoes}&dp=${info.dimensaoPop}&p1=${info.pobCruz}&p2=${info.pobMut}&t=${info.tempoLimite}&av=${info.avaliacaoDef}&nestab=${info.nEstabiliz}`;
-    //let urlPlanning = `http://vs770.dei.isep.ipp.pt:8082/tarefas?g=${info.Ngeracoes}&dp=${info.dimensaoPop}&p1=${info.pobCruz}&p2=${info.pobMut}&t=${info.tempoLimite}&av=${info.avaliacaoDef}&nestab=${info.nEstabiliz}`;
-    //let urlPlanning = `http://rdg-planning.h5b0bhc4e5a0dddx.westeurope.azurecontainer.io/tarefas?g=${info.Ngeracoes}&dp=${info.dimensaoPop}&p1=${info.pobCruz}&p2=${info.pobMut}&t=${info.tempoLimite}&av=${info.avaliacaoDef}&nestab=${info.nEstabiliz}`;
+      let urlPlanning = `${this.apiUrl}/tarefas?ng=${info.Ngeracoes}&dp=${info.dimensaoPop}&p1=${info.pobCruz}&p2=${info.pobMut}&t=${info.tempoLimite}&av=${info.avaliacaoDef}&nestab=${info.nEstabiliz}`;
 
       const response = await axios.get(urlPlanning); // Espera pela resposta da requisição
 
@@ -129,32 +135,37 @@ export default class TaskService implements ITaskService {
   }
 
 
-  public async updateTask(taskDTO: ITaskDTO): Promise<Result<ITaskDTO>> {
+  public async updateTask(taskDTO: ITaskPatchRequestDTO, taskId:string): Promise<Result<ITaskPickupDeliveryDTO | ITaskVigilanceDTO>> {
     try {
-      const task = await this.taskRepo.findByDomainId(taskDTO.id);
 
-      if (task === null) {
-        return Result.fail<ITaskDTO>("Task not found");
+      const statusEnum: TaskStatus = TaskStatus[taskDTO.taskStatus as keyof TaskStatus];
+
+      taskDTO.id = taskId;
+      const task_pickup = await this.taskPickupDeliveryRepo.findByDomainId(taskDTO.id);
+
+      if (task_pickup === null) {
+        const task_vig = await this.taskVigilanceRepo.findByDomainId(taskDTO.id);
+
+        if (task_vig === null) {
+          return Result.fail<ITaskVigilanceDTO>("Task not found");
+        }
+        else {
+
+          task_vig.updateTaskStatus(statusEnum);
+          await this.taskVigilanceRepo.save(task_vig);
+
+          const taskDTOResult = TaskVigilanceMap.toDTO(task_vig) as ITaskVigilanceDTO;
+          return Result.ok<ITaskVigilanceDTO>(taskDTOResult)
+        }
       }
       else {
-        task.name = taskDTO.name;
-        await this.taskRepo.save(task);
+        task_pickup.updateTaskStatus(statusEnum);
+        await this.taskPickupDeliveryRepo.save(task_pickup);
 
-        const taskDTOResult = TaskMap.toDTO(task) as ITaskDTO;
-        return Result.ok<ITaskDTO>(taskDTOResult)
+        const taskDTOResult = TaskPickupDeliveryMap.toDTO(task_pickup) as ITaskPickupDeliveryDTO;
+        return Result.ok<ITaskPickupDeliveryDTO>(taskDTOResult)
+
       }
-    } catch (e) {
-      throw e;
-    }
-  }
-
-  public async getAllTasks(): Promise<Result<Array<ITaskDTO>>> {
-    try {
-      const tasks = await this.taskRepo.findAll();
-
-      const tasksDTO = tasks.map(task => TaskMap.toDTO(task) as ITaskDTO);
-
-      return Result.ok<Array<ITaskDTO>>(tasksDTO)
     } catch (e) {
       throw e;
     }
@@ -166,7 +177,7 @@ export default class TaskService implements ITaskService {
       const allTasks = await this.taskVigilanceRepo.findAll();
 
       // Filtra apenas as tarefas onde 'pending' é true
-      const filteredPendingTasks = allTasks.filter(task => task.pending === true);
+      const filteredPendingTasks = allTasks.filter(task => task.taskStatus.pending === true);
 
       const pendingTasksDTO = filteredPendingTasks.map((task) => TaskVigilanceMap.toDTO(task));
 
@@ -182,7 +193,7 @@ export default class TaskService implements ITaskService {
       const allTasks = await this.taskPickupDeliveryRepo.findAll();
 
       // Filtra apenas as tarefas onde 'pending' é true
-      const filteredPendingTasks = allTasks.filter(task => task.pending === true);
+      const filteredPendingTasks = allTasks.filter(task => task.taskStatus.pending === true);
 
       const pendingTasksDTO = filteredPendingTasks.map((task) => TaskPickupDeliveryMap.toDTO(task));
 
@@ -244,8 +255,8 @@ export default class TaskService implements ITaskService {
       const allTasks = await this.taskVigilanceRepo.findAll();
 
       // Filtra apenas as tarefas onde 'approved' é true
-      const filteredApprovedTasks = allTasks.filter(task => task.approved === true);
-      const filteredApprovedNotPlannedTasks = filteredApprovedTasks.filter(task => task.planned === false);
+      const filteredApprovedTasks = allTasks.filter(task => task.taskStatus.approved === true);
+      const filteredApprovedNotPlannedTasks = filteredApprovedTasks.filter(task => task.taskStatus.planned === false);
 
       const pendingTasksDTO = filteredApprovedNotPlannedTasks.map((task) => TaskVigilanceMap.toDTO(task));
 
@@ -261,8 +272,8 @@ export default class TaskService implements ITaskService {
       const allTasks = await this.taskPickupDeliveryRepo.findAll();
 
       // Filtra apenas as tarefas onde 'pending' é true
-      const filteredApprovedTasks = allTasks.filter(task => task.approved === true);
-      const filteredApprovedNotPlannedTasks = filteredApprovedTasks.filter(task => task.planned === false);
+      const filteredApprovedTasks = allTasks.filter(task => task.taskStatus.approved === true);
+      const filteredApprovedNotPlannedTasks = filteredApprovedTasks.filter(task => task.taskStatus.planned === false);
 
       const pendingTasksDTO = filteredApprovedNotPlannedTasks.map((task) => TaskPickupDeliveryMap.toDTO(task));
 
@@ -272,6 +283,42 @@ export default class TaskService implements ITaskService {
     }
   }
 
-  
+  public async getTasksByUserEmail(userEmail: string): Promise<Result<Array<ITaskSearchResponseDTO>>> {
+    try {
+      const deliveryTasks = await this.taskPickupDeliveryRepo.findByUserEmail(userEmail);
+      const vigilanceTasks = await this.taskVigilanceRepo.findByUserEmail(userEmail);
+
+      const tasksDTO = [];
+      deliveryTasks.map(deliveryTask => tasksDTO.push(TaskPickupDeliveryMap.toSearchResponseDTO(deliveryTask)));
+      vigilanceTasks.map(vigilanceTasks => tasksDTO.push(TaskVigilanceMap.toSearchResponseDTO(vigilanceTasks)));
+      return Result.ok<Array<ITaskSearchResponseDTO>>(tasksDTO);
+
+    }
+    catch (error) {
+      return Result.fail<Array<ITaskSearchResponseDTO>>(error);
+    }
+
+  }
+
+  public async getTasksByStatus(taskStatus: string): Promise<Result<Array<ITaskSearchResponseDTO>>> {
+    try {
+      const status = ParseUtils.parseStringToTaskStatus(taskStatus);
+      if (!status) {
+        return Result.fail<Array<ITaskSearchResponseDTO>>('Invalid task status');
+      }
+      const deliveryTasks = await this.taskPickupDeliveryRepo.findByTaskStatus(status);
+      const vigilanceTasks = await this.taskVigilanceRepo.findByTaskStatus(status);
+
+      const tasksDTO = [];
+      deliveryTasks.map(deliveryTask => tasksDTO.push(TaskPickupDeliveryMap.toSearchResponseDTO(deliveryTask)));
+      vigilanceTasks.map(vigilanceTasks => tasksDTO.push(TaskVigilanceMap.toSearchResponseDTO(vigilanceTasks)));
+      return Result.ok<Array<ITaskSearchResponseDTO>>(tasksDTO);
+
+    }
+    catch (error) {
+      return Result.fail<Array<ITaskSearchResponseDTO>>(error);
+    }
+
+  }
 
 }

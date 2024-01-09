@@ -50,10 +50,10 @@ listaTarefas_handler(Request) :-
                               pisoDestino(PisoDestino, [])]),
 
     % Converter valores que deveriam ser números para inteiros
-    term_to_atom(OrigX, X), % Converte OrigX para um número
-    term_to_atom(OrigY, Y), % Converte OrigY para um número
-    term_to_atom(DestX, DX), % Converte DestX para um número
-    term_to_atom(DestY, DY), % Converte DestY para um número
+    term_to_atom(X,OrigX), % Converte OrigX para um número
+    term_to_atom(Y,OrigY), % Converte OrigY para um número
+    term_to_atom(DX,DestX), % Converte DestX para um número
+    term_to_atom(DY,DestX), % Converte DestY para um número
         adicionar_tarefa(T, X, Y, C, DX, DY, F),
 		obter_tarefas(Lista),
     	reply_json(json([lista=Lista])).
@@ -206,12 +206,6 @@ valida_tarefa_com_outras(Tarefa, [OutraTarefa | Resto]) :-
     not(tempo_transicao(OutraTarefa, Tarefa, _)),
 	tarefa(Tarefa, _, _, _, CelEndTask1,CelEndTask2, PisoEndTask),
 	tarefa(OutraTarefa, CelBeginTask1,CelBeginTask2, PisoBeginTask, _, _, _),
-
-	%tarefa(Tarefa, _, DestinoT1),
-	%tarefa(OutraTarefa, OrigemT2, _),
-	%Para calcular apenas o custo entre tarefas e nao durante o processamento de tarefas
-	%localizacao(DestinoT1,PisoOrig, CelulaOrig),
-	%localizacao(OrigemT2,PisoDest,CelulaDest),
     ((PisoEndTask == PisoBeginTask, aStar([CelEndTask1,CelEndTask2], [CelBeginTask1,CelBeginTask2], _, Custo));
     caminho_pisos_com_custo(PisoEndTask, PisoBeginTask, _, _, Custo, _)),
     assert(tempo_transicao(Tarefa, OutraTarefa, Custo)),
@@ -346,7 +340,7 @@ gera_geracao(N,G,Pop,Tinicial,Tlimite,AvEspecifica,NEstab,Count):-
 	ordena_populacao(All, AllOrd),
 
     length(Pop, Size),
-	%Calcula o número de melhores a serem preservados, garantindo que pelo menos 30% sao preservados da população incial
+	%Calcula o número de melhores a serem preservados, garantindo que pelo menos 30% sao preservados da população atual
     NumeroMelhoresPreservar is round(Size * 0.3), 
 
 	%Seleciona os melhores indivíduos para preservar na próxima geração

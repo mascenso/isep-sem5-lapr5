@@ -1,5 +1,6 @@
 
 import { Result } from "../core/logic/Result";
+import {TaskStatus} from "../domain/task-agg/TaskStatus";
 
 type ParseDataType = 'number' | 'string' | 'object'
 
@@ -25,7 +26,7 @@ class ParseArrayConfig {
 
 export class ParseUtils {
   public static parseBoolean(raw: any): boolean {
-    if (raw === "" || raw === undefined || raw === null || raw === "null") return false; 
+    if (raw === "" || raw === undefined || raw === null || raw === "null") return false;
     return JSON.parse(raw);
   }
 
@@ -42,5 +43,11 @@ export class ParseUtils {
 
   public static parseArray(rawArrayString: any) : ParseArrayConfig {
     return new ParseArrayConfig(rawArrayString);
+  }
+
+  public static parseStringToTaskStatus(statusString: string): TaskStatus | undefined {
+    return Object.values(TaskStatus).includes(statusString as TaskStatus)
+      ? (statusString as TaskStatus)
+      : undefined;
   }
 }

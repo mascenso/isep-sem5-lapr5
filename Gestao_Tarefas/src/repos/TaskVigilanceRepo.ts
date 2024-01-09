@@ -7,6 +7,7 @@ import { Document, FilterQuery, Model } from 'mongoose';
 import { ITaskVigilancePersistence } from '../dataschema/ITaskVigilancePersistence';
 import { TaskVigilance } from '../domain/task-agg/TaskVigilance';
 import ITaskVigilanceRepo from '../services/IRepos/ITaskVigilanceRepo';
+import {TaskStatus} from "../domain/task-agg/TaskStatus";
 
 @Service()
 export default class TaskVigilanceRepo implements ITaskVigilanceRepo {
@@ -45,9 +46,15 @@ export default class TaskVigilanceRepo implements ITaskVigilanceRepo {
 
         return TaskVigilanceMap.toDomain(taskCreated);
       } else {
-        taskDocument.id = taskVigilance.id;
-        await taskDocument.save();
+        const updateFields = ['taskStatus']
 
+        for (const field of updateFields) {
+          if (taskVigilance[field] !== undefined) {
+            taskDocument[field] = taskVigilance[field].props;
+          }
+        }
+
+        await taskDocument.save();
         return taskVigilance;
       }
     } catch (err) {
@@ -70,6 +77,60 @@ export default class TaskVigilanceRepo implements ITaskVigilanceRepo {
     const tasks = await this.taskVigilanceSchema.find();
     return tasks.map((task) => TaskVigilanceMap.toDomain(task));
   }
+
+
+  public async findByUserEmail(email: string): Promise<TaskVigilance[]> {
+    const query = {user: {userEmail: email}};
+    const tasks = await this.taskVigilanceSchema.find(query);
+    return tasks.map(task => TaskVigilanceMap.toDomain(task));
+  }
+
+  public async findByTaskStatus(status: TaskStatus): Promise<TaskVigilance[]> {
+    const query = this.mapToQuery(status);
+    const tasks = await this.taskVigilanceSchema.find(query);
+    return tasks.map(task => TaskVigilanceMap.toDomain(task));
+  }
+
+
+  private mapToQuery(status: TaskStatus): any {
+    let query: any;
+    switch (status) {
+      case TaskStatus.APPROVED:
+        query = {
+          $and: [
+            {'taskStatus.approved': true},
+            {'taskStatus.planned': false},
+            {'taskStatus.pending':false}
+          ]
+        };
+        break;
+
+      case TaskStatus.PENDING:
+        query = {
+          $and: [
+            {'taskStatus.approved': false},
+            {'taskStatus.planned': false},
+            {'taskStatus.pending':true}
+          ]
+        };
+        break;
+
+      case TaskStatus.PLANNED:
+        query = {
+          $and: [
+            {'taskStatus.approved': true},
+            {'taskStatus.planned': true},
+            {'taskStatus.pending':false}
+          ]
+        }
+        break;
+
+      default:
+        query = {};
+    }
+    return query;
+  }
+
 
 }
 

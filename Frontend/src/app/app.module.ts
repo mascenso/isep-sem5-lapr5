@@ -63,6 +63,8 @@ import {AuthInterceptor} from "./interceptors/auth.interceptor";
 import { UserProfileComponent } from './home/user-profile/user-profile.component';
 import { PendingTaskListComponent } from './home/tasks/pending-task-list/pending-task-list.component';
 import { TaskPlanningComponent } from './home/tasks/task-planning/task-planning.component';
+import { ValidateTaskComponent } from './home/tasks/validate-task/validate-task.component';
+import { TaskListComponent } from './home/tasks/task-list/task-list.component';
 
 
 @NgModule({
@@ -104,7 +106,9 @@ import { TaskPlanningComponent } from './home/tasks/task-planning/task-planning.
     RegisterComponent,
     PrivacyPolicyComponent,
     TaskPlanningComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    ValidateTaskComponent,
+    TaskListComponent
   ],
   imports: [
     BrowserModule,

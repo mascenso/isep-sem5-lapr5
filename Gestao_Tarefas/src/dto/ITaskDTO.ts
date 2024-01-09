@@ -1,5 +1,4 @@
-
-export default interface ITaskDTO {
-  id: string;
-  name: string
-}
+export  default interface ITaskDTO {
+    id: string;
+    name: string;
+  }

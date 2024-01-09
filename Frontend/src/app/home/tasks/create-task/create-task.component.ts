@@ -8,6 +8,8 @@ import { TasksService } from 'src/app/services/tasks.service';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Observable, Subscription} from "rxjs";
 import {UserService} from "../../../services/user.service";
+import {TaskVigilanceRequestDTO} from "../../../../dto/taskVigilanceDTO"
+import {TaskPickupRequestDTO} from "../../../../dto/taskPickupDTO"
 
 @Component({
   selector: 'app-create-task',
@@ -27,7 +29,7 @@ export class CreateTaskComponent implements OnInit{
   buildingServiceSubscription$ = new Subscription();
   floorServiceSubscription$ = new Subscription();
 
-  user = {userName:"", userContact:""}
+  user = {userName:"", userContact:"", userEmail:""}
 
 
   constructor(private fb: FormBuilder, private buildingService: BuildingService,
@@ -37,7 +39,7 @@ export class CreateTaskComponent implements OnInit{
     private userService: UserService) { }
 
   ngOnInit(): void {
-    this.userService.getUserData(true).subscribe((response) => {this.user.userName = response.firstName, this.user.userContact = response.phoneNumber},);
+    this.userService.getUserData(true).subscribe((response) => {this.user.userName = response.firstName, this.user.userContact = response.phoneNumber, this.user.userEmail = response.email},);
 
     // Inicialize os formulários conforme necessário
     this.vigilanciaForm = this.fb.group({
@@ -55,9 +57,13 @@ export class CreateTaskComponent implements OnInit{
       contactNumber: [null, Validators.required],
       user: this.fb.group({
         userName:[null, Validators.required],
-        userContact:[null,Validators.required]}),
-      approved: [false],
-      pending:[true]
+        userContact:[null,Validators.required],
+        userEmail:[null,Validators.required]}
+      ),
+      taskStatus:{
+        approved:false,
+        pending:true
+      }
     });
 
     this.pickupForm = this.fb.group({
@@ -90,8 +96,10 @@ export class CreateTaskComponent implements OnInit{
         name: ['', Validators.required],
         contactNumber: [null, Validators.required]
       }),
-      approved: [false],
-      pending:[true]
+      taskStatus:{
+        approved:false,
+        pending:true
+      }
     });
 
        // fetch building list from service
@@ -164,7 +172,7 @@ export class CreateTaskComponent implements OnInit{
       taskForm.startPosition = [taskForm.startPosition.x, taskForm.startPosition.y]
       taskForm.endPosition = [taskForm.endPosition.x, taskForm.endPosition.y]
 
-      this.taskService.createVigilanceTask(taskForm).subscribe(
+      this.taskService.createVigilanceTask(taskForm as TaskVigilanceRequestDTO).subscribe(
         (response) => {
           this.vigilanciaForm.reset(),
           this._snackBar.open("Tarefa criada com sucesso!", "close", {
@@ -187,7 +195,7 @@ export class CreateTaskComponent implements OnInit{
       taskForm.deliveryLocalization.room = [parseInt(taskForm.deliveryLocalization.room.x,10) , parseInt(taskForm.deliveryLocalization.room.y,10)]
       taskForm.pickupLocalization.room = [parseInt(taskForm.pickupLocalization.room.x,10) , parseInt(taskForm.pickupLocalization.room.y,10)]
 
-      this.taskService.createPickupTask(taskForm).subscribe(
+      this.taskService.createPickupTask(taskForm as TaskPickupRequestDTO).subscribe(
         (response) => {
           this.pickupForm.reset(),
           this._snackBar.open("Tarefa criada com sucesso!", "close", {

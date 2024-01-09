@@ -2,32 +2,22 @@ import {AggregateRoot} from "../../core/domain/AggregateRoot";
 import {UniqueEntityID} from "../../core/domain/UniqueEntityID";
 import {Result} from "../../core/logic/Result";
 import {Guard} from "../../core/logic/Guard";
+import { User } from "./user";
+import { LocationRoom } from "./locationRoom";
+import { TaskStatusVO } from "./taskStatusVO";
+import { TaskStatus } from "./TaskStatus";
 
 interface TaskPickupDeliveryProps {
     description: string;
-    pickupLocalization: {
-      buildingId:String;
-      floor:object;
-      room: number[];
-    };
-    deliveryLocalization:{
-      buildingId:String;
-      floor:object;
-      room: number[];
-    };
+    user: User;
+    taskStatus: TaskStatusVO;
+
+    pickupLocalization: LocationRoom;
+    deliveryLocalization:LocationRoom;
     contactNumber:number;
-    user:object;
-    deliveryContact:{
-      name:String;
-      contactNumber:number;
-    };
-    pickupContact:{
-      name:String;
-      contactNumber:number;
-    };
-    approved:boolean;
-    pending:boolean;
-    planned:boolean;
+    deliveryContact: User;
+
+    pickupContact: User;
 }
 
 export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
@@ -46,11 +36,16 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
       { argument: props.user, argumentName: 'user' },
       { argument: props.deliveryContact, argumentName: 'deliveryContact' },
       { argument: props.pickupContact, argumentName: 'pickupContact' },
-      { argument: props.approved, argumentName: 'approved' },
-      { argument: props.pending, argumentName: 'pending' },
-      { argument: props.planned, argumentName: 'planned' },
+      { argument: props.taskStatus, argumentName: 'taskStatus' },
     ];
 
+    const taskStatus = TaskStatusVO.create(props.taskStatus.approved, props.taskStatus.pending, props.taskStatus.planned);
+    if (taskStatus.isFailure) {
+      return Result.fail<TaskPickupDelivery>(taskStatus.error.toString())
+    }
+    else {
+      props.taskStatus = taskStatus.getValue();
+    }
 
     const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
@@ -96,17 +91,9 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
   public get pickupContact() : object {
     return this.props.pickupContact;
   }
-  public get approved() : boolean {
-    return this.props.approved;
+  public get taskStatus() : TaskStatusVO {
+    return this.props.taskStatus;
   }
-  public get pending() : boolean {
-    return this.props.pending;
-  }
-  public get planned() : boolean {
-    return this.props.planned;
-  }
-
-
 
 
   set description ( value: string) {
@@ -125,7 +112,7 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
     this.props.contactNumber = value;
   }
 
-  set user ( value: object) {
+  set user ( value: any) {
     this.props.user = value;
   }
 
@@ -136,13 +123,26 @@ export class TaskPickupDelivery extends AggregateRoot<TaskPickupDeliveryProps> {
   set pickupContact ( value: any) {
     this.props.pickupContact = value;
   }
-  set approved ( value: boolean) {
-    this.props.approved = value;
+  set taskStatus ( value: TaskStatusVO) {
+    this.props.taskStatus = value;
   }
-  set pending ( value: boolean) {
-    this.props.pending = value;
-  }
-  set planned ( value: boolean) {
-    this.props.planned = value;
+
+  public updateTaskStatus(taskStatus: TaskStatus): void {
+    switch (taskStatus) {
+      case TaskStatus.APPROVED:
+        this.props.taskStatus = TaskStatusVO.create(true, false, false).getValue();
+        break;
+      case TaskStatus.PENDING:
+        this.props.taskStatus = TaskStatusVO.create(false, true, false).getValue();
+        break;
+      case TaskStatus.PLANNED:
+        this.props.taskStatus = TaskStatusVO.create(true, false, true).getValue();
+        break;
+      case TaskStatus.REJECTED:
+          this.props.taskStatus = TaskStatusVO.create(false, false, false).getValue();
+          break;
+      default:
+        throw new Error("TaskStatus not valid");
+    }
   }
 }

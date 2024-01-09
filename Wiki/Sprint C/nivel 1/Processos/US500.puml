@@ -1,0 +1,18 @@
+@startuml US500
+
+actor Utilizador
+participant "RobDroneGo" as Sistema
+
+Utilizador -> Sistema : Planear tarefas;
+activate Sistema
+
+Sistema -> Utilizador : Mostra tarefas aprovadas não planeadas/erro ao obter tarefas;
+deactivate Sistema
+
+Utilizador -> Sistema : Lista de tarefas selecionadas para planear;
+activate Sistema
+
+Sistema -> Utilizador : Sequência de tarefas planeadas/erro ao planear tarefas;
+deactivate Sistema
+
+@enduml

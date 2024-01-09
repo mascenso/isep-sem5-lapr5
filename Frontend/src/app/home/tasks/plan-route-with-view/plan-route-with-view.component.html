@@ -29,12 +29,13 @@
     </mat-form-field>
     <mat-form-field *ngIf="selectedBuildingEnd">
         <mat-label>Escolha um floor de destino:</mat-label>
-        <mat-select id="dropdownFloorEndPlan" [(ngModel)]="selectedFloorEnd" (valueChange)="loadMapAndRoute()">
+        <mat-select id="dropdownFloorEndPlan" [(ngModel)]="selectedFloorEnd" >
         <mat-option *ngFor="let floor of floorsEnd" [value]="floor.id">
             {{ floor.floorNumber }}
         </mat-option>
         </mat-select>
     </mat-form-field>
+    <button *ngIf="selectedFloorEnd"(click)="loadMapAndRoute()"> Plan</button>
 </div>
 <div class="container-view" *ngIf="mapToLoad.data.map != undefined">
     <app-view [showMenus]="false" [automaticPlaning]="mapToLoad" [cellsToMove]="cellsToMove"></app-view>

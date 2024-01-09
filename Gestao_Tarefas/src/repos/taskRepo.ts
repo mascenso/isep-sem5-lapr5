@@ -70,6 +70,6 @@ export default class TaskRepo implements ITaskRepo {
     const tasks = await this.taskSchema.find();
     return tasks.map((task) => TaskMap.toDomain(task));
   }
- 
+
 }
 

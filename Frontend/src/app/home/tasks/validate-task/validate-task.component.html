@@ -1,0 +1,63 @@
+<!-- Seletor de Tasks -->
+<div class="validate-task-container">
+  <div class="validate-task-section">
+    <h2>List tasks to validate</h2>
+    <!-- Tabela de tasks para validar -->
+    <table mat-table
+           [dataSource]="pendingTaskList" multiTemplateDataRows
+           class="mat-elevation-z8">
+      <div *ngFor="let column of displayedColumns" [matColumnDef]="column">
+        <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
+        <td mat-cell *matCellDef="let task">
+          <ng-container *ngIf="column === 'description'">{{ task[column] }}</ng-container>
+          <ng-container *ngIf="column === 'user name'">{{ task.user.userName }}</ng-container>
+          <ng-container *ngIf="column === 'user contact'">{{ task.user.userContact }}</ng-container>
+          <ng-container *ngIf="column === 'type'">{{ task.type }}</ng-container>
+        </td>
+
+      </div>
+      <ng-container matColumnDef="expand">
+        <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+            <ng-container *ngIf="expandedElement === element; else arrowDown;">
+              <mat-icon>keyboard_arrow_up</mat-icon>
+            </ng-container>
+            <ng-template #arrowDown>
+              <mat-icon>keyboard_arrow_down</mat-icon>
+            </ng-template>
+          </button>
+
+        </td>
+      </ng-container>
+
+      <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+          <div *ngIf="expandedElement === element" class="expanded-detail">
+            <!-- Display Accept and Reject buttons when expanded -->
+            <div class="task-approval" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+              <button mat-button color="primary" (click)="acceptTask(element)">Accept</button>
+              <button mat-button color="warn" (click)="rejectTask(element)">Reject</button>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="disclaimer">
+        <td mat-footer-cell *matFooterCellDef [attr.colspan]="columnsToDisplayWithExpand.length">
+          No data to display
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+          class="validate-task-row"
+          [class.example-expanded-row]="expandedElement === element"
+          (click)="expandedElement = expandedElement === element ? null : element">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="validate-task-detail-row"></tr>
+    </table>
+  </div>
+
+</div>

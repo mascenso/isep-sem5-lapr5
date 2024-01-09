@@ -135,8 +135,8 @@ namespace UserManagement.Controllers
         {
           try
           {
-            var userIdFromClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
-            await _userService.DeleteUser(new UserId(userIdFromClaim));
+            //var userIdFromClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            await _userService.DeleteUser(new UserId(id));
             return NoContent(); // 204 No Content
           }
           catch (NotFoundException)

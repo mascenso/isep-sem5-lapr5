@@ -38,13 +38,13 @@
                 }
         },
       {
-        "locationBridge":[10,22],
+        "locationBridge":[9.9,21],
         "buildind":
-        {
-          "code":"C",
-          "floor":2,
-          "inicialPosition":[2,10]
-        }
+          {
+            "code":"C",
+            "floor":2,
+            "inicialPosition":[11,9]
+          }
       }
     ],
     "exitLocation": [0,0]

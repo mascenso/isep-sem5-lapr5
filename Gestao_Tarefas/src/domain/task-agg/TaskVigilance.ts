@@ -2,18 +2,19 @@ import {AggregateRoot} from "../../core/domain/AggregateRoot";
 import {UniqueEntityID} from "../../core/domain/UniqueEntityID";
 import {Result} from "../../core/logic/Result";
 import {Guard} from "../../core/logic/Guard";
+import { TaskStatusVO } from "./taskStatusVO";
+import { TaskStatus } from "./TaskStatus";
 
 interface TaskVigilanceProps {
     description: string;
+    user:object;
+    taskStatus: TaskStatusVO;
+
     buildingId: string;
     floors:object[];
     startPosition: number[];
     endPosition: number[];
     contactNumber:number;
-    user:object;
-    approved:boolean;
-    pending:boolean;
-    planned:boolean;
 }
 
 export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
@@ -32,11 +33,16 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
       { argument: props.endPosition, argumentName: 'endPosition' },
       { argument: props.contactNumber, argumentName: 'contactNumber' },
       { argument: props.user, argumentName: 'user' },
-      { argument: props.approved, argumentName: 'approved' },
-      { argument: props.pending, argumentName: 'pending' },
-      { argument: props.planned, argumentName: 'planned' }
+      { argument: props.taskStatus, argumentName: 'taskStatus' },
     ];
 
+    const taskStatus = TaskStatusVO.create(props.taskStatus.approved, props.taskStatus.pending, props.taskStatus.planned);
+    if (taskStatus.isFailure) {
+      return Result.fail<TaskVigilance>(taskStatus.error.toString())
+    }
+    else {
+      props.taskStatus = taskStatus.getValue();
+    }
 
     const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
@@ -74,14 +80,8 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
   public get user() : object {
     return this.props.user;
   }
-  public get approved() : boolean {
-    return this.props.approved;
-  }
-  public get pending() : boolean {
-    return this.props.pending;
-  }
-  public get planned() : boolean {
-    return this.props.planned;
+  public get taskStatus() : TaskStatusVO {
+    return this.props.taskStatus;
   }
   public get startPosition() : number[] {
     return this.props.startPosition;
@@ -110,14 +110,8 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
   set user ( value: object) {
     this.props.user = value;
   }
-  set approved ( value: boolean) {
-    this.props.approved = value;
-  }
-  set pending ( value: boolean) {
-    this.props.pending = value;
-  }
-  set planned ( value: boolean) {
-    this.props.planned = value;
+  set taskStatus ( value: TaskStatusVO) {
+    this.props.taskStatus = value;
   }
 
   set startPosition ( value: number[]) {
@@ -125,6 +119,25 @@ export class TaskVigilance extends AggregateRoot<TaskVigilanceProps> {
   }
   set endPosition ( value: number[]) {
     this.props.endPosition = value;
+  }
+
+  public updateTaskStatus(taskStatus: TaskStatus): void {
+    switch (taskStatus) {
+      case TaskStatus.APPROVED:
+        this.props.taskStatus = TaskStatusVO.create(true, false, false).getValue();
+        break;
+      case TaskStatus.PENDING:
+        this.props.taskStatus = TaskStatusVO.create(false, true, false).getValue();
+        break;
+      case TaskStatus.PLANNED:
+        this.props.taskStatus = TaskStatusVO.create(true, false, true).getValue();
+        break;
+      case TaskStatus.REJECTED:
+        this.props.taskStatus = TaskStatusVO.create(false, false, false).getValue();
+        break;
+      default:
+        throw new Error("TaskStatus not valid");
+    }
   }
 
 }

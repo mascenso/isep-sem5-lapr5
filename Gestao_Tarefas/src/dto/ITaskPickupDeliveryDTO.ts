@@ -1,28 +1,15 @@
+import { User } from "../domain/task-agg/user";
+import { LocationRoom } from "../domain/task-agg/locationRoom";
+import { TaskStatusVO } from "../domain/task-agg/taskStatusVO";
 
 export default interface ITaskPickupDeliveryDTO {
   id: string;
   description: string;
-  pickupLocalization: {
-    buildingId:String;
-    floor:object;
-    room: number[];
-  };
-  deliveryLocalization:{
-    buildingId:String;
-    floor:object;
-    room: number[];
-  };
+  pickupLocalization: LocationRoom;
+  deliveryLocalization: LocationRoom;
   contactNumber:number;
-  user:object;
-  deliveryContact:{
-    name:String;
-    contactNumber:number;
-  };
-  pickupContact:{
-    name:String;
-    contactNumber:number;
-  };
-  approved:boolean;
-  pending:boolean;
-  planned:boolean;
+  user:User;
+  deliveryContact:User;
+  pickupContact:User;
+  taskStatus:TaskStatusVO;
 }

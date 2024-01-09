@@ -5,6 +5,7 @@ import config from "../../config";
 import ITaskController from "./IControllers/ITaskController";
 import ITaskService from "../services/IServices/ITaskService";
 import ITaskDTO from '../dto/ITaskDTO';
+import ITaskPatchRequestDTO from '../dto/ITaskPatchRequestDTO';
 import ITaskPickupDeliveryDTO from '../dto/ITaskPickupDeliveryDTO';
 import ITaskVigilanceDTO from '../dto/ITaskVigilanceDTO';
 
@@ -35,6 +36,7 @@ export default class TaskController implements ITaskController /* TODO: extends 
   };
   public async createVigilanceTask(req: Request, res: Response, next: NextFunction) {
     try {
+
       const taskOrError = await this.taskServiceInstance.createVigilanceTask(req.body as ITaskVigilanceDTO) as Result<ITaskVigilanceDTO>;
 
       if (taskOrError.isFailure) {
@@ -66,7 +68,7 @@ export default class TaskController implements ITaskController /* TODO: extends 
 
   public async updateTask(req: Request, res: Response, next: NextFunction) {
     try {
-      const taskOrError = await this.taskServiceInstance.updateTask(req.body as ITaskDTO) as Result<ITaskDTO>;
+      const taskOrError = await this.taskServiceInstance.updateTask(req.body as ITaskPatchRequestDTO, req.params.id) as Result<ITaskPickupDeliveryDTO | ITaskVigilanceDTO>;
 
       if (taskOrError.isFailure) {
         return res.status(404).send();
@@ -189,14 +191,11 @@ export default class TaskController implements ITaskController /* TODO: extends 
   }
 
   public async planearTarefas(req: Request, res: Response, next: NextFunction) {
-console.log("CHEGOU AQUI ",req.body);
 
     const taskInfo = req.body;
     try {
 
       const tasksOrError = await this.taskServiceInstance.getTasksPlanning(taskInfo) as Result<any>;
-      console.log("tasksOrError ",tasksOrError);
-
 
       if (tasksOrError.isFailure) {
         return res.status(404).send();
@@ -209,6 +208,49 @@ console.log("CHEGOU AQUI ",req.body);
       return next(e);
     }
   }
-  
+
+  public async getTasksByUserEmail(req: Request, res: Response, next: NextFunction) {
+
+    try {
+      const userEmail = req.params.userEmail;
+      if (!userEmail || !userEmail.includes("@")) {
+        return res.status(400).send("Invalid user email!");
+      }
+      const tasksOrError = await this.taskServiceInstance.getTasksByUserEmail(userEmail) as Result<any>;
+      if (tasksOrError.isFailure) {
+        return res.status(404).send();
+      }
+      return res.status(200).json(tasksOrError.getValue());
+
+    }
+    catch (e) {
+
+      return next(e);
+
+    }
+  }
+
+  public async getTasksByStatus(req: Request, res: Response, next: NextFunction) {
+
+    try {
+      const taskStatus = req.params.taskStatus;
+      if (!taskStatus) {
+        return res.status(400).send("Status can't be null!");
+      }
+      const tasksOrError = await this.taskServiceInstance.getTasksByStatus(taskStatus) as Result<any>;
+      if (tasksOrError.isFailure) {
+        return res.status(404).send();
+      }
+      return res.status(200).json(tasksOrError.getValue());
+
+    }
+    catch (e) {
+
+      return next(e);
+
+    }
+  }
+
+
 }
 

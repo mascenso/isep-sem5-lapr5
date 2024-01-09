@@ -11,9 +11,7 @@ const TaskVigilanceSchema = new mongoose.Schema(
     endPosition: { type: [Number], unique: false },
     contactNumber: { type: Number, unique: false },
     user:{ type: Object, unique: false },
-    approved:{type:Boolean, unique:false},
-    pending:{type:Boolean, unique:false},
-    planned: {type:Boolean, unique:false}
+    taskStatus:{ type: Object, unique: false },
   },
   {
     timestamps: true

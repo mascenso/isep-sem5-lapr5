@@ -4,7 +4,7 @@ import config from "../../config";
 
 import ITaskController from "./IControllers/ITaskController";
 import ITaskService from "../services/IServices/ITaskService";
-import ITaskDTO from '../dto/ITaskDTO';
+import ITaskPatchRequestDTO from '../dto/ITaskPatchRequestDTO';
 import ITaskPickupDeliveryDTO from '../dto/ITaskPickupDeliveryDTO';
 import ITaskVigilanceDTO from '../dto/ITaskVigilanceDTO';
 import IRouteController from './IControllers/IRouteController';
@@ -37,6 +37,6 @@ export default class RouteController implements IRouteController /* TODO: extend
       return next(e);
     }
   }
-  
+
 }
 

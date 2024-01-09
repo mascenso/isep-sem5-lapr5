@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 
 // Set the NODE_ENV to 'development' by default
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+//Production
+//process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 
 const envFound = dotenv.config();
 if (!envFound) {
@@ -20,15 +22,22 @@ export default {
    * That long string from mlab
    */
   //databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/tasks",
-  databaseURL: process.env.MONGODB_URI || "mongodb://taskAdmin:Pinalistas2024@vsgate-s1.dei.isep.ipp.pt:10199/tasksDB",
+  //databaseURL: process.env.MONGODB_URI || "mongodb://taskAdmin:Pinalistas2024@vsgate-s1.dei.isep.ipp.pt:10199/tasksDB",
+
+  //dummy database para teste e2e
+  databaseURL: process.env.MONGODB_URI || "mongodb://mongoadmin:123456789@vsgate-s1.dei.isep.ipp.pt:10199/dummyDB",
   /**
-   * 
+   *
    */
 
   /**
    * Your secret sauce
    */
   jwtSecret: process.env.JWT_SECRET || "my sakdfho2390asjod$%jl)!sdjas0i secret",
+
+  apiUrlPROLOG: process.env.NODE_ENV === 'production'
+    ? 'https://robdronego.westeurope.cloudapp.azure.com'
+    : 'http://127.0.0.1:8081',
 
   /**
    * Used by winston logger

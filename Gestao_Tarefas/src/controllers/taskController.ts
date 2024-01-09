@@ -36,6 +36,7 @@ export default class TaskController implements ITaskController /* TODO: extends 
   };
   public async createVigilanceTask(req: Request, res: Response, next: NextFunction) {
     try {
+
       const taskOrError = await this.taskServiceInstance.createVigilanceTask(req.body as ITaskVigilanceDTO) as Result<ITaskVigilanceDTO>;
 
       if (taskOrError.isFailure) {

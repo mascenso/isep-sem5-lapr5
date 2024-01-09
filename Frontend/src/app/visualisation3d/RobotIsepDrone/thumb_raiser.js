@@ -284,6 +284,7 @@ export default class ThumbRaiser {
         this.helpCheckBox.checked = false;
         this.statisticsCheckBox = document.getElementById("statistics");
         this.statisticsCheckBox.checked = false;
+        this.toolTipFloor = document.getElementById("toolTipFloor");
 
         // Build the help panel
         this.buildHelpPanel();
@@ -596,6 +597,8 @@ export default class ThumbRaiser {
             /**
              * RAYCASTER - TOOLTIP 
              *  
+             * 
+             */
             this.raycaster = new THREE.Raycaster();
             this.mouse = new THREE.Vector2();
             this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -605,12 +608,13 @@ export default class ThumbRaiser {
             this.raycaster.setFromCamera(this.mouse, this.activeViewCamera.perspective);
 
             // Verificar se o raio intersecta os objetos de tooltips
-            var intersects = this.raycaster.intersectObjects(this.tooltipsList,false);
-
+            var intersects = this.raycaster.intersectObjects(this.tooltipsList,true);
+            //var intersects = this.raycaster.intersectObjects(this.scene3D.children,true);
+            
             // Exibir tooltip se houver interseção
             if (intersects.length > 0) {
                 for (let i = 0; i < intersects.length; i++) {
-                    var tooltipText = intersects[i].object.userData.name;
+                    var tooltipText = intersects[i].object.name;
                     console.log("Tooltip: " + tooltipText);
 
                     // Atualizar a posição da tooltip com base nas coordenadas do mouse
@@ -626,10 +630,10 @@ export default class ThumbRaiser {
 
 
             }else {
-            // Ocultar a tooltip se não houver interseção
-            this.toolTipFloor.style.display = 'none';
+                // Ocultar a tooltip se não houver interseção
+                this.toolTipFloor.style.display = 'none';
             }
-            */
+            
         }
     }
 

@@ -38,19 +38,20 @@ describe('TaskVigilance - Unit Test', () => {
     expect(taskVigilance.taskStatus.planned).to.equal(taskProps.taskStatus.planned);
   });
 
-  /*
+
   it('should fail to create a TaskVigilance with missing required properties', () => {
     // Falta building ID e o contacto obrigatorio
     const taskProps = {
       description: 'Incomplete Task',
-      floors: [{ }],
+
+      buildingId: 'um-id-muito-grande',
+      floors: null,
       startPosition: [3, 2],
       contactNumber: 123456789,
       endPosition: [6, 4],
       user: { name: 'Joana' },
-      approved: false,
-      pending: true,
-      planned: false,
+      taskStatus: TaskStatusVO.create( true, false, false ).getValue()
+
     };
 
     // Cria a tarefa de vigilância com propriedades faltando
@@ -59,5 +60,5 @@ describe('TaskVigilance - Unit Test', () => {
     // Verifica se a criação falhou (deve falhar por causa das propriedades faltantes)
     expect(taskResult.isFailure).to.be.true;
   });
-  */
+
 });

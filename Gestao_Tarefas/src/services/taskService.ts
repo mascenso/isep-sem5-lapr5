@@ -1,6 +1,6 @@
 import { Service, Inject } from 'typedi';
 import config from "../../config";
-import ITaskDTO from '../dto/ITaskDTO';
+import ITaskPatchRequestDTO from '../dto/ITaskPatchRequestDTO';
 import ITaskService from './IServices/ITaskService';
 import { Result } from "../core/logic/Result";
 import ITaskVigilanceDTO from '../dto/ITaskVigilanceDTO'
@@ -83,7 +83,7 @@ export default class TaskService implements ITaskService {
   }
 
 
-  public async updateTask(taskDTO: ITaskDTO, taskId:string): Promise<Result<ITaskPickupDeliveryDTO | ITaskVigilanceDTO>> {
+  public async updateTask(taskDTO: ITaskPatchRequestDTO, taskId:string): Promise<Result<ITaskPickupDeliveryDTO | ITaskVigilanceDTO>> {
     try {
 
       const statusEnum: TaskStatus = TaskStatus[taskDTO.taskStatus as keyof TaskStatus];

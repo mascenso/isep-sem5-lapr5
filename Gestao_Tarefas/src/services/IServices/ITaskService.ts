@@ -1,11 +1,11 @@
 import { Result } from "../../core/logic/Result";
-import ITaskDTO from "../../dto/ITaskDTO";
+import ITaskPatchRequestDTO from "../../dto/ITaskPatchRequestDTO";
 import ITaskPickupDeliveryDTO from "../../dto/ITaskPickupDeliveryDTO";
 import ITaskVigilanceDTO from "../../dto/ITaskVigilanceDTO";
 import ITaskSearchResponseDTO from "../../dto/ITaskSearchResponseDTO";
 
 export default interface ITaskService  {
-  updateTask(taskDTO: ITaskDTO, taskId: string): Promise<Result<ITaskPickupDeliveryDTO | ITaskVigilanceDTO>>;
+  updateTask(taskDTO: ITaskPatchRequestDTO, taskId: string): Promise<Result<ITaskPickupDeliveryDTO | ITaskVigilanceDTO>>;
   createVigilanceTask(taskDTO: ITaskVigilanceDTO): Promise<Result<ITaskVigilanceDTO>>;
   createPickupDeliveryTask(taskDTO: ITaskPickupDeliveryDTO): Promise<Result<ITaskPickupDeliveryDTO>>;
   getAllVigilancePendingTasks(): Promise<Result<Array<ITaskVigilanceDTO[]>>>;

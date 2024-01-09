@@ -4,7 +4,7 @@ import config from "../../config";
 
 import ITaskController from "./IControllers/ITaskController";
 import ITaskService from "../services/IServices/ITaskService";
-import ITaskDTO from '../dto/ITaskDTO';
+import ITaskPatchRequestDTO from '../dto/ITaskPatchRequestDTO';
 import ITaskPickupDeliveryDTO from '../dto/ITaskPickupDeliveryDTO';
 import ITaskVigilanceDTO from '../dto/ITaskVigilanceDTO';
 
@@ -52,7 +52,7 @@ export default class TaskController implements ITaskController /* TODO: extends 
 
   public async updateTask(req: Request, res: Response, next: NextFunction) {
     try {
-      const taskOrError = await this.taskServiceInstance.updateTask(req.body as ITaskDTO, req.params.id) as Result<ITaskPickupDeliveryDTO | ITaskVigilanceDTO>;
+      const taskOrError = await this.taskServiceInstance.updateTask(req.body as ITaskPatchRequestDTO, req.params.id) as Result<ITaskPickupDeliveryDTO | ITaskVigilanceDTO>;
 
       if (taskOrError.isFailure) {
         return res.status(404).send();

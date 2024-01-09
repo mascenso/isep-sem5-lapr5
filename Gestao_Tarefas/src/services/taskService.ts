@@ -1,8 +1,11 @@
 import { Service, Inject } from 'typedi';
 import config from "../../config";
 import ITaskPatchRequestDTO from '../dto/ITaskPatchRequestDTO';
+import { Task } from "../domain/task";
+import ITaskRepo from '../services/IRepos/ITaskRepo';
 import ITaskService from './IServices/ITaskService';
 import { Result } from "../core/logic/Result";
+import { TaskMap } from "../mappers/TaskMap";
 import ITaskVigilanceDTO from '../dto/ITaskVigilanceDTO'
 import ITaskPickupDeliveryDTO from '../dto/ITaskPickupDeliveryDTO';
 import { TaskVigilanceMap } from '../mappers/TaskVigilanceMap'
@@ -14,6 +17,7 @@ import { TaskPickupDelivery } from '../domain/task-agg/TaskPickupDelivery';
 import ITaskSearchResponseDTO from "../dto/ITaskSearchResponseDTO";
 import { ParseUtils } from "../utils/ParseUtils";
 import { TaskStatus } from "../domain/task-agg/TaskStatus";
+import ITaskDTO from "../dto/ITaskDTO";
 
 
 @Service()
@@ -22,10 +26,38 @@ export default class TaskService implements ITaskService {
   private apiUrl = config.apiUrlPROLOG;
 
   constructor(
+    @Inject(config.repos.task.name) private taskRepo: ITaskRepo,
     @Inject(config.repos.taskVigilance.name) private taskVigilanceRepo: ITaskVigilanceRepo,
     @Inject(config.repos.taskPickupDelivery.name) private taskPickupDeliveryRepo: ITaskPickupDeliveryRepo,
   ) { }
 
+  public async getAllTasks(): Promise<Result<Array<ITaskDTO>>> {
+    try {
+      const allTasks = await this.taskRepo.findAll();
+
+      const tasksDTO = allTasks.map((task) => TaskMap.toDTO(task));
+
+      return Result.ok<Array<ITaskDTO>>(tasksDTO);
+    } catch (error) {
+      return Result.fail<Array<ITaskDTO>>(error);
+    }
+  }
+
+  public async getTask(taskId: string): Promise<Result<ITaskDTO>> {
+    try {
+      const task = await this.taskRepo.findByDomainId(taskId);
+
+      if (task === null) {
+        return Result.fail<ITaskDTO>("Task not found");
+      }
+      else {
+        const taskDTOResult = TaskMap.toDTO(task) as ITaskDTO;
+        return Result.ok<ITaskDTO>(taskDTOResult)
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
 
   public async createVigilanceTask(taskVigilanceDTO: ITaskVigilanceDTO): Promise<Result<ITaskVigilanceDTO>> {
     try {
@@ -62,6 +94,26 @@ export default class TaskService implements ITaskService {
 
       const taskDTOResult = TaskPickupDeliveryMap.toDTO(taskResult) as ITaskPickupDeliveryDTO;
       return Result.ok<ITaskPickupDeliveryDTO>(taskDTOResult)
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  public async createTask(taskDTO: ITaskDTO): Promise<Result<ITaskDTO>> {
+    try {
+
+      const taskOrError = await Task.create(taskDTO);
+
+      if (taskOrError.isFailure) {
+        return Result.fail<ITaskDTO>(taskOrError.errorValue());
+      }
+
+      const taskResult = taskOrError.getValue();
+
+      await this.taskRepo.save(taskResult);
+
+      const taskDTOResult = TaskMap.toDTO(taskResult) as ITaskDTO;
+      return Result.ok<ITaskDTO>(taskDTOResult)
     } catch (e) {
       throw e;
     }

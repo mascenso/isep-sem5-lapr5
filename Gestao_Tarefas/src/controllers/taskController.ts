@@ -4,6 +4,7 @@ import config from "../../config";
 
 import ITaskController from "./IControllers/ITaskController";
 import ITaskService from "../services/IServices/ITaskService";
+import ITaskDTO from '../dto/ITaskDTO';
 import ITaskPatchRequestDTO from '../dto/ITaskPatchRequestDTO';
 import ITaskPickupDeliveryDTO from '../dto/ITaskPickupDeliveryDTO';
 import ITaskVigilanceDTO from '../dto/ITaskVigilanceDTO';
@@ -18,7 +19,21 @@ export default class TaskController implements ITaskController /* TODO: extends 
   ) {
   }
 
+  public async createTask(req: Request, res: Response, next: NextFunction) {
+    try {
+      const taskOrError = await this.taskServiceInstance.createTask(req.body as ITaskDTO) as Result<ITaskDTO>;
 
+      if (taskOrError.isFailure) {
+        return res.status(402).send();
+      }
+
+      const taskDTO = taskOrError.getValue();
+      return res.json(taskDTO).status(201);
+    }
+    catch (e) {
+      return next(e);
+    }
+  };
   public async createVigilanceTask(req: Request, res: Response, next: NextFunction) {
     try {
       const taskOrError = await this.taskServiceInstance.createVigilanceTask(req.body as ITaskVigilanceDTO) as Result<ITaskVigilanceDTO>;
@@ -65,6 +80,22 @@ export default class TaskController implements ITaskController /* TODO: extends 
       return next(e);
     }
   };
+
+  public async getAllTasks(req: Request, res: Response, next: NextFunction) {
+    try {
+      const tasksOrError = await this.taskServiceInstance.getAllTasks() as Result<Array<ITaskDTO>>;
+
+      if (tasksOrError.isFailure) {
+        return res.status(404).send();
+      }
+
+      const tasksDTO = tasksOrError.getValue();
+      return res.status(201).json(tasksDTO);
+    }
+    catch (e) {
+      return next(e);
+    }
+  }
 
   public async getAllVigilancePendingTasks(req: Request, res: Response, next: NextFunction) {
 

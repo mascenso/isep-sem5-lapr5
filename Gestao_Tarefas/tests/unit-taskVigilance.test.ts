@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { UniqueEntityID } from '../src/core/domain/UniqueEntityID';
 import { TaskVigilance } from '../src/domain/task-agg/TaskVigilance';
 import { TaskStatusVO } from "../src/domain/task-agg/taskStatusVO";
+import { TaskStatus } from "../src/domain/task-agg/TaskStatus";
 
 describe('TaskVigilance - Unit Test', () => {
   it('should create a valid TaskVigilance instance', () => {
@@ -40,7 +41,6 @@ describe('TaskVigilance - Unit Test', () => {
 
 
   it('should fail to create a TaskVigilance with missing required properties', () => {
-    // Falta building ID e o contacto obrigatorio
     const taskProps = {
       description: 'Incomplete Task',
 
@@ -54,11 +54,70 @@ describe('TaskVigilance - Unit Test', () => {
 
     };
 
-    // Cria a tarefa de vigilância com propriedades faltando
+    // Cria a tarefa de vigilância com propriedades em falta
     const taskResult = TaskVigilance.create(taskProps, new UniqueEntityID());
 
-    // Verifica se a criação falhou (deve falhar por causa das propriedades faltantes)
+    // Verifica se a criação falhou (deve falhar por causa das propriedades em falta)
     expect(taskResult.isFailure).to.be.true;
   });
+
+  describe('TaskVigilance', () => {
+    const validTaskProps = {
+      description: 'Test Task',
+      buildingId: '12314',
+      floors: [{ floorNumber: 1 }, { floorNumber: 2 }],
+      startPosition: [1, 2],
+      endPosition: [4, 10],
+      contactNumber: 123456789,
+      user: { name: 'Zé' },
+      taskStatus: TaskStatusVO.create( false, true, false ).getValue()
+    };
+
+    it('should update task status to APPROVED', () => {
+      const task = TaskVigilance.create(validTaskProps).getValue();
+      task.updateTaskStatus(TaskStatus.APPROVED);
+
+      expect(task.taskStatus.approved).to.be.true;
+      expect(task.taskStatus.pending).to.be.false;
+      expect(task.taskStatus.planned).to.be.false;
+    });
+
+    it('should update task status to PENDING', () => {
+      const task = TaskVigilance.create(validTaskProps).getValue();
+      task.updateTaskStatus(TaskStatus.PENDING);
+
+      expect(task.taskStatus.approved).to.be.false;
+      expect(task.taskStatus.pending).to.be.true;
+      expect(task.taskStatus.planned).to.be.false;
+    });
+
+    it('should update task status to PLANNED', () => {
+      const task = TaskVigilance.create(validTaskProps).getValue();
+      task.updateTaskStatus(TaskStatus.PLANNED);
+
+      expect(task.taskStatus.approved).to.be.true;
+      expect(task.taskStatus.pending).to.be.false;
+      expect(task.taskStatus.planned).to.be.true;
+    });
+
+    it('should update task status to REJECTED', () => {
+      const task = TaskVigilance.create(validTaskProps).getValue();
+      task.updateTaskStatus(TaskStatus.REJECTED);
+
+      expect(task.taskStatus.approved).to.be.false;
+      expect(task.taskStatus.pending).to.be.false;
+      expect(task.taskStatus.planned).to.be.false;
+    });
+
+    it('should throw an error for an invalid task status', () => {
+      const task = TaskVigilance.create(validTaskProps).getValue();
+
+      expect(() => task.updateTaskStatus('INVALID_STATUS' as TaskStatus)).to.throw('TaskStatus not valid');
+    });
+  });
+
+
+
+
 
 });

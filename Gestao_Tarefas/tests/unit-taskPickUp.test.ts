@@ -43,4 +43,55 @@ describe('Task PickUp - Unit Test', () => {
     expect(taskPickupDelivery.taskStatus.planned).to.equal(taskProps.taskStatus.planned);
   });
 
+  it('should fail to create a TaskPickUp with missing required properties', () => {
+    const taskProps = {
+      description: 'Incomplete Task',
+      pickupLocalization: LocationRoom.create('12', {
+        "floorId": "id-muito-grande",
+        "floorNumber": 3,
+        "description": "a1"
+      }, [1, 2]).getValue(),
+      deliveryLocalization: LocationRoom.create('1212', {
+        "floorId": "id-muito-grande",
+        "floorNumber": 3,
+        "description": "a1"
+      }, [4, 2]).getValue(),
+      contactNumber: null,
+      user: User.create('Zé', 987654321, '').getValue(),
+      deliveryContact: User.create('Zé', 987654321, '').getValue(),
+      pickupContact: User.create('Rui', 981722222, '').getValue(),
+      taskStatus: TaskStatusVO.create(true, false, false).getValue()
+    };
+
+    // Cria a tarefa de pickup delivery com propriedades em falta
+    const taskResult = TaskPickupDelivery.create(taskProps, new UniqueEntityID());
+
+    // Verifica se a criação falhou (deve falhar por causa das propriedades em falta)
+    expect(taskResult.isFailure).to.be.true;
+
+  });
+
+
+  it('should fail to create a TaskPickUp with invalid pickupLocalization', () => {
+    const taskProps = {
+      description: 'Incomplete Task',
+      pickupLocalization: LocationRoom.create('', {}, [1, 2]).getValue(),
+      deliveryLocalization: null,
+      contactNumber: 123456789,
+      user: User.create('Zé', 987654321, '').getValue(),
+      deliveryContact: User.create('Zé', 987654321, '').getValue(),
+      pickupContact: User.create('Rui', 981722222, '').getValue(),
+      taskStatus: TaskStatusVO.create(true, false, false).getValue()
+    };
+
+    // Cria a tarefa de pickup delivery com propriedades em falta
+    const taskResult = TaskPickupDelivery.create(taskProps, new UniqueEntityID());
+
+    // Verifica se a criação falhou (deve falhar por causa das propriedades em falta)
+    expect(taskResult.isFailure).to.be.true;
+
+  });
+
+
+
 });

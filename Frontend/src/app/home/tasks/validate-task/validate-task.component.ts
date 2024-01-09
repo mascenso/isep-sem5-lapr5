@@ -123,7 +123,7 @@ export class ValidateTaskComponent implements OnInit {
 
     this.tasksService.updateTaskById(taskPatchRequestDTO as TaskPatchRequestDTO, task.id).subscribe(
       (rejectedTask) => {
-        this._snackBar.open("Task approved!", "close", {
+        this._snackBar.open("Task rejected!", "close", {
           duration: 5000,
           panelClass: ['snackbar-success']
         });

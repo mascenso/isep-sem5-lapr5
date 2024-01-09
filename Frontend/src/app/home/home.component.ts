@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {LoadingSpinnerService} from "../services/loading-spinner.service";
 import {AuthService} from "../services/auth.service";
+import { UserService } from "../services/user.service";
 
 @Component({
   selector: 'app-home',
@@ -11,10 +12,13 @@ export class HomeComponent implements OnInit {
   isExpanded: boolean = false;
 
   userRole: string = '';
+  user = {userName:"", userContact:"", userEmail:""}
 
   constructor(private authService: AuthService,
-              public spinnerService: LoadingSpinnerService) {}
+              private userService: UserService,
+              public spinnerService: LoadingSpinnerService,) {}
   ngOnInit(): void {
+    this.userService.getUserData(true).subscribe((response) => {this.user.userName = response.firstName, this.user.userContact = response.phoneNumber, this.user.userEmail = response.email},);
     this.userRole = this.authService.userRole();
   }
 

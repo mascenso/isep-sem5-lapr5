@@ -21,11 +21,11 @@ export default {
   /**
    * That long string from mlab
    */
-  //databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/tasks",
+  databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/tasks",
   //databaseURL: process.env.MONGODB_URI || "mongodb://***REMOVED***@vsgate-s1.dei.isep.ipp.pt:10199/tasksDB",
 
   //dummy database para teste e2e
-  databaseURL: process.env.MONGODB_URI || "mongodb://***REMOVED***@vsgate-s1.dei.isep.ipp.pt:10199/dummyDB",
+  //databaseURL: process.env.MONGODB_URI || "mongodb://***REMOVED***@vsgate-s1.dei.isep.ipp.pt:10199/dummyDB",
   /**
    *
    */

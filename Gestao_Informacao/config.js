@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-// 22/02/2024 removed secrets
+// 22/02/2024 removed secrets ***REMOVED***
 
 // Set the NODE_ENV to 'development' by default
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';

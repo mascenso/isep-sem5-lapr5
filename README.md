@@ -1,14 +1,8 @@
 # ISEP-LAPR5-2023/24
 # Bulletproof Node.js architecture 🛡️
 
-This is the example repository from the blog post ['Bulletproof node.js project architecture'](https://softwareontheroad.com/ideal-nodejs-project-structure?utm_source=github&utm_medium=readme)
-
-Please read the blog post in order to have a good understanding of the server architecture.
-
-Also, I added lots of comments to the code that are not in the blog post, because they explain the implementation and the reason behind the choices of libraries and some personal opinions and some bad jokes.
-
-The API by itself doesn't do anything fancy, it's just a user CRUD with authentication capabilities.
-Maybe we can transform this into something useful, a more advanced example, just open an issue and let's discuss the future of the repo.
+This repository contains the final "LAPR5" course Project 5 at Instituto Politécnico do Porto - Instituto Superior de Engenharia (ISEP).
+Utilizing the Onion architecture, further information can be found in the associated [wiki](https://github.com/mascenso/isep-sem5-lapr5/wiki).
 
 ## Development
 
